@@ -1,75 +1,38 @@
-## DeepCircuitX — Repository Navigation Guide
+## DeepCircuitX — Quick Guide
 
-This repo mirrors/organizes artifacts from the DeepCircuitX dataset to make it easy to browse and use locally. DeepCircuitX aggregates chip/IP/module-level RTL and RISC‑V projects, plus natural‑language annotations and training/evaluation data for LLMs.
+This repo hosts a sample subset of DeepCircuitX for easy local browsing and LLM experimentation.
+- Contains: source RTL (Chip, IP, Module, RISC‑V), intermediate annotations, SFT samples, and eval prompts.
+- Note: training JSONs are short samples (~5k lines each); annotations include a few representative types per hierarchy (≈5 each).
 
-Reference: see the official dataset overview “Source RTL code” for scope, levels, and counts: [DeepCircuitX: Source RTL code](https://zeju.gitbook.io/lcm-team/deepcircuitx/souce-rtl-code).
+Reference: [DeepCircuitX: Source RTL code](https://zeju.gitbook.io/lcm-team/deepcircuitx/souce-rtl-code).
 
-### What’s inside (high‑level)
-- **Source RTL code**: Verilog/SystemVerilog modules and projects organized by design level (Chip, IP, Module, RISC‑V).
-- **Intermediate NL annotations**: Auto‑generated specs/Q&A/module blurbs derived from RTL for model training prep.
-- **SFT training data samples**: JSON corpora for supervised fine‑tuning on tasks like code completion, generation and understanding. 
-- **Evaluation prompts**: Prompt templates for evaluating comment generation, code generation, and completion.
+### Contents
+- `Hierarchy/` — RTL organized by level; many modules include `_<name>_/intermediate_comment/` with specs/Q&A/module blurbs.
+- `train_data_samples/` — `Training-CodeComp.json`, `Training-CodeGen.json`, `Training-CodeUnderstand.json` (instruction, input, output).
+- `eval_data/` — standardized prompts for comment generation, code generation, and completion.
 
-### Directory layout
-- `Hierarchy/`
-  - `chip/`, `ip/`, `module/`, `riscv/`: Design artifacts grouped by level, mirroring DeepCircuitX’s taxonomy noted on the official page.
-  - Within each design family you’ll find project subfolders; many modules include a sibling annotation folder named like `_<module_name>_/intermediate_comment/`.
-  - Example (Module level):
-    - `Hierarchy/module/4-Bit_Arithmetic_Logic_Unit/4-bit-16-function-complete-alu/_abc_/`
-      - `intermediate_comment/`
-        - `abc_spec.json` — one‑paragraph module spec + prompt scaffolding (includes embedded original RTL references)
-        - `abc_QA.json` — focused Q&A about ports/signals/behavior
-        - `abc_module.json` — concise module blurb
-        - `*_blocks.json` — optional placeholder for future block‑level segmentation
-      - `spec/spec.txt`, `abc.txt` — flattened summaries of the above
-      - Original RTL lives alongside (e.g., `.v` files) in the module/project tree
+### Keywords by hierarchy (comma‑separated)
+- **Chip‑level**: Voice processor, Audio Processor, KARAOKE PROCESSOR, ADPCM Processor, Sound Processor, Radio Processor, DOLBY-B NOISE PROCESSOR, ECHO SOUD PROCESSOR, Simplified SRS 3D Sound Processor, SHARC Processor, Speech Recognition Processor, VIDEO PROCESSOR, Teletext Processor, Video Display Processor, OSD Processor, Codec, MULTI PURPOSE AUDIO/VIDEO EMBEDDED PROCESSOR, SURROUND PROCESSOR, Synchronous Processor, PICO (Pixel Data Processor), Digital Image Processor, GRAPHIC DISPLAY PROCESSOR, JPEG Image Processor, RGB PROCESSOR, JPEG IMAGE COMPRESSION PROCESSOR, Image Signal Processor, Radar Processor, GPS PROCESSOR, GPS BASEBAND PROCESSOR, LCD Flat Panel Processor, CIS Analog Signal Processor, 2K - Samples FFT-Processor, VIF / SIF signal processor, Histogram/Hough Transform Processor, CCD Signal Processor, VCR VHS Chroma Signal Processor, Pythagoras Processor, Motion Processor, SEMICONDUCTOR SIGNAL PROCESSOR, MIXED-SIGNAL PROCESSOR, CARRADIO SIGNAL PROCESSOR, Baseband Signal Processor, Navigator Motion Processor, RDS/RBDS processor, Video Enhancement Processor, Communications Processor, IP Frame Routing Processor, Codirectional Digital Data Processor, Neuron Chip Network Processor, Component Interface Processor, E-COMMERCE PROCESSOR, Security Processor, Power PC 405GP Embedded Processor, AMD Embedded G-Series SOC processor, Rad-Hard 32-bit SPARC Embedded Processor, ColdFire Processor, Blackfin Embedded Processor, Mobile Intel Pentium4 Processor-M, Dual-Core Intel Itanium Processor, Intel Atom Processor, ARM Cortex M7 processor
+- **IP‑level**: Color space converter, DMA, PCI, Public Key Acceleration, True Random Number Generator, 3DES/DES Encryption, SHA-1/MD5 Authentication
+- **Module‑level**: NBCD ADDER, Radiation Hardened 4-Bit Full ADDER with Fast Carry, 4-Bit Binary Full Adder, 4-Bit Binary Full Adder with Fast Carry, High-Speed Advanced Adder, FC Series Adder, 4-Bit Full Adder, 4-Bit Full Adder with Parallel Carry Output, 9-Bit Wallace Tree Adder, 4-Bit BCD Adder, High-Speed 6-Bit Adder, Floating Point Pipelined Adder Unit, 4-Bit Binary Adder with Fast Carry, High-Speed CMOS Logic 4-Bit Binary Full Adder with Fast Carry, Quad Serial Subtractor, Dual 2-Bit Subtractor, Arithmetic Logic Unit, 4-Bit Arithmetic Logic Unit, CMOS 4-Bit Arithmetic Logic Unit, 32-Bit Cascadable Barrel Shifter, 32-Bit Barrel Shifter with Registers, Floating Point Comparator Unit, Floating Point Pipelined Adder Unit, Floating Point Pipelined Divider Unit, Floating Point Pipelined Multiplier Unit, CMOS Floating Point Processing Unit, Embedded 32-Bit Microprocessor with Integrated Floating Point Unit, Floating Point Coprocessor, Fixed/Floating-Point DSP, HCMOS Floating Point Coprocessor, Floating Point Arithmetic Coprocessor, Floating Point Coprocessor Double Precision, HCMOS Enhanced Floating-Point Coprocessor, Floating-Point Status Control, High-Performance Floating-Point Coprocessor, Floating Point Digital Signal Processor, Floating Point to Integer Pipelined Converter, Floating Point Arithmetic Coprocessor Double Precision, Integer to Floating Point Pipelined Converter, Multicore Fixed and Floating-Point Digital Signal Processor, Multiplier-Accumulator, Parallel CMOS Multiplier-Accumulator, Complex Accumulator, Dual Comparator, Single Comparator, Magnitude Comparator, Voltage Comparator, Quad Comparator, Window Comparator, Phase Comparator, Differential Comparator, Digital Comparator, MicroPower Comparator, NanoPower Comparator, Wave Comparator, IttyBitty Comparator, Dual Voltage Comparator, Quad Differential Comparator, Precision Voltage Comparator, Single Differential Comparator, Dual Differential Comparator, Equality Comparator, MicroPower Dual Comparator, Low Voltage Comparator, High Speed Comparator, Dual Operational Comparator, Dual Temperature Comparator, Single-Supply Comparator, Ground Sense Comparator, Octal Differential Comparator, Battery Operated Power Comparator, Identity Comparator, Latched Comparator, Address Comparator, Push-Pull Output Comparator, Self-Powered Isolated Comparator, Integrated Circuit Voltage Comparator, MicroPower Programmable Quad Comparator, Total Counter / Time Counter, Decade Counter, Binary Counter, Divide-by-Twelve Counter, Octal Counter, Multi-function Counter, Pneumatic Counter, Intelligent Counter, Programmable Counter, Digital Counter, Predetermining Counter, Step Counter, Frequency Counter, Parallel Counter, CMOS Counter, Universal Hexadecimal Counter, Nonvolatile Safety Counter, Miniature LCD Counter, Digital LCD Counter, Power Divider, Clock Divider, Frequency Divider, Programmable Divider, 2-/3-Way Power Divider, User Configurable Divider, Frequency Multiplier, Clock Multiplier, Analog Multiplier, Current Multiplier, Electron Multiplier, Operational Multiplier, BCD Rate Multiplier, SATA Port Multiplier, VTM Current Multiplier, Port Multiplier Chip, Binary Rate Multiplier, Channel Photo Multiplier, FC Series Multiplier, Video Multiplier, Spread-Spectrum Crystal Multiplier, Surface Mount Multiplier, High Frequency Multiplier, Fast Dual DAC Multiplier, CMOS BCD Rata Multiplier, Barrel shifter, Shift registers, Universal Shift Register, static Shift register, Dual supply 8-bit serial-in/serial-out or parallel-out Shift register, Bidirectional Universal Shift Register, Parallel-in to Serial-out (PISO) Shift Register, PARALLEL-LOAD Shift REGISTER, Serial-In, Parallel-Out (SIPO) Shift Register, 8-Bit Serial-Input/Serial or Parallel-Output Shift Register with Latched 3-State Outputs High-Performance Silicon-Gate CMOS, Parallel-Load Shift registers with Open-Drain Outputs, Shift Register With Schmitt-Trigger Inputs and Output registers, MUX/DeMUX, Dual MUX/DeMUX, MUX-LATCH, MUX-REGISTER, Floating Point pipelined divider Unit, multiply/Divide Unit, Video (VCD / DVD) Controller, Motor Controller, Camera Controller, Peripheral interface, DMA Control, PWM, Voice, PLL / Clock, Arbiter, Bus Controller, AD/DA, Arithmetic Converter, Encoder, Decoder
 
-- Training corpora (root):
-  - `Training-CodeComp.json` — SFT pairs for code completion from description/ code
-    - Schema per entry:
-      - `instruction` — fixed task prompt (e.g., “Based on the module-level description, generate the corresponding Verilog code.”)
-      - `input` — plain‑text “Module‑level description: …”
-      - `output` — target Verilog code as a single string (module RTL)
-  - `Training-CodeGen.json` — same schema but code generation tasks (same general schema: `instruction`/`input`/`output`)
-  - `Training-CodeUnderstand.json` — same schema but code commenting / understanding tasks (if populated)
+### Annotation counts (by level)
+| RTL Category | Module‑Level | Block‑Level | Repository‑Level |
+| --- | ---: | ---: | ---: |
+| Chip | 5,471 | 36,955 | 84 |
+| IP | 12,863 | 20,101 | 183 |
+| Module | 28,901 | — | 1,389 |
+| RISC‑V | 2,116 | — | 560 |
 
-- Evaluation:
-  - `eval_data/dataset_new_comment_generation_prompt.json`
-  - `eval_data/dataset_new_code_generation_prompt.json`
-  - `eval_data/dataset_new_code_completion_prompt.json`
-  - These contain prompt templates for consistent offline evaluation of LLMs on comment gen, code gen, and completion.
+### Dataset counts for RTL code tasks
+| Task | IP | Module | RISC‑V | Chip | Total |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| RTL Code Understanding | 6,386 | 14,499 | 1,348 | 3,922 | 26,155 |
+| RTL Code Completion | 6,178 | 14,131 | 1,312 | 3,822 | 25,443 |
+| RTL Code Generation | 6,479 | 16,511 | 1,393 | 3,950 | 28,333 |
 
-### How to use the pieces
-- **Authoritative RTL**: Always treat the `.v`/`.sv` files as ground truth for synthesis/simulation.
-- **Intermediate annotations** (`intermediate_comment/`):
-  - Use to build instruction‑tuning samples (specs, Q&A, short blurbs). These are staging artifacts, not meant for synthesis.
-  - No chain‑of‑thought is stored here; they are concise, final NL outputs.
-- **SFT datasets** (`Training-*.json`):
-  - Feed `instruction`+`input` to the model; supervise on `output` (Verilog string).
-  - Typical example:
-    - `instruction`: "Based on the module-level description, generate the corresponding Verilog code."
-    - `input`: "Module-level description: …"
-    - `output`: "`timescale ...\nmodule ... endmodule"
-- **Eval prompts** (`eval_data/*.json`):
-  - Use as is for standardized benchmarking across tasks.
+### Notes
+- Treat `.v`/`.sv` as ground truth; intermediate annotations are for training prep (no chain‑of‑thought stored).
+- SFT schema: `{ instruction, input, output }`.
+- More details: [DeepCircuitX docs](https://zeju.gitbook.io/lcm-team/deepcircuitx/souce-rtl-code).
 
-### Tips for navigation
-- Start at `Hierarchy/` to explore by level; drill down to find module folders and their `intermediate_comment/` annotations.
-- Use the `*_spec.json` for a quick overview of a module, and open the sibling `.v` to see the exact implementation.
-- For training, begin with `Training-CodeComp.json` to see the exact SFT schema and outputs.
-
-### Upstream documentation
-- Overview and counts for Chip/IP/Module/RISC‑V levels, sourcing and keyword lists are documented here: [DeepCircuitX: Source RTL code](https://zeju.gitbook.io/lcm-team/deepcircuitx/souce-rtl-code).
-
-If you need block‑level segmentation or richer annotations, consider populating the `*_blocks.json` files next to each module to map logical RTL sections to explanations.
-
-
-@misc{li2025deepcircuitxcomprehensiverepositoryleveldataset,
-      title={DeepCircuitX: A Comprehensive Repository-Level Dataset for RTL Code Understanding, Generation, and PPA Analysis}, 
-      author={Zeju Li and Changran Xu and Zhengyuan Shi and Zedong Peng and Yi Liu and Yunhao Zhou and Lingfeng Zhou and Chengyu Ma and Jianyuan Zhong and Xi Wang and Jieru Zhao and Zhufei Chu and Xiaoyan Yang and Qiang Xu},
-      year={2025},
-      eprint={2502.18297},
-      archivePrefix={arXiv},
-      primaryClass={cs.LG},
-      url={https://arxiv.org/abs/2502.18297}, 
-}
