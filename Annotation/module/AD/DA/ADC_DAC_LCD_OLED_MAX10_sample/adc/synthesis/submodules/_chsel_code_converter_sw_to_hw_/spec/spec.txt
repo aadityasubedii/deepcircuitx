@@ -1,0 +1,10 @@
+Module name: chsel_code_converter_sw_to_hw.
+Module specification: The chsel_code_converter_sw_to_hw module is responsible for converting a 5-bit channel selection code from a software-compatible format (`chsel_from_sw`) to a hardware-specific format (`chsel_to_hw`) suitable for analog-to-digital converters (ADCs). This conversion is crucial for ensuring proper communication between software interfacing and ADC hardware, which may vary based on the device type and whether it is the first or second ADC in a dual-ADC configuration.
+
+The module has a single 5-bit input port, `chsel_from_sw`, which accepts the channel selection code from software. It also has a single 5-bit output port, `chsel_to_hw`, which outputs the converted hardware-compatible channel selection code.
+
+Internally, the module utilizes a register with the same name as the output port, `chsel_to_hw`, to hold the converted code. This register ensures a stable output between clock cycles until a new conversion is required based on changes to the input port.
+
+The code consists of multiple blocks that leverage conditional statements and local parameters to handle conversion logic. Based on the `device_partname_fivechar_prefix` parameter and the `is_this_first_or_second_adc` parameter, the module classifies the device type and ADC order to determine the appropriate conversion mapping through defined local parameters and case statements. The conversion relies on matching the software channel code to predefined hardware codes, with a default value assigned for unmatched cases.
+
+The main functional block is an `always` combinatorial block that reacts to changes in the `chsel_from_sw` input. Depending on the parameters mentioned earlier, different sets of case statements are used to assign the correct hardware code to the `chsel_to_hw` register. The module thus ensures that the ADC receives the correct hardware channel code corresponding to the software-defined selections.

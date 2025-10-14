@@ -1,0 +1,1 @@
+assign o_irq  = irq_timer  == 8'd1;

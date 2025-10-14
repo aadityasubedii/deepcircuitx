@@ -1,0 +1,16 @@
+{
+    "line_num": [
+        [
+            122,
+            139
+        ],
+        [
+            75,
+            113
+        ]
+    ],
+    "blocks": [
+        "always@(*)\nif (mem_en && !memwrite)\n\t\tcasex (mem_addr)\n\t\t\t\n\t\t\t8'b1xxxxxxx: io_data = cr_app_data_out;\n\t\t\t\n\t\t\t8'b00000010: io_data = {24'b0, SW_I};\t\n\t\t\t\n\t\t\t8'b00100000: io_data = {16'b0, mic_data, 4'b0};\n\t\t\t8'b00100001: io_data = {31'b0, mic_done};\n\t\t\t\n\t\t\t8'b01000001: io_data = {31'b0, spkr_update};\n\t\t\t\n\t\t\t8'b00001000: io_data = {27'b0, filter, menu_in};\n\t\t\t\n\t\t\t8'b00000000: io_data = br_memdata_out; \n\t\t\tdefault: io_data = 0; \n\t\tendcase",
+        "always@(posedge clk)\n\tif (reset)\n\t\tbegin\n\t\tLEDS <= 8'd0;\n\t\tbr_memdata_in <= 0;\n\t\tspeaker_buffer <= 0;\n\t\tspkr_data <= 0;\n\t\tmic_start <= 0;\n\t\tbuffer_updated <= 0;\n\t\tend\n\telse if (memwrite)\n\t\tcasex (mem_addr)\n\t\t\t\n\n\n\t\t\t8'b1xxxxxxx: begin \n\t\t\t\t\t\t\tcr_app_data_in <= data_out1[15:0]; \n\t\t\t\t\t\t\tmic_start <= 1;\n\t\t\t\t\t\t\tend\n\t\t\t\n\n\n\t\t\t`mic:\t\tmic_start <= 0;\n\t\t\t\n\n\n\n\t\t\t`speaker:\tbegin spkr_data <= speaker_buffer;\n\t\t\t\t\t\t\tbuffer_updated <= 1; end\n\t\t\t\n\n\n\t\t\t`sp_bufr:\tbegin speaker_buffer <= data_out1[15:0];\n\t\t\t\t\t\t\tbuffer_updated <= 0; end\n\t\t\t\n\t\t\t`leds:\t\tLEDS <= data_out1[7:0];\n\t\t\t\n\t\t\t`block:\t\tbr_memdata_in <= data_out1;\n\t\tendcase"
+    ]
+}

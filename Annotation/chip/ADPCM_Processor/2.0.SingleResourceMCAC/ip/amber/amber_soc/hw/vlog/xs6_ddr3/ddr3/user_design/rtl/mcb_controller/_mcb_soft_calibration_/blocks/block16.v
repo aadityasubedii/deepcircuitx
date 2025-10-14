@@ -1,0 +1,1 @@
+assign pre_sysrst_minpulse_width_ok = pre_sysrst_cnt[3];

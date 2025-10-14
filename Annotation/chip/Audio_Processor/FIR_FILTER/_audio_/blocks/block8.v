@@ -1,0 +1,1 @@
+assign aout_avail = (ai == 2'b01);

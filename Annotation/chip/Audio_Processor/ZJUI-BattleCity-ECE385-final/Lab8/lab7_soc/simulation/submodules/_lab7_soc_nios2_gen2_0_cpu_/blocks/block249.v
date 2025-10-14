@@ -1,0 +1,1 @@
+  assign R_rf_b = R_rf_b_q;

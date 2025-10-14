@@ -1,0 +1,1 @@
+assign rx_start = rxd_d[4:3] == 2'b11 && rxd_d[1:0] == 2'b00;

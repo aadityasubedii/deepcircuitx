@@ -1,0 +1,1 @@
+      else always @(posedge clk) rmw_rd_done = #TCQ my_rmw_rd_ns;

@@ -1,0 +1,1 @@
+assign ex_read_cache_busy = exclusive_access && !i_write_enable && c_state != CS_IDLE;

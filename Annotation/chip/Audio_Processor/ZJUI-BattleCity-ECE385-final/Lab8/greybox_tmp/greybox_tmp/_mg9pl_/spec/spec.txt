@@ -1,0 +1,7 @@
+Module name: mg9pl. 
+
+Module specification: The mg9pl module in Verilog serves as a representation of a RAM block, which is primarily instantiated through an lpm_ram_dq instance named mgl_prim1. The core operation of this module is controlled by the state of various signals at the rising edge of its clock inputs. This module works with an 8-bit address (`address`) and an 8-bit data input (`data`). The timing of input and output operations are synchronised through clock signals, `inclock` and `outclock` respectively. The write enable signal `we`, when activated, triggers writing the data held by the `data` signal into the memory location pointed by the `address` signal.
+
+The memory read operation outputs an 8-bit value referenced by `q`, and this read operation takes place only when the `we` signal is not active to ensure no simultaneous read/write operations. Inside the module, a wire `wire_mgl_prim1_q` connects the `q` output of the memory instance `mgl_prim1` to the `q` output of the module, enabling real-time data transfer from the memory block to external parts of the design. 
+
+The data, address, and output data are all registered types, thus their values are stored until new ones are loaded. As specified by the parameters `lpm_address_control`, `lpm_indata`, and `lpm_outdata`, the memory block operates with a width of 8 bits (both address and data) as defined by `lpm_width` and `lpm_widthad`. It doesn't use embedded array blocks for storing data as specified by `use_eab`, implying that the data is stored in registers or latch-based structures.

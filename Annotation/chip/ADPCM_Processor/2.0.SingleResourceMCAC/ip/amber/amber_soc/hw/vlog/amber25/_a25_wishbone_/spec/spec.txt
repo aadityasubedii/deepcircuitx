@@ -1,0 +1,11 @@
+Module name: a25_wishbone. 
+
+Module Specification: The 'a25_wishbone' module is a hardware design primarily created to manage multiple wishbone protocol requests from three different ports. The primary function of this module is to act as an interface and address buffer that accommodates, prioritizes, and processes protocol requests based on the order of their arrival. It executes both reading and write operations on these ports and every operation is clock-driven, indicating they’re initiated on every positive edge of the clock.
+
+Among the multitude of input ports in the module are i_clk, i_reset, i_port0_req, i_port1_req, i_port2_req, i_port0_write, i_port1_write, i_port2_write, i_port0_wdata, i_port1_wdata, i_port2_wdata, i_port0_be, i_port1_be, i_port2_be, i_port0_addr, i_port1_addr, i_port2_addr, i_wb_dat, i_wb_ack, i_wb_err. These ports serve various functions such as driving the timing of the system (i_clk), initializing the system (i_reset), determining whether the operation for each port is a read or write, holding the incoming write data for each of the three ports and returning error status from the core interacting with the wishbone.
+
+Simultaneously, the output ports include o_port0_ack, o_port1_ack, o_port2_ack, o_port0_rdata, o_port1_rdata, o_port2_rdata, o_wb_adr, o_wb_sel, o_wb_we, o_wb_dat, o_wb_cyc, o_wb_stb, which acknowledge the requests from each of the three ports, select which byte to interact with on the data bus, indicate a write cycle and provide data to the core interacting with the wishbone.
+
+On the other hand, internal signals like WBUF, wbuf_valid, wbuf_accepted, wbuf_write, wbuf_wdata, wbuf_be, wbuf_addr, new_access, serving_port signify the validity of the entries in the buffers for each port, assume the buffered addresses for each port’s operation, and indicate which port's buffered request is currently being processed.
+
+The Verilog RTL code showcases the hierarchical integration of the module a25_wishbone. The main blocks defined are for the input-output ports and the internal processing of data. To assist with data handling, internal instances of another module "a25_wishbone_buf" are used. Combining the operation of these designated blocks allows for the effective execution of the module's purpose.

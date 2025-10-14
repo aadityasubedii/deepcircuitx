@@ -1,0 +1,1 @@
+  always @(posedge clk) wr_this_rank_r <= #TCQ wr_this_rank_ns;

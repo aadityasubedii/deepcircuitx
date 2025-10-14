@@ -1,0 +1,1 @@
+  localparam PNTR_RAM_CNT = 2;

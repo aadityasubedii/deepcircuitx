@@ -1,0 +1,1 @@
+assign rx_start_negedge = rx_tap[3] && !rx_tap[2] && rx_state == 2'd0;

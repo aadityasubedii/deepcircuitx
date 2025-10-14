@@ -1,0 +1,1 @@
+    assign wait_o = wait_out_enable ? (wait_out_valid ? wait_out : 1'bx) : 1'bz;

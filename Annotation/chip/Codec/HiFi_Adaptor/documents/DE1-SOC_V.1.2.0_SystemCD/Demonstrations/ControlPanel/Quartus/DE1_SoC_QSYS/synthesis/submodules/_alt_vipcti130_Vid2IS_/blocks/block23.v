@@ -1,0 +1,1 @@
+assign end_of_vsync = ~v_sync & v_sync_reg;

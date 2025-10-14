@@ -1,0 +1,1 @@
+      always @(posedge clk) faw_cnt_r <= #TCQ faw_cnt_ns;

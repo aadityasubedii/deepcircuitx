@@ -1,0 +1,1 @@
+	assign rj_data = (rd_en) ? rj_mem[rj_rd_addr] : 16'd0;

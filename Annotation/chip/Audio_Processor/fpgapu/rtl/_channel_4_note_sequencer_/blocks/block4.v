@@ -1,0 +1,1 @@
+  reg [3:0] r_envelope_index = 0;

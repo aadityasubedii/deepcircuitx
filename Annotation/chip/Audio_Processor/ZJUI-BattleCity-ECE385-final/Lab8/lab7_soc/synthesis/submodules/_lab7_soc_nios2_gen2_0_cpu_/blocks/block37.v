@@ -1,0 +1,1 @@
+  assign D_ctrl_ld_st_ex = 1'b0;

@@ -1,0 +1,1 @@
+  assign iddr_rst = rst_sync_r1 ;

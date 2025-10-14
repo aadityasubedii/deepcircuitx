@@ -1,0 +1,1 @@
+  assign fifo_11_enable = ((fifo_wrptr == 4'd11) && input_ge1)  || (ge2_free && (fifo_wrptr_plus1== 4'd11) && input_ge2)  ||(ge3_free && (fifo_wrptr_plus2== 4'd11) && input_ge3);

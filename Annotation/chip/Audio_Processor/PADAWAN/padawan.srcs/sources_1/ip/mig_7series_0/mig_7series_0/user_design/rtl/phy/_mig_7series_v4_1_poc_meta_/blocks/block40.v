@@ -1,0 +1,1 @@
+  always @ (posedge clk) run_too_small_r1 <= #TCQ run_too_small & (run_ends_r == 'd1);  

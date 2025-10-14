@@ -1,0 +1,11 @@
+  assign lim2init_write_request    = write_request_r;
+  assign lim2init_prech_req        = prech_req_r;
+  assign lim2poc_ktap_right        = ktap_right_r;
+  assign lim2poc_rdy               = poc_ready_r;
+  assign lim2ocal_stg3_left_lim    = stg3_left_lim;
+  assign lim2ocal_stg3_right_lim   = stg3_right_lim;
+  assign lim2stg3_dec              = stg3_dec_req_r;
+  assign lim2stg3_inc              = stg3_inc_req_r;
+  assign lim2stg2_dec              = stg2_dec_req_r;
+  assign lim2stg2_inc              = stg2_inc_req_r;
+  assign lim_done                  = done_r;

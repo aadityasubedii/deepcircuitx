@@ -1,0 +1,1 @@
+  assign maint_srx_r = maint_srx_r_lcl;

@@ -1,0 +1,1 @@
+	assign x = data_in[9:0] - ADC_OFFSET;		

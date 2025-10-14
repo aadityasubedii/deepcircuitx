@@ -1,0 +1,1 @@
+assign A1T=(A1+UA1);

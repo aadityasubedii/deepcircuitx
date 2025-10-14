@@ -1,0 +1,1 @@
+  end else if ((CLK_PERIOD/nCK_PER_CLK > 2500) && (nCK_PER_CLK == 4)) begin: wrdq_div2_4to1_rdlvl_first

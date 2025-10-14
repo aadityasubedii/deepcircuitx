@@ -1,0 +1,41 @@
+{
+    "line_num": [
+        [
+            119,
+            133
+        ],
+        [
+            102,
+            116
+        ],
+        [
+            94,
+            99
+        ],
+        [
+            87,
+            91
+        ],
+        [
+            82,
+            85
+        ],
+        [
+            75,
+            79
+        ],
+        [
+            67,
+            72
+        ]
+    ],
+    "blocks": [
+        "function [2:0] ungray8;\ninput [2:0] gray;\nbegin\n    case(gray)\n        3'b000 : ungray8 = 3'b000;\n        3'b001 : ungray8 = 3'b001;\n        3'b011 : ungray8 = 3'b010;\n        3'b010 : ungray8 = 3'b011;\n        3'b110 : ungray8 = 3'b100;\n        3'b111 : ungray8 = 3'b101;\n        3'b101 : ungray8 = 3'b110;\n        3'b100 : ungray8 = 3'b111;\n    endcase\nend\nendfunction",
+        "function [2:0] gray8;\ninput [2:0] binary;\nbegin\n    case(binary)\n        3'b000 : gray8 = 3'b000;\n        3'b001 : gray8 = 3'b001;\n        3'b010 : gray8 = 3'b011;\n        3'b011 : gray8 = 3'b010;\n        3'b100 : gray8 = 3'b110;\n        3'b101 : gray8 = 3'b111;\n        3'b110 : gray8 = 3'b101;\n        3'b111 : gray8 = 3'b100;\n    endcase\nend\nendfunction",
+        "assign wr_pointer_rd = ungray8(wr_pointer_d2);\nassign rd_pointer_wr = ungray8(rd_pointer_d2);\n\nassign o_data  = data[rd_pointer[1:0]];\nassign o_full  = {~wr_pointer[2], wr_pointer[1:0]} == rd_pointer_wr;\nassign o_empty = wr_pointer_rd == rd_pointer;",
+        "always @( posedge rd_clk )\n    begin\n    wr_pointer_d1 <= gray8(wr_pointer);\n    wr_pointer_d2 <= wr_pointer_d1;\n    end",
+        "always @( posedge rd_clk )\n    if ( i_pop && !o_empty )\n        rd_pointer <= rd_pointer + 1'd1;\n",
+        "always @( posedge wr_clk )\n    begin\n    rd_pointer_d1 <= gray8(rd_pointer);\n    rd_pointer_d2 <= rd_pointer_d1;\n    end",
+        "always @( posedge wr_clk )\n    if ( i_push && !o_full )\n        begin\n        wr_pointer <= wr_pointer + 1'd1;\n        data[wr_pointer[1:0]] <= i_data;\n        end"
+    ]
+}

@@ -1,0 +1,1 @@
+        assign status_update_int = status_update_int_reg | genlocked_int_reg;

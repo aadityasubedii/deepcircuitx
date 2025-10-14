@@ -1,0 +1,1 @@
+  assign E_rf_ecc_unrecoverable_valid = 1'b0;

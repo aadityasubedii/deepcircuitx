@@ -1,0 +1,2 @@
+assign Dec_Flag = (TARGET_DQS_DELAY < DQS_DELAY);
+assign Inc_Flag = (TARGET_DQS_DELAY > DQS_DELAY);

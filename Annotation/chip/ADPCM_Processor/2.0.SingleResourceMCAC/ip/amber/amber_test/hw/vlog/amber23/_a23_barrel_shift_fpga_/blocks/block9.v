@@ -1,0 +1,1 @@
+assign p_l = rot_prod[31:0];

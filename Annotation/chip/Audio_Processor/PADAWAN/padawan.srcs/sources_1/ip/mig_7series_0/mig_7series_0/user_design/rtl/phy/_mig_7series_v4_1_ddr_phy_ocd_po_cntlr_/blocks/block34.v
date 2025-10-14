@@ -1,0 +1,1 @@
+  assign simp_stg3_final_sel = simp_stg3_final_shft[5:0];

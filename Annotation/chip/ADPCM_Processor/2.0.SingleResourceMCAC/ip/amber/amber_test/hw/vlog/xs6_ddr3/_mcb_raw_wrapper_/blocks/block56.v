@@ -1,0 +1,35 @@
+       end
+       
+       if (C_PORT_ENABLE[2] == 1'b1)
+       begin
+               assign mig_p4_arb_en      = p2_arb_en ;
+               assign mig_p4_cmd_clk     = p2_cmd_clk  ;
+               assign mig_p4_cmd_en      = p2_cmd_en   ;
+               assign mig_p4_cmd_ra      = p2_cmd_ra  ;
+               assign mig_p4_cmd_ba      = p2_cmd_ba   ;
+               assign mig_p4_cmd_ca      = p2_cmd_ca  ;
+               assign mig_p4_cmd_instr   = p2_cmd_instr;
+               assign mig_p4_cmd_bl      = {(p2_cmd_instr[2] | p2_cmd_bl[5]),p2_cmd_bl[4:0]}   ;
+               assign p2_cmd_empty       = mig_p4_cmd_empty ; 
+               assign p2_cmd_full        = mig_p4_cmd_full  ; 
+               assign mig_p5_en          = p2_wr_en;
+               assign mig_p5_wr_data     = p2_wr_data[31:0];
+               assign mig_p5_wr_mask     = p2_wr_mask[3:0];
+               assign mig_p4_en          = p2_rd_en;
+               
+                assign mig_p4_clk        = p2_rd_clk;
+                assign mig_p5_clk        = p2_wr_clk;
+
+                assign p2_rd_data        = mig_p4_rd_data;
+                assign p2_wr_count       = mig_p5_count;
+                assign p2_rd_count       = mig_p4_count;
+                assign p2_wr_empty       = mig_p5_empty;
+                assign p2_wr_full        = mig_p5_full;
+                assign p2_wr_error       = mig_p5_error;  
+                assign p2_wr_underrun    = mig_p5_underrun;
+                assign p2_rd_overflow    = mig_p4_overflow;    
+                assign p2_rd_error       = mig_p4_error;
+                assign p2_rd_full        = mig_p4_full;
+                assign p2_rd_empty       = mig_p4_empty;
+               
+       end else

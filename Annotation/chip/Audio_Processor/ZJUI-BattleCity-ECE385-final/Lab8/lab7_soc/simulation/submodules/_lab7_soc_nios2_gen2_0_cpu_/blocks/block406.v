@@ -1,0 +1,1 @@
+  assign dct_code = {is_cond_dct, dct_is_taken};

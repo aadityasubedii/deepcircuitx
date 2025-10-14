@@ -1,0 +1,1 @@
+  always @(posedge clk) fall_lead_r <= #TCQ fall_lead_ns;

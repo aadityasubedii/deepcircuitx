@@ -1,0 +1,1 @@
+    always @(addr[1]) addr_timing_check(1);

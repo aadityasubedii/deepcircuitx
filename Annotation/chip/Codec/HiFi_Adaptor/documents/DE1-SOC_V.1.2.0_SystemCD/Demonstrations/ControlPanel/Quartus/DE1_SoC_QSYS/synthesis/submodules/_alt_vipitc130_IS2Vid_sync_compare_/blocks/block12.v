@@ -1,0 +1,1 @@
+assign enable = sof_cvi_locked & sof_cvo_locked & genlock_enable[1] & genlock_enable[0];

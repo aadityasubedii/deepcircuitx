@@ -1,0 +1,13 @@
+Module name: main_mem. 
+
+Module specification: The main_mem module is a memory module interfacing with a Wishbone bus, serving incoming read/write requests from Wishbone master(s) by accessing its internal memory array. 
+
+The module includes input ports such as 'clk' (the clock signal), 'reset' (resets the module's state to initial values), 'scan_enable' (enabling scan mode), 'test_mode', 'i_mem_ctrl' (controls the addressing mode), 'i_wb_adr' (memory address from the Wishbone master), 'i_wb_sel' (selects byte enables in writing phase), 'i_wb_we' (Wishbone write enable signal to decide the type of operation), 'i_wb_dat' (data to be written into memory), 'i_wb_cyc' (indicates a valid bus cycle), and 'i_wb_stb' (indicates a valid data transfer or address phase). 
+
+Output ports include 'o_wb_dat' (data output to Wishbone bus, used when read operation is requested), 'o_wb_ack' (Wishbone acknowledge signal to indicate that data transfer has been successfully completed), and 'o_wb_err' (Wishbone error signal, used to indicate if an error has occurred during data transfer). 
+
+Internally, the module uses signals such as 'ram' (the memory array), 'start_write' and 'start_read' (signal the initiation of memory write and read operations respectively), 'rd_data' (holds read data), 'masked_wdata' (holds masked write data), 'wr_en', 'wr_mask', 'wr_data' (control write operations), and 'addr_d1' (holds delayed version of the supplied address). 
+
+The code includes various blocks for handling specific tasks: he conditional 'generate' block is used to configure operations according to the Wishbone data width (128 or 32 bits); the 'always' block is used for setting initial states and defining the behavior of registers on each clock cycle; and finally, 'masked' block to mask write data. 
+
+The main_mem module is robustly designed to fulfill the memory requests while meeting the complexities of Wishbone bus operation, which makes it a key component in systems that utilize a Wishbone bus for inter-component communication.

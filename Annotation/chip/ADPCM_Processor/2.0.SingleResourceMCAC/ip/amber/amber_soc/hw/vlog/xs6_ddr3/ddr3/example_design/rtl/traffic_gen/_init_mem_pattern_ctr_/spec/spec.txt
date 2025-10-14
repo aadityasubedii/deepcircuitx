@@ -1,0 +1,11 @@
+Module name: init_mem_pattern_ctr.
+
+Module specification: The module init_mem_pattern_ctr is designed to manage the generation of patterns for memory initialization and testing on FPGA hardware. This module manages these functions with regards to the memory characteristics received as parameters. It can be used with both SPARTAN6 and VIRTEX6 FPGA families, depending on the 'FAMILY' parameter input.
+
+The module receives various inputs such as: clock signal (clk_i), reset signal (rst_i), memory controller command address (mcb_cmd_addr_i), control signals for memory operations (mcb_cmd_bl_i, mcb_cmd_en_i, mcb_cmd_instr_i, mcb_wr_en_i), voltage IO modifications (vio_modify_enable), and signals to check memory initialization completion (mcb_init_done_i) and any error in memory block comparison (cmp_error). 
+
+It gives outputs including control signals for traffic running (run_traffic_o), start and end addresses for a memory testing operation (start_addr_o, end_addr_o), seed values for memory commands, data, and loading operations (cmd_seed_o, data_seed_o, load_seed_o), mode selections of different operations and fixed values used in memory testing.
+
+The module uses internal signals such as signals used to maintain the state of a Finite State Machine (current_state, next_state), register the completion of memory controller block's initialization (mcb_init_done_reg, mcb_init_done_reg1) and manage address comparisons during memory operations (AC2_G_E2, AC1_G_E1, AC3_G_E3). The current address being processed is held by internal register current_address. Also, signals like run_traffic, bram_mode_enable, and tst_matched control certain internal operations.
+
+The Verilog code of the module is formed of different blocks of code based on a switch-case structure, each representing different stages such as idle, memory initialization for write and read, testing memory, and comparison error.

@@ -1,0 +1,1 @@
+assign mtrans_reg2_mask = 1'd1<<mtrans_reg1;

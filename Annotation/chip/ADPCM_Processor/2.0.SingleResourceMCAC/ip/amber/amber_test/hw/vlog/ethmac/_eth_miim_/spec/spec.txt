@@ -1,0 +1,11 @@
+Module name: eth_miim. 
+
+Module specification: The eth_miim module is a Media Independent Interface Management (MIIM) design in Verilog meant for managing communications between MAC and PHY layer components in Ethernet network devices. It manages control and status querying operations on the physical layer (PHY), supporting different operations like writing control data (WCtrlData), reading status data (RStat), scanning status data (ScanStat), and others. 
+
+Inputs to this module are clock signal (Clk), reset signal (Reset), a divisor value (Divider), control data (CtrlData), addresses of the specific PHY register and PHY devices (Rgad, Fiad), signals for writing control data (WCtrlData), reading status data (RStat), scanning status data (ScanStat) and a Multidirectional Interface pin (Mdi) for input and output operations. 
+
+Output from this module includes a clock signal for control and status operations (Mdc), an output modifier for Multidirectional Interface pin (Mdo), corresponding enable signal (MdoEn), signals showing activity of the component, physical connection issues, status information validity, and the initiation of writing control data or reading status (Busy, LinkFail, Nvalid, WCtrlDataStart, RStatStart, UpdateMIIRX_DATAReg) and a register for status or control information read from the PHY (Prsd).
+
+Internally, this module uses registered versions of signals to hold their values from recent operation cycles, signals to start and end operations, signals to denote the progress of an operation, a counter for tracking bit transfers and several signals, registers and wires to latch and maintain the last byte of the data when the module is reading the status.
+
+This module consists of three different blocks: eth_clockgen, eth_shiftreg, and eth_outputcontrol, which are responsible for clock generation, shifting operations, and control of output respectively. The eth_miim module provides synchronization across these blocks, thus collectively ensuring reliable communication between MAC and PHY components in Ethernet applications.

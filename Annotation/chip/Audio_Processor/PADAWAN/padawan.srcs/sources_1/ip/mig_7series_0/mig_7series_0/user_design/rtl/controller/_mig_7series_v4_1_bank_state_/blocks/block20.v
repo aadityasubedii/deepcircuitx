@@ -1,0 +1,1 @@
+  always @(posedge clk) starve_limit_cntr_r <= #TCQ starve_limit_cntr_ns;

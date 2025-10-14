@@ -1,0 +1,1 @@
+    assign tx_data = { 4'he, ram_data[27:0] };

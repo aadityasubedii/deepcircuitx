@@ -1,0 +1,1 @@
+assign data_out = valid_out ? pre_data_out : data_out_d1;

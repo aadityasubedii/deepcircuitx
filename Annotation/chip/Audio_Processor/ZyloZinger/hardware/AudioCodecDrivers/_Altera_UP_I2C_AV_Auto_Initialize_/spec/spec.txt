@@ -1,0 +1,28 @@
+Module name: Altera_UP_I2C_AV_Auto_Initialize.
+
+Module specification: 
+
+The Altera_UP_I2C_AV_Auto_Initialize is a Verilog module designed to implement an automatic initialization procedure for an Inter-Integrated Circuit (I2C) interface with an audio device. Particularly, the module manages the state transitions for initializing several registers and data transfer operations. It relies heavily on a state machine model to manage this process. 
+
+The module accepts five input ports:
+
+- clk: clock input for synchronization.
+- reset: used to reset the state machine and other registers to their initial state.
+- clear_error: used to clear any initialization errors.
+- ack: acknowledgement from I2C interface.
+- transfer_complete: signals completion of a data transfer operation.
+
+It also provides six output ports:
+
+- data_out: 8-bit output holding the data to be sent over the I2C interface.
+- transfer_data: triggers when a data transfer operation should begin or occur.
+- send_start_bit: signals the sending of a start bit on the I2C bus.
+- send_stop_bit: signals the sending of a stop bit on the I2C bus.
+- auto_init_complete: goes high when the automated initialization process is complete.
+- auto_init_error: goes high when an error occurs during the automated initialization.
+
+Internally, the module employs several signals (change_state, finished_auto_init, rom_address_counter, rom_data, ns_i2c_auto_init, s_i2c_auto_init) that control the state transitions, track the ROM address, store data written into the ROM, and preserve state attributes of initialization process. 
+
+The code block structure includes parameter definition, port declarations, localparam designation, and state transition logic for the state machine described in the always blocks. These blocks support operations like managing state transitions, setting output port signals based on internal conditions, resetting on encountering an error and updating the ROM address counter. The syntax case is used to store different data into the rom_data based on the value of rom_address_counter. The auto_init_complete signal and the change_state and finished_auto_init wires are assigned based on certain specific condition checks.
+
+All of these elements work together to provide the central functionality of the Altera_UP_I2C_AV_Auto_Initialize module, which is the automated initiation of the I2C interface between the main controller and the audio device.

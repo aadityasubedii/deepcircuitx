@@ -1,0 +1,1 @@
+  assign oci_reg_01_addressed = address == 9'h101;

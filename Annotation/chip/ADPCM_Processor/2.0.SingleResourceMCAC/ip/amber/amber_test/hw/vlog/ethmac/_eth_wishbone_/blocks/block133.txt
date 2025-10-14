@@ -1,0 +1,4 @@
+Line number: 
+[856, 881]
+Comment: 
+The block is responsible for managing and updating transmission length ('TxLength') in a data transmission system under different control conditions. Firstly, If a system reset event is detected, the transmission length is set to zero. However, during a valid transmission, if both 'TxEn', 'TxEn_q' and 'TxBDRead' flags are true, the 'TxLength' is updated with the upper 16 bits of 'ram_do', assuming it's a read signal of a dual-port RAM. Lastly, if 'MasterWbTX' and 'm_wb_ack_i' are true, which seems to refer to a successful write operation in a Wishbone interface, the 'TxLength' is decremented based on a variable 'TxPointerLSB_rst' which seemingly relates to the least significant bit of a transmission pointer. The decrement varies from 1 to 4 based on the 'TxPointerLSB_rst' value. All transitions occur on the positive edge of the system clock or a system reset.

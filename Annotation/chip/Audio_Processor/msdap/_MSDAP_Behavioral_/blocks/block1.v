@@ -1,0 +1,1 @@
+	assign OutReady = OutReady_L && OutReady_R;

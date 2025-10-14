@@ -1,0 +1,1 @@
+      always @(posedge clk) maint_zq_r_lcl <= #TCQ maint_zq_ns;

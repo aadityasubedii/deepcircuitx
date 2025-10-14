@@ -1,0 +1,1 @@
+  assign o_phase_delta = r_phase_delta;

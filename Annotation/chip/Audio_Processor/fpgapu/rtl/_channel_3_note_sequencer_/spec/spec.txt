@@ -1,0 +1,22 @@
+Module name: channel_3_note_sequencer.
+
+Module specification: The "channel_3_note_sequencer" module is a segment of hardware design primarily purposed for control signal generation related to sound note timings and durations in a larger system such as a programmable sound generator, a digital synthesizer, or a sequencer in a digital music system. This module does not specifically output any sound but provides control signals such as frequency (mapped to a phase delta) for each note. 
+
+This module has the following input ports: 
+1. i_clk: The clock signal input for synchronization. 
+2. i_rst: The reset input for resetting registers. 
+3. i_tick_stb: An input tick signal, which though defined, is not used within this segment of the code. 
+4. i_note_stb: An input signal for invoking the process of checking if a note has finished playing, and if the next note in the sequence should be started. 
+
+The module also has following output ports: 
+1. o_top: A constant high byte possibly used somewhere else in the overall design.
+2. o_top_valid: A validation signal that is always "true", indicating that the output is always valid. 
+3. o_phase_delta: Control signal sent to the note_table module to tune the current note's frequency.
+
+Internal signals used within the module are: 
+1. r_duration_count: Counter that keeps track of a note's play duration.
+2. r_note_index: Index for the current note within the predefined sequence.
+3. r_note: Current note value derived from the note table.
+4. r_note_len: Duration for which the current note should be played.
+
+The module integrates different blocks of code executing on different conditions like clock's positive edge or activation/deactivation of i_rst or i_note_stb. These blocks primarily control the updating of internal signal values leading to seamless transition between notes in a predefined sequence. The mapping between note index and specific note values along with their lengths is defined in a case block. Concurrently, an instance of note_table module is used that maps the current note to a phase shift value (o_phase_delta).

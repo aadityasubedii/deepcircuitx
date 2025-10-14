@@ -1,0 +1,1 @@
+assign cmd_clk_en =  ( rdy_i & pipe_out_vld & run_traffic_i ||  mode_load_pulse && (CMD_PATTERN == "CGEN_BRAM"));

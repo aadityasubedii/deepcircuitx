@@ -1,0 +1,1 @@
+    assign led_en = prescale == 0;

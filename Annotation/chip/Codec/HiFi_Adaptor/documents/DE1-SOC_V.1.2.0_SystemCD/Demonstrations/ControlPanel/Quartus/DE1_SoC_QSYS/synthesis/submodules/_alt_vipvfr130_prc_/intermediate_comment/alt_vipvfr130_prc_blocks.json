@@ -1,0 +1,81 @@
+{
+    "line_num": [
+        [
+            299,
+            299
+        ],
+        [
+            298,
+            298
+        ],
+        [
+            297,
+            297
+        ],
+        [
+            296,
+            296
+        ],
+        [
+            295,
+            295
+        ],
+        [
+            271,
+            302
+        ],
+        [
+            157,
+            157
+        ],
+        [
+            146,
+            146
+        ],
+        [
+            143,
+            143
+        ],
+        [
+            142,
+            142
+        ],
+        [
+            139,
+            139
+        ],
+        [
+            138,
+            138
+        ],
+        [
+            137,
+            137
+        ],
+        [
+            136,
+            136
+        ],
+        [
+            45,
+            55
+        ]
+    ],
+    "blocks": [
+        "\t\tassign dout_endofpacket = eop_out;",
+        "\t\tassign dout_startofpacket = sop_out;",
+        "\t\tassign dout_data = data_out;",
+        "\t\tassign dout_valid = valid_out;",
+        "\t\tassign ready_out = dout_ready;",
+        "generate\n\tif (READY_LATENCY == 1) begin\n\n\t\t\n\t\talt_vipvfr130_common_stream_output\n\t\t\t#(.DATA_WIDTH (BPS * CHANNELS_IN_PAR))\n\t\t\tavalon_st_output\n\t\t\t(\t.clk (clock),\n\t\t\t\t.rst (reset),\n\t\t\t\t.dout_ready (dout_ready),\n\t\t\t\t.dout_valid (dout_valid),\n\t\t\t\t.dout_data (dout_data),\n\t\t\t\t.dout_sop (dout_startofpacket),\n\t\t\t\t.dout_eop (dout_endofpacket),\n\t\t\t\t.int_ready (ready_out),\n\t\t\t\t.int_valid (valid_out),\n\t\t\t\t.int_data (data_out),\n\t\t\t\t.int_sop (sop_out),\n\t\t\t\t.int_eop (eop_out),\n\t\t\t\t.enable (1'b1),\n\t\t\t\t.synced ());\t\t\t\t\t\t\t\t\t\t\t\n\t\n\tend else begin \n\t\t\n\t\tassign ready_out = dout_ready;\n\t\tassign dout_valid = valid_out;\n\t\tassign dout_data = data_out;\n\t\tassign dout_startofpacket = sop_out;\n\t\tassign dout_endofpacket = eop_out;\n\t\t\n\tend\nendgenerate",
+        "wire global_ena = !(stall_FROM_read_master_TO_WIRE_global_ena | stall_FROM_prc_core_TO_WIRE_global_ena);",
+        "assign interrupts[0] = complete;",
+        "assign master_reset = (CLOCKS_ARE_SEPARATE) ? master_av_reset : reset;",
+        "assign master_clock = (CLOCKS_ARE_SEPARATE) ? master_av_clock : clock;",
+        "assign packet_words = registers[3*SLAVE_DATA_REQUIREDWIDTH+MAX_BURST_LENGTH_REQUIREDWIDTH-1:3*SLAVE_DATA_REQUIREDWIDTH];",
+        "assign packet_samples = registers[2*SLAVE_DATA_REQUIREDWIDTH+PACKET_SAMPLES_REQUIREDWIDTH-1:2*SLAVE_DATA_REQUIREDWIDTH];",
+        "assign packet_type = registers[SLAVE_DATA_REQUIREDWIDTH+3:SLAVE_DATA_REQUIREDWIDTH];",
+        "assign packet_addr = registers[MM_ADDR_REQUIREDWIDTH-1:0];",
+        "function integer alt_vipfunc_required_width;\n  input [511:0] value;\n  integer i;\n  begin\n    alt_vipfunc_required_width = 512;\n    for (i=512; i>0; i=i-1) begin\n      if (2**i>value)\n        alt_vipfunc_required_width = i;\n    end\n  end\nendfunction"
+    ]
+}

@@ -1,0 +1,131 @@
+{
+    "line_num": [
+        [
+            288,
+            288
+        ],
+        [
+            286,
+            286
+        ],
+        [
+            284,
+            284
+        ],
+        [
+            279,
+            280
+        ],
+        [
+            273,
+            278
+        ],
+        [
+            265,
+            267
+        ],
+        [
+            247,
+            252
+        ],
+        [
+            234,
+            234
+        ],
+        [
+            226,
+            231
+        ],
+        [
+            203,
+            205
+        ],
+        [
+            194,
+            194
+        ],
+        [
+            187,
+            190
+        ],
+        [
+            173,
+            175
+        ],
+        [
+            144,
+            162
+        ],
+        [
+            120,
+            132
+        ],
+        [
+            118,
+            118
+        ],
+        [
+            113,
+            115
+        ],
+        [
+            106,
+            108
+        ],
+        [
+            99,
+            104
+        ],
+        [
+            94,
+            97
+        ],
+        [
+            87,
+            92
+        ],
+        [
+            80,
+            85
+        ],
+        [
+            59,
+            68
+        ],
+        [
+            42,
+            47
+        ],
+        [
+            32,
+            37
+        ]
+    ],
+    "blocks": [
+        "    assign done = done_delay & done_req;",
+        "    pipe #(.LENGTH(4)) pipe_done (.ck(ck), .in(done_req), .out(done_delay));",
+        "    wire done_delay;",
+        "    assign out_audio = out_we ? shift_out : 0;\n    assign out_addr = out_we ? out_addr_2[(CHAN_W-1):0] : 0;",
+        "    always @(posedge ck) begin\n        out_addr_0 <= gain_1[(CHAN_W-1):0];\n        out_addr_1 <= out_addr_0;\n        out_addr_2 <= out_addr_1;\n    end\n",
+        "    always @(posedge ck) begin\n        out_we <= shift_en;\n    end",
+        "    always @(posedge ck) begin\n        shift_0 <= offset;\n        shift_1 <= shift_0;\n        shift_2 <= shift_1;\n        shift_3 <= shift_2;\n    end",
+        "    assign acc_in = mul_out;",
+        "    always @(posedge ck) begin\n        acc_add_0 <= acc_add_req;\n        \n        acc_add_1 <= acc_add_0;\n        acc_add <= acc_add_1 ^ negative;\n    end",
+        "    always @(posedge ck) begin\n        negative <= neg_audio;\n    end",
+        "    assign neg_audio = audio_in[15];",
+        "    always @(posedge ck) begin\n        gain_1 <= gain_0;\n        gain_2 <= gain_1;\n    end",
+        "    always @(posedge ck) begin\n        gain_0 <= gain;\n    end",
+        "    always @(posedge ck) begin\n        if (reset) begin\n            case (op_code)\n                OP_NOOP     : noop();\n                OP_CAPTURE  : capture(offset[3:0]);\n                OP_MAC      : mac(0, 1);\n                OP_MACN     : mac(0, 0);\n                OP_MACZ     : mac(1, 1);\n                OP_MACNZ    : mac(1, 0);\n                OP_SAVE     : save();\n                OP_HALT     : halt();\n                default     : err();\n            endcase\n        end else begin\n            noop();\n            error <= 0;\n            done_req <= 0;\n        end\n    end",
+        "    task capture(input [3:0] code);\n        noop();\n        case (code)\n            0 : capture_out <= coef_data; \n            1 : capture_out <= { audio_in, pad, audio_raddr_0 }; \n            2 : capture_out <= { gain_2, audio }; \n            3 : capture_out <= mul_out; \n\n            5 : capture_out <= acc_out[31:0]; \n            6 : capture_out <= { 13'h0, out_addr, out_audio };\n            7 : capture_out <= { 32'h12345678 };\n        endcase\n    endtask",
+        "    assign pad = 0;",
+        "    always @(posedge ck) begin\n        audio_raddr_0 <= audio_raddr;\n    end",
+        "    task err;\n        error <= 1;\n    endtask",
+        "    task save;\n        acc_en_req <= 0;\n        acc_rst_req <= 0;\n        acc_add_req <= 0;\n        out_en_req <= 1;\n    endtask",
+        "    task halt;\n        noop();\n        done_req <= 1;\n    endtask",
+        "    task mac(input zero, input add);\n        acc_en_req <= 1;\n        acc_rst_req <= zero;\n        acc_add_req <= add;\n        out_en_req <= 0;\n    endtask",
+        "    task noop;\n        acc_en_req <= 0;\n        out_en_req <= 0;\n        acc_rst_req <= 0;\n        acc_add_req <= 0;\n    endtask",
+        "    always @(posedge ck) begin\n        if (reset && !done_req && (coef_addr != 0)) begin\n            gain    <= coef_data[15:0];\n            chan    <= coef_data[16+(CHAN_W-1):16];\n            offset  <= coef_data[16+(CHAN_W+FRAME_W-1):16+(CHAN_W)];\n            op_code <= coef_data[31:16+(CHAN_W+FRAME_W)];\n        end else begin\n            op_code <= 0;\n        end\n    end",
+        "    always @(posedge ck) begin\n        if (reset && !done_req)\n            coef_addr <= coef_addr + 1;\n        else\n            coef_addr <= 0;\n    end",
+        "    initial begin \n        coef_addr = 0;\n        error = 1;\n        out_we = 0;\n        capture_out = 0;\n    end"
+    ]
+}

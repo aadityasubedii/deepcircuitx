@@ -1,0 +1,1 @@
+  wire rnk_config_strobe_ns = ~rnk_config_strobe_r[0] && |rtc && ~granted_col_ns;

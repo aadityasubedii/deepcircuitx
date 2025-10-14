@@ -1,0 +1,1 @@
+    assign mul_a = { gain[12:0], 3'b0 };

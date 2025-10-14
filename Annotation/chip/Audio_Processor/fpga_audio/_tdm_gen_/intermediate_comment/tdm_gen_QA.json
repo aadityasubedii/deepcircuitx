@@ -1,0 +1,43 @@
+{
+    "gpt-message": [
+        {
+            "role": "system",
+            "content": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+        },
+        {
+            "role": "user",
+            "content": "Name of the module and its functionality is as follows: \nModule name: tdm_gen.\nExplanation: This module is a clock domain crossing boundary unit that generates 'tdm_out' from the 'FIX_DATA' indexed by 'bclk_cnt'. 'bclk_cnt' is updated on the negative edge of 'bclk'. It is set to 62 if 'wc_ff' equals to '2'b01'(when a positive edge of 'wclk' arrives right after a negative edge of 'bclk') and otherwise, it is decremented by one. The 'wc_ff' is updated on the positive edge of 'bclk' where it shifts itself and concatenates 'wclk'. The 'FIX_DATA' is a constant defined in this module."
+        },
+        {
+            "role": "user",
+            "content": "Input and output ports and their explanation is as follows: \nInput ports: [bclk, wclk]. \nExplanation: 'bclk' is the main clock input around which the module functions. 'wclk' is another clock input used to shift the state of wc_ff to ensure that 'bclk_cnt' is updated at the right time.\n\nOutput ports: [tdm_out]. \nExplanation: 'tdm_out' is the output port of the module. It outputs a bit from 'FIX_DATA' indexed by 'bclk_cnt' generated within the module based on the clock inputs 'bclk' and 'wclk'."
+        },
+        {
+            "role": "user",
+            "content": "Internal signals and their explanation is as follows: \nInternal signals: [wc_ff, bclk_cnt, FIX_DATA]. \nExplanation: \n1. 'wc_ff' is a 2-bit register which is updated at every positive edge of 'bclk.' It shifts its current state and adds 'wclk' at the LSB. This keeps tracking of if a positive edge of 'wclk' arrives right after a negative edge of 'bclk', by checking if 'wc_ff' equals to '2'b01'.\n2. 'bclk_cnt' is a 6-bit counter that is updated at every negative edge of 'bclk'. It is set to 6'd62 when 'wc_ff' equals '2'b01', otherwise it is decremented by 1. This counter value is used to index into 'FIX_DATA'.\n3. 'FIX_DATA' is a parameter in the module that holds a specific 32-bit data value. A bit from this data is passed out as 'tdm_out' depending on the index specified by 'bclk_cnt'."
+        }
+    ],
+    "claude-message": [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+                },
+                {
+                    "type": "text",
+                    "text": "Name of the module and its functionality is as follows: \nModule name: tdm_gen.\nExplanation: This module is a clock domain crossing boundary unit that generates 'tdm_out' from the 'FIX_DATA' indexed by 'bclk_cnt'. 'bclk_cnt' is updated on the negative edge of 'bclk'. It is set to 62 if 'wc_ff' equals to '2'b01'(when a positive edge of 'wclk' arrives right after a negative edge of 'bclk') and otherwise, it is decremented by one. The 'wc_ff' is updated on the positive edge of 'bclk' where it shifts itself and concatenates 'wclk'. The 'FIX_DATA' is a constant defined in this module."
+                },
+                {
+                    "type": "text",
+                    "text": "Input and output ports and their explanation is as follows: \nInput ports: [bclk, wclk]. \nExplanation: 'bclk' is the main clock input around which the module functions. 'wclk' is another clock input used to shift the state of wc_ff to ensure that 'bclk_cnt' is updated at the right time.\n\nOutput ports: [tdm_out]. \nExplanation: 'tdm_out' is the output port of the module. It outputs a bit from 'FIX_DATA' indexed by 'bclk_cnt' generated within the module based on the clock inputs 'bclk' and 'wclk'."
+                },
+                {
+                    "type": "text",
+                    "text": "Internal signals and their explanation is as follows: \nInternal signals: [wc_ff, bclk_cnt, FIX_DATA]. \nExplanation: \n1. 'wc_ff' is a 2-bit register which is updated at every positive edge of 'bclk.' It shifts its current state and adds 'wclk' at the LSB. This keeps tracking of if a positive edge of 'wclk' arrives right after a negative edge of 'bclk', by checking if 'wc_ff' equals to '2'b01'.\n2. 'bclk_cnt' is a 6-bit counter that is updated at every negative edge of 'bclk'. It is set to 6'd62 when 'wc_ff' equals '2'b01', otherwise it is decremented by 1. This counter value is used to index into 'FIX_DATA'.\n3. 'FIX_DATA' is a parameter in the module that holds a specific 32-bit data value. A bit from this data is passed out as 'tdm_out' depending on the index specified by 'bclk_cnt'."
+                }
+            ]
+        }
+    ]
+}

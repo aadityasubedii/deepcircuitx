@@ -1,0 +1,13 @@
+Module name: eth_crc. 
+
+Module specification: 
+
+The eth_crc module is a hardware description component written in Verilog RTL code, that stands for "ethernet Cyclic Redundancy Check". It's a key player in network communications, especially in the context of Ethernet frames data transmission or storage, by providing error detection functionality.
+
+This module takes five input signals and returns two output signals. The input signals are 'Clk' (the clock that drives the module), 'Reset' (an active-high reset signal), 'Data' (a 4-bit data input), 'Enable' (a signal that enables or disables the CRC computation), and 'Initialize' (a signal to set/reset the Crc register after a time period 'Tp'). 
+
+The output signals are 'Crc' (a 32-bit calculated CRC value), and 'CrcError' (a signal that indicates a CRC error by going high when the calculated CRC value doesn't match the expected value). 
+
+There are also two internal signals, 'Crc' (a 32-bit register holding the calculated CRC or predefined values) and 'CrcNext' (a 32-bit wire holding the intermediate CRC values). 
+
+The code can be broadly divided into different sections: 'assign' statements to calculate the intermediate CRC values using XOR operations and assign them to CrcNext, 'always' block that updates the 'Crc' register value at the positive edge of the clock or reset signal, and the error detection where the calculated CRC is compared to a predefined value, signaling an error if they don't match. The module utilizes XOR operations extensively which is typical to the nature of CRC computations normally done through the modulo-2 division.

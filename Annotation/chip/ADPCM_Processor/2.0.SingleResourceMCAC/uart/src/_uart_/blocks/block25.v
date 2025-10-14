@@ -1,0 +1,1 @@
+assign   tx_fifo_push_not_full      = tx_fifo_push && !tx_fifo_full;

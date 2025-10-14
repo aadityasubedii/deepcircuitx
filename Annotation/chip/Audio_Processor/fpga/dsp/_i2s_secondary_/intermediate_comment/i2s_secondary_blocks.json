@@ -1,0 +1,86 @@
+{
+    "line_num": [
+        [
+            210,
+            213
+        ],
+        [
+            154,
+            215
+        ],
+        [
+            146,
+            146
+        ],
+        [
+            119,
+            144
+        ],
+        [
+            114,
+            114
+        ],
+        [
+            111,
+            113
+        ],
+        [
+            89,
+            98
+        ],
+        [
+            69,
+            81
+        ],
+        [
+            67,
+            68
+        ],
+        [
+            51,
+            62
+        ],
+        [
+            45,
+            45
+        ],
+        [
+            44,
+            44
+        ],
+        [
+            38,
+            41
+        ],
+        [
+            25,
+            28
+        ],
+        [
+            18,
+            18
+        ],
+        [
+            17,
+            17
+        ]
+    ],
+    "blocks": [
+        "    assign sck          = external ? ext_sck        : local_sck;\n    assign ws           = external ? ext_ws         : local_ws;\n    assign en           = external ? ext_en         : local_en;\n    assign frame_posn   = external ? ext_frame_posn : local_frame_posn;",
+        "module i2s_dual\n#(parameter DIVIDER=16, WIDTH=$clog2(DIVIDER)+1, DETECT=5)\n(\n    input wire ck,\n    input wire rst,\n    input wire ext_sck,\n    input wire ext_ws,\n    output wire sck,\n    output wire ws,\n    output wire en,\n    output wire [5:0] frame_posn,\n    output wire external\n);\n\n    \n    wire local_en;\n    wire local_sck;\n    wire local_ws;\n    wire [5:0] local_frame_posn;\n\n    i2s_clock #(.DIVIDER(DIVIDER))\n    i2s_clock(\n        .ck(ck),\n        .rst(rst),\n        .en(local_en),\n        .sck(local_sck),\n        .ws(local_ws),\n        .frame_posn(local_frame_posn)\n    );\n\n    \n    wire ext_en;\n    wire [5:0] ext_frame_posn;\n\n    i2s_secondary #(.WIDTH(WIDTH))\n    i2s_secondary(\n        .ck(ck),\n        .sck(ext_sck),\n        .ws(ext_ws),\n        .en(ext_en),\n        .frame_posn(ext_frame_posn)\n    );\n\n    \n\n    i2s_detect #(.WIDTH(DETECT))\n    i2s_detect(\n        .ck(ck),\n        .ext_ws(ext_ws),\n        .ext_frame_posn(ext_frame_posn),\n        .local_frame_posn(local_frame_posn),\n        .local_en(local_en),\n        .valid(external)\n    );\n\n    \n    assign sck          = external ? ext_sck        : local_sck;\n    assign ws           = external ? ext_ws         : local_ws;\n    assign en           = external ? ext_en         : local_en;\n    assign frame_posn   = external ? ext_frame_posn : local_frame_posn;\n\nendmodule",
+        "    assign valid = good_frames == 2'b11;",
+        "    always @(posedge ck) begin\n\n        ws <= ext_ws;\n        ws_0 <= ws;\n\n        has_64_bits <= ext_frame_posn == 6'h3f;\n\n        if (ext_okay) begin\n            frames <= 0;\n        end else if (local_sof) begin\n            if (frames != 2'b11) begin\n                frames <= frames + 1;\n            end\n        end\n\n        if (local_sof) begin\n            if (frames == 0) begin\n                if (good_frames != 2'b11) begin\n                    good_frames <= good_frames + 1;\n                end\n            end else begin\n                good_frames <= 0;\n            end\n        end\n\n    end",
+        "    assign local_sof = local_en & (local_frame_posn == 0);",
+        "    assign sof = ws_0 & !ws;\n    wire ext_okay;\n    assign ext_okay = had_64_bits & sof;",
+        "module i2s_detect\n#(parameter WIDTH=5)\n(\n    input wire ck,\n    input wire ext_ws,\n    input wire [5:0] ext_frame_posn,\n    input wire local_en,\n    input wire [5:0] local_frame_posn,\n    output wire valid\n);",
+        "    always @(posedge ck) begin\n\n        en <= start_sck;\n\n        if (start_sck) begin\n            frame_posn <= frame_posn + 1;\n        end\n\n        if (start_frame) begin\n            frame_posn <= 0;\n        end\n\n    end",
+        "    assign start_sck = prescale == match;\n",
+        "    always @(posedge ck) begin\n\n        if (ck_in) begin \n            prescale <= 0;\n            match <= prescale - 3;\n        end else begin\n            if (prescale != S_MAX) begin\n                prescale <= prescale + 1;\n            end\n        end\n\n    end",
+        "    assign ck_in = prev_sck && !sck0;",
+        "    assign start_frame = prev_ws & !ws0;",
+        "    always @(posedge ck) begin\n        prev_ws <= ws0;\n        prev_sck <= sck0;\n    end    ",
+        "    always @(posedge ck) begin\n        sck0 <= sck;\n        ws0  <= ws;\n    end",
+        "    initial en = 0;",
+        "    initial frame_posn = 0;"
+    ]
+}

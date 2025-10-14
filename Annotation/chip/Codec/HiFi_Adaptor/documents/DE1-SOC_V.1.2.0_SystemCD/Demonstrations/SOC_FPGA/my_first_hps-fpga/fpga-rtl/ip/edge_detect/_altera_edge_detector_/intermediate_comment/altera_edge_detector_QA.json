@@ -1,0 +1,43 @@
+{
+    "gpt-message": [
+        {
+            "role": "system",
+            "content": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+        },
+        {
+            "role": "user",
+            "content": "Name of the module and its functionality is as follows: \nModule name: altera_edge_detector.\nExplanation: This module is designed to detect edges in a digital signal input. It specifically detects rising or falling edges based on the value of the `EDGE_TYPE` parameter. The detected edge generates a pulse output which can either be extended over multiple clock cycles controlled by the `PULSE_EXT` parameter or be a single clock cycle pulse. Additional features include ignoring reset during busy pulsing determined by `IGNORE_RST_WHILE_BUSY`, providing robustness in its operation. The module operates as a finite state machine with three states: IDLE, ARM, and CAPT, transitioning between these states based on the input signal and generating the output pulses accordingly."
+        },
+        {
+            "role": "user",
+            "content": "Input and output ports and their explanation is as follows: \nInput ports: clk, rst_n, signal_in.\nExplanation: \n- `clk` is the clock input to which the module's operations are synchronized. Each state transition and output pulse generation is aligned with the rising edge of this clock.\n- `rst_n` is the active-low reset input. When reset is asserted (low), the module's internal state and possibly output pulses are reset to initial conditions, ensuring a defined startup behavior.\n- `signal_in` is the digital signal input where the module detects edges. Depending on the configuration, rising or falling edges in this signal trigger state changes and potentially generate output pulses.\n\nOutput ports: pulse_out.\nExplanation:\n- `pulse_out` is the output pulse signal. This output generates a pulse either just for a single clock cycle or extended over multiple cycles, depending on the `PULSE_EXT` parameter. This pulse indicates the detection of an edge in the `signal_in` based on `EDGE_TYPE` configuration."
+        },
+        {
+            "role": "user",
+            "content": "Internal signals and their explanation is as follows: \nInternal signals: state, next_state, pulse_detect, busy_pulsing, reset_qual_n, extend_pulse, pulse_reg.\nExplanation:\n- `state` and `next_state` are two-state registers that hold the current and the next states of the finite state machine implemented in the module, respectively. These registers control how the module reacts to the input signal and when it transitions between the IDLE, ARM, and CAPT states.\n- `pulse_detect` is a register used to indicate if a pulse should be generated in response to a detected edge according to the conditions checked in the always block that handles state transitions. It helps in controlling pulse generation based on the state machine\u2019s current state.\n- `busy_pulsing` is a wire that indicates if the module is currently outputting a pulse, which affects the reset behavior when `IGNORE_RST_WHILE_BUSY` is enabled. This ensures that during an active pulse output, the reset condition can optionally be ignored.\n- `reset_qual_n` is a wire that combines the reset signal `rst_n` with `busy_pulsing` to create a qualified reset signal which may ignore the standard reset behavior during pulse output if configured.\n- `extend_pulse` is a register array used when `PULSE_EXT` is configured for more than one cycle. It serves to extend the duration of the output pulse, shifting the pulse through this array according to the defined pulse extension length.\n- `pulse_reg` is a register used when `PULSE_EXT` is configured to be one; it stores the state of `pulse_detect` for output, essentially implementing a non-extended pulse which is the simplest pulse output scenario."
+        }
+    ],
+    "claude-message": [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+                },
+                {
+                    "type": "text",
+                    "text": "Name of the module and its functionality is as follows: \nModule name: altera_edge_detector.\nExplanation: This module is designed to detect edges in a digital signal input. It specifically detects rising or falling edges based on the value of the `EDGE_TYPE` parameter. The detected edge generates a pulse output which can either be extended over multiple clock cycles controlled by the `PULSE_EXT` parameter or be a single clock cycle pulse. Additional features include ignoring reset during busy pulsing determined by `IGNORE_RST_WHILE_BUSY`, providing robustness in its operation. The module operates as a finite state machine with three states: IDLE, ARM, and CAPT, transitioning between these states based on the input signal and generating the output pulses accordingly."
+                },
+                {
+                    "type": "text",
+                    "text": "Input and output ports and their explanation is as follows: \nInput ports: clk, rst_n, signal_in.\nExplanation: \n- `clk` is the clock input to which the module's operations are synchronized. Each state transition and output pulse generation is aligned with the rising edge of this clock.\n- `rst_n` is the active-low reset input. When reset is asserted (low), the module's internal state and possibly output pulses are reset to initial conditions, ensuring a defined startup behavior.\n- `signal_in` is the digital signal input where the module detects edges. Depending on the configuration, rising or falling edges in this signal trigger state changes and potentially generate output pulses.\n\nOutput ports: pulse_out.\nExplanation:\n- `pulse_out` is the output pulse signal. This output generates a pulse either just for a single clock cycle or extended over multiple cycles, depending on the `PULSE_EXT` parameter. This pulse indicates the detection of an edge in the `signal_in` based on `EDGE_TYPE` configuration."
+                },
+                {
+                    "type": "text",
+                    "text": "Internal signals and their explanation is as follows: \nInternal signals: state, next_state, pulse_detect, busy_pulsing, reset_qual_n, extend_pulse, pulse_reg.\nExplanation:\n- `state` and `next_state` are two-state registers that hold the current and the next states of the finite state machine implemented in the module, respectively. These registers control how the module reacts to the input signal and when it transitions between the IDLE, ARM, and CAPT states.\n- `pulse_detect` is a register used to indicate if a pulse should be generated in response to a detected edge according to the conditions checked in the always block that handles state transitions. It helps in controlling pulse generation based on the state machine\u2019s current state.\n- `busy_pulsing` is a wire that indicates if the module is currently outputting a pulse, which affects the reset behavior when `IGNORE_RST_WHILE_BUSY` is enabled. This ensures that during an active pulse output, the reset condition can optionally be ignored.\n- `reset_qual_n` is a wire that combines the reset signal `rst_n` with `busy_pulsing` to create a qualified reset signal which may ignore the standard reset behavior during pulse output if configured.\n- `extend_pulse` is a register array used when `PULSE_EXT` is configured for more than one cycle. It serves to extend the duration of the output pulse, shifting the pulse through this array according to the defined pulse extension length.\n- `pulse_reg` is a register used when `PULSE_EXT` is configured to be one; it stores the state of `pulse_detect` for output, essentially implementing a non-extended pulse which is the simplest pulse output scenario."
+                }
+            ]
+        }
+    ]
+}

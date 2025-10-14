@@ -1,0 +1,11 @@
+Module name: timer_module. 
+
+Module specification: The module "timer_module" is a timing module based on a provided clock signal (`i_clk`) implementing wishbone bus architecture. It consists of three timers (timer0, timer1, timer2) and manages read/write operations, timer controls, interrupt generation when timer is depleted and debug functions. 
+
+The significant input ports to the module are `i_clk`, `i_wb_adr`, `i_wb_sel`, `i_wb_we`, `i_wb_dat`, `i_wb_cyc`, `i_wb_stb`. These represent the clock input, wishbone address input, select input for the Wishbone bus, write enable input for the wishbone bus, data input for the Wishbone bus, cycle input for the Wishbone bus, and strobe input signal for the Wishbone bus respectively.
+
+Output ports are `o_wb_dat`, `o_wb_ack`, `o_wb_err` and `o_timer_int`. These output ports represent data output for the Wishbone bus, acknowledge signal for Wishbone bus, error signal for Wishbone bus, and an array of interrupt signals generated from timers respectively.
+
+Internal signals like `timer0_load_reg`, `timer1_load_reg`, `timer2_load_reg` etc. are used to control registers for each timer, load values, and handle interrupt signals from each timer. Signals like `wb_rdata32`, `wb_wdata32` etc. manage writing and reading operations on the Wishbone bus. 
+
+The code comprises of different blocks managing write and read operations, timer controls, timers value decrement, generating interrupts and debug functions. Each timer operation is configured individually. Timers decrement based on control register settings and possible pre-scaling. An interrupt is generated when the timer value reaches zero. Timer interrupt status can be cleared by wishbone operations. Debug functionalities result in monitor logs on various operations. The module is aptly designed to manage timers in a system employing wishbone architecture.

@@ -1,0 +1,56 @@
+{
+    "line_num": [
+        [
+            299,
+            299
+        ],
+        [
+            298,
+            298
+        ],
+        [
+            297,
+            297
+        ],
+        [
+            296,
+            296
+        ],
+        [
+            295,
+            295
+        ],
+        [
+            271,
+            302
+        ],
+        [
+            241,
+            269
+        ],
+        [
+            201,
+            238
+        ],
+        [
+            160,
+            198
+        ],
+        [
+            45,
+            55
+        ]
+    ],
+    "blocks": [
+        "\t\tassign dout_endofpacket = eop_out;",
+        "\t\tassign dout_startofpacket = sop_out;",
+        "\t\tassign dout_data = data_out;",
+        "\t\tassign dout_valid = valid_out;",
+        "\t\tassign ready_out = dout_ready;",
+        "generate\n\tif (READY_LATENCY == 1) begin\n\n\t\t\n\t\talt_vipvfr131_common_stream_output\n\t\t\t#(.DATA_WIDTH (BPS * CHANNELS_IN_PAR))\n\t\t\tavalon_st_output\n\t\t\t(\t.clk (clock),\n\t\t\t\t.rst (reset),\n\t\t\t\t.dout_ready (dout_ready),\n\t\t\t\t.dout_valid (dout_valid),\n\t\t\t\t.dout_data (dout_data),\n\t\t\t\t.dout_sop (dout_startofpacket),\n\t\t\t\t.dout_eop (dout_endofpacket),\n\t\t\t\t.int_ready (ready_out),\n\t\t\t\t.int_valid (valid_out),\n\t\t\t\t.int_data (data_out),\n\t\t\t\t.int_sop (sop_out),\n\t\t\t\t.int_eop (eop_out),\n\t\t\t\t.enable (1'b1),\n\t\t\t\t.synced ());\t\t\t\t\t\t\t\t\t\t\t\n\t\n\tend else begin \n\t\t\n\t\tassign ready_out = dout_ready;\n\t\tassign dout_valid = valid_out;\n\t\tassign dout_data = data_out;\n\t\tassign dout_startofpacket = sop_out;\n\t\tassign dout_endofpacket = eop_out;\n\t\t\n\tend\nendgenerate",
+        "alt_vipvfr131_common_avalon_mm_slave\n  #(.AV_ADDRESS_WIDTH (SLAVE_ADDRESS_REQUIREDWIDTH),\n    .AV_DATA_WIDTH (SLAVE_DATA_REQUIREDWIDTH),\n    .NO_OUTPUTS (1),\n    .NO_INTERRUPTS (NO_INTERRUPTS),\n    .NO_REGISTERS (NO_REGISTERS),\n    .ALLOW_INTERNAL_WRITE (0))\navalon_mm_control_slave\n  (\n  \t.rst (reset),\n    .clk (clock),\n    \n    \n    .av_address (control_av_address),\n    .av_read (control_av_read),\n    .av_readdata (control_av_readdata),\n    .av_write (control_av_write),\n    .av_writedata (control_av_writedata),\n    .av_irq (control_av_irq),\n    \n    \n    .enable (enable),\n    .clear_enable (clear_enable), \n    .triggers (triggers),\n    .registers (registers),\n    .registers_in (registers_in),\n    .registers_write (registers_write),\n    .interrupts (interrupts),\n    .stopped (stopped));\t",
+        "alt_vipvfr131_prc_core\n\t#(.BITS_PER_SYMBOL (BPS),\n\t\t.SYMBOLS_PER_BEAT (CHANNELS_IN_PAR),\n\t\t.BURST_LENGTH_REQUIREDWIDTH (MAX_BURST_LENGTH_REQUIREDWIDTH),\n\t\t.PACKET_SAMPLES_REQUIREDWIDTH (PACKET_SAMPLES_REQUIREDWIDTH))\n\nprc_core\t\t\n\t(\t.clock (clock),\n\t\t.reset (reset),\n\t\t\n\t\t.stall(stall_FROM_prc_core_TO_WIRE_global_ena),\n\t\t.ena(global_ena),\n\t\t\t\n\t\t.read (read_FROM_prc_core_TO_read_master),\t\t\n\t\t.data (pixel_data_FROM_read_master_TO_prc_core),\n\t\t.discard_remaining_data_of_read_word (discard_remaining_data_of_read_word_FROM_prc_core_TO_read_master),\n\t\t\n\t\t\n\t\t.cmd_length_of_burst (cmd_length_of_burst_FROM_prc_core_TO_read_master),\n\t\t.cmd (cmd_FROM_prc_core_TO_read_master),\n\t\t.cmd_addr (cmd_addr_FROM_prc_core_TO_read_master),\t\t\n\t\t\t\t\n\t\t\n\t\t.enable (enable),\n\t\t.clear_enable (clear_enable),\n\t\t.stopped (stopped),\n\t\t.complete (complete),\n\t\t.packet_addr (packet_addr),\n\t\t.packet_type (packet_type),\n\t\t.packet_words (packet_words),\n\t\t.packet_samples (packet_samples),\n\t\t\n\t\t\n\t\t.ready_out (ready_out),\t\t\n\t\t.valid_out (valid_out),\n\t\t.data_out (data_out),\n\t\t.sop_out (sop_out),\n\t\t.eop_out (eop_out));",
+        "alt_vipvfr131_prc_read_master \n#(.ADDR_WIDTH (MM_ADDR_REQUIREDWIDTH),\n    .DATA_WIDTH (MEM_PORT_WIDTH),\n    .READ_USED (1),\n    .COMMAND_FIFO_DEPTH (1),  \n    .READ_FIFO_DEPTH (RMASTER_FIFO_DEPTH),\n    .CLOCKS_ARE_SAME (!CLOCKS_ARE_SEPARATE),\n    .MAX_BURST_LENGTH_REQUIREDWIDTH (MAX_BURST_LENGTH_REQUIREDWIDTH),\n    .BURST_WIDTH (MM_MASTER_BURST_REQUIREDWIDTH),\n    .READ_TARGET_BURST_SIZE (RMASTER_BURST_TARGET),\n    .UNPACKED_WIDTH(BPS * CHANNELS_IN_PAR)\n    )\nread_master\n(\t\t.clock (clock),\n\t\t.reset (reset),\n        \n    .ena(global_ena),\n    .stall(stall_FROM_read_master_TO_WIRE_global_ena),\n    \n    .cmd_addr(cmd_addr_FROM_prc_core_TO_read_master),\n    .cmd_write_instead_of_read(1'b0),  \n    .cmd_burst_instead_of_single_op(1'b1), \n    .cmd_length_of_burst(cmd_length_of_burst_FROM_prc_core_TO_read_master),\n    .cmd(cmd_FROM_prc_core_TO_read_master),\n\n    .read_data(pixel_data_FROM_read_master_TO_prc_core),\n    .read(read_FROM_prc_core_TO_read_master),\n    .discard_remaining_data_of_read_word(discard_remaining_data_of_read_word_FROM_prc_core_TO_read_master),\n\n    .av_address (master_av_address),\n    .av_read (master_av_read),\n    .av_clock (master_clock),\n    .av_reset (master_reset),\n    .av_readdata (master_av_readdata),\n    .av_readdatavalid (master_av_readdatavalid),\n    .av_waitrequest (master_av_waitrequest),\n    .av_burstcount (master_av_burstcount)\n \n); ",
+        "function integer alt_vipfunc_required_width;\n  input [511:0] value;\n  integer i;\n  begin\n    alt_vipfunc_required_width = 512;\n    for (i=512; i>0; i=i-1) begin\n      if (2**i>value)\n        alt_vipfunc_required_width = i;\n    end\n  end\nendfunction"
+    ]
+}

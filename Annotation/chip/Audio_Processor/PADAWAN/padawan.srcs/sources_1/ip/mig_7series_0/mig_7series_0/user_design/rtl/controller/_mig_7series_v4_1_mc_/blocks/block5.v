@@ -1,0 +1,1 @@
+        assign mc_wrdata_en_i = mc_wrdata_en_r;

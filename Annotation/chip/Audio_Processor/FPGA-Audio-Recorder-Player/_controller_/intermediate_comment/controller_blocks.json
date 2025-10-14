@@ -1,0 +1,51 @@
+{
+    "line_num": [
+        [
+            329,
+            516
+        ],
+        [
+            305,
+            324
+        ],
+        [
+            289,
+            300
+        ],
+        [
+            251,
+            286
+        ],
+        [
+            238,
+            248
+        ],
+        [
+            205,
+            236
+        ],
+        [
+            174,
+            181
+        ],
+        [
+            158,
+            166
+        ],
+        [
+            135,
+            155
+        ]
+    ],
+    "blocks": [
+        "always@(posedge clk37)\nbegin\n\t\n\tif(~reset) begin\n\t\taddress <= 0;\n\tend\n\t\n\telse if(status)begin \n\t\tcase (state)\n\t\n\t\t8'h00: begin\n\t\tif(record)\n\t\t\tstate <= 8'h01;\n\t\telse if(play && (address < max_ram_address)) begin\n\t\t\taddress <= 0;\n\t\t\tstate <= 8'h03;\n\t\tend\n\t\telse if(delete)\n\t\t\tstate <= 8'h00;\n\t\telse if(pause)\n\t\t\tstate <= 8'h06;\n\t\telse if(delete_all) begin\n\t\t\taddress <= 0;\n\t\t\tstate <= 8'h17;\n\t\tend\n\t\telse\n\t\t\tstate <= 8'h00;\n\t\t\n\t\tcount <= 0;\t\t\n\t\tplayback <= 0;\n\t\tend\n\t\t\n\t\t\n\t\t\n\t\t\n\t\n\t\t8'h11: begin\n\t\t\taddress <= 0;\n\t\t\tstate <= 8'h01;\n\t\tend\n\t\t\n\t\t8'h01: begin\n\t\t\tplayback <= 0;\n\t\t\tLEDRAM <= 1'b0;\n\t\t\tif(count < 350) begin\n\t\t\t\tcount <= count + 1;\n\t\t\t\tstate <= 8'h01;\n\t\t\tend\n\t\t\telse if(record) begin\n\t\t\tRAMin <= audio_output;\n\t\t\tstate <= 8'h12;\n\t\t\tend\n\t\t\telse begin\n\t\t\t\tstate <= 8'h00;\n\t\t\t\tcount <= 0;\n\t\t\t\taddress <= 0;\n\t\t\tend\n\t\tend\n\t\t\n\t\t8'h12: begin\n\t\t\tenableWrite <= 1'b1;\n\t\t\tstate <= 8'h02;\n\t\tend\n\t\t\n\t\t8'h02: begin\n\t\t\tcount <= 0;\n\t\t\tenableWrite <= 1'b0;\n\t\t\taddress <= address + 1;\n\t\t\tif(address >= max_ram_address) begin\n\t\t\t\tLEDRAM <= 1'b1;\n\t\t\t\tstate <= 8'h00;\n\t\t\tend\n\t\t\telse\tbegin\n\t\t\t\tstate <= 8'h01;\n\t\t\t\tSTATLED2 <= 1;\n\t\t\tend\n\t\tend\n\t\t\n\t\t\n\t\t\n\t\t\n\t\t\n\t\t8'h03: begin\n\t\t\tplayback <= 1;\n\t\t\tif(play) \n\t\t\t\tstate <= 8'h14;\n\t\t\telse\n\t\t\t\tstate <= 8'h00;\n\t\tend\n\t\t\t\n\t\t\t\n\t\t8'h14: begin\n\t\t\tif (count < 350) begin\n\t\t\t\tcount <= count + 1;\n\t\t\t\tstate <= 8'h14;\n\t\t\tend\n\t\t\telse state <= 8'h24;\n\t\t\tend\n\t\t\t\n\t\t8'h24: begin\n\t\t\tenableWrite <= 1'b0;\n\t\t\treqRead <= 1'b1;\t\t\t\n\t\t\tstate <= 8'h04;\n\t\tend\n\t\t\t\n\t\t8'h04: begin\n\t\t\treqRead <= 1'b0;\n\t\t\tif(dataPresent) begin\n\t\t\t\tmem_out <= RAMout;\n\t\t\t\tackRead <= 1'b1;\n\t\t\t\tstate <= 8'h05;\n\t\t\tend\n\t\t\t\n\t\t\telse begin\n\t\t\t\treqRead <= 1'b1;\n\t\t\t\tstate <= 8'h04;\n\t\t\tend\n\t\tend\n\t\t\n\t\t8'h05: begin\n\t\t\tackRead <= 1'b0;\n\t\t\taddress <= address + 1;\n\t\t\tcount <= 0;\n\t\t\tif (address >= max_ram_address) begin\n\t\t\t\tstate <= 8'h00;\n\t\t\tend\n\t\t\t\n\t\t\telse\n\t\t\t\tstate <= 8'h03;\n\t\tend\n\t\t\n\t\n\t\t8'h06: begin\n\t\t\tif(pause)\n\t\t\t\tstate <= 8'h06;\n\t\t\telse if(play) \n\t\t\t\tstate <= 8'h03;\n\t\t\telse begin\n\t\t\t\taddress <= 0;\n\t\t\t\tstate <= 8'h00;\n\t\t\tend\n\t\tend\n\t\t\n\t\t\n\t\n\t\n\t\t8'h17: begin\n\t\t\taddress <= 0;\n\t\t\tstate <= 8'h07;\n\t\tend\n\t\t\n\t\t8'h07: begin\n\t\t\tplayback <= 0;\n\t\t\tif(delete_all) begin\n\t\t\tRAMin <= 0;\n\t\t\tstate <= 8'h18;\n\t\t\tend\n\t\t\t\n\t\t\telse begin\n\t\t\t\taddress <= 0;\n\t\t\t\tstate <= 8'h00;\n\t\t\tend\n\t\tend\n\t\t\n\t\t8'h18: begin\n\t\t\tenableWrite <= 1'b1;\n\t\t\tstate <= 8'h08;\n\t\tend\n\t\t\n\t\t8'h08: begin\n\t\t\tenableWrite <= 1'b0;\n\t\t\taddress <= address + 1;\n\t\t\tif(address >= max_ram_address) begin\n\t\t\t\tLEDRAM <= 1'b0;\n\t\t\t\tdeletedall <= 1;\n\t\t\t\taddress <= 0;\n\t\t\t\tstate <= 8'h00;\n\t\t\t\tend\n\t\t\t\telse\tbegin\n\t\t\t\t\tdeletedall <= 0;\n\t\t\t\t\tstate <= 8'h07;\n\t\t\t\tend\n\t\t\tend\n\t\t\n\t\t\n\tendcase\n\tend\nend",
+        "sockit_top audio(\n    .clk(clk100mhz),\n\t .playback(playback),\n\t .volume_control(volume_control),\n    .AUD_ADCLRCK(AUD_ADCLRCK), \n    .AUD_ADCDAT(AUD_ADCDAT), \n    .AUD_DACLRCK(AUD_DACLRCK), \n    .AUD_DACDAT(AUD_DACDAT), \n    .AUD_XCK(AUD_XCK), \n    .AUD_BCLK(AUD_BCLK), \n    .AUD_I2C_SCLK(AUD_I2C_SCLK), \n    .AUD_I2C_SDAT(AUD_I2C_SDAT), \n    .AUD_MUTE(AUD_MUTE), \n    .PLL_LOCKED(PLL_LOCKED), \n    .KEY(1), \n    .SW(switches),\n\t .audio_in(mem_out), \t\n\t .audio_out(audio_output),\n\t .audio_clk(audio_clk)\n);",
+        "rs232_uart urt(\n\t\t.tx_data_in(pb_out_port), \n\t\t.write_tx_data(write_to_uart), \n\t\t.tx_buffer_full(uart_buffer_full),\n\t\t.rx_data_out(uart_rx_data),\n\t\t.read_rx_data_ack(read_from_uart),\n\t\t.rx_data_present(uart_data_present),\n\t\t.rs232_tx(rs232_tx),\n\t\t.rs232_rx(rs232_rx),\n\t\t.reset(uart_reset),\n\t\t.clk(clk100mhz)\n);\t",
+        "ram_interface_wrapper RAMRapper (\n\t.address(address),\t\t\t\t\n\t.data_in(RAMin), \t\t\t\t\t\n\t.write_enable(enableWrite), \t\n\t.read_request(reqRead), \t\t\n\t.read_ack(ackRead), \t\t\t\t\n\t.data_out(RAMout), \t\t\t\t\n\t.reset(0), \n\t.clk(clk), \n\t.hw_ram_rasn(hw_ram_rasn), \n\t.hw_ram_casn(hw_ram_casn),\n\t.hw_ram_wen(hw_ram_wen), \n\t.hw_ram_ba(hw_ram_ba), \n\t.hw_ram_udqs_p(hw_ram_udqs_p), \n\t.hw_ram_udqs_n(hw_ram_udqs_n), \n\t.hw_ram_ldqs_p(hw_ram_ldqs_p), \n\t.hw_ram_ldqs_n(hw_ram_ldqs_n), \n\t.hw_ram_udm(hw_ram_udm), \n\t.hw_ram_ldm(hw_ram_ldm), \n\t.hw_ram_ck(hw_ram_ck), \n\t.hw_ram_ckn(hw_ram_ckn), \n\t.hw_ram_cke(hw_ram_cke), \n\t.hw_ram_odt(hw_ram_odt),\n\t.hw_ram_ad(hw_ram_ad), \n\t.hw_ram_dq(hw_ram_dq), \n\t.hw_rzq_pin(hw_rzq_pin), \n\t.hw_zio_pin(hw_zio_pin), \n\t.clkout(clk37), \n\t.sys_clk(clk37), \n\t.rdy(status), \n\t.rd_data_pres(dataPresent),\n\t.max_ram_address(max_ram_address),\n\t\n\t.STATLED3(STATLED3),\n\t.STATLED4(STATLED4)\n);",
+        "picoblaze pblaze(\n\t.port_id(pb_port_id),\n\t.read_strobe(pb_read_strobe), \n\t.in_port(pb_in_port),\n\t.write_strobe(pb_write_strobe), \n\t.out_port(pb_out_port),\n\t.interrupt(pb_interrupt),\n\t.interrupt_ack(),\n\t.reset(pb_reset),\n\t.clk(clk100mhz)\n );",
+        "always @(posedge clk100mhz or posedge pb_reset)\n\tbegin\n\t\tif(pb_reset) begin\n\t\t\tpb_in_port <= 0;\n\t\t\tread_from_uart <= 0;\n\t\tend else begin\n\t\t\t\n\t\t\tcase(pb_port_id)\n\t\t\t\t\n\t\t\t\t8'h02: pb_in_port <= uart_rx_data;\n\t\t\t\t8'h04: pb_in_port <= {7'b0000000,uart_data_present};\n\t\t\t\t8'h05: pb_in_port <= {7'b0000000,uart_buffer_full};\n\t\t\t\t8'h07: pb_in_port <= {7'b0000000,deletedall};\n\t\t\t\tdefault: pb_in_port <= 8'h00;\n\t\t\tendcase\n\t\t\t\n\t\t\t\n\t\t\t\n\t\t\t\n\t\t\t\n\t\t\t\n\t\t\t\n\t\t\tread_from_uart <= pb_read_strobe & (pb_port_id == 8'h04);\n\t\t\tif(write_to_state_reg) begin \n\t\t\t\trecord <= (pb_out_port == 8'h01); \n\t\t\t\tplay <= (pb_out_port == 8'h00);\n\t\t\t\tdelete <= (pb_out_port == 8'h02);\n\t\t\t\tpause <= (pb_out_port == 8'h03);\n\t\t\t\tdelete_all <= (pb_out_port == 8'h04);\n\t\t\tend\n\t\tend\n\tend",
+        "always @(posedge clk100mhz)\nbegin\n\tif(vu_dn && (volume_control < 4))\n\t\tvolume_control <= volume_control + 1;\n\t\n\telse if(vd_dn && (volume_control > 0))\n\t\tvolume_control <= volume_control - 1;\nend",
+        "assign pb_reset = ~reset;\nassign uart_reset =  ~reset;\nassign pb_interrupt = 1'b0;\nassign write_to_uart = pb_write_strobe & (pb_port_id == 8'h03);\nassign write_to_state_reg = pb_write_strobe & (pb_port_id == 8'h06);\n\nassign STATLED0 = record;\nassign STATLED1 = play;\n",
+        "initial begin\n\trecord <= 0;\n\tplay <= 0;\n\tdelete <= 0;\n\tdelete_all <= 0;\n\tpause <= 0;\n\tcount <= 0;\n\tvolume_control <= 1;\n\tplayback <= 0;\n\taddress <= 0;\n\t\n\t\n\tstate <= 8'h00;\n\t\n\t\n\tSTATLED2 <= 0;\n\t\n\t\n\tenableWrite <= 0;\n\tLEDRAM <= 1'b0;\nend"
+    ]
+}

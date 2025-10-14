@@ -1,0 +1,11 @@
+Module name: mig_7series_v4_1_ddr_phy_tempmon. 
+
+Module specification: The mig_7series_v4_1_ddr_phy_tempmon module, designed to operate in a 7 series FPGA DDR memory system, functions to monitor and regulate the FPGA's temperature. Its role is integral to maintaining the stability of the device's operations, by adjusting temperature parameters dynamically in response to varying levels of device temperature detected. 
+
+The module uses six inputs - clk (system clock for sequential logic synchronization), rst (resets the system), calib_complete (indicates when calibration is done), tempmon_sample_en (enables the sampling of temperature), device_temp (real-time temperature data), and calib_device_temp (temperature data at calib phase). 
+
+It generates four output signals - tempmon_pi_f_inc and tempmon_pi_f_dec (when high, prompt an increase or decrease in system temperature respectively), tempmon_sel_pi_incdec (high when temperature needs adjustment), and tempmon_done_skip (high when sample count of 5 is reached and temperature monitoring task can be skipped). 
+
+Internally, the module uses several process-control signals and temperature limit parameters that govern transitions between different states of the temperature monitoring system. These include the preset state signals (IDLE, INIT, etc.), signals to handle tempmon_pi_f_dec and tempmon_pi_f_inc status, temperature limit signals enhancing switch control from one state to another, device_temp_init storing initial temperature, synchronization signals including tempmon_sample_en_101, tempmon_sample_en_102, device_temp_101, device_temp_capture_102, update_temp_102, and intermediate signals including calib_complete_r, tempmon_done, sample_en_cnt. 
+
+The module encompasses several blocks or sections: one module parameter declaration block, two localparam declaration blocks defining the threshold levels and system states, several signal blocks defining input and output ports and internal variables, a logic block implementing the state transitions, and sequential code blocks for state updates, conditions, and synchronization. These components collectively contribute to the performance and efficiency of complex FPGA systems.

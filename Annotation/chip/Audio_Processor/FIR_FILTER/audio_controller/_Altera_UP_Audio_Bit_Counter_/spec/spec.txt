@@ -1,0 +1,13 @@
+Module name: Altera_UP_Audio_Bit_Counter. 
+
+Module Specification: The Altera_UP_Audio_Bit_Counter module is a dedicated bit counter for audio operations. The purpose of this module is to provide a mechanism to count audio data bits while also having the capability to restart or stop the count operation when required.
+
+The module takes five input ports: 'clk', 'reset', 'bit_clk_rising_edge', 'bit_clk_falling_edge', 'left_right_clk_rising_edge', and 'left_right_clk_falling_edge'. The 'clk' port provides the main system clock that synchronizes the internal operations of the module. The 'reset' port provides a way to reset the internal states of the module. The remaining ports are clock related signals derived from the bit clock and left/right clock which influence the operation of the internal bit counter accordingly.
+
+The module provides one output port: 'counting', which indicates whether the internal counter is actively counting or not, depending on the state of 'bit_counter' and state of reset and clock events.
+
+Inside the module, there are two significant internal signals: 'reset_bit_counter' and 'bit_counter'. 'reset_bit_counter' acts an additional reset driven by the edges of the 'left_right_clk' clock source. 'bit_counter' is the core counting element in this module. These signals are integral to the functionality of the module and work in concert to control the state of the output 'counting'.
+
+The code can be conceptualized in three major segments. The Input/Output (I/O) port definitions and parameters declaration, the event-driven always blocks that control 'bit_counter' and 'counting' states based on clock events and reset signals, and finally, the 'assign' statement where the 'reset_bit_counter' is assigned an OR operation of 'left_right_clk' rising and falling edges.
+
+Overall, Altera_UP_Audio_Bit_Counter is a specialized module for sound applications where synchronizing audio data bits is crucial. Its design allows for precise control over bit counting operations, providing stable, reliable, and consistent operation that meets the demands of audio systems.

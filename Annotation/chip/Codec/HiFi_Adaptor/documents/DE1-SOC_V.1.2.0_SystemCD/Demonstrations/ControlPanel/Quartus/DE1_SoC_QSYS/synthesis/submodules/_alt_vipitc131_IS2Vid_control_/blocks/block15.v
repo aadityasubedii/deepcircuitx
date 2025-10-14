@@ -1,0 +1,1 @@
+        assign write_trigger = av_write & ~is_side_registers;

@@ -1,0 +1,8 @@
+Module name: Shifter. 
+
+Module specification:
+The "Shifter" module in Verilog is designed to perform various bit-shift operations on a 4-bit input B, which is influenced by another 4-bit input A and controlled by a 4-bit Opcode. The module processes these inputs and outputs a 4-bit value, `shift_out`, which is the result of the shift operation specified by the Opcode. The input A determines the number of positions (using its lower two bits) that B should be shifted. The Opcode specifies the type of shift: '0000' and '0001' trigger a left shift, '0010' triggers a standard right shift, and '0011' triggers a right shift with the most significant bit (MSB) of B propagated to the MSB of the result. If Opcode has any other values, `shift_out` defaults to '0000'. 
+
+The internal signals include `left_shift` and `right_shift`, which are 4-bit wires holding the intermediate results of left and right-shifted operations, respectively. `left_shift` is calculated by shifting B left by the number of positions specified in the lower two bits of A, and `right_shift` similarly handles the right shift. 
+
+For the control logic, the module uses conditional statements to assign the value to `shift_out` based on the Opcode. If the Opcode is '0000' or '0001', `shift_out` takes the value of `left_shift`; if '0010', it takes `right_shift`; and if '0011', it modifies `right_shift` by propagating B's MSB. Any other Opcode value results in `shift_out` being '0000'. This module effectively encapsulates the logic for different bit-shifting operations, enhanced by a control mechanism for various modes of bit manipulation.

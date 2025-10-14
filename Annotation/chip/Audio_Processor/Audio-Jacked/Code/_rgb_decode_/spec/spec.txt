@@ -1,0 +1,28 @@
+Module name: `rgb_decode`.
+Module specification: 
+
+The module `rgb_decode` functions as a decoder for RGB data. Using input RGB data read from memory, it translates this data into separate Red (R), Green (G), and Blue (B) color values. It operates synchronously with a clock signal and employs a case structure that adjusts the RGB outputs according to specific data patterns.
+
+The inputs for this module are:
+- `clk` (system clock signal)
+- `reset` (system reset signal)
+- `decode_state` (binary decoding control signal)
+- `hcount` (4-bit horizontal pixel count)
+- `br_memdata_out` (RGB data output from memory)
+- `vga_addr_bit` (buffer toggling signal)
+
+The outputs of this module are 8-bit discrete Red (`R`), Green (`G`), and Blue (`B`) color values that together form the final RGB color value.
+
+The internal signals used within this module are:
+- `br_rgb_data_0`, `br_rgb_data_1` (buffer registers for storing RGB data)
+- `get_data` (data fetch control register)
+- `buff_num` (buffer selector)
+- `data_color_0`, `data_color_1` (specific color data wires from respective buffers)
+
+The first block of code initializes the buffer registers based on `clk`, `reset`, and `decode_state` signals. If in decode state, data should be fetched (`get_data` set to 1), and once fetched, it fills the appropriate buffer based on `buff_num` signal. 
+
+The second block toggles `buff_num` based on `reset` and `vga_addr_bit`. 
+
+Then, specific color data is extracted from each buffer and assigned to `data_color_0` and `data_color_1` wires. 
+
+The final block adjusts output color values (`R`, `G`, `B`) for each clock cycle based on the state of `buff_num` and the case of `data_color_0` or `data_color_1`. The reset state sets all color values to zero. For non-reset states, it uses a decoding scheme to produce each color value from the bits of `data_color_0` or `data_color_1` as per the case structure.

@@ -1,0 +1,1 @@
+    pipe #(.LENGTH(2)) delay(.ck(ck), .in(in_neg), .out(neg_out));

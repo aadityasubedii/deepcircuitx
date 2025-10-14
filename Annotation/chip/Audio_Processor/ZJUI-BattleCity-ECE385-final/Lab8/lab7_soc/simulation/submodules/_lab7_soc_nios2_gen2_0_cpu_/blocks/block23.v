@@ -1,0 +1,1 @@
+  assign R_ctrl_ignore_dst_nxt = D_ctrl_ignore_dst;

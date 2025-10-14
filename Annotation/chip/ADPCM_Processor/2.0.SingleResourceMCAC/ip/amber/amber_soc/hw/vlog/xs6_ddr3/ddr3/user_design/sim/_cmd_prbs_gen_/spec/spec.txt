@@ -1,0 +1,11 @@
+Module name: cmd_prbs_gen. 
+
+Module specification: The cmd_prbs_gen is a Pseudo-Random Bit Sequence (PRBS) generator module used for generating pseudo-random sequences of data primarily in test scenarios. This module declares parameters such as TCQ (propagation delay), FAMILY (device family such as SPARTAN6), and PRBS_CMD (type of PRBS command). 
+
+This module has four input ports: clk_i, prbs_seed_init, clk_en, and prbs_seed_i. clk_i is the clock input, synchronizing the execution of sequential logic in the module. prbs_seed_init is a control signal input used to initialize or reset the pseudo-random bit sequence (PRBS) to a known state. clk_en is the clock enable signal deciding if the internal state of the PRBS generator should be updated or not. prbs_seed_i is the seed input for beginning the PRBS. 
+
+An output port, prbs_o, is implemented to provide the calculated PRBS that can be utilized by other modules or entities.
+
+Three internal signals are declared; ZEROS, prbs, and lfsr_q. ZEROS signal generates a zero sequence used when the output bit width is smaller than the SEED_WIDTH for different PRBS commands. The prbs register holds the PRBS derived from the lfsr_q signal. lfsr_q is implemented as a linear feedback shift register in the PRBS generator, continuously updated based on the pseudo-random sequence generation algorithm.
+
+The module's main features include the generation of 64 bit, 32 bit, or 20 bit PRBS based on PRBS_CMD and PRBS_WIDTH, the possibility of initializing the PRBS with a seed from outside the module, and the ability to emulate different test scenarios for ADDRESSES and INSTRUCTIONS. It includes different conditions for different FPGA families. The internal code is divided into different blocks, each generating a PRBS of unique width and are conditionally compiled based on the PRBS_CMD and PRBS_WIDTH parameters. The final code block assigns the PRBS to the output.

@@ -1,0 +1,1 @@
+	initial reset_count = 1'b0;

@@ -1,0 +1,1 @@
+assign sclr = ~enable | restart_count;

@@ -1,0 +1,1 @@
+  assign tw_valid = |trc_im_data[35 : 32];

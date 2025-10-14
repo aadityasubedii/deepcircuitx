@@ -1,0 +1,12 @@
+    assign clk2waite = clk2waiter;
+    assign adv2dqe   = adv_n;
+    assign adv2dq    = adv2dqr;
+    assign adv2wi    = adv2dqr;
+    assign zz2pd     = !zz_n;
+    assign ce2dqe    = !ce_n;
+    assign ce2dq     = !ce_n;
+    assign ce2cem    = !ce_n;
+    assign ce2wi     = !ce_n;
+    assign ce2waite  = !ce_n;
+    assign ce2wait   = !ce_n;
+    assign ce2rst    = ce_n;

@@ -1,0 +1,121 @@
+{
+    "line_num": [
+        [
+            234,
+            248
+        ],
+        [
+            223,
+            232
+        ],
+        [
+            193,
+            219
+        ],
+        [
+            179,
+            189
+        ],
+        [
+            177,
+            177
+        ],
+        [
+            171,
+            171
+        ],
+        [
+            169,
+            169
+        ],
+        [
+            162,
+            164
+        ],
+        [
+            156,
+            156
+        ],
+        [
+            151,
+            154
+        ],
+        [
+            141,
+            145
+        ],
+        [
+            132,
+            132
+        ],
+        [
+            126,
+            130
+        ],
+        [
+            118,
+            122
+        ],
+        [
+            112,
+            116
+        ],
+        [
+            98,
+            104
+        ],
+        [
+            94,
+            96
+        ],
+        [
+            74,
+            90
+        ],
+        [
+            65,
+            70
+        ],
+        [
+            37,
+            56
+        ],
+        [
+            31,
+            35
+        ],
+        [
+            17,
+            27
+        ],
+        [
+            5,
+            15
+        ]
+    ],
+    "blocks": [
+        "    initial begin\n\n        for (int i = 0; i < 5; i++) begin\n            @(posedge ck);\n        end\n\n        data_y <= 16'h7fff;\n        start <= 1;\n\n        @(posedge ck);\n        start <= 0;\n\n        \n\n    end",
+        "    always @(posedge ck) begin\n        acc_en <= fetching;\n        req <= fetching;\n\n        \n        if (fetching & !req)\n            clr <= 1;\n        if (clr)\n            clr <= 0;\n    end",
+        "    initial begin\n\n        $display(\"test highest_bit()\");\n\n        level_in <= 0;\n        @(posedge ck);\n\n        test_level(40'h0000000000, 0);\n        test_level(40'h0000000001, 0);\n        test_level(40'h0000000003, 1);\n        test_level(40'h1000000001, 36);\n        test_level(40'h2002222001, 37);\n        test_level(40'h7002222001, 38);\n        test_level(40'h7fffffffff, 38);\n\n        for (ii = 0; ii < 39; ii = ii + 1) begin\n            test_level(1 << ii, ii);\n        end\n\n        test_level(40'h8000000000, 38);\n        test_level(40'hA000000000, 38);\n        test_level(40'hA123456789, 38);\n        test_level(40'hffffffffff, 0);\n        test_level(40'hffffffffef, 4);\n        test_level(40'hfeffffffef, 32);\n\n    end",
+        "    task test_level(input [39:0] in, input [5:0] result);\n\n        begin\n            level_in <= in;\n            @(posedge ck);\n            @(posedge ck);\n            \n            tb_assert(level_out == result);\n        end\n\n    endtask",
+        "    highest_bit level_test(.ck(ck), .in(level_in), .out(level_out));",
+        "    shifter shifter(.ck(ck), .en(1'b1), .shift(shift), .in(acc_out), .out(audio));",
+        "    assign shift = 14;",
+        "    mac mac(.ck(ck), .en(acc_en), .clr(clr), .req(req), \n        .x(data_x), .y(data_y), .out(acc_out), .done(acc_done));\n",
+        "",
+        "    corr_fetch #(.ADDR_W(ADDR_W), .COUNT_W(COUNT_W)) \n        fetch_x(.ck(ck), .en(1'b1), .start(start), .count(count),\n            .start_addr(8'h0), .raddr(raddr_x), .ren(fetching), .done(fetch_done));\n",
+        "    wire fetch_done;\n    dpram #(.BITS(16), .SIZE(256), .FILE(\"x.dat\")) ram_x(.ck(ck),\n        .we(we_x), .waddr(waddr_x), .wdata(wdata_x),\n        .re(re_x), .raddr(raddr_x), .rdata(data_x));\n",
+        "    assign rst = reset == 3;",
+        "    always @(posedge ck) begin\n        if (reset != 3)\n            reset <= reset + 1;\n    end\n",
+        "    initial begin\n        $dumpfile(\"correlator.vcd\");\n        $dumpvars(0, tb);\n        #500000 $finish;\n    end",
+        "module tb ();\n\n    reg ck = 0;\n\n    always #42 ck <= !ck;",
+        "    always @(posedge ck) begin\n        out <= 0;\n        for (i = 0; i < WIDTH; i = i + 1) begin\n            if (hi_bit[i])\n                out <= i;\n        end\n    end",
+        "    assign hi_bit = bit_64 ^ (bit_64 >> 1);\n\n    integer i;",
+        "    assign normal = in[WIDTH-1] ? ~in : in;\n\n    wire [(WIDTH-1):0] bit_1;\n    wire [(WIDTH-1):0] bit_2;\n    wire [(WIDTH-1):0] bit_4;\n    wire [(WIDTH-1):0] bit_8;\n    wire [(WIDTH-1):0] bit_16;\n    wire [(WIDTH-1):0] bit_32;\n    wire [(WIDTH-1):0] bit_64;\n\n    assign bit_1  = normal | (normal >> 1);\n    assign bit_2  = bit_1  | (bit_1 >> 2);\n    assign bit_4  = bit_2  | (bit_2 >> 4);\n    assign bit_8  = bit_4  | (bit_4 >> 8);\n    assign bit_16 = bit_8  | (bit_8 >> 16);\n    assign bit_32 = bit_16 | (bit_16 >> 32);\n    assign bit_64 = bit_32 | (bit_32 >> 64);",
+        "module highest_bit\n    #(parameter WIDTH=40, parameter LEVEL_W=$clog2(WIDTH))\n   (input wire ck,\n    input wire signed [(WIDTH-1):0] in,\n    output reg [(LEVEL_W-1):0] out\n);",
+        "    always @(posedge ck) begin\n        if (en) begin\n            if (start) begin\n                raddr <= start_addr;\n                ren <= 1;\n                done <= 0;\n                counter <= count;\n            end else begin\n                if (counter > 1) begin\n                    counter <= counter - 1;\n                    raddr <= raddr + 1;\n                end else begin\n                    if (ren)\n                        done <= 1;\n                    ren <= 0;\n                    raddr <= 0;\n                end\n            end\n        end\n    end",
+        "    initial begin\n        raddr = 0;\n        ren = 0;\n        done = 0;\n    end",
+        "module corr_fetch\n    #(parameter ADDR_W=8, parameter COUNT_W=4)\n   (input wire ck,\n    input wire en,\n    input wire start,\n    input wire [(COUNT_W-1):0] count,\n    input wire [(ADDR_W-1):0] start_addr,\n    output reg [(ADDR_W-1):0] raddr,\n    output reg ren,\n    output reg done\n);",
+        "task tb_assert(input test);\n\n    begin\n        if (!test)\n        begin\n            $display(\"ASSERTION FAILED in %m\");\n            $finish;\n        end\n    end\n\nendtask"
+    ]
+}

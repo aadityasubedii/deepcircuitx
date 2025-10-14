@@ -1,0 +1,9 @@
+Module name: eth_clockgen.
+
+Module specification: The 'eth_clockgen' module is a clock generator designed for Ethernet applications. It takes three inputs: Clk, Reset, and Divider. The Clk is the clock signal used for triggering the internal counter and the Management Data Clock (Mdc). The Reset is used to reset the Mdc and the counter on its positive edge. The Divider is an 8-bit signal that is used to adjust the frequency of the Mdc, effectively dividing the input clock frequency.
+
+The output of the module consists of Mdc, MdcEn, and MdcEn_n. Mdc is the Management Data Clock signal the module generates. It derives its frequency from the input clock signal, adjusted by the Divider value, and toggles with every instance when the counter equals zero. MdcEn is the enable signal for the management data clock that activates whenever the counter equals zero and the Mdc signal is low. MdcEn_n is the inverse of MdcEn and becomes high when the counter equals zero and the Mdc signal is high.
+
+Internally, the module uses signals like Counter, CountEq0, CounterPreset, and TempDivider. Counter is an 8-bit register tracking the count based on the Clk signal and gets reset by the Reset signal. CountEq0 is a wire signal detecting when the Counter equals zero, triggering respective changes in Mdc, MdcEn, and MdcEn_n. CounterPreset holds the preset value for Counter derived from the Divider, and TempDivider is a wire that holds the adjusted value of Divider guaranteeing it is at least 2.
+
+The code contains different blocks performing specific tasks: setting up input and output ports, declaring registers and wire signals, implementing the counters' actions utilizing always blocks, and assigning output values. This well-organized design ensures the eth_clockgen can accurately generate a clock signal suitable for Ethernet applications.

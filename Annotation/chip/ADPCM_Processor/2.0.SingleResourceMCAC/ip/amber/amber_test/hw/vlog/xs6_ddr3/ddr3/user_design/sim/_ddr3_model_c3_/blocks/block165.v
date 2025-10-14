@@ -1,0 +1,1 @@
+    always @(ba_in  [ 2]) cmd_addr_timing_check( 6);

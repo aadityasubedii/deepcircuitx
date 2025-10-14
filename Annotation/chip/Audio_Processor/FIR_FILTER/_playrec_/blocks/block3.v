@@ -1,0 +1,1 @@
+assign audio_out = ram_data_out;

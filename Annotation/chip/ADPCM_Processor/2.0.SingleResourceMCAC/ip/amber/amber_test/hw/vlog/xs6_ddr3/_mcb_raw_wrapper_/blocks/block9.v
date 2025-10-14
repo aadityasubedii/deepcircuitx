@@ -1,0 +1,1 @@
+OBUFT iob_cke (.O(mcbx_dram_cke),.I(ioi_cke),.T(t_cke));

@@ -1,0 +1,11 @@
+{
+    "line_num": [
+        [
+            37,
+            108
+        ]
+    ],
+    "blocks": [
+        "always @(posedge clk) begin\n    if (start) begin\n        sclk_divider <= 7'd0;\n        stage <= 5'd0;\n        clock_en <= 1'b0;\n        sdat <= 1'b1;\n        acks <= 3'b111;\n        data <= i2c_data;\n    end else begin\n        if (sclk_divider == 7'd127) begin\n            sclk_divider <= 7'd0;\n\n            if (stage != LAST_STAGE)\n                stage <= stage + 1'b1;\n\n            case (stage)\n                \n                5'd0:  clock_en <= 1'b1;\n                \n                5'd9:  acks[0] <= i2c_sdat;\n                5'd18: acks[1] <= i2c_sdat;\n                5'd27: acks[2] <= i2c_sdat;\n                \n                5'd28: clock_en <= 1'b0;\n            endcase\n        end else\n            sclk_divider <= sclk_divider + 1'b1;\n\n        if (midlow) begin\n            case (stage)\n                \n                5'd0:  sdat <= 1'b0;\n                \n                5'd1:  sdat <= data[23];\n                5'd2:  sdat <= data[22];\n                5'd3:  sdat <= data[21];\n                5'd4:  sdat <= data[20];\n                5'd5:  sdat <= data[19];\n                5'd6:  sdat <= data[18];\n                5'd7:  sdat <= data[17];\n                5'd8:  sdat <= data[16];\n                \n                5'd9:  sdat <= 1'b1;\n                \n                5'd10: sdat <= data[15];\n                5'd11: sdat <= data[14];\n                5'd12: sdat <= data[13];\n                5'd13: sdat <= data[12];\n                5'd14: sdat <= data[11];\n                5'd15: sdat <= data[10];\n                5'd16: sdat <= data[9];\n                5'd17: sdat <= data[8];\n                \n                5'd18: sdat <= 1'b1;\n                \n                5'd19: sdat <= data[7];\n                5'd20: sdat <= data[6];\n                5'd21: sdat <= data[5];\n                5'd22: sdat <= data[4];\n                5'd23: sdat <= data[3];\n                5'd24: sdat <= data[2];\n                5'd25: sdat <= data[1];\n                5'd26: sdat <= data[0];\n                \n                5'd27: sdat <= 1'b1;\n                \n                5'd28: sdat <= 1'b0;\n                5'd29: sdat <= 1'b1;\n            endcase\n        end\n    end\nend"
+    ]
+}

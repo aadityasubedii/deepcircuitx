@@ -1,0 +1,16 @@
+{
+    "line_num": [
+        [
+            110,
+            114
+        ],
+        [
+            65,
+            107
+        ]
+    ],
+    "blocks": [
+        "initial\n    begin\n    if ( DATA_WIDTH    != 128 ) $display(\"%M Warning: Incorrect parameter DATA_WIDTH\");\n    if ( ADDRESS_WIDTH != 8   ) $display(\"%M Warning: Incorrect parameter ADDRESS_WIDTH\");\n    end",
+        "generate\n    for (i=0;i<4;i=i+1) begin : u_gen\n        RAMB8BWER #(\n            .DATA_WIDTH_A        ( 36                        ),\n            .DATA_WIDTH_B        ( 36                        ),\n            .RAM_MODE            ( \"SDP\"                     ),\n            .SIM_COLLISION_CHECK ( \"GENERATE_X_ONLY\"         ),\n            .WRITE_MODE_A        ( \"READ_FIRST\"              ),\n            .WRITE_MODE_B        ( \"READ_FIRST\"              )\n         ) \n        u_ramb8bwer (\n            .CLKAWRCLK      ( i_clk                          ),     \n            .CLKBRDCLK      ( i_clk                          ),\n            .ADDRAWRADDR    ( {i_address, 5'd0}              ),\n            .ADDRBRDADDR    ( {i_address, 5'd0}              ),\n            .ENAWREN        ( i_write_enable                 ),       \n            .ENBRDEN        ( ~i_write_enable                ),\n            \n            \n            .WEAWEL         ( byte_write_enable[4*i+1:4*i+0] ),  \n            .DIADI          ( i_write_data[32*i+15:32*i+ 0]  ), \n            .DOADO          ( o_read_data [32*i+15:32*i+ 0]  ),\n            \n            \n            .WEBWEU         ( byte_write_enable[4*i+3:4*i+2] ),\n            .DIBDI          ( i_write_data[32*i+31:32*i+16]  ),\n            .DOBDO          ( o_read_data [32*i+31:32*i+16]  ),\n\n            \n            \n            .DIPBDIP        ( 2'd0                           ),\n            .DIPADIP        ( 2'd0                           ),      \n            .DOPADOP        (                                ),\n            .DOPBDOP        (                                ),\n          \n            .REGCEA         ( 1'd0                           ),\n            .REGCEBREGCE    ( 1'd0                           ),\n            .RSTA           ( 1'd0                           ),\n            .RSTBRST        ( 1'd0                           )\n        );\n\n    end\nendgenerate"
+    ]
+}

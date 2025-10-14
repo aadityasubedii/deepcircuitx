@@ -1,0 +1,1 @@
+assign WriteDataOp  = WCtrlDataStart_q1 & ~WCtrlDataStart_q2;    

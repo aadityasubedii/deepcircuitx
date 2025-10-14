@@ -1,0 +1,16 @@
+{
+    "line_num": [
+        [
+            268,
+            280
+        ],
+        [
+            196,
+            264
+        ]
+    ],
+    "blocks": [
+        "always @ (posedge MTxClk or posedge Reset)\nbegin\n  if(Reset)\n    Rule1 <= #Tp 1'b0;\n  else\n    begin\n      if(StateIdle | StateBackOff)\n        Rule1 <= #Tp 1'b0;\n      else\n      if(StatePreamble | FullD)\n        Rule1 <= #Tp 1'b1;\n    end\nend",
+        "always @ (posedge MTxClk or posedge Reset)\nbegin\n  if(Reset)\n    begin\n      StateIPG        <= #Tp 1'b0;\n      StateIdle       <= #Tp 1'b0;\n      StatePreamble   <= #Tp 1'b0;\n      StateData[1:0]  <= #Tp 2'b0;\n      StatePAD        <= #Tp 1'b0;\n      StateFCS        <= #Tp 1'b0;\n      StateJam        <= #Tp 1'b0;\n      StateJam_q      <= #Tp 1'b0;\n      StateBackOff    <= #Tp 1'b0;\n      StateDefer      <= #Tp 1'b1;\n    end\n  else\n    begin\n      StateData[1:0] <= #Tp StartData[1:0];\n      StateJam_q <= #Tp StateJam;\n\n      if(StartDefer | StartIdle)\n        StateIPG <= #Tp 1'b0;\n      else\n      if(StartIPG)\n        StateIPG <= #Tp 1'b1;\n\n      if(StartDefer | StartPreamble)\n        StateIdle <= #Tp 1'b0;\n      else\n      if(StartIdle)\n        StateIdle <= #Tp 1'b1;\n\n      if(StartData[0] | StartJam)\n        StatePreamble <= #Tp 1'b0;\n      else\n      if(StartPreamble)\n        StatePreamble <= #Tp 1'b1;\n\n      if(StartFCS | StartJam)\n        StatePAD <= #Tp 1'b0;\n      else\n      if(StartPAD)\n        StatePAD <= #Tp 1'b1;\n\n      if(StartJam | StartDefer)\n        StateFCS <= #Tp 1'b0;\n      else\n      if(StartFCS)\n        StateFCS <= #Tp 1'b1;\n\n      if(StartBackoff | StartDefer)\n        StateJam <= #Tp 1'b0;\n      else\n      if(StartJam)\n        StateJam <= #Tp 1'b1;\n\n      if(StartDefer)\n        StateBackOff <= #Tp 1'b0;\n      else\n      if(StartBackoff)\n        StateBackOff <= #Tp 1'b1;\n\n      if(StartIPG)\n        StateDefer <= #Tp 1'b0;\n      else\n      if(StartDefer)\n        StateDefer <= #Tp 1'b1;\n    end\nend"
+    ]
+}

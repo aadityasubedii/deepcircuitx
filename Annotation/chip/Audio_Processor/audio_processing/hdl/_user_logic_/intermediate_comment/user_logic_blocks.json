@@ -1,0 +1,46 @@
+{
+    "line_num": [
+        [
+            279,
+            283
+        ],
+        [
+            270,
+            277
+        ],
+        [
+            259,
+            268
+        ],
+        [
+            248,
+            257
+        ],
+        [
+            230,
+            246
+        ],
+        [
+            221,
+            228
+        ],
+        [
+            207,
+            219
+        ],
+        [
+            196,
+            201
+        ]
+    ],
+    "blocks": [
+        "  assign IP2Bus_Data  = (mem_read_ack == 1'b1) ? mem_ip2bus_data : 0;\n  assign IP2Bus_AddrAck = (mem_write_ack || (mem_read_enable && mem_read_ack));\n  assign IP2Bus_WrAck = mem_write_ack;\n  assign IP2Bus_RdAck = mem_read_ack;\n  assign IP2Bus_Error = 0;",
+        "always @(*)\nbegin\n  \n  case (mem_select) \n    1 : mem_ip2bus_data <= mem_data_out[0];\n    default : mem_ip2bus_data <= 0;\n  endcase\nend",
+        "always @(*)\nbegin\n  for (i=0;i<=C_NUM_MEM-1;i=i+1)\n  begin\n    for (byte_index=0;byte_index<=NUM_BYTE_LANES-1;byte_index=byte_index+1)\n    begin\n      mem_data_out[i][(byte_index*8) +: 8] <= data_out[i][byte_index];\n    end\n  end\nend ",
+        "always @(*)\nbegin\n  for (i=0;i<=C_NUM_MEM-1;i=i+1)\n  begin\n    for (byte_index=0;byte_index<=NUM_BYTE_LANES-1;byte_index=byte_index+1)\n    begin\n\t\tdata_out[i][byte_index] <= OUTPUT[i][byte_index][read_address];\n    end\n  end\nend ",
+        "always @(posedge Bus2IP_Clk) \nbegin\n  for (i=0;i<=C_NUM_MEM-1;i=i+1)\n  begin\n    for (byte_index=0;byte_index<=NUM_BYTE_LANES-1;byte_index=byte_index+1)\n    begin\n      if(write_enable[i][byte_index] == 1)\n      begin\n\t\t\tINPUT[i][byte_index][mem_address] <= data_in[i][byte_index];\n\t\t\t\n\t\t\t\n\t\t\t\n      end\n      read_address <= mem_address;\n    end\n  end\nend",
+        "always @(*) begin\n  for (i=0;i<=C_NUM_MEM-1;i=i+1) begin\n    for (byte_index=0;byte_index<=NUM_BYTE_LANES-1;byte_index=byte_index+1) begin\n      write_enable[i][byte_index] <= Bus2IP_WrCE[i] && Bus2IP_BE[byte_index];\n      data_in[i][byte_index] <= Bus2IP_Data[(byte_index*8) +: 8];\n    end\n  end\nend",
+        "always @( posedge Bus2IP_Clk)\n  begin\n    if(Bus2IP_Resetn == 0) \n    begin\n      mem_read_ack_dly1 <= 0;\n      mem_read_ack_dly2 <= 0;\n    end\n    else\n    begin\n      mem_read_ack_dly1 <= mem_read_enable;\n      mem_read_ack_dly2 <= mem_read_ack_dly1;\n    end\n  end",
+        "always @ (posedge Bus2IP_Clk) begin\n\t\tOUTPUT[0][0][xk_index] = OLED_OUT[7:0] ;\t\n\t\tOUTPUT[0][1][xk_index] = OLED_OUT[15:8];\t\n\t\tOUTPUT[0][2][xk_index] = OLED_OUT[23:16];\t\n\t\tOUTPUT[0][3][xk_index] = OLED_OUT[31:24];\nend"
+    ]
+}

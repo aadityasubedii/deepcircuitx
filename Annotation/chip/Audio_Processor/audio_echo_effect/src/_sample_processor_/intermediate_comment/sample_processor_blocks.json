@@ -1,0 +1,11 @@
+{
+    "line_num": [
+        [
+            47,
+            68
+        ]
+    ],
+    "blocks": [
+        "    always @(posedge clk or posedge reset) begin\n        if (reset) begin\n            i_ready_processor <= 1'b1;\n            o_valid_processor <= 1'b0;\n            o_current_left <= 0;\n            o_current_right <= 0;\n            o_feedback_left <= 0;\n            o_feedback_right <= 0;\n        end else begin\n            if (i_valid_processor) begin\n                o_current_left <=  ($signed(i_current_left) >>> 1) + ($signed(i_current_left) >>> 2) + ($signed(i_buffer_right) >>> 2);\n                o_feedback_left <= ($signed(i_current_left) >>> 1) + ($signed(i_current_left) >>> 2) + ($signed(i_buffer_left) >>> 2);\n                o_current_right <= ($signed(i_current_right) >>> 1) + ($signed(i_current_right) >>> 2) + ($signed(i_buffer_left) >>> 2);\n                o_feedback_right <= ($signed(i_current_right) >>> 1) + ($signed(i_current_right) >>> 2) + ($signed(i_buffer_right) >>> 2);\n                o_valid_processor <= 1'b1;\n                i_ready_processor <= 1'b0;\n            end else if (o_valid_processor && o_ready_processor) begin\n                i_ready_processor <= 1'b1;\n                o_valid_processor <= 1'b0;\n            end\n        end\n    end"
+    ]
+}

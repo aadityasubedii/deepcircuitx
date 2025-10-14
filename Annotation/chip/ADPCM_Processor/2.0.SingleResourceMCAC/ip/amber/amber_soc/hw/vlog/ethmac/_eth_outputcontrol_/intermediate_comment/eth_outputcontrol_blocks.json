@@ -1,0 +1,16 @@
+{
+    "line_num": [
+        [
+            126,
+            143
+        ],
+        [
+            105,
+            122
+        ]
+    ],
+    "blocks": [
+        "always @ (posedge Clk or posedge Reset)\nbegin\n  if(Reset)\n    begin\n      Mdo_2d <= #Tp 1'b0;\n      Mdo_d <= #Tp 1'b0;\n      Mdo <= #Tp 1'b0;\n    end\n  else\n    begin\n      if(MdcEn_n)\n        begin\n          Mdo_2d <= #Tp ~SerialEn & BitCounter<32;\n          Mdo_d <= #Tp ShiftedBit | Mdo_2d;\n          Mdo <= #Tp Mdo_d;\n        end\n    end\nend",
+        "always @ (posedge Clk or posedge Reset)\nbegin\n  if(Reset)\n    begin\n      MdoEn_2d <= #Tp 1'b0;\n      MdoEn_d <= #Tp 1'b0;\n      MdoEn <= #Tp 1'b0;\n    end\n  else\n    begin\n      if(MdcEn_n)\n        begin\n          MdoEn_2d <= #Tp SerialEn | InProgress & BitCounter<32;\n          MdoEn_d <= #Tp MdoEn_2d;\n          MdoEn <= #Tp MdoEn_d;\n        end\n    end\nend"
+    ]
+}

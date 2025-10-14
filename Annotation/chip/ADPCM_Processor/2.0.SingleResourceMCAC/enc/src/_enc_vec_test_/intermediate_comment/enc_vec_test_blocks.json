@@ -1,0 +1,146 @@
+{
+    "line_num": [
+        [
+            834,
+            846
+        ],
+        [
+            775,
+            828
+        ],
+        [
+            762,
+            770
+        ],
+        [
+            716,
+            756
+        ],
+        [
+            714,
+            714
+        ],
+        [
+            713,
+            713
+        ],
+        [
+            708,
+            711
+        ],
+        [
+            704,
+            704
+        ],
+        [
+            702,
+            702
+        ],
+        [
+            701,
+            701
+        ],
+        [
+            692,
+            692
+        ],
+        [
+            623,
+            689
+        ],
+        [
+            552,
+            616
+        ],
+        [
+            479,
+            546
+        ],
+        [
+            476,
+            478
+        ],
+        [
+            437,
+            469
+        ],
+        [
+            430,
+            432
+        ],
+        [
+            406,
+            424
+        ],
+        [
+            383,
+            404
+        ],
+        [
+            370,
+            381
+        ],
+        [
+            305,
+            367
+        ],
+        [
+            287,
+            303
+        ],
+        [
+            281,
+            281
+        ],
+        [
+            279,
+            279
+        ],
+        [
+            237,
+            276
+        ],
+        [
+            233,
+            235
+        ],
+        [
+            229,
+            231
+        ],
+        [
+            223,
+            227
+        ]
+    ],
+    "blocks": [
+        "function [127:0] insert_32_into_128;\ninput [1:0]   pos;\ninput [127:0] word128;\ninput [31:0]  word32;\nbegin\n     case (pos)\n         2'd0: insert_32_into_128 = {word128[127:32], word32};\n         2'd1: insert_32_into_128 = {word128[127:64], word32, word128[31:0]};\n         2'd2: insert_32_into_128 = {word128[127:96], word32, word128[63:0]};\n         2'd3: insert_32_into_128 = {word32, word128[95:0]};\n     endcase\nend\nendfunction",
+        "task display_registers;\nbegin\n    $display(\"\");\n    $display(\"----------------------------------------------------------------------------\");\n    $display(\"Amber Core\");\n\n    case (`U_EXECUTE.status_bits_mode)\n        FIRQ:    $display(\"         User       > FIRQ         IRQ          SVC\"); \n        IRQ:     $display(\"         User         FIRQ       > IRQ          SVC\"); \n        SVC:     $display(\"         User         FIRQ         IRQ        > SVC\"); \n        default: $display(\"       > User         FIRQ         IRQ          SVC\"); \n    endcase\n\n    $display(\"r0       0x%08x\", `U_REGISTER_BANK.r0);\n    $display(\"r1       0x%08x\", `U_REGISTER_BANK.r1);\n    $display(\"r2       0x%08x\", `U_REGISTER_BANK.r2);\n    $display(\"r3       0x%08x\", `U_REGISTER_BANK.r3);\n    $display(\"r4       0x%08x\", `U_REGISTER_BANK.r4);\n    $display(\"r5       0x%08x\", `U_REGISTER_BANK.r5);\n    $display(\"r6       0x%08x\", `U_REGISTER_BANK.r6);\n    $display(\"r7       0x%08x\", `U_REGISTER_BANK.r7);\n    $display(\"r8       0x%08x   0x%08x \", `U_REGISTER_BANK.r8,  `U_REGISTER_BANK.r8_firq);\n    $display(\"r9       0x%08x   0x%08x \", `U_REGISTER_BANK.r9,  `U_REGISTER_BANK.r9_firq);\n    $display(\"r10      0x%08x   0x%08x \", `U_REGISTER_BANK.r10, `U_REGISTER_BANK.r10_firq);\n    $display(\"r11      0x%08x   0x%08x \", `U_REGISTER_BANK.r11, `U_REGISTER_BANK.r11_firq);\n    $display(\"r12      0x%08x   0x%08x \", `U_REGISTER_BANK.r12, `U_REGISTER_BANK.r12_firq);\n    \n    $display(\"r13      0x%08x   0x%08x   0x%08x   0x%08x\", \n                                               `U_REGISTER_BANK.r13, \n                                               `U_REGISTER_BANK.r13_firq, \n                                               `U_REGISTER_BANK.r13_irq,\n                                               `U_REGISTER_BANK.r13_svc);\n    $display(\"r14 (lr) 0x%08x   0x%08x   0x%08x   0x%08x\", \n                                               `U_REGISTER_BANK.r14, \n                                               `U_REGISTER_BANK.r14_firq, \n                                               `U_REGISTER_BANK.r14_irq,\n                                               `U_REGISTER_BANK.r14_svc);\n\n\n    $display(\"r15 (pc) 0x%08x\", {6'd0,`U_REGISTER_BANK.r15,2'd0});\n    $display(\"\");\n    $display(\"Status Bits: N=%d, Z=%d, C=%d, V=%d, IRQ Mask %d, FIRQ Mask %d, Mode = %s\",  \n       `U_EXECUTE.status_bits_flags[3],\n       `U_EXECUTE.status_bits_flags[2],\n       `U_EXECUTE.status_bits_flags[1],\n       `U_EXECUTE.status_bits_flags[0],\n       `U_EXECUTE.status_bits_irq_mask,\n       `U_EXECUTE.status_bits_firq_mask,\n       mode_name (`U_EXECUTE.status_bits_mode) );\n    $display(\"----------------------------------------------------------------------------\");\n    $display(\"\");       \n\nend\nendtask",
+        "always @ ( posedge `U_SYSTEM.clk )\n    if ( timeout != 0 )\n        if (`U_TB.clk_count >= timeout)\n            begin\n            `ifndef NETLIST\n\t\t\t`TB_ERROR_MESSAGE\n\t\t`endif\n            $display(\"Timeout Error. Edit $AMBER_BASE/hw/tests/timeouts.txt to change the timeout\");\n            end",
+        "always @*\n        begin\n        if ( test_status_set || testfail )\n            begin\n            if ( test_status_reg == 32'd17 && !testfail )\n                begin\n                display_registers;\n                $display(\"++++++++++++++++++++\");\n                $write(\"Passed %s %0d ticks\\n\", `AMBER_TEST_NAME, `U_TB.clk_count);\n                $display(\"++++++++++++++++++++\");\n                $fwrite(`U_TB.log_file,\"Passed %s %0d ticks\\n\", `AMBER_TEST_NAME, `U_TB.clk_count);\n                $finish;\n                end\n            else\n                begin\n                display_registers;\n                if ( testfail )\n                    begin\n                    $display(\"++++++++++++++++++++\");\n                    $write(\"Failed %s\\n\", `AMBER_TEST_NAME);\n                    $display(\"++++++++++++++++++++\");\n                    $fwrite(`U_TB.log_file,\"Failed %s\\n\", `AMBER_TEST_NAME);\n                    $finish;\n                    end\n                else\n                    begin\n                    $display(\"++++++++++++++++++++\");\n                    if (test_status_reg >= 32'h8000)\n                        $write(\"Failed %s - with error 0x%08x\\n\", `AMBER_TEST_NAME, test_status_reg);\n                    else\n                        $write(\"Failed %s - with error on line %1d\\n\", `AMBER_TEST_NAME, test_status_reg);\n                    $display(\"++++++++++++++++++++\");\n                    if (test_status_reg >= 32'h8000)\n                        $fwrite(`U_TB.log_file,\"Failed %s - with error 0x%08h\\n\", `AMBER_TEST_NAME, test_status_reg);\n                    else\n                        $fwrite(`U_TB.log_file,\"Failed %s - with error on line %1d\\n\", `AMBER_TEST_NAME, test_status_reg);\n                    $finish;\n                    end\n                end\n            end\n        end",
+        "assign test_status_reg = `U_TEST_MODULE.test_status_reg;",
+        "assign test_status_set = `U_TEST_MODULE.test_status_set;",
+        "initial\n    begin\n    testfail  = 1'd0;\n    end",
+        "reg             testfail;",
+        "`include \"../include/a25_functions.vh\"",
+        "`include \"../include/a25_localparams.vh\"",
+        "dumpvcd u_dumpvcd();",
+        "always @ ( posedge `U_SYSTEM.reset ) begin\n\trepeat(`RESET_MEM_TICKS)\n\t\t@ ( negedge `U_SYSTEM.clk );\n        $display(\"Load main memory from %s\", `MAIN_MEM_FILE);\n\n        main_mem_file   = $fopen(`MAIN_MEM_FILE, \"r\");\n            \n        \n        main_mem_line_count   = 0;\n        \n        if (main_mem_file == 0)\n            begin\n            $display(\"ERROR: Can't open input file %s\", `MAIN_MEM_FILE);\n            `ifndef NETLIST\n\t\t\t`TB_ERROR_MESSAGE\n\t\t`endif\n            end\n\n        if (main_mem_file != 0)\n            begin  \n            fgets_return = 1;\n            while (fgets_return != 0)\n                begin\n                fgets_return        = $fgets(line, main_mem_file);\n                main_mem_line_count = main_mem_line_count + 1;\n                aligned_line        = align_line(line);\n                \n                \n                if (aligned_line[120*8-1:118*8] != 16'h2f2f)\n                    begin\n                    \n                    if (aligned_line[120*8-1:119*8] != 8'h40 && aligned_line[120*8-1:119*8] != 8'h00)\n                        begin\n                        $display(\"Format ERROR in input file %s, line %1d. Line must start with a @, not %08x\", \n                                 `MAIN_MEM_FILE, main_mem_line_count, aligned_line[118*8-1:117*8]);\n                        `ifndef NETLIST\n            \t\t\t`TB_ERROR_MESSAGE\n\t\t\t\t`endif\n                        end\n                    \n                    if (aligned_line[120*8-1:119*8] != 8'h00)\n                        begin\n                        main_mem_file_address =   hex_chars_to_32bits (aligned_line[119*8-1:111*8]);\n                        main_mem_file_data    =   hex_chars_to_32bits (aligned_line[110*8-1:102*8]);\n\n                      \n                      \n                      \n                      \n                      main_mem_file_data_128 = `U_RAM [main_mem_file_address[31:4]];\n                      `U_RAM [main_mem_file_address[31:4]] = \n                          insert_32_into_128 ( main_mem_file_address[3:2], \n                                               main_mem_file_data_128, \n                                               main_mem_file_data );\n\n                      `ifdef AMBER_LOAD_MEM_DEBUG\n                          $display (\"Load RAM: PAddr: 0x%08x, Data 0x%08x\", \n                                     main_mem_file_address, main_mem_file_data);\n                      `endif   \n                        \n                        end\n                    end  \n                end\n                \n            $display(\"Read in %1d lines\", main_mem_line_count);      \n            end\n end",
+        "always @ ( posedge `U_SYSTEM.reset ) begin\n\t\trepeat(`RESET_MEM_TICKS)\n\t\t\t@ ( negedge `U_SYSTEM.clk );\n        $display(\"Load boot memory from %s\", `BOOT_MEM_FILE);\n        boot_mem_line_count   = 0;\n        boot_mem_file         = $fopen(`BOOT_MEM_FILE,    \"r\");\n        if (boot_mem_file == 0)\n            begin\n\t\t`ifndef NETLIST\n            \t`TB_ERROR_MESSAGE\n\t\t`endif\n            $display(\"TESTBENCHERROR: Can't open input file %s\", `BOOT_MEM_FILE);\n            $finish;\n            end\n        \n        if (boot_mem_file != 0)\n            begin  \n            fgets_return = 1;\n            while (fgets_return != 0)\n                begin\n                fgets_return        = $fgets(line, boot_mem_file);\n                boot_mem_line_count = boot_mem_line_count + 1;\n                aligned_line        = align_line(line);\n                \n                \n                if (aligned_line[120*8-1:118*8] != 16'h2f2f)\n                    begin\n                    \n                    if (aligned_line[120*8-1:119*8] != 8'h40 && aligned_line[120*8-1:119*8] != 8'h00)\n                        begin\n                        $display(\"Format ERROR in input file %s, line %1d. Line must start with a @, not %08x\", \n                                 `BOOT_MEM_FILE, boot_mem_line_count, aligned_line[118*8-1:117*8]);\n                        `ifndef NETLIST\n            \t\t\t`TB_ERROR_MESSAGE\n\t\t\t\t`endif\n                        end\n                    \n                    if (aligned_line[120*8-1:119*8] != 8'h00)\n                        begin\n                        boot_mem_file_address  =   hex_chars_to_32bits (aligned_line[119*8-1:111*8]);\n                        boot_mem_file_data     =   hex_chars_to_32bits (aligned_line[110*8-1:102*8]);\n                        \n                        boot_mem_file_data_128 = `U_BOOT_MEM.u_mem.mem[boot_mem_file_address[BOOT_MSB:4]];\n                        `U_BOOT_MEM.u_mem.mem[boot_mem_file_address[BOOT_MSB:4]] = \n                              insert_32_into_128 ( boot_mem_file_address[3:2], \n                                                   boot_mem_file_data_128, \n                                                   boot_mem_file_data );\n                        \n                        `ifdef AMBER_LOAD_MEM_DEBUG\n                            $display (\"Load Boot Mem: PAddr: 0x%08x, Data 0x%08x\", \n                                        boot_mem_file_address, boot_mem_file_data);\n                        `endif   \n                        end\n                    end  \n                end\n                \n            $display(\"Read in %1d lines\", boot_mem_line_count);      \n            end\n\n        \n        timeout   = `AMBER_TIMEOUT   ;  \n        core_str = \"amber25\";      \n        $display(\"Core %s, log file %s, timeout %0d, test name %0s \", core_str, `AMBER_LOG_FILE, timeout, `AMBER_TEST_NAME );          \n        log_file = $fopen(`AMBER_LOG_FILE, \"a\");                               \nend",
+        "always @(posedge reset, negedge enc_o_clk) begin\n\tif (reset | ~program_start) begin\n\t\ttdmo_fs_prev <= 1'b0;\n\t\tcaptured_data <= 1'b0;\n\t\ttdmo_delay_start <= 'd5;\n\tend else begin\n\t\tif (tdmo_test_count <= loop) begin\n\t\t\tif (tdmo_delay_start < 3) begin \n\t\t\t\ttdmo_delay_start <= tdmo_delay_start + 1'b1;\n\t\t\tend else if (enc_o_fs & ~tdmo_fs_prev) begin\n\t\t\t\tdata_out[0][7] <= enc_o;\n\t\t\t\ttdmo_bit_count <= 3'b110;\n\t\t\t\ttdmo_ch_count <= 5'b00000;\n\t\t\tend else begin\n\t\t\t\tdata_out[tdmo_ch_count][tdmo_bit_count] <= enc_o;\n\t\t\t\ttdmo_bit_count <= tdmo_bit_count - 1'b1;\n\t\t\t\tif (tdmo_test_count == 'd0 && tdmo_ch_count == 5'b11111 && tdmo_bit_count == 3'b001) begin\n\t\t\t\t\ttdmo_bit_count <= 3'd7;\n\t\t\t\t\ttdmo_test_count <= tdmo_test_count + 1'b1;\n\t\t\t\t\ttdmo_ch_count <= 5'b00000;\n\t\t\t\tend else if (tdmo_bit_count == 3'd0) begin\n\t\t\t\t\t\tcaptured_data <= 1'b1;\n\t\t\t\t\t\ttdmo_bit_count <= 3'd7;\n\t\t\t\t\t\ttdmo_ch_count <= tdmo_ch_count + 1'b1;\n\t\t\t\t\t\tif (tdmo_ch_count == 5'b11111) begin\n\t\t\t\t\t\t\ttdmo_test_count <= tdmo_test_count + 1'b1;\n\t\t\t\t\t\t\ttdmo_ch_count <= 5'b00000;\n\t\t\t\t\t\tend\n\t\t\t\tend else begin\n`ifdef ERRORCHECK\n\t\t\t\t\tif (captured_data && (tdmo_bit_count == 3'd7)) begin\n`ifdef SINGLECHANNEL\n\t\t\t\t\tif ((tdmo_ch_count == 1) && (tdmo_test_count >= 1)) begin\n\t\t\t\t\t\tif (data_out[0] != data_out_vec[tdmo_test_count-1][7:0]) begin\n\t\t\t\t\t\t\t$display(\"%t TESTBENCHERROR: failure found for channel 0 and test number %d, when output data = %h but should be %h\",$time,tdmo_test_count,data_out[0],data_out_vec[tdmo_test_count-1][7:0]); \n\t\t\t\t\t\t\t$finish;\n\t\t\t\t\t\tend\n\t\t\t\t\tend\n`else\n\t\t\t\t\tif (tdmo_test_count >= 1) begin\n\t\t\t\t\t\tif (tdmo_ch_count == 0) begin\n\t\t\t\t\t\t\tif (data_out[31] != data_out_vec[32*tdmo_test_count-33][7:0]) begin\n\t\t\t\t\t\t\t\t$display(\"%t TESTBENCHERROR: failure found for channel %h and test number %d, when output data = %h but should be %h\",$time,tdmo_ch_count,tdmo_test_count,data_out[31],data_out_vec[32*tdmo_test_count-33][7:0]); \n\t\t\t\t\t\t\t\t$finish;\n\t\t\t\t\t\t\tend\n\t\t\t\t\t\tend else begin\n\t\t\t\t\t\t\tif (data_out[tdmo_ch_count-1] != data_out_vec[32*tdmo_test_count+tdmo_ch_count-33][7:0]) begin\n\t\t\t\t\t\t\t\t$display\t\t(\"%t TESTBENCHERROR: failure found for channel %h and test number %d, when output data = %h but should be %h\",$time,tdmo_ch_count,tdmo_test_count,data_out[tdmo_ch_count-1],data_out_vec[32*tdmo_test_count+tdmo_ch_count-33][7:0]); \n\t\t\t\t\t\t\t\t$finish;\n\t\t\t\t\t\t\tend\n\t\t\t\t\t\t\telse if ((tdmo_test_count % 100)==0 && tdmo_ch_count == 1) begin \n\t\t\t\t\t\t\t\t$display(\"%t Passing tests so far. Currently on test number %d\", $time, tdmo_test_count);\n\t\t\t\t\t\t\tend\n\t\t\t\t\t\tend\n\t\t\t\t\tend\n`endif\n\t\t\t\t\tend\n`endif\n\t\t\t\t\tcaptured_data <= 1'b0;\n\t\t\t\tend\n\t\t\tend\n\t\t\ttdmo_fs_prev <= enc_o_fs;\n\t\tend else begin\n\t\t\t$display(\"%t TESTBENCHFINISHED: simulation complete\",$time);\n\t\t\t$finish;\n\t\tend\n\tend\nend",
+        "reg tdmo_fs_prev;\nreg captured_data;\ninteger tdmo_delay_start;",
+        "always @(posedge enc_s_clk) begin\n\tif (reset | ~program_start) begin\n\t\tdelay_start <= 'd5;\n\tend else begin\n\t\tif (test_count < loop)  begin\n\t\t\tif (delay_start < 3) begin \n\t\t\t\tdelay_start <= delay_start + 1'b1;\n\t\t\tend else begin\n\t\t\t\tif ((ch_count == 5'd0) ) begin\n\t\t\t\t\tenc_s_fs <= 1'b1;\n\t\t\t\tend else begin\n\t\t\t\t\tenc_s_fs <= 1'b0;\n\t\t\t\tend\n\t\t`ifdef SINGLECHANNEL\n\t\t\t\tif (ch_count == 0) begin\n\t\t\t\t\tenc_s <= data_in_vec[test_count][bit_count];\n\t\t\t\tend else begin\n\t\t\t\t\tenc_s <= 1'b0;\n\t\t\t\tend\n\t\t`else\n\t\t\t\tenc_s <= data_in_vec[32*test_count + ch_count][bit_count];\n\t\t`endif\n\t\t\t\tbit_count <= bit_count - 1'b1;\n\t\t\t\tif (bit_count == 3'd0) begin\n\t\t\t\t\tch_count <= ch_count + 1'b1;\n\t\t\t\t\tif (ch_count == 5'b11111) begin\n\t\t\t\t\t\ttest_count <= test_count + 1'b1;\n\t\t\t\t\tend\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\nend",
+        "always @ ( posedge `U_SYSTEM.clk )\n    clk_count <= clk_count + 1'd1;\n",
+        "always @(posedge reset, posedge clk) begin\n\tif (reset) begin\n\t\tprogram_start <= 1'b0;\n\tend else begin\n\t\n\n\n\t\tif(config_done == 1 && program_start == 0) begin\n\t\t\taddrs = 7'b1100000;\n\t\t\t@(posedge clk);\n\t\t\trs = 1'b1;\n\t\t\t@(posedge clk);\n\t\t\trs = 1'b0;\n\t\t\tif (r_data == 1) begin\n\t\t\t\tprogram_start <= 1'b1;\n\t\t\tend\n\t\tend\n\tend\nend",
+        "always @(rate, law) begin\n\tcase (rates[rate])\n\t\t\"40\": w_data[2:1] = 2'b00;\n\t\t\"32\": w_data[2:1] = 2'b01;\n\t\t\"24\": w_data[2:1] = 2'b10;\n\t\t\"16\": w_data[2:1] = 2'b11;\n\tendcase\n\tcase (laws[law])\n\t\t\"AA\": w_data[0] = 1;\n\t\t\"MM\": w_data[0] = 0;\n\t\t\"AM\": w_data[0] = 1;\n\t\t\"MA\": w_data[0] = 0;\n\tendcase\n\tfor (next_channel = 0; next_channel<32; next_channel=next_channel+1) begin\n\t\taddrs[4:0] = next_channel;\n\t\tws = 1'b1;\n\t\t@(posedge clk);\n\t\tws = 1'b0;\n\t\t@(posedge clk);\n\tend\n\tconfig_done = 1'b1;\nend",
+        "always @ (posedge clk, posedge reset) begin\n\tif(reset) begin\n\t\tenc_s_clk <= 1'b0;\n\t\tser_count <= 8'h00;\n\tend else if (ser_count != 8'h3B) begin\n\t\tser_count <= ser_count + 1'b1;\n\t\tenc_s_clk <= enc_s_clk;\n\tend else if (ser_count == 8'h3B) begin\n\t\tser_count <= 8'h00;\n\t\tenc_s_clk <= ~ enc_s_clk;\n\tend\nend",
+        "initial begin\n    $timeformat(-9,2,\"ns\", 16);\n`ifdef SDFSCAN\n    $sdf_annotate(\"sdf/enc_tsmc065_scan.sdf\", test.top);\n`endif\n\tclk = 1'b0;\n\tenc_s = 1'b0;\n\t\n\tenc_s_fs = 1'b0;\n\tuart_clk = 1'b0;\n\tscan_in0 = 1'b0;\n\tscan_in1 = 1'b0;\n\tscan_in2 = 1'b0;\n\tscan_in3 = 1'b0;\n\tscan_in4 = 1'b0;\n\tscan_enable = 1'b0;\n\ttest_mode = 1'b0;\n\tch_count = 5'd0;\n\tbit_count = 3'd7;\n\ttest_count = 'd0;\n\tnext_channel = 'd0;\n\n\n\ttdmo_ch_count = 5'd0;\n\ttdmo_bit_count = 3'd7;\n\ttdmo_test_count = 'd0;\n\n\treset = 1'd0;\n\t@(posedge clk)\n\t\treset = #1 1'd1;\n\trepeat(`RESET_MEM_TICKS)\n\t\t@(negedge clk);\n\treset = #1 1'd0;\n\n\taddrs = 7'h20;\n\tcs = 1'b1;\n\trs = 1'b0;\n\tws = 1'b0;\n\tw_data = 8'h00;\n\n\t\n\t$readmemh({\"./ENCTests.t\"},testCases);\n\tmodel = testCases[0];\n\ttype = testCases[1];\n\toperation= testCases[2];\n\tlaw = testCases[3];\n\trate = testCases[4];\n\t$display(\"%s %s %s %s %s law\", models[model], rates[rate], operations[operation], types[type], laws[law]);\n\n\t\n\t$readmemh({\"../sw/mc_model/vector_out/\",laws[law],\"/\", models[model], \"/\", types[type],\"/\", operations[operation],\"/\",rates[rate],\"/\",\"vectorSize.t\"}, vectorSizes);\n\tloop = vectorSizes[0];\n`ifndef SINGLECHANNEL\n\tloop = loop / 32;\n`endif\n\t$readmemh({\"../sw/mc_model/vector_out/\",laws[law],\"/\", models[model], \"/\", types[type],\"/\", operations[operation],\"/\",rates[rate],\"/\",\"channel.t\"}, channels);\n\ttest_channel = channels[0];\n\t$display(\"Current channel being tested with main vectors is: %d\", test_channel);\n\t$display(\"Other channels being tested with null vectors\");           \n\t$readmemh({\"../sw/mc_model/vector_out/\",laws[law],\"/\", models[model], \"/\", types[type],\"/\", operations[operation],\"/\",rates[rate],\"/\",\"input.t\"}, data_in_vec);\n\t$readmemh({\"../sw/mc_model/vector_out/\",laws[law],\"/\", models[model], \"/\", types[type],\"/\", operations[operation],\"/\",rates[rate],\"/\",\"output.t\"}, data_out_vec);\n\nend",
+        "initial begin\n  rates[0]      = \"40\";\n  rates[1]      = \"32\";\n  rates[2]      = \"24\";\n  rates[3]      = \"16\";\n  laws[0]       = \"AA\";\n  laws[1]       = \"MM\";  \n  laws[2]       = \"AM\";\n  laws[3]       = \"MA\";\n  operations[0] = \"nrm\";\n  operations[1] = \"ovr\";\n  operations[2] = \"i\";\n  types[0]      = \"reset\";\n  types[1]      = \"homing\";\n  models[0]     = \"enc\";\n  models[1]     = \"dec\";\nend",
+        "always #(`UART_CLK_PERIOD/2) uart_clk = ~uart_clk;",
+        "always #(`CLK_PERIOD/2) clk = ~clk;",
+        "CFG_INT config_mod (\n\t.reset(reset),\n\t.clk(clk),\n\t.scan_in0(scan_in0),\n\t.scan_in1(scan_in1),\n\t.scan_in2(scan_in2),\n\t.scan_in3(scan_in3),\n\t.scan_in4(scan_in4),\n\t.scan_enable(scan_enable),\n\t.test_mode(test_mode),\n\t.scan_out0(scan_out0),\n\t.scan_out1(scan_out1),\n\t.scan_out2(scan_out2),\n\t.scan_out3(scan_out3),\n\t.scan_out4(scan_out4),\n\t.rs(rs),\n\t.ws(ws),\n\t.cs(cs),\n\t.w_data(w_data),\n\t.addrs(addrs),\n\t.r_data(r_data),\n\t.i_wb_adr_e(i_wb_adr_e),\n\t.i_wb_sel_e(i_wb_sel_e[3:0]),\n\t.i_wb_we_e(i_wb_we_e),\n\t.o_wb_dat_e(o_wb_dat_e[31:0]),\n\t.i_wb_dat_e(i_wb_dat_e[31:0]),\n\t.i_wb_cyc_e(i_wb_cyc_e),\n\t.i_wb_stb_e(i_wb_stb_e),\n\t.o_wb_ack_e(o_wb_ack_e),\n\t.o_wb_err_e(o_wb_err_e),\n\t.i_wb_adr_d(i_wb_adr_d),\n\t.i_wb_sel_d(i_wb_sel_d[3:0]),\n\t.i_wb_we_d(i_wb_we_d),\n\t.o_wb_dat_d(o_wb_dat_d[31:0]),\n\t.i_wb_dat_d(i_wb_dat_d[31:0]),\n\t.i_wb_cyc_d(i_wb_cyc_d),\n\t.i_wb_stb_d(i_wb_stb_d),\n\t.o_wb_ack_d(o_wb_ack_d),\n\t.o_wb_err_d(o_wb_err_d)\n);",
+        "assign o_wb_dat_d[127:96] = o_wb_dat_d[31:0];\nassign o_wb_dat_d[95:64]  = o_wb_dat_d[31:0];\nassign o_wb_dat_d[63:32]  = o_wb_dat_d[31:0];",
+        "assign o_wb_dat_e[127:96] = o_wb_dat_e[31:0];\nassign o_wb_dat_e[95:64]  = o_wb_dat_e[31:0];\nassign o_wb_dat_e[63:32]  = o_wb_dat_e[31:0];",
+        "generate\n\tfor (n=0; n<501; n=n+1) begin : gg\n\t\tassign memory[n] = test.u_main_mem.ram[n + 2100];\n\tend\nendgenerate"
+    ]
+}

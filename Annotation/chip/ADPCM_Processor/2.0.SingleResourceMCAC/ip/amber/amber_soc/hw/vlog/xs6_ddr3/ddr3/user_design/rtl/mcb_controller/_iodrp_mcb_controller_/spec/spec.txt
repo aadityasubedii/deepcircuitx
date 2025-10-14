@@ -1,0 +1,9 @@
+Module name: iodrp_mcb_controller. 
+
+Module specification: The iodrp_mcb_controller is a module designed to manage the process of reading from or writing to a specific address in memory, typically within the context of an IO routing system. Its functionality is centered around the management and manipulation of different states of memory access, creating control signals, and managing data transmission through Differential Readback Path (DRP) clock domain. 
+
+The module comprises various input and output ports. The input ports include memcell_address (the address within the memory cell), write_data (the data to be written), rd_not_write, cmd_valid, use_broadcast, drp_ioi_addr, sync_rst, DRP_CLK, and DRP_SDO. These input ports control various aspects of the memory operation, like command validation, data broadcasting, read or write operation indication, and DRP clock signal. The output ports include read_data (the data read from the memory cell), rdy_busy_n, DRP_CS, DRP_SDI, DRP_ADD, DRP_BKST, and MCB_UIREAD. These output ports manage data reading, DRP address write enable, serialized data input to the DRP, DRP chip select, and control data phase operations.
+
+Internally, the module utilises signals such as memcell_addr_reg, data_reg, and shift_through_reg to hold the memory cell address and the data being written or read. Signals like load_shift_n, addr_data_sel_n, bit_cnt keep track of bit positions during state transitions and manage load shift operations.
+
+The primary blocks in the module are the always blocks that define the sequences of operations based on the input signals and conditional statements, a task block named shift_n_expand responsible for expanding incoming serialized data, and a case statement for handling shifts in data during state transitions. The module also uses state machines with defined states like READ, WRITE, DATA_PHASE among others, to control the flow of operations.

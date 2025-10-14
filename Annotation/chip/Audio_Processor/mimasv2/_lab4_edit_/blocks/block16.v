@@ -1,0 +1,1 @@
+  assign right_out_data = left_out_data;

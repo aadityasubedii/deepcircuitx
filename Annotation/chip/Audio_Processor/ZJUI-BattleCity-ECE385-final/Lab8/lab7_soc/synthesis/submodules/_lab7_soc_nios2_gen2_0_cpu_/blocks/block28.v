@@ -1,0 +1,1 @@
+  assign R_ctrl_mem32_nxt = D_ctrl_mem32;

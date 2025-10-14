@@ -1,0 +1,1 @@
+  assign oclkdelay_calib_cnt = {1'b0, byte_r};

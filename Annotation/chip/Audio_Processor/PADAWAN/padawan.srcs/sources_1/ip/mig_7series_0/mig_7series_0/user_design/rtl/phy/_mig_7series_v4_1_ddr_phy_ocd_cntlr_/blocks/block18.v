@@ -1,0 +1,1 @@
+  assign oclkdelay_calib_done = oclkdelay_calib_done_r;

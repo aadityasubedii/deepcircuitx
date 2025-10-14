@@ -1,0 +1,1 @@
+  assign W_wr_data = W_wr_data_non_zero;

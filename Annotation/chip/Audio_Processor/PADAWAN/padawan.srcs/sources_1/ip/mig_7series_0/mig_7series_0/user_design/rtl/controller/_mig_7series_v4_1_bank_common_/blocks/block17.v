@@ -1,0 +1,1 @@
+      always @(posedge clk) maint_wip_r_lcl <= #TCQ maint_wip_ns;

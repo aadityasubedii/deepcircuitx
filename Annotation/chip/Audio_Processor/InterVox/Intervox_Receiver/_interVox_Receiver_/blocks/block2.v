@@ -1,0 +1,12 @@
+  assign io_CLK_REC = 1'h0; 
+  assign io_DATA_OUT = clockRec_io_DATA_OUT; 
+  assign io_CLK_DBUG = 1'h0; 
+  assign io_DBUG = clockRec_io_DBUG; 
+  assign io_DBUG1 = clockRec_io_DBUG1; 
+  assign io_LED = clockRec_io_LED; 
+  assign io_BCLK = clockRec_io_CLK_OUT; 
+  assign io_LRCLK = i2sTrans_io_LRCLK; 
+  assign io_SDATA = i2sTrans_io_SDATA; 
+  assign clockRec_clock = clock;
+  assign clockRec_reset = reset;
+  assign clockRec_io_DATA_IN = io_INTERVOX_IN; 

@@ -1,0 +1,9 @@
+Module name: mig_7series_v4_1_ecc_merge_enc. 
+
+Module specification: This module primarily aids in Error Correction Code (ECC) processing to fortify a Memory Interface Generator (MIG) in 7 series devices. Its inputs are write data (wr_data), write data mask (wr_data_mask), clock (clk), reset (rst), read merge data (rd_merge_data), raw data (raw_not_ecc), and Hamming rows (h_rows). It executes an operation by merging the read and write data according to the write mask and computes control bits using a Hamming code if the raw_not_ecc signal is not asserted. 
+
+The module produces a memory write data (mc_wrdata) and a memory write data mask (mc_wrdata_mask). The memory write data is the incorporated data that is all set to be written to the memory, and the memory write data mask is a continuous 0, indicating that all data bits are reliable. 
+
+Internally, the module uses registered versions of the write data, write data mask, read merge data, and raw data (raw_not_ecc) signals: wr_data_r, wr_data_mask_r, rd_merge_data_r, and raw_not_ecc_r, which act as buffers and synchronize read and write data processing. Also, it utilizes a merged_data signal which stores the result of the merging operation, and a mc_wrdata_c signal that temporarily holds the merged and ECC computed data ready for output.
+
+The module comprises two major code blocks; merge_data_outer and ecc_word, the earlier merges the read and write data while the latter computes the ECC. Overall, this module plays a crucial role in enhancing data integrity when written to memory.

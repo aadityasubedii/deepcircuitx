@@ -1,0 +1,1 @@
+    assign prev = rst ? 0 : out;

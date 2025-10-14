@@ -1,0 +1,86 @@
+{
+    "line_num": [
+        [
+            365,
+            406
+        ],
+        [
+            324,
+            363
+        ],
+        [
+            321,
+            321
+        ],
+        [
+            311,
+            319
+        ],
+        [
+            293,
+            307
+        ],
+        [
+            274,
+            289
+        ],
+        [
+            257,
+            272
+        ],
+        [
+            240,
+            255
+        ],
+        [
+            223,
+            238
+        ],
+        [
+            207,
+            221
+        ],
+        [
+            204,
+            204
+        ],
+        [
+            199,
+            199
+        ],
+        [
+            189,
+            195
+        ],
+        [
+            165,
+            185
+        ],
+        [
+            153,
+            161
+        ],
+        [
+            145,
+            151
+        ]
+    ],
+    "blocks": [
+        "generate\nif (FAMILY ==  \"VIRTEX6\")  begin : V6_WDGEN\n\nv6_data_gen #                                 \n \n(  \n   .TCQ               (TCQ),\n   .ADDR_WIDTH      (32 ),\n   .BL_WIDTH        (BL_WIDTH       ),\n   .DWIDTH          (DWIDTH       ),\n   .MEM_BURST_LEN     (MEM_BURST_LEN),\n   \n   .DATA_PATTERN    (DATA_PATTERN  ),\n   .NUM_DQ_PINS      (NUM_DQ_PINS  ),\n   .SEL_VICTIM_LINE   (SEL_VICTIM_LINE),\n   \n   .COLUMN_WIDTH     (COLUMN_WIDTH),\n    .EYE_TEST   (EYE_TEST)\n   \n )                 \n v6_data_gen\n (\n   .clk_i              (clk_i         ),        \n   .rst_i              (rst_i[1]      ),\n   .data_rdy_i         (data_rdy_i    ),\n   .prbs_fseed_i       (prbs_fseed_i),\n   \n   .data_mode_i        (data_mode_i   ),  \n   .cmd_startA         (cmd_start    ),  \n   .cmd_startB         (cmd_startB    ),   \n   .cmd_startC         (cmd_startC    ),   \n   .cmd_startD         (cmd_startD    ),   \n   .cmd_startE         (cmd_startE    ),   \n   .m_addr_i           (addr_i),          \n   .fixed_data_i         (fixed_data_i),\n\n   .addr_i             (addr_i        ),       \n   .user_burst_cnt     (user_burst_cnt),\n   .fifo_rdy_i         (fifo_not_full    ),   \n   .data_o             (data_o        )\n  );\nend",
+        "generate\nif (FAMILY == \"SPARTAN6\")  begin : SP6_WDGEN\n\nsp6_data_gen #\n \n( \n   .TCQ             (TCQ),\n   .ADDR_WIDTH      (32 ),\n   \n   .BL_WIDTH        (BL_WIDTH       ),\n   .DWIDTH          (DWIDTH       ),\n   .DATA_PATTERN    (DATA_PATTERN  ),\n   .NUM_DQ_PINS      (NUM_DQ_PINS  ),\n   .COLUMN_WIDTH     (COLUMN_WIDTH)\n   \n )\n sp6_data_gen\n (\n   .clk_i              (clk_i         ),        \n   .rst_i              (rst_i[1]         ), \n   .data_rdy_i         (data_rdy_i    ),\n   .prbs_fseed_i       (prbs_fseed_i),\n   \n   .data_mode_i        (data_mode_i   ),  \n   .cmd_startA         (cmd_start    ),  \n   .cmd_startB         (cmd_startB    ),   \n   .cmd_startC         (cmd_startC    ),   \n   .cmd_startD         (cmd_startD    ),   \n   .cmd_startE         (cmd_startE    ),   \n   .fixed_data_i         (fixed_data_i),\n   \n   .addr_i             (addr_i        ),       \n   .user_burst_cnt     (user_burst_cnt),\n   .fifo_rdy_i         (fifo_not_full    ),   \n   .data_o             (data_o        )  \n  );\nend\n\n\nendgenerate",
+        "assign data_valid_o = data_valid & fifo_not_full;",
+        "always @ (posedge clk_i)\nbegin\n  if (rst_i[1])  \n    data_valid <= #TCQ 'd0;\n  else if(cmd_start) \n    data_valid <= #TCQ 1'b1;\n  else if (fifo_not_full && user_burst_cnt <= 6'd1)  \n    data_valid <= #TCQ 1'b0;\nend",
+        "always @( posedge clk_i)\nbegin\n  if ( rst_i[0] )\n    cmd_rdyF <= #TCQ 1'b1;\n  else if (cmd_startF)\n     if (bl_i == 1)\n        cmd_rdyF <= #TCQ 1'b1;\n     else\n       cmd_rdyF <= #TCQ 1'b0;\n  else if  ((user_burst_cnt == 6'd2 && fifo_not_full ) )\n\n      cmd_rdyF <= #TCQ 1'b1;\n  \n\nend",
+        "always @( posedge clk_i)\nbegin\n  if ( rst_i[0] )\n    cmd_rdyE <= #TCQ 1'b1;\n  else if (cmd_startE)\n     if (bl_i == 1)\n        cmd_rdyE <= #TCQ 1'b1;\n     else\n       cmd_rdyE <= #TCQ 1'b0;\n  else if  ((user_burst_cnt == 6'd2 && fifo_not_full ) ) \n\n\n      cmd_rdyE <= #TCQ 1'b1;\n  \n\nend",
+        "always @( posedge clk_i)\nbegin\n  if ( rst_i[0] )\n    cmd_rdyD <= #TCQ 1'b1;\n  else if (cmd_startD)\n     if (bl_i == 1)\n        cmd_rdyD <= #TCQ  1'b1;\n     else\n       cmd_rdyD <= #TCQ 1'b0;\n  else if  ((user_burst_cnt == 6'd2 && fifo_not_full ) ) \n\n\n      cmd_rdyD <= #TCQ 1'b1;\n  \n\nend",
+        "always @( posedge clk_i)\nbegin\n  if ( rst_i[0] )\n    cmd_rdyC <= #TCQ 1'b1;\n  else if (cmd_startC)\n     if (bl_i == 1)\n        cmd_rdyC <= #TCQ 1'b1;\n     else\n       cmd_rdyC <= #TCQ 1'b0;\n  else if  ((user_burst_cnt == 6'd2 && fifo_not_full ) )\n\n\n      cmd_rdyC <= #TCQ 1'b1;\n  \n\nend",
+        "always @( posedge clk_i)\nbegin\n  if ( rst_i [0])\n    cmd_rdyB <= #TCQ 1'b1;\n  else if (cmd_startB)\n     if (bl_i == 1)\n        cmd_rdyB <= #TCQ 1'b1;\n     else\n       cmd_rdyB <= #TCQ 1'b0;\n  else if  ((user_burst_cnt == 6'd2 && fifo_not_full ) )\n\n\n      cmd_rdyB <= #TCQ 1'b1;\n  \n\nend",
+        "always @( posedge clk_i)\nbegin\n  if ( rst_i[0] )\n    cmd_rdy <= #TCQ 1'b1;\n  else if (cmd_start)\n     if (bl_i == 1)\n        cmd_rdy <= #TCQ 1'b1;\n     else\n       cmd_rdy <= #TCQ 1'b0;\n  else if  ((user_burst_cnt == 6'd2 && fifo_not_full ) )\n\n      cmd_rdy <= #TCQ 1'b1;\n  \n\nend",
+        "assign cmd_rdy_o = cmd_rdy & fifo_not_full;",
+        "assign  last_word_o = u_bcount_2 & fifo_not_full;",
+        "always @ (posedge clk_i)\nbegin\nif ((user_burst_cnt == 2  && fifo_not_full )|| (cmd_startC && bl_i == 1))\n    u_bcount_2 <= #TCQ 1'b1;\nelse if (last_word_o)\n    u_bcount_2 <= #TCQ 1'b0;\nend    ",
+        "always @( posedge clk_i)\nbegin\n  if ( rst_i[0] )\n    user_burst_cnt <= #TCQ 'd0;\n  else if(cmd_start) \n    if (FAMILY == \"SPARTAN6\") begin\n       if (bl_i == 6'b000000)\n          user_burst_cnt <= #TCQ 7'b1000000;\n       else\n     user_burst_cnt <= #TCQ bl_i;\n       \n       end\n        else\n     user_burst_cnt <= #TCQ bl_i;\n  else if(fifo_not_full) \n     if (user_burst_cnt != 6'd0)\n       user_burst_cnt <= #TCQ user_burst_cnt - 1'b1;\n     else\n        user_burst_cnt <=#TCQ 'd0;\n        \nend",
+        "always @ (posedge clk_i)\nbegin\ncmd_start  <= #TCQ  cmd_validC_i & cmd_rdyC ;\ncmd_startB <= #TCQ  cmd_valid_i & cmd_rdyB;\ncmd_startC <= #TCQ  cmd_validB_i & cmd_rdyC;\ncmd_startD <= #TCQ  cmd_validB_i & cmd_rdyD;  \ncmd_startE <= #TCQ  cmd_validB_i & cmd_rdyE;  \ncmd_startF <= #TCQ  cmd_validB_i & cmd_rdyF;  \nend",
+        "always @( posedge clk_i)\nbegin\nif ((user_burst_cnt == 2 || (cmd_start && bl_i == 1 && FAMILY == \"VIRTEX6\")) && (fifo_not_full))\n    data_wr_end_o <= #TCQ  1'b1;\nelse\n    data_wr_end_o <= #TCQ  1'b0;\nend"
+    ]
+}

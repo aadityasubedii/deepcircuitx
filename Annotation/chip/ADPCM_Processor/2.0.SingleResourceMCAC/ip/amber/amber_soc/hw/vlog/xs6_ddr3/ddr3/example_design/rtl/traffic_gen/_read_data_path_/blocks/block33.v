@@ -1,0 +1,1 @@
+   assign force_wrcmd_gen_o = force_wrcmd_gen;

@@ -1,0 +1,15 @@
+Module name: lab7_soc_nios2_gen2_0_cpu_debug_slave_tck.
+
+Module specification: The 'lab7_soc_nios2_gen2_0_cpu_debug_slave_tck' is a Verilog module that is designed for aiding in the debugging of an FPGA configured CPU, specifically the Nios II Gen2 in a system on a chip environment. It manipulates and reads system statuses through input signals and communicates with an external debugger via a JTAG interface. 
+
+The module's input ports include various 32-bit signals such as 'MonDReg' and 'break_readreg' relating to monitored data and reading from breakpoints respectively, along with debugging latches ('dbrk_hitx_latch'), debug acknowledgement ('debugack'), a 2-bit input for the instruction register ('ir_in'), JTAG state indicators ('jtag_state_rti'), monitor unit signals ('monitor_error', 'monitor_ready'), reset and latch signals ('reset_n', 'resetlatch') and the JTAG clock and data signals ('tck', 'tdi'). 
+
+The module also receives signals related to tracing memory ('tracemem_on', 'tracemem_trcdata', 'tracemem_tw'), trace address and status signals ('trc_im_addr', 'trc_on', 'trc_wrap'), breakpoint types and trigger states ('trigbrktype', 'trigger_state_1'), and control signals for JTAG states ('vs_cdr', 'vs_sdr', 'vs_uir'). 
+
+The output ports of the module include a 2-bit instruction register output ('ir_out'), an inverse reset signal ('jrst_n'), a 38-bit shift register output ('sr') which is primarily designed for storing and transmitting the debug data, a readiness indicator for the 'test idle state' ('st_ready_test_idle'), and a JTAG Data Output ('tdo').
+
+Internally, the module uses multiple signals such as 'DRsize' to decide the size of the data register, 'debugack_sync' and 'monitor_ready_sync' which are synchronized versions of debug acknowledgement and monitor readiness respectively, and others like 'sr', 'tdo', 'st_ready_test_idle' and 'jrst_n'. There are also internal reset wires 'unxcomplemented_resetxx1' and 'unxcomplemented_resetxx2' for synchronizing debugack and monitor_ready respectively. 
+
+The main code block of the module contains 'always @ (posedge tck)' which represents the actions to be taken at each positive edge of the JTAG clock, categorized based on different combinations of the control signals and instruction register inputs. This "always block" includes different cases for 'vs_cdr', 'vs_sdr' and 'vs_uir', focusing on assigning values to the shift register 'sr' and the Data Register size 'DRsize'. 
+
+Another 'always' block modifies instruction register 'ir_out' based on the synchronized acknowledgement and monitor signals. Two instances of 'altera_std_synchronizer' module help in generating 'debugack_sync' and 'monitor_ready_sync' signals depending on 'debugack' and 'monitor_ready' inputs respectively. Finally, the module assigns the inverse of the input reset signal to 'jrst_n'. Overall, the module implements complexities of the debugging mechanism, recovery and manipulation scheme of debug instructions received through JTAG.

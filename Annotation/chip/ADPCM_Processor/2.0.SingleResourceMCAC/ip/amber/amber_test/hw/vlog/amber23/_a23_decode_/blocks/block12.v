@@ -1,0 +1,1 @@
+assign firq_not_user_mode_nxt = !user_mode_regs_load_nxt && status_bits_mode_nxt == FIRQ;

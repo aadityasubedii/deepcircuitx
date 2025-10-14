@@ -1,0 +1,66 @@
+{
+    "line_num": [
+        [
+            254,
+            254
+        ],
+        [
+            249,
+            252
+        ],
+        [
+            230,
+            248
+        ],
+        [
+            225,
+            228
+        ],
+        [
+            206,
+            224
+        ],
+        [
+            199,
+            200
+        ],
+        [
+            196,
+            198
+        ],
+        [
+            177,
+            190
+        ],
+        [
+            166,
+            174
+        ],
+        [
+            157,
+            163
+        ],
+        [
+            148,
+            154
+        ],
+        [
+            140,
+            146
+        ]
+    ],
+    "blocks": [
+        "endmodule",
+        "defparam \n\tAudio_Out_Right_Channel_FIFO.DATA_WIDTH\t= AUDIO_DATA_WIDTH,\n\tAudio_Out_Right_Channel_FIFO.DATA_DEPTH\t= 128,\n\tAudio_Out_Right_Channel_FIFO.ADDR_WIDTH\t= 7;",
+        "Altera_UP_SYNC_FIFO Audio_Out_Right_Channel_FIFO(\n\t\n\t.clk\t\t\t(clk),\n\t.reset\t\t\t(reset),\n\n\t.write_en\t\t(right_channel_data_en & ~right_channel_fifo_is_full),\n\t.write_data\t\t(right_channel_data),\n\n\t.read_en\t\t(read_right_channel),\n\t\n\t\n\n\t\n\t.fifo_is_empty\t(right_channel_fifo_is_empty),\n\t.fifo_is_full\t(right_channel_fifo_is_full),\n\t.words_used\t\t(right_channel_fifo_used),\n\n\t.read_data\t\t(right_channel_from_fifo)\n);",
+        "defparam \n\tAudio_Out_Left_Channel_FIFO.DATA_WIDTH\t= AUDIO_DATA_WIDTH,\n\tAudio_Out_Left_Channel_FIFO.DATA_DEPTH\t= 128,\n\tAudio_Out_Left_Channel_FIFO.ADDR_WIDTH\t= 7;",
+        "Altera_UP_SYNC_FIFO Audio_Out_Left_Channel_FIFO(\n\t\n\t.clk\t\t\t(clk),\n\t.reset\t\t\t(reset),\n\n\t.write_en\t\t(left_channel_data_en & ~left_channel_fifo_is_full),\n\t.write_data\t\t(left_channel_data),\n\n\t.read_en\t\t(read_left_channel),\n\t\n\t\n\n\t\n\t.fifo_is_empty\t(left_channel_fifo_is_empty),\n\t.fifo_is_full\t(left_channel_fifo_is_full),\n\t.words_used\t\t(left_channel_fifo_used),\n\n\t.read_data\t\t(left_channel_from_fifo)\n);",
+        "assign read_right_channel\t= left_right_clk_falling_edge &\n\t\t\t\t\t\t\t\tleft_channel_was_read;",
+        "assign read_left_channel\t= left_right_clk_rising_edge &\n\t\t\t\t\t\t\t\t ~left_channel_fifo_is_empty & \n\t\t\t\t\t\t\t\t ~right_channel_fifo_is_empty;",
+        "always @(posedge clk)\nbegin\n\tif (reset == 1'b1)\n\t\tdata_out_shift_reg\t<= {AUDIO_DATA_WIDTH{1'b0}};\n\telse if (read_left_channel)\n\t\tdata_out_shift_reg\t<= left_channel_from_fifo;\n\telse if (read_right_channel)\n\t\tdata_out_shift_reg\t<= right_channel_from_fifo;\n\telse if (left_right_clk_rising_edge | left_right_clk_falling_edge)\n\t\tdata_out_shift_reg\t<= {AUDIO_DATA_WIDTH{1'b0}};\n\telse if (bit_clk_falling_edge)\n\t\tdata_out_shift_reg\t<= \n\t\t\t{data_out_shift_reg[(AUDIO_DATA_WIDTH - 1):1], 1'b0};\nend",
+        "always @(posedge clk)\nbegin\n\tif (reset == 1'b1)\n\t\tleft_channel_was_read <= 1'b0;\n\telse if (read_left_channel)\n\t\tleft_channel_was_read <=1'b1;\n\telse if (read_right_channel)\n\t\tleft_channel_was_read <=1'b0;\nend",
+        "always @(posedge clk)\nbegin\n\tif (reset == 1'b1)\n\t\tserial_audio_out_data <= 1'b0;\n\telse\n\t\tserial_audio_out_data <= data_out_shift_reg[AUDIO_DATA_WIDTH];\nend",
+        "always @(posedge clk)\nbegin\n\tif (reset == 1'b1)\n\t\tright_channel_fifo_write_space <= 8'h00;\n\telse\n\t\tright_channel_fifo_write_space <= 8'h80 - {right_channel_fifo_is_full,right_channel_fifo_used};\nend",
+        "always @(posedge clk)\nbegin\n\tif (reset == 1'b1)\n\t\tleft_channel_fifo_write_space <= 8'h00;\n\telse\n\t\tleft_channel_fifo_write_space <= 8'h80 - {left_channel_fifo_is_full,left_channel_fifo_used};\nend"
+    ]
+}

@@ -1,0 +1,1 @@
+		assign dout_startofpacket = sop_out;

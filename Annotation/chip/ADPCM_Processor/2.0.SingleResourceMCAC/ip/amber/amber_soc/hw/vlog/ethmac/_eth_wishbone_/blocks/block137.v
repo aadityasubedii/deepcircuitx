@@ -1,0 +1,1 @@
+assign RstDeferLatched = BlockingTxStatusWrite_sync2 & ~BlockingTxStatusWrite_sync3;

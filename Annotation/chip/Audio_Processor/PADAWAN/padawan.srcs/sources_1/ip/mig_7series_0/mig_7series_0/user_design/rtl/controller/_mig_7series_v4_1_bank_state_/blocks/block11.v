@@ -1,0 +1,1 @@
+  assign col_rdy_wr = col_rdy && ~rd_wr_r;

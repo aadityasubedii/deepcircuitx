@@ -1,0 +1,1 @@
+assign enable_synced = (synced_int_nxt) ? enable : enable_synced_reg;

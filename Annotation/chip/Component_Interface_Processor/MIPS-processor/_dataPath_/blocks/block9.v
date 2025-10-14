@@ -1,0 +1,3 @@
+assign dataOut=tempA;    
+	
+endmodule

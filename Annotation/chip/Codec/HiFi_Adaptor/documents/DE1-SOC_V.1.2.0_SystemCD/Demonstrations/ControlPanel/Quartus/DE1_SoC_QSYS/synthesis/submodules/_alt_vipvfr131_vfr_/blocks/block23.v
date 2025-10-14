@@ -1,0 +1,1 @@
+localparam SLAVE_ADDRESS_REQUIREDWIDTH = 5; 

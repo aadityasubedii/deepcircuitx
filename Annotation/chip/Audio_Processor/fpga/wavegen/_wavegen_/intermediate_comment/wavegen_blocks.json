@@ -1,0 +1,46 @@
+{
+    "line_num": [
+        [
+            164,
+            173
+        ],
+        [
+            154,
+            161
+        ],
+        [
+            149,
+            152
+        ],
+        [
+            147,
+            147
+        ],
+        [
+            133,
+            140
+        ],
+        [
+            83,
+            123
+        ],
+        [
+            43,
+            43
+        ],
+        [
+            36,
+            38
+        ]
+    ],
+    "blocks": [
+        "    assign i2s_sck_in = D0;\n    assign D1 = i2s_sck_gen;\n    assign i2s_ws_in = D2;\n    assign D3 = i2s_ws_gen;\n\n    \n    assign D4 = sck;\n    assign D5 = ws;\n    assign D6 = d0;\n    assign D7 = d1;",
+        "    assign LED0 = state == 0;\n    assign LED1 = state == 1;\n    assign LED2 = state == 2;\n    assign LED3 = state == 3;\n    assign LED4 = counter[0];\n    assign LED5 = counter[1];\n    assign LED6 = counter[2];\n    assign LED7 = counter[3];",
+        "    always @(posedge ck) begin\n        if (prescale == 0)\n            counter <= { counter[2:0], next };\n    end",
+        "    assign next = (counter == 0) ? 1 : 0;",
+        "    always @(posedge ck) begin\n        if (debounce) begin\n            sw1 <= SW1;\n            if (SW1 && !sw1) begin\n                state <= state + 1;\n            end\n        end\n    end",
+        "    always @(posedge ck) begin\n        if (en && (frame_posn == 0)) begin\n            addr <= addr + 1;\n            frame <= frame + 1;\n            pulse_period <= pulse_period + 1;\n            case (state)\n                0 : begin\n                    signal_0 <= sin(addr);\n                    signal_1 <= sin(addr << 1);\n                    signal_2 <= sin(addr << 2);\n                    signal_3 <= sin(addr << 3);\n                end\n                1 : begin\n                    signal_0 <= sin(addr << 2);\n                    signal_1 <= sin(addr << 3);\n                    signal_2 <= sin(addr << 4);\n                    signal_3 <= sin(addr << 5);\n                end\n                2 : begin\n                    signal_0 <= sin(addr << 3);\n                    signal_1 <= sin(addr << 4);\n                    signal_2 <= sin(addr << 5);\n                    signal_3 <= sin(addr << 6);\n                end\n                3 : begin\n                    \n                    if (pulse_period == 0) begin\n                        signal_0 <= 16'h7ff0;\n                        signal_1 <= 16'h8010;\n                        signal_2 <= 16'h7ff0;\n                        signal_3 <= 16'h8010;\n                    end else begin\n                        signal_0 <= 16'h0000;\n                        signal_1 <= 16'h0000;\n                        signal_2 <= 16'h0000;\n                        signal_3 <= 16'h0000;\n                    end\n                end\n            endcase\n        end\n    end",
+        "    assign debounce = & prescale[19:0];",
+        "    always @(posedge ck) begin\n        prescale <= prescale + 1;\n    end"
+    ]
+}

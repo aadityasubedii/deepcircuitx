@@ -1,0 +1,1 @@
+  wire r_new_note = i_note_stb & (r_duration_count == r_note_len);

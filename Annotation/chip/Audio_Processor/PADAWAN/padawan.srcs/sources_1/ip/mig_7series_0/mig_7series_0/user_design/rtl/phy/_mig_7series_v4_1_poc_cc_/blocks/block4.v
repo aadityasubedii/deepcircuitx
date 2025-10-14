@@ -1,0 +1,1 @@
+  assign dbg_poc = dbg_poc_r;

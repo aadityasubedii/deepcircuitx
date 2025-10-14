@@ -1,0 +1,1 @@
+assign byte_enable = i_wb_sel;

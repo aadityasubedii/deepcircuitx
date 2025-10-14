@@ -1,0 +1,2 @@
+`ifndef verilog
+	genvar n;

@@ -1,0 +1,1 @@
+    assign acc_in = mul_out;

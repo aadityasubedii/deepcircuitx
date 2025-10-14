@@ -1,0 +1,1 @@
+assign sample_req[1] = (lrck_divider == 8'hfe);

@@ -1,0 +1,11 @@
+Module name: coeff_memory. 
+
+Module specification: The 'coeff_memory' module in Verilog serves as a memory storage module specifically designed to store 16-bit coefficient data for a domain-specific application. The module has two operational modes - WRITE mode and READ mode, enabled by the input signals 'wr_en' and 'rd_en', respectively. 
+
+The input ports are 'wr_en', 'rd_en', 'Sclk', 'coeff_wr_addr', 'coeff_rd_addr', and 'data_in'. 'wr_en' is the write enable signal which controls writing operations to the memory, while 'rd_en' is the read enable signal which controls reading operations from the memory. The 'Sclk' is the system clock input which controls the operational speed of the memory and all the memory operations are done at the falling edge of this clock signal. 'coeff_wr_addr' and 'coeff_rd_addr' are input address signals which are used to select the memory address for writing and reading respectively. 'data_in' is the input data.
+
+The output port is 'coeff_data'. The data stored at the specified read address ('coeff_rd_addr') is outputted through 'coeff_data' if 'rd_en' signal is high, otherwise, zero is outputted. 
+
+The module uses an internal signal: 'coeff_mem', declared as a 512 recording-element array of 16-bit registers, to store or retrieve the coefficient data. Each recording element in 'coeff_mem' corresponds to a memory address in the WRITE or READ operations on triggering of the 'wr_en' or 'rd_en' signals respectively.
+
+The module comprises two major blocks: one that processes write operations and another that manages read operations. The block for write operations uses an always block triggered on the falling edge of 'Sclk' where 'coeff_mem' at the 'coeff_wr_addr' is assigned 'data_in' when 'wr_en' is high. The read operation block is outside the always block where 'coeff_data' gets assigned the value of 'coeff_mem' at the 'coeff_rd_addr' if 'rd_en' is high, else an output of zero is given.

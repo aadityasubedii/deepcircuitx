@@ -1,0 +1,1 @@
+assign finished_auto_init = (rom_address_counter == MAX_ROM_ADDRESS);

@@ -1,0 +1,1 @@
+  assign byte_rd_en = !empty_in[3] || !my_empty[3];

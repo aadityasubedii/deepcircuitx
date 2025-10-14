@@ -1,0 +1,1 @@
+   assign regl_dqs_cnt_timing = {2'd0, regl_dqs_cnt};

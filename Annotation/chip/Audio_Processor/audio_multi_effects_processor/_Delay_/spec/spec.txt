@@ -1,0 +1,9 @@
+Module name: Delay. 
+
+Module specification: The Delay module functions as a hardware block designed for introducing a delay to the incoming input data. This delay is programmable and is accomplished by a succession of registers organized as an array (DELAY). 
+
+The module includes three input ports: 'clk' which is the clock signal driving the sequential operations within the module, 'rlrot' a two-bit control signal that determines whether the delay index 'i' is incremented or decremented, and 'DATA_IN', the 12-bit data intended for delay manipulation. There is one output port: 'DATA_OUT' and it provides the sum of the current input data and the aged data from the delay register indexed by 'i'. 
+
+Internally, the module uses a 26-deep array 'DELAY' and an integer 'i'. 'DELAY' operates as a circular buffer, storing input data history, while 'i' acts as a control for the depth of the delay. 
+
+The code essentially features three operational blocks. Initially, all registers are reset to zero. Secondly, an 'always' block captures positive clock edges, and depending on 'rlrot', increments or decrements 'i' within bounds. Thirdly, output is managed by two 'always' blocks: one computes 'DATA_OUT' based on the current 'DATA_IN' and data from the buffer indexed by 'i'; the other block captures clock edges and shifts the content of 'DELAY', discarding the oldest and accepting new 'DATA_IN' into the array.

@@ -1,0 +1,1 @@
+  assign ge2_free = ~fifo_cnt[4];

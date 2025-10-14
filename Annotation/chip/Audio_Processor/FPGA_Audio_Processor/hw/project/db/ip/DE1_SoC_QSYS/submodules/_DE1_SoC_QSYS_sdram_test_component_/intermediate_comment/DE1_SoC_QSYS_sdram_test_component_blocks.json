@@ -1,0 +1,61 @@
+{
+    "line_num": [
+        [
+            274,
+            274
+        ],
+        [
+            259,
+            267
+        ],
+        [
+            236,
+            256
+        ],
+        [
+            212,
+            233
+        ],
+        [
+            196,
+            205
+        ],
+        [
+            185,
+            194
+        ],
+        [
+            175,
+            183
+        ],
+        [
+            61,
+            66
+        ],
+        [
+            59,
+            60
+        ],
+        [
+            57,
+            57
+        ],
+        [
+            50,
+            53
+        ]
+    ],
+    "blocks": [
+        "endmodule",
+        "  assign txt_code = (cmd_code == 3'h0)? 24'h4c4d52 :\n    (cmd_code == 3'h1)? 24'h415246 :\n    (cmd_code == 3'h2)? 24'h505245 :\n    (cmd_code == 3'h3)? 24'h414354 :\n    (cmd_code == 3'h4)? 24'h205752 :\n    (cmd_code == 3'h5)? 24'h205244 :\n    (cmd_code == 3'h6)? 24'h425354 :\n    (cmd_code == 3'h7)? 24'h4e4f50 :\n    24'h424144;",
+        "  assign read_temp[7 : 0] = mask[0] ? 8'bz : read_data[7 : 0];\n  assign read_temp[15 : 8] = mask[1] ? 8'bz : read_data[15 : 8];\n  \n  assign read_addr = (index == 0)? rd_addr_pipe_0 :\n    (index == 1)? rd_addr_pipe_1 :\n    rd_addr_pipe_2;\n\n  \n  assign read_mask = (index == 0)? rd_mask_pipe_0 :\n    (index == 1)? rd_mask_pipe_1 :\n    rd_mask_pipe_2;\n\n  \n  assign read_valid = (index == 0)? rd_valid_pipe[0] :\n    (index == 1)? rd_valid_pipe[1] :\n    rd_valid_pipe[2];\n\n  assign index = latency - 1'b1;\n  assign mask = read_mask;\n  assign zs_dq = read_valid ? read_temp : {16{1'bz}};\n",
+        "  always @(posedge clk)\n    begin\n      \n      if (cke)\n        begin\n          \n          if (CODE == 24'h4c4d52)\n              latency <= a[6 : 4];\n          \n          if (CODE == 24'h414354)\n              addr_crb <= {ba[1], a, ba[0]};\n          rd_valid_pipe[2] <= rd_valid_pipe[1];\n          rd_valid_pipe[1] <= rd_valid_pipe[0];\n          rd_valid_pipe[0] <= CODE == 24'h205244;\n          rd_addr_pipe_2 <= rd_addr_pipe_1;\n          rd_addr_pipe_1 <= rd_addr_pipe_0;\n          rd_addr_pipe_0 <= test_addr;\n          rd_mask_pipe_2 <= rd_mask_pipe_1;\n          rd_mask_pipe_1 <= rd_mask_pipe_0;\n          rd_mask_pipe_0 <= dqm;\n        end\n    end",
+        "  assign cke = zs_cke;\n  assign cs_n = zs_cs_n;\n  assign ras_n = zs_ras_n;\n  assign cas_n = zs_cas_n;\n  assign we_n = zs_we_n;\n  assign dqm = zs_dqm;\n  assign ba = zs_ba;\n  assign a = zs_addr;\n  assign cmd_code = {ras_n, cas_n, we_n};\n  assign CODE = (&cs_n) ? 24'h494e48 : txt_code;",
+        "  DE1_SoC_QSYS_sdram_test_component_ram_module DE1_SoC_QSYS_sdram_test_component_ram\n    (\n      .data      (rmw_temp),\n      .q         (read_data),\n      .rdaddress ((CODE == 24'h205752) ? test_addr : read_addr),\n      .rdclken   (1'b1),\n      .wraddress (test_addr),\n      .wrclock   (clk),\n      .wren      (CODE == 24'h205752)\n    );",
+        "initial\n  begin\n    $write(\"\\n\");\n    $write(\"************************************************************\\n\");\n    $write(\"This testbench includes an SOPC Builder Generated Altera model:\\n\");\n    $write(\"'DE1_SoC_QSYS_sdram_test_component.v', to simulate accesses to SDRAM.\\n\");\n    $write(\"Initial contents are loaded from the file: 'DE1_SoC_QSYS_sdram_test_component.dat'.\\n\");\n    $write(\"************************************************************\\n\");\n  end",
+        "  always @(posedge wrclock)\n    begin\n      \n      if (wren)\n          mem_array[wraddress] <= data;\n    end",
+        "initial\n    $readmemh(\"DE1_SoC_QSYS_sdram_test_component.dat\", mem_array);",
+        "  assign q = mem_array[read_address];",
+        "  always @(rdaddress)\n    begin\n      read_address = rdaddress;\n    end"
+    ]
+}

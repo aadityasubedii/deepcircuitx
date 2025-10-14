@@ -1,0 +1,13 @@
+Module name: boot_mem32. 
+
+Module specification: 
+
+The boot_mem32 module is a part of memory management in a system. It is designed to handle the reading and writing of data through a standard bus architecture, Wishbone, used in modern System-on-Chip (SoC) designs. This module supports both read and write operations, handles byte selection and responds to addresses provided, and it has the provision to add random jitter to the operations for debugging purposes. It can interface with both Xilinx FPGA hardware and generic SRAM. 
+
+The module takes as inputs: a clock signal (i_wb_clk) to synchronize operations; an address (i_wb_adr) to specify where data should be read from or written to; a select signal (i_wb_sel) to determine which bytes within a data word are involved in the operation; a write enable signal (i_wb_we) to initiate write operations; an input data signal (i_wb_dat) with the given write data; a cycle signal (i_wb_cyc) to indicate a bus cycle in progress; and a strobe signal (i_wb_stb) to initiate either read or write operations. 
+
+On the output side, the module provides: an output data signal (o_wb_dat) with data retrieved during a read operation; an acknowledgement signal (o_wb_ack) indicating successful read or write operations; and an error signal (o_wb_err) which, in this case, is always set to low, signifying no error declaration.
+
+Internally, the module uses signals such as start_read, start_write, read_data, write_data, byte_enable, and address to manage and control the operations. While performing memory operations in certain situations, it adds random jitter for debugging purposes. Read/write operations are initiated when the respective start signals are enabled, and various registers hold the status of these operations and the read/write data. 
+
+The entire module is divided into sections that handle the definition of parameters and ports, initialization of variables and signals, assignment of tasks to signals, debugging specific assignments, and the specification of hardware-particular operations. The boot_mem32 module thus presents a comprehensive and functional design for managing memory operations in hardware systems.

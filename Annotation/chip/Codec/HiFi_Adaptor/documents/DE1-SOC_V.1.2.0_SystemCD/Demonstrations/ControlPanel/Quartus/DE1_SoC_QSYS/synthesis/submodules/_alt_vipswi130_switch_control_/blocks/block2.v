@@ -1,0 +1,1 @@
+assign global_synced = &synced;

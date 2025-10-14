@@ -1,0 +1,1 @@
+  localparam RAW_BIT_WIDTH = PAYLOAD_WIDTH - DATA_WIDTH;

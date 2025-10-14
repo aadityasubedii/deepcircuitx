@@ -1,0 +1,1 @@
+    assign dma_dat = dma_ack ? data_out : 0;

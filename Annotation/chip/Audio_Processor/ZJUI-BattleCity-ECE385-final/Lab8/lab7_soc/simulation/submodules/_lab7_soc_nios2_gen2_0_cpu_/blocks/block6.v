@@ -1,0 +1,1 @@
+  assign D_ctrl_alu_force_and = 1'b0;

@@ -1,0 +1,41 @@
+{
+    "line_num": [
+        [
+            64,
+            88
+        ],
+        [
+            62,
+            62
+        ],
+        [
+            61,
+            61
+        ],
+        [
+            59,
+            59
+        ],
+        [
+            58,
+            58
+        ],
+        [
+            57,
+            57
+        ],
+        [
+            32,
+            38
+        ]
+    ],
+    "blocks": [
+        "always @ (posedge clk or negedge test_reset_n)\nbegin\n\tif (~test_reset_n)\n\tbegin\n\t\tlb_error <= 'b0;\n\t\ttest_mask <= 'b1;\n\t\ttest_case <= 2'b00;\n\tend\n\telse\n\tbegin\n\t\t\n\t\tif (test_mask == (1 << (PAIR_NUM-1)))\n\t\tbegin\n\t\t\ttest_mask <= 'b1;\n\t\t\ttest_case <= test_case + 1;\n\t\tend\n\t\telse\n\t\t\ttest_mask <= (test_mask << 1);\n\t\t\t\n\t\t\n\t\tif ((test_in & test_mask) != test_out)\n\t\t\tlb_error <= lb_error | test_mask;\n\t\t\t\n\tend\nend",
+        "assign {test_dir_invert, test_value_invert} = {PAIR_BIR?test_case[1]:1'b0,test_case[0]};",
+        "assign test_out = test_mask;",
+        "assign lb_in = (test_dir_invert)?(test_value_invert?~test_out:test_out):{PAIR_NUM{1'bz}};",
+        "assign lb_out = (test_dir_invert)?{PAIR_NUM{1'bz}}:(test_value_invert?~test_out:test_out);",
+        "assign test_in = (test_value_invert)?(test_dir_invert?~lb_out:~lb_in):(test_dir_invert?lb_out:lb_in);",
+        "always @ (posedge clk)\nbegin\n\tif (s_cs & s_write)\n\t\ttest_reset_n <= s_writedata[0];\n\telse if (s_cs & s_read)\n\t\ts_readdata <= lb_error;\nend"
+    ]
+}

@@ -1,0 +1,1 @@
+  always @(posedge clk) req_cmd_r <= #TCQ req_cmd_ns;

@@ -1,0 +1,1 @@
+            assign reset_req = reseter == 0;

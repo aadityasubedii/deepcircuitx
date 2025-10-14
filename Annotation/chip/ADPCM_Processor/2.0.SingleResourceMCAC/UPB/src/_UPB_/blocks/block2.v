@@ -1,0 +1,1 @@
+assign UBn = UGBn + ULBn;

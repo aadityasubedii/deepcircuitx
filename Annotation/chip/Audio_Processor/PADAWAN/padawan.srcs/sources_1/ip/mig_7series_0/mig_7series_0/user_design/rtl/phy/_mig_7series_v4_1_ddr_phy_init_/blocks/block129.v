@@ -1,0 +1,1 @@
+  assign pi_phase_locked_err = (pi_phaselock_timer == PHASELOCKED_TIMEOUT) ? 1'b1 : 1'b0;

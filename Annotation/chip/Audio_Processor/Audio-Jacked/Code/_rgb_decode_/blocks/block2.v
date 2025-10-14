@@ -1,0 +1,1 @@
+assign data_color_1[0] = br_rgb_data_1[30-(hcount*2)]; 

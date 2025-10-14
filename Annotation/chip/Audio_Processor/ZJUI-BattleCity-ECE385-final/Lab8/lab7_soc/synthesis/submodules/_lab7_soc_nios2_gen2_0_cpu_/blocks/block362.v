@@ -1,0 +1,16 @@
+  assign dbrk_hit0_latch = 1'b0;
+  assign dbrk0_low_value = 0;
+  assign dbrk0_high_value = 0;
+  assign dbrk_hit1_latch = 1'b0;
+  assign dbrk1_low_value = 0;
+  assign dbrk1_high_value = 0;
+  assign dbrk_hit2_latch = 1'b0;
+  assign dbrk2_low_value = 0;
+  assign dbrk2_high_value = 0;
+  assign dbrk_hit3_latch = 1'b0;
+  assign dbrk3_low_value = 0;
+  assign dbrk3_high_value = 0;
+  assign xbrk0_value = 32'b0;
+  assign xbrk1_value = 32'b0;
+  assign xbrk2_value = 32'b0;
+  assign xbrk3_value = 32'b0;

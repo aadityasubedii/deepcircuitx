@@ -1,0 +1,1 @@
+            assign out_channel = 1'b0;

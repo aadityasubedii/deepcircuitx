@@ -1,0 +1,21 @@
+{
+    "line_num": [
+        [
+            114,
+            153
+        ],
+        [
+            104,
+            108
+        ],
+        [
+            69,
+            98
+        ]
+    ],
+    "blocks": [
+        "always@(posedge clk)\n\tcase(present_state)\n\t\t`menu1:  \t begin\n\t\t\t\t\t\t menu_in <= 2'b00;\n\t\t\t\t\t\t filter  <= 3'd0;\n\t\t\t\t\t\t end\n\t\t`menu1_wait: begin\n\t\t\t\t\t\t menu_in <= 2'b00;\n\t\t\t\t\t\t filter  <= 3'd0;\n\t\t\t\t\t\t end\n\t\t`menu2: \t\t begin\n\t\t\t\t\t\t menu_in <= 2'b01;\n\t\t\t\t\t\t filter  <= 3'd0;\n\t\t\t\t\t\t end\n\t\t`menu2_wait: begin\n\t\t\t\t\t\t menu_in <= 2'b01;\n\t\t\t\t\t\t filter  <= 3'd0;\n\t\t\t\t\t\t end\t\t\t\t\t\t \n\t\t`menu3: \t\t begin\n\t\t\t\t\t\t menu_in <= 2'b10;\n\t\t\t\t\t\t if(filter1)\n\t\t\t\t\t\t\tfilter  <= 3'd1;\n\t\t\t\t\t\t else if(filter2)\n\t\t\t\t\t\t\tfilter  <= 3'd2;\n\t\t\t\t\t\t else if(filter3)\n\t\t\t\t\t\t\tfilter  <= 3'd3;\n\t\t\t\t\t\t else if(filter4)\n\t\t\t\t\t\t\tfilter <=  3'd4;\n\t\t\t\t\t\t else\t\n\t\t\t\t\t\t\tfilter <=  3'd0;\n\t\t\t\t\t\t end\t\t\t\t\t\t\t\t\t\t\t\n\t\t`menu3_wait: begin\n\t\t\t\t\t\t menu_in <= 2'b10;\n\t\t\t\t\t\t filter  <= 3'd0;\n\t\t\t\t\t\t end\n\t\tdefault:\t\t begin\n\t\t\t\t\t\t menu_in <= 2'b00;\n\t\t\t\t\t\t filter  <= 3'd0;\n\t\t\t\t\t\t end\n\tendcase",
+        "always@(posedge clk)\nif (reset)\n\tpresent_state <= `menu1;\nelse\n\tpresent_state <= next_state;",
+        "always@(*)\n\tcase(present_state)\n\t\t`menu1: \t\tif(record)\n\t\t\t\t\t\t\tnext_state = `menu1_wait;\n\t\t\t\t\t\telse\n\t\t\t\t\t\t\tnext_state = `menu1;\n\t\t`menu1_wait:if(no_touch)\n\t\t\t\t\t\t\tnext_state = `menu2;\n\t\t\t\t\t\telse\n\t\t\t\t\t\t\tnext_state = `menu1_wait;\n\t\t`menu2: \t\tif(stop)\n\t\t\t\t\t\t\tnext_state = `menu2_wait;\n\t\t\t\t\t\telse if (end_progress_bar)\n\t\t\t\t\t\t\tnext_state = `menu3;\n\t\t\t\t\t\telse\n\t\t\t\t\t\t\tnext_state = `menu2;\n\t\t`menu2_wait:if(no_touch)\n\t\t\t\t\t\t\tnext_state = `menu3;\n\t\t\t\t\t\telse\n\t\t\t\t\t\t\tnext_state = `menu2_wait;\n\t\t`menu3: \t\tif(record_new)\n\t\t\t\t\t\t\tnext_state = `menu3_wait;\n\t\t\t\t\t\telse\n\t\t\t\t\t\t\tnext_state = `menu3;\n\t\t`menu3_wait:if(no_touch)\n\t\t\t\t\t\t\tnext_state = `menu1;\n\t\t\t\t\t\telse\n\t\t\t\t\t\t\tnext_state = `menu3_wait;\n\t\tdefault: next_state = `menu1;\n\tendcase"
+    ]
+}

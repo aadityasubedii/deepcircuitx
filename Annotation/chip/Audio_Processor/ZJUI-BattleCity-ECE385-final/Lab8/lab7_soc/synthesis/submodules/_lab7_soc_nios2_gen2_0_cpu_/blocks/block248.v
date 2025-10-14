@@ -1,0 +1,11 @@
+reg     [ 31: 0] oci_ienable;
+wire             oci_reg_00_addressed;
+wire             oci_reg_01_addressed;
+wire    [ 31: 0] oci_reg_readdata;
+reg              oci_single_step_mode;
+wire             ocireg_ers;
+wire             ocireg_mrs;
+wire             ocireg_sstep;
+wire             take_action_oci_intr_mask_reg;
+wire             take_action_ocireg;
+wire             write_strobe;

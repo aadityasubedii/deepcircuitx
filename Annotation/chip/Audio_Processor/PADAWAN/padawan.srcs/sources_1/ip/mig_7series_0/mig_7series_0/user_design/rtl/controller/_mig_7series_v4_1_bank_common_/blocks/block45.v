@@ -1,0 +1,1 @@
+  assign accept_ns = accept_ns_lcl;

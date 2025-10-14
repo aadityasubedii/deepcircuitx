@@ -1,0 +1,1 @@
+assign StartOp      = WriteDataOp | ReadStatusOp | ScanStatusOp;

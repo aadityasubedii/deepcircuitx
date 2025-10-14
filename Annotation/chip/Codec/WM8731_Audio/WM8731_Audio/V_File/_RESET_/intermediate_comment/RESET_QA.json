@@ -1,0 +1,43 @@
+{
+    "gpt-message": [
+        {
+            "role": "system",
+            "content": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+        },
+        {
+            "role": "user",
+            "content": "Name of the module and its functionality is as follows: \nModule name: RESET\n\nExplanation: The module 'RESET' is designed to generate a reset signal after a specified delay. The delay duration is defined by the 'delay_time' input, measured in milliseconds. The reset sequence begins when the input clock 'clk_in' is present and counts milliseconds using the designated frequency settings (`CLK_IN` and `CLK_1MS_Count`). When the accumulated milliseconds match the specified delay time by the user, the module outputs an active reset signal 'rst_n'. This reset signal remains active as long as the input 'reset_key_in' is also active, ensuring a synchronized and conditional reset operation. This mechanism finds usage in scenarios where a system requires a stable period after power-up or any event necessitating a reset with a delay."
+        },
+        {
+            "role": "user",
+            "content": "Input and output ports and their explanation is as follows: \nInput ports: clk_in, reset_key_in, delay_time.\nExplanation:\n- clk_in: This is the input clock signal which drives the timing within the RESET module. It is used to measure and count milliseconds, determining when to issue a reset signal after the defined delay.\n- reset_key_in: This is a control input that enables the reset output. The reset signal 'rst_n' is only active when this input is also active, allowing external control over the reset operation.\n- delay_time: This is a 10-bit wide input specifying the delay in milliseconds before activating the reset signal. It sets the duration for how long the module counts before issuing a reset.\n\nOutput ports: rst_n.\nExplanation:\n- rst_n: This is the output reset signal of the module. It remains active (logic high) when the internally calculated delay matches the 'delay_time' provided by the user and the 'reset_key_in' is active. This output forms an essential part of the reset control, enabling the module to issue a synchronized reset signal based on the provided conditions."
+        },
+        {
+            "role": "user",
+            "content": "Internal signals and their explanation is as follows: \nInternal signals: delay_rst_n, Count_1Ms, Delay_Count.\nExplanation:\n- delay_rst_n: This is a register used to control the output of the reset signal 'rst_n'. It initially holds a low value (0), and is set high (1) once the delay count matches the specified delay time. This register ensures that the reset signal is issued only after the proper delay.\n- Count_1Ms: This 24-bit register is used to count the number of clock cycles that equate to one millisecond, based on the input clock frequency defined by `CLK_IN` and `CLK_1MS_Count`. It resets to 0 after reaching the count corresponding to one millisecond, facilitating the measurement of time in milliseconds.\n- Delay_Count: This 10-bit register is responsible for accumulating the number of milliseconds counted by Count_1Ms. It increments once every millisecond until it equals or exceeds the value set by `delay_time`. This count is critical in determining when the delay specified for the reset operation has been met."
+        }
+    ],
+    "claude-message": [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+                },
+                {
+                    "type": "text",
+                    "text": "Name of the module and its functionality is as follows: \nModule name: RESET\n\nExplanation: The module 'RESET' is designed to generate a reset signal after a specified delay. The delay duration is defined by the 'delay_time' input, measured in milliseconds. The reset sequence begins when the input clock 'clk_in' is present and counts milliseconds using the designated frequency settings (`CLK_IN` and `CLK_1MS_Count`). When the accumulated milliseconds match the specified delay time by the user, the module outputs an active reset signal 'rst_n'. This reset signal remains active as long as the input 'reset_key_in' is also active, ensuring a synchronized and conditional reset operation. This mechanism finds usage in scenarios where a system requires a stable period after power-up or any event necessitating a reset with a delay."
+                },
+                {
+                    "type": "text",
+                    "text": "Input and output ports and their explanation is as follows: \nInput ports: clk_in, reset_key_in, delay_time.\nExplanation:\n- clk_in: This is the input clock signal which drives the timing within the RESET module. It is used to measure and count milliseconds, determining when to issue a reset signal after the defined delay.\n- reset_key_in: This is a control input that enables the reset output. The reset signal 'rst_n' is only active when this input is also active, allowing external control over the reset operation.\n- delay_time: This is a 10-bit wide input specifying the delay in milliseconds before activating the reset signal. It sets the duration for how long the module counts before issuing a reset.\n\nOutput ports: rst_n.\nExplanation:\n- rst_n: This is the output reset signal of the module. It remains active (logic high) when the internally calculated delay matches the 'delay_time' provided by the user and the 'reset_key_in' is active. This output forms an essential part of the reset control, enabling the module to issue a synchronized reset signal based on the provided conditions."
+                },
+                {
+                    "type": "text",
+                    "text": "Internal signals and their explanation is as follows: \nInternal signals: delay_rst_n, Count_1Ms, Delay_Count.\nExplanation:\n- delay_rst_n: This is a register used to control the output of the reset signal 'rst_n'. It initially holds a low value (0), and is set high (1) once the delay count matches the specified delay time. This register ensures that the reset signal is issued only after the proper delay.\n- Count_1Ms: This 24-bit register is used to count the number of clock cycles that equate to one millisecond, based on the input clock frequency defined by `CLK_IN` and `CLK_1MS_Count`. It resets to 0 after reaching the count corresponding to one millisecond, facilitating the measurement of time in milliseconds.\n- Delay_Count: This 10-bit register is responsible for accumulating the number of milliseconds counted by Count_1Ms. It increments once every millisecond until it equals or exceeds the value set by `delay_time`. This count is critical in determining when the delay specified for the reset operation has been met."
+                }
+            ]
+        }
+    ]
+}

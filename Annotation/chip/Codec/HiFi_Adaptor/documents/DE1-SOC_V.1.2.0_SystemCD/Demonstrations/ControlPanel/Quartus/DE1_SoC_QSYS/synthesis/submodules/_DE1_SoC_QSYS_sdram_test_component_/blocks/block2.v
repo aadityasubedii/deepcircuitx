@@ -1,0 +1,1 @@
+  assign zs_dq = read_valid ? read_temp : {16{1'bz}};

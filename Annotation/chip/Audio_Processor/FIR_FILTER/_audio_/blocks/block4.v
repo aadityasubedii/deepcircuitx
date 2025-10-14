@@ -1,0 +1,1 @@
+assign ain_new = (ai == 2'b01);

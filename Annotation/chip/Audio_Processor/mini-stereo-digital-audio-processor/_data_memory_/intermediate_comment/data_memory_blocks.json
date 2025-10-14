@@ -1,0 +1,21 @@
+{
+    "line_num": [
+        [
+            37,
+            37
+        ],
+        [
+            17,
+            35
+        ],
+        [
+            10,
+            16
+        ]
+    ],
+    "blocks": [
+        "\tassign input_data = (read_enable) ? datamem[dataread] : 16'd0;",
+        "\talways @(posedge in_flag)\n\tbegin\n\t\tif (in_data == 16'd0)\n\t\tbegin\n\t\t\tcount_zero = count_zero + 1'b1;\n\t\t\tif (count_zero == 12'd800)\n\t\t\t\tflag_zero = 1'b1;\n\t\t\telse if (count_zero > 12'd800)\n\t\t\tbegin\n\t\t\t\tcount_zero = 12'd800;\n\t\t\t\tflag_zero = 1'b1;\n\t\t\tend\n\t\tend\t\t\n\t\telse if (in_data != 16'd0)\n\t\tbegin\n\t\t\tcount_zero = 12'd0;\n\t\t\tflag_zero = 1'b0;\n\t\tend\n\tend",
+        "\talways @(posedge Sclk)\n\tbegin\n\t\tif(write_enable == 1'b1)\n\t\t\tdatamem[datawrite] = in_data;\n\t\telse\n\t\t\tdatamem[datawrite] = datamem[datawrite];\n\tend"
+    ]
+}

@@ -1,0 +1,1 @@
+  assign req_cas = 1'b1;

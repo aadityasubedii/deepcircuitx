@@ -1,0 +1,1 @@
+  assign break_a_wpr_high_bits = break_a_wpr[3 : 2];

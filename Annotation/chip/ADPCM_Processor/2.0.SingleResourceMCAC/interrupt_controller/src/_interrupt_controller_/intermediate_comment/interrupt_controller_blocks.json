@@ -1,0 +1,51 @@
+{
+    "line_num": [
+        [
+            265,
+            331
+        ],
+        [
+            217,
+            248
+        ],
+        [
+            184,
+            212
+        ],
+        [
+            165,
+            178
+        ],
+        [
+            153,
+            163
+        ],
+        [
+            132,
+            147
+        ],
+        [
+            130,
+            130
+        ],
+        [
+            129,
+            129
+        ],
+        [
+            121,
+            127
+        ]
+    ],
+    "blocks": [
+        "always @(posedge reset, posedge clk) begin\n\tif (reset) begin\n\n\tend else begin\n\t    if ( wb_read_ack || wb_start_write )\n\t\t  begin\n\t\t  `TB_DEBUG_MESSAGE\n\n\t\t  if ( wb_start_write )\n\t\t      $write(\"Write 0x%08x to   \", i_wb_dat);\n\t\t  else\n\t\t      $write(\"Read  0x%08x from \", o_wb_dat);\n\n\t\t  case ( i_wb_adr[15:0] )\n\t\t      AMBER_IC_IRQ0_STATUS:\n\t\t          $write(\" Interrupt Controller module IRQ0 Status\");\n\t\t      AMBER_IC_IRQ0_RAWSTAT:\n\t\t          $write(\" Interrupt Controller module IRQ0 Raw Status\");\n\t\t      AMBER_IC_IRQ0_ENABLESET:\n\t\t          $write(\" Interrupt Controller module IRQ0 Enable Set\");\n\t\t      AMBER_IC_IRQ0_ENABLECLR:\n\t\t          $write(\" Interrupt Controller module IRQ0 Enable Clear\");\n\t\t      AMBER_IC_FIRQ0_STATUS:\n\t\t          $write(\" Interrupt Controller module FIRQ0 Status\");\n\t\t      AMBER_IC_FIRQ0_RAWSTAT:\n\t\t          $write(\" Interrupt Controller module FIRQ0 Raw Status\");\n\t\t      AMBER_IC_FIRQ0_ENABLESET:\n\t\t          $write(\" Interrupt Controller module FIRQ0 Enable set\");\n\t\t      AMBER_IC_FIRQ0_ENABLECLR:\n\t\t          $write(\" Interrupt Controller module FIRQ0 Enable Clear\");\n\t\t      AMBER_IC_INT_SOFTSET_0:\n\t\t          $write(\" Interrupt Controller module SoftInt 0 Set\");\n\t\t      AMBER_IC_INT_SOFTCLEAR_0:\n\t\t          $write(\" Interrupt Controller module SoftInt 0 Clear\");\n\t\t      AMBER_IC_IRQ1_STATUS:\n\t\t          $write(\" Interrupt Controller module IRQ1 Status\");\n\t\t      AMBER_IC_IRQ1_RAWSTAT:\n\t\t          $write(\" Interrupt Controller module IRQ1 Raw Status\");\n\t\t      AMBER_IC_IRQ1_ENABLESET:\n\t\t          $write(\" Interrupt Controller module IRQ1 Enable Set\");\n\t\t      AMBER_IC_IRQ1_ENABLECLR:\n\t\t          $write(\" Interrupt Controller module IRQ1 Enable Clear\");\n\t\t      AMBER_IC_FIRQ1_STATUS:\n\t\t          $write(\" Interrupt Controller module FIRQ1 Status\");\n\t\t      AMBER_IC_FIRQ1_RAWSTAT:\n\t\t          $write(\" Interrupt Controller module FIRQ1 Raw Status\");\n\t\t      AMBER_IC_FIRQ1_ENABLESET:\n\t\t          $write(\" Interrupt Controller module FIRQ1 Enable set\");\n\t\t      AMBER_IC_FIRQ1_ENABLECLR:\n\t\t          $write(\" Interrupt Controller module FIRQ1 Enable Clear\");\n\t\t      AMBER_IC_INT_SOFTSET_1:\n\t\t          $write(\" Interrupt Controller module SoftInt 1 Set\");\n\t\t      AMBER_IC_INT_SOFTCLEAR_1:\n\t\t          $write(\" Interrupt Controller module SoftInt 1 Clear\");\n\n\t\t      default:\n\t\t          begin\n\t\t          $write(\" unknown Amber IC Register region\");\n\t\t          $write(\", Address 0x%08h\\n\", i_wb_adr);\n\t\t          `TB_ERROR_MESSAGE\n\t\t          end\n\t\t  endcase\n\n\t\t  $write(\", Address 0x%08h\\n\", i_wb_adr);\n\t\t  end\n\tend\nend",
+        "always @( posedge reset, posedge clk ) begin\n\tif (reset) begin\n\t\twb_rdata32 <= 'd0;\n\tend else begin\n\t    if ( wb_start_read )\n\t\t  case ( i_wb_adr[15:0] )\n\n\t\t      AMBER_IC_IRQ0_ENABLESET:    wb_rdata32 <= irq0_enable_reg;\n\t\t      AMBER_IC_FIRQ0_ENABLESET:   wb_rdata32 <= firq0_enable_reg;\n\t\t      AMBER_IC_IRQ0_RAWSTAT:      wb_rdata32 <= raw_interrupts;\n\t\t      AMBER_IC_IRQ0_STATUS:       wb_rdata32 <= irq0_interrupts;\n\t\t      AMBER_IC_FIRQ0_RAWSTAT:     wb_rdata32 <= raw_interrupts;\n\t\t      AMBER_IC_FIRQ0_STATUS:      wb_rdata32 <= firq0_interrupts;\n\n\t\t      AMBER_IC_INT_SOFTSET_0:     wb_rdata32 <= {31'd0, softint_0_reg};\n\t\t      AMBER_IC_INT_SOFTCLEAR_0:   wb_rdata32 <= {31'd0, softint_0_reg};\n\n\t\t      AMBER_IC_IRQ1_ENABLESET:    wb_rdata32 <= irq1_enable_reg;\n\t\t      AMBER_IC_FIRQ1_ENABLESET:   wb_rdata32 <= firq1_enable_reg;\n\t\t      AMBER_IC_IRQ1_RAWSTAT:      wb_rdata32 <= raw_interrupts;\n\t\t      AMBER_IC_IRQ1_STATUS:       wb_rdata32 <= irq1_interrupts;\n\t\t      AMBER_IC_FIRQ1_RAWSTAT:     wb_rdata32 <= raw_interrupts;\n\t\t      AMBER_IC_FIRQ1_STATUS:      wb_rdata32 <= firq1_interrupts;\n\n\t\t      AMBER_IC_INT_SOFTSET_1:     wb_rdata32 <= {31'd0, softint_1_reg};\n\t\t      AMBER_IC_INT_SOFTCLEAR_1:   wb_rdata32 <= {31'd0, softint_1_reg};\n\n\t\t      default:                    wb_rdata32 <= 32'h22334455;\n\n\t\t  endcase\n\tend\nend",
+        "always @( posedge reset, posedge clk ) begin\n\tif (reset) begin\n\t\tirq0_enable_reg  <= 'd0;\n\t\tfirq0_enable_reg <= 'd0;\n\t\tirq1_enable_reg  <= 'd0;\n\t\tfirq1_enable_reg <= 'd0;\n\t\tsoftint_0_reg    <= 'd0;\n\t\tsoftint_1_reg    <= 'd0;\n\tend else begin\n\t    if ( wb_start_write )\n\t\t  case ( i_wb_adr[15:0] )\n\t\t      AMBER_IC_IRQ0_ENABLESET:  irq0_enable_reg  <=  irq0_enable_reg  | ( i_wb_dat);\n\t\t      AMBER_IC_IRQ0_ENABLECLR:  irq0_enable_reg  <=  irq0_enable_reg  & (~i_wb_dat);\n\t\t      AMBER_IC_FIRQ0_ENABLESET: firq0_enable_reg <=  firq0_enable_reg | ( i_wb_dat);\n\t\t      AMBER_IC_FIRQ0_ENABLECLR: firq0_enable_reg <=  firq0_enable_reg & (~i_wb_dat);\n\n\t\t      AMBER_IC_INT_SOFTSET_0:   softint_0_reg    <=  softint_0_reg   | ( i_wb_dat[0]);\n\t\t      AMBER_IC_INT_SOFTCLEAR_0: softint_0_reg    <=  softint_0_reg   & (~i_wb_dat[0]);\n\n\t\t      AMBER_IC_IRQ1_ENABLESET:  irq1_enable_reg  <=  irq1_enable_reg  | ( i_wb_dat);\n\t\t      AMBER_IC_IRQ1_ENABLECLR:  irq1_enable_reg  <=  irq1_enable_reg  & (~i_wb_dat);\n\t\t      AMBER_IC_FIRQ1_ENABLESET: firq1_enable_reg <=  firq1_enable_reg | ( i_wb_dat);\n\t\t      AMBER_IC_FIRQ1_ENABLECLR: firq1_enable_reg <=  firq1_enable_reg & (~i_wb_dat);\n\n\t\t      AMBER_IC_INT_SOFTSET_1:   softint_1_reg    <=  softint_1_reg   | ( i_wb_dat[0]);\n\t\t      AMBER_IC_INT_SOFTCLEAR_1: softint_1_reg    <=  softint_1_reg   & (~i_wb_dat[0]);\n\t\t  endcase\n\tend\nend",
+        "assign irq0_interrupts  = {raw_interrupts[31:1], softint_0_reg} & irq0_enable_reg;\nassign firq0_interrupts =  raw_interrupts                       & firq0_enable_reg;\nassign irq1_interrupts  = {raw_interrupts[31:1], softint_1_reg} & irq1_enable_reg;\nassign firq1_interrupts  = raw_interrupts                       & firq1_enable_reg;\n\n\n\nassign irq_0  = |{irq0_interrupts,  i_test_reg_irq};\nassign firq_0 = |{firq0_interrupts, i_test_reg_firq};\nassign irq_1  = |irq1_interrupts;\nassign firq_1 = |firq1_interrupts;\n\nassign o_irq  = irq_0  | irq_1;\nassign o_firq = firq_0 | firq_1;",
+        "assign raw_interrupts =  {23'd0,\n                          i_tdmi_int,               \n                          i_tm_timer_int[2],        \n                          i_tm_timer_int[1],        \n                          i_tm_timer_int[0],        \n                          1'd0,\n                          1'd0,\n                          1'd0,\n                          i_uart0_int,              \n                          1'd0                      \n                         };                         ",
+        "generate\nif (WB_DWIDTH == 128)\n    begin : wb128\n    assign wb_wdata32   = i_wb_adr[3:2] == 2'd3 ? i_wb_dat[127:96] :\n                          i_wb_adr[3:2] == 2'd2 ? i_wb_dat[ 95:64] :\n                          i_wb_adr[3:2] == 2'd1 ? i_wb_dat[ 63:32] :\n                                                  i_wb_dat[ 31: 0] ;\n\n    assign o_wb_dat    = {4{wb_rdata32}};\n    end\nelse\n    begin : wb32\n    assign wb_wdata32  = i_wb_dat;\n    assign o_wb_dat    = wb_rdata32;\n    end\nendgenerate",
+        "assign o_wb_ack = i_wb_stb && ( wb_start_write || wb_start_read_d1 );",
+        "assign o_wb_err = 1'd0;",
+        "always @( posedge reset, posedge clk ) begin\n\tif (reset) begin\n\t\twb_start_read_d1 <= 'd0;\n\tend else begin\n\t\twb_start_read_d1 <= wb_start_read;\n\tend\nend"
+    ]
+}

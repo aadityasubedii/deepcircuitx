@@ -1,0 +1,1 @@
+assign ram_we = (BDWrite & {4{(WbEn & WbEn_q)}}) | {4{(TxStatusWrite | RxStatusWrite)}};

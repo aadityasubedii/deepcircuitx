@@ -1,0 +1,11 @@
+Module name: a25_fetch.
+
+Module specification: The 'a25_fetch' module is a central part of a CPU design that specifically orchestrates fetch operation. It retrieves instructions from cache memory or directly accesses them from the main memory based on cache control signals. Whereas the decision for fetching specific instruction is guided using the supplied address. The module also handles cache related operations and associates with 'a25_icache' module. The fetch operation is synchronized with clock signals and is subject to stalls if system readiness, cache stalling, or write-back wait state conditions appear.
+
+Input Ports: 'i_clk' is a clock input signal; 'i_reset' resets the system; 'i_mem_stall', 'i_exec_stall', and 'i_conflict' relay different stall condition signals; 'i_system_rdy' indicates system readiness; 'i_iaddress', 'i_iaddress_valid', 'i_iaddress_nxt' are address signals of instruction; 'i_cache_enable', 'i_cache_flush', 'i_cacheable_area' are the cache control signals; 'i_wb_read_data', 'i_wb_ready' provide status and data of write-back stage.
+
+Output Ports: 'o_fetch_stall' signals if fetch stage is stalled; 'o_fetch_instruction' outputs the fetched instruction; 'o_wb_req' and 'o_wb_address' signal and provide address for a request of write-back operation. 
+
+Internal Signals: 'core_stall' and 'cache_stall' indicate the respective stages of stalling; 'cache_read_data128' and 'cache_read_data' hold fetched instructions from the cache; 'sel_cache', 'uncached_instruction_read', 'address_cachable', are signals for interacting with cache operations; 'icache_wb_req' signals write-back request to 'icache' module; 'wait_wb' indicates a wait state for write-back; 'wb_req_r' and 'wb_rdata32' are registers and wires that hold write-back data. 
+
+Code Sections: Code starts by defining the interfaces and declaring signals. The logic operation assigning values to most of these signals follows. Then the main functionality of fetching instructions, deciding whether to fetch from cache or main memory, and processing the fetch operation delays or stalls is defined. The last part of code includes instantiation of the 'a25_icache' module with connections to different inputs and outputs, which essentially helps in serving cache-related functionalities. This provides a comprehensive overview of the module's behavior and functionality.

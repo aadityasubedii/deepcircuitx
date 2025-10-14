@@ -1,0 +1,3 @@
+      assign p5_error          = 'b0;
+      assign p5_error_status   = 'b0;
+      assign p5_cmp_data       = 'b0;

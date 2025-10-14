@@ -1,0 +1,11 @@
+Module name: audio_processing. 
+
+Module specification: The audio_processing module is designed to handle the audio processing, specifically audio clipping for two channels (ch1_in and ch2_in). The primary operation is regulated by a state machine that navigates between three states (ST_IDLE, ST_CLIP_L, ST_CLIP_R), driven by the clock signal (clk). Each rising edge of the clk signal triggers an update of its state, each of which corresponds to a different operation that processes an input signal.
+
+The module receives inputs via four ports: clk, cnt256_n, ch1_in, and ch2_in. The clk is a clock signal that orients the synchronization of the signals, cnt256_n is an 8-bit number used to set the timing of when the processed values are outputted and when the state of the state machine alters. The ch1_in and ch2_in are 16-bit signed input channels for audio input that are subject to signal processing within the module. The processed (clipped) audio signals are then buffered into ch1_buf and ch2_buf, held until output timing signaled by cnt256_n reaching '1'. 
+
+The processed signals are then transmitted from two output ports: ch1_out and ch2_out. Both are 16-bit signed output channels representing the audio outputs of two separate channels.
+
+Internally, the module contains three signals state, ch1_buf, and ch2_buf. The state is a 4-bit register used as a state holder for the implemented state machine controlling the operations flow within the module. The ch1_buf and ch2_buf are 16-bit signed buffers storing the clipped output for ch1_in and ch2_in respectively.
+
+The code is divided into major blocks handling various functions. cnt256_n initializes the state machine entering into ST_CLIP_L state at the start. When cnt256_n equals '1', the processed audio signals are outputted to ch1_out and ch2_out. Also, the case structure governs how the state machine operates in each state, essentially controlling the audio clipping procedure. During ST_CLIP_L, the audio signal from ch1_in is clipped if it exceeds preset limits, and the result is stored in ch1_buf. The same operation is repeated in ST_CLIP_R state for the ch2_in input, with the results stored in ch2_buf. After this, the state machine transitions back to ST_IDLE until reactivated at the next cycle.

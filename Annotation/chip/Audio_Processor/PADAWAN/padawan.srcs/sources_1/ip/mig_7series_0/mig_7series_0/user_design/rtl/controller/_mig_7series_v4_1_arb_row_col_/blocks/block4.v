@@ -1,0 +1,1 @@
+          assign col_channel_offset = 0;

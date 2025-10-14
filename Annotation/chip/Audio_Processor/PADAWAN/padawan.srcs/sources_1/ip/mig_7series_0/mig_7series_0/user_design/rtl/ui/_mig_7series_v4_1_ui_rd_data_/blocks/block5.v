@@ -1,0 +1,1 @@
+        assign rd_buf_full = occ_cnt_ns[DATA_BUF_ADDR_WIDTH];

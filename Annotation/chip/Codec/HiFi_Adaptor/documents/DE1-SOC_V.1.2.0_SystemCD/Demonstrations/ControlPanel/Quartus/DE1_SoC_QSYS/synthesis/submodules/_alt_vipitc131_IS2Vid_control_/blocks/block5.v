@@ -1,0 +1,1 @@
+        assign write_trigger = 1'b0;

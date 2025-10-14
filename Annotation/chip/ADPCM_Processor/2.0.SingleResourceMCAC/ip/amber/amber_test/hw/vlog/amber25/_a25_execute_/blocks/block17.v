@@ -1,0 +1,1 @@
+assign priviledged_update              = !i_core_stall;

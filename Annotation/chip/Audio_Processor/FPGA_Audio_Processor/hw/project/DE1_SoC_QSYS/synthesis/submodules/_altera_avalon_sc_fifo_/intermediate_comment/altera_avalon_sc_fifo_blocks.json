@@ -1,0 +1,331 @@
+{
+    "line_num": [
+        [
+            900,
+            913
+        ],
+        [
+            885,
+            894
+        ],
+        [
+            883,
+            883
+        ],
+        [
+            880,
+            880
+        ],
+        [
+            861,
+            878
+        ],
+        [
+            814,
+            858
+        ],
+        [
+            801,
+            812
+        ],
+        [
+            780,
+            790
+        ],
+        [
+            779,
+            779
+        ],
+        [
+            754,
+            778
+        ],
+        [
+            753,
+            753
+        ],
+        [
+            752,
+            752
+        ],
+        [
+            714,
+            750
+        ],
+        [
+            712,
+            714
+        ],
+        [
+            693,
+            698
+        ],
+        [
+            686,
+            691
+        ],
+        [
+            680,
+            682
+        ],
+        [
+            679,
+            679
+        ],
+        [
+            672,
+            678
+        ],
+        [
+            659,
+            668
+        ],
+        [
+            643,
+            655
+        ],
+        [
+            631,
+            641
+        ],
+        [
+            620,
+            620
+        ],
+        [
+            618,
+            630
+        ],
+        [
+            591,
+            594
+        ],
+        [
+            577,
+            588
+        ],
+        [
+            576,
+            576
+        ],
+        [
+            546,
+            548
+        ],
+        [
+            533,
+            544
+        ],
+        [
+            532,
+            532
+        ],
+        [
+            530,
+            530
+        ],
+        [
+            529,
+            529
+        ],
+        [
+            484,
+            512
+        ],
+        [
+            466,
+            475
+        ],
+        [
+            439,
+            464
+        ],
+        [
+            437,
+            438
+        ],
+        [
+            418,
+            419
+        ],
+        [
+            403,
+            415
+        ],
+        [
+            402,
+            402
+        ],
+        [
+            400,
+            400
+        ],
+        [
+            388,
+            399
+        ],
+        [
+            387,
+            387
+        ],
+        [
+            369,
+            385
+        ],
+        [
+            345,
+            354
+        ],
+        [
+            338,
+            344
+        ],
+        [
+            333,
+            333
+        ],
+        [
+            332,
+            332
+        ],
+        [
+            315,
+            327
+        ],
+        [
+            302,
+            312
+        ],
+        [
+            280,
+            300
+        ],
+        [
+            278,
+            278
+        ],
+        [
+            269,
+            274
+        ],
+        [
+            260,
+            265
+        ],
+        [
+            256,
+            259
+        ],
+        [
+            231,
+            234
+        ],
+        [
+            225,
+            230
+        ],
+        [
+            219,
+            223
+        ],
+        [
+            214,
+            218
+        ],
+        [
+            212,
+            237
+        ],
+        [
+            199,
+            210
+        ],
+        [
+            189,
+            197
+        ],
+        [
+            188,
+            198
+        ],
+        [
+            187,
+            211
+        ],
+        [
+            186,
+            238
+        ],
+        [
+            174,
+            184
+        ]
+    ],
+    "blocks": [
+        "    function integer log2ceil;\n        input integer val;\n        reg[31:0] i;\n\n        begin\n            i = 1;\n            log2ceil = 0;\n\n            while (i < val) begin\n                log2ceil = log2ceil + 1;\n                i = i[30:0] << 1;\n            end\n        end\n    endfunction",
+        "    end\n    else begin : gen_blk20_else\n      assign ok_to_forward = 1'b1;\n      assign drop_on_error = 1'b0;\n      if (ADDR_WIDTH <= 1)\n        assign curr_sop_ptr = 1'b0;\n      else\n        assign curr_sop_ptr = {ADDR_WIDTH - 1 { 1'b0 }};\n    end\n    endgenerate",
+        "      assign curr_sop_ptr = (write && in_startofpacket && in_endofpacket) ? wr_ptr : sop_ptr;",
+        "      assign drop_on_error = drop_on_error_en & (error_in_pkt | in_pkt_error) & in_pkt_eop_arrive & ",
+        "      always @(posedge clk or posedge reset) begin\n        if (reset) begin\n          sop_ptr <= 0;\n          error_in_pkt <= 0;\n        end\n        else begin\n          \n          if ( in_pkt_start ) \n            sop_ptr <= wr_ptr;\n\n          \n          \n          if (in_pkt_eop_arrive)\n            error_in_pkt <= 1'b0;\n          else if ( in_pkt_error & (pkt_has_started | in_pkt_start))\n            error_in_pkt <= 1'b1;\n        end\n      end",
+        "      always @(posedge clk or posedge reset) begin\n        if (reset) begin\n          pkt_cnt           <= 0;\n          pkt_has_started   <= 0;\n          sop_has_left_fifo <= 0;\n          fifo_too_small_r  <= 0;\n          pkt_cnt_eq_zero   <= 1'b1;\n          pkt_cnt_eq_one    <= 1'b0;\n          fifo_fill_level_lt_cut_through_threshold <= 1'b1;\n        end\n        else begin\n          fifo_fill_level_lt_cut_through_threshold <= fifo_fill_level < cut_through_threshold;\n          fifo_too_small_r <= fifo_too_small;\n\n          if( in_pkt_eop_arrive )\n            sop_has_left_fifo <= 1'b0;\n          else if (out_pkt_sop_leave & pkt_cnt_eq_zero )\n            sop_has_left_fifo <= 1'b1;\n\n          if (in_pkt_eop_arrive & ~out_pkt_leave & ~drop_on_error ) begin\n            pkt_cnt <= pkt_cnt + 1'b1;\n            pkt_cnt_eq_zero <= 0;\n            if (pkt_cnt == 0)\n              pkt_cnt_eq_one <= 1'b1;\n            else\n              pkt_cnt_eq_one <= 1'b0;\n          end\n          else if((~in_pkt_eop_arrive | drop_on_error) & out_pkt_leave) begin\n            pkt_cnt <= pkt_cnt - 1'b1;\n            if (pkt_cnt == 1) \n              pkt_cnt_eq_zero <= 1'b1;\n            else\n              pkt_cnt_eq_zero <= 1'b0;\n            if (pkt_cnt == 2) \n              pkt_cnt_eq_one <= 1'b1;\n            else\n              pkt_cnt_eq_one <= 1'b0;\n          end\n\n          if (in_pkt_start)\n            pkt_has_started <= 1'b1;\n          else if (in_pkt_eop_arrive)\n            pkt_has_started <= 1'b0;\n        end\n      end",
+        "    generate if (USE_STORE_FORWARD) begin : gen_blk20\n      assign wait_for_threshold   = (fifo_fill_level_lt_cut_through_threshold) & wait_for_pkt ;\n      assign wait_for_pkt         = pkt_cnt_eq_zero  | (pkt_cnt_eq_one  & out_pkt_leave);\n      assign ok_to_forward        = (pkt_mode ? (~wait_for_pkt | ~pkt_has_started) : \n                                     ~wait_for_threshold) | fifo_too_small_r;\n      assign in_pkt_eop_arrive    = in_valid & in_ready & in_endofpacket;\n      assign in_pkt_start         = in_valid & in_ready & in_startofpacket;\n      assign in_pkt_error         = in_valid & in_ready & |in_error;\n      assign out_pkt_sop_leave    = out_valid & out_ready & out_startofpacket;\n      assign out_pkt_leave        = out_valid & out_ready & out_endofpacket;\n      assign fifo_too_small       = (pkt_mode ? wait_for_pkt : wait_for_threshold) & full & out_ready;\n",
+        "      always @(posedge clk or posedge reset) begin\n          if (reset) begin\n              csr_readdata <= 0;\n          end\n          else if (csr_read) begin\n              csr_readdata <= 0;\n\n              if (csr_address == 0) \n                  csr_readdata <= {{(31 - ADDR_WIDTH){1'b0}}, fill_level};\n          end\n      end",
+        "    else begin : gen_blk19_else2",
+        "      always @(posedge clk or posedge reset) begin\n          if (reset) begin\n              almost_full_threshold  <= max_fifo_size[23 : 0];\n              almost_empty_threshold <= 0;\n              csr_readdata           <= 0;\n          end\n          else begin\n             if (csr_read) begin\n                csr_readdata <= 32'b0;\n                if (csr_address == 3)\n                    csr_readdata <= {8'b0, almost_empty_threshold};\n                else if (csr_address == 2)\n                    csr_readdata <= {8'b0, almost_full_threshold};\n                else if (csr_address == 0)\n                    csr_readdata <= {{(31 - ADDR_WIDTH){1'b0}}, fill_level};\n             end\n             else if (csr_write) begin\n               if(csr_address == 3'b011)\n                   almost_empty_threshold <= csr_writedata[23:0];\n               else if(csr_address == 3'b010)\n                  almost_full_threshold  <= csr_writedata[23:0];\n             end       \n          end\n      end\n    end",
+        "    assign max_fifo_size = FIFO_DEPTH - 1;",
+        "    else if (USE_ALMOST_FULL_IF || USE_ALMOST_EMPTY_IF) begin : gen_blk19_else1",
+        "      always @(posedge clk or posedge reset) begin\n          if (reset) begin\n              almost_full_threshold  <= max_fifo_size[23 : 0];\n              almost_empty_threshold <= 0;\n              cut_through_threshold  <= 0;\n              drop_on_error_en       <= 0;\n              csr_readdata           <= 0;\n              pkt_mode               <= 1'b1;\n          end\n          else begin\n              if (csr_read) begin\n                csr_readdata <= 32'b0;\n                if (csr_address == 5)\n                    csr_readdata <= {31'b0, drop_on_error_en};\n                else if (csr_address == 4)\n                    csr_readdata <= {8'b0, cut_through_threshold};\n                else if (csr_address == 3)\n                    csr_readdata <= {8'b0, almost_empty_threshold};\n                else if (csr_address == 2)\n                    csr_readdata <= {8'b0, almost_full_threshold};\n                else if (csr_address == 0)\n                    csr_readdata <= {{(31 - ADDR_WIDTH){1'b0}}, fill_level};\n             end\n             else if (csr_write) begin\n               if(csr_address == 3'b101)\n                   drop_on_error_en       <= csr_writedata[0];\n               else if(csr_address == 3'b100) begin\n                   cut_through_threshold  <= csr_writedata[23:0];\n                   pkt_mode <= (csr_writedata[23:0] == 0);\n               end\n               else if(csr_address == 3'b011)\n                    almost_empty_threshold <= csr_writedata[23:0];\n               else if(csr_address == 3'b010)\n                  almost_full_threshold  <= csr_writedata[23:0];\n             end     \n          end\n      end",
+        "    generate if (USE_STORE_FORWARD) begin : gen_blk19\n    assign max_fifo_size = FIFO_DEPTH - 1;\n      always @(posedge clk or posedge reset) begin",
+        "    generate if (USE_ALMOST_EMPTY_IF) begin : gen_blk18\n      assign almost_empty_data = (fill_level <= almost_empty_threshold);\n    end\n    else\n      assign almost_empty_data = 0;\n    endgenerate",
+        "    generate if (USE_ALMOST_FULL_IF) begin : gen_blk17\n      assign almost_full_data = (fill_level >= almost_full_threshold);\n    end\n    else\n      assign almost_full_data = 0;\n    endgenerate",
+        "        always @* begin\n            fill_level = 0;\n        end  ",
+        "    else begin : gen_blk16_else",
+        "        always @* begin\n            fill_level = fifo_fill_level;\n\n            if (EMPTY_LATENCY == 3)\n                fill_level = fifo_fill_level + {{ADDR_WIDTH{1'b0}}, out_valid};\n        end\n    end",
+        "            always @(posedge clk or posedge reset) begin\n                if (reset) \n                    fifo_fill_level <= 0;\n                else if (next_full & !drop_on_error)\n                    fifo_fill_level <= depth32[ADDR_WIDTH:0];\n                else begin\n                    fifo_fill_level[ADDR_WIDTH]     <= 1'b0;\n                    fifo_fill_level[ADDR_WIDTH-1 : 0] <= next_wr_ptr - next_rd_ptr;\n                end\n            end",
+        "            always @(posedge clk or posedge reset) begin\n                if (reset) begin\n                    fifo_fill_level <= 0;\n                end else if (drop_on_error) begin\n                    fifo_fill_level <= fifo_fill_level - curr_packet_len_less_one;\n                    if (read)\n                        fifo_fill_level <= fifo_fill_level - curr_packet_len_less_one - 1'b1;\n                end else if (write && !read) begin\n                    fifo_fill_level <= fifo_fill_level + 1'b1;\n                end else if (read && !write) begin\n                    fifo_fill_level <= fifo_fill_level - 1'b1;\n                end\n            end",
+        "            always @(posedge clk or posedge reset) begin\n                if (reset) begin\n                    curr_packet_len_less_one <= 0;\n                end else begin\n                    if (write) begin\n                        curr_packet_len_less_one <= curr_packet_len_less_one + 1'b1;\n                        if (in_endofpacket)\n                            curr_packet_len_less_one <= 0;\n                    end\n                end\n            end",
+        "        assign depth32 = DEPTH;",
+        "    generate if (USE_FILL_LEVEL) begin : gen_blk16\n        wire [31:0] depth32;\n        assign depth32 = DEPTH;\n\n        if (USE_STORE_FORWARD) begin\n\n            reg [ADDR_WIDTH : 0] curr_packet_len_less_one;\n            \n            \n            \n            \n            \n            ",
+        "        always @* begin\n            out_valid   = internal_out_valid;\n            out_payload = internal_out_payload;\n        end",
+        "        always @(posedge clk or posedge reset) begin\n            if (reset) begin\n                out_valid   <= 0;\n                out_payload <= 0;\n            end\n            else begin\n                if (internal_out_ready) begin\n                    out_valid   <= internal_out_valid & ok_to_forward;\n                    out_payload <= internal_out_payload;\n                end\n            end\n        end",
+        "    generate if (EMPTY_LATENCY == 3) begin : gen_blk15",
+        "        always @* begin\n            internal_out_valid = !empty & ok_to_forward;\n        end",
+        "        always @(posedge clk or posedge reset) begin\n            if (reset)\n                internal_out_valid <= 0;\n            else begin\n                internal_out_valid <= !empty & ok_to_forward & ~drop_on_error;\n\n                if (read) begin\n                    if (incremented_rd_ptr == wr_ptr)\n                        internal_out_valid <= 1'b0;\n                end\n            end\n        end",
+        "    generate if (EMPTY_LATENCY > 1) begin : gen_blk14",
+        "    assign internal_out_ready = out_ready || !out_valid;",
+        "    assign in_ready = !full;",
+        "        always @* begin\n            full  = mem_used[DEPTH-1];\n            empty = !mem_used[0];\n\n            \n            \n            \n            \n            if (DEPTH == 1)\n                full = mem_used[0] && !read;\n\n            internal_out_payload = mem[0];\n\n            \n            \n            \n            \n            \n            \n            \n            \n            \n            if (EMPTY_LATENCY == 0) begin\n                empty = !mem_used[0] && !in_valid;\n\n                if (!mem_used[0] && in_valid)\n                    internal_out_payload = in_payload;\n            end\n        end",
+        "        always @(posedge clk or posedge reset) begin\n            if (reset) begin\n                empty <= 1;\n                full  <= 0;\n            end\n            else begin \n                empty <= next_empty;\n                full  <= next_full;\n            end\n        end",
+        "        always @* begin\n            next_full = full;\n            next_empty = empty;\n     \n            if (read && !write) begin\n                next_full = 1'b0;\n     \n                if (incremented_rd_ptr == wr_ptr)\n                    next_empty = 1'b1;\n            end\n            \n            if (write && !read) begin\n                if (!drop_on_error)\n                  next_empty = 1'b0;\n                else if (curr_sop_ptr == rd_ptr)   \n                  next_empty = 1'b1;\n     \n                if (incremented_wr_ptr == rd_ptr && !drop_on_error)\n                    next_full = 1'b1;\n            end\n\n            if (write && read && drop_on_error) begin\n                if (curr_sop_ptr == next_rd_ptr)\n                  next_empty = 1'b1;\n            end\n        end",
+        "    generate if (USE_MEMORY_BLOCKS == 1) begin : gen_blk13\n",
+        "    end\n    endgenerate",
+        "            always @(posedge clk, posedge reset) begin\n                if (reset) begin\n                    mem_used[i] <= 0;\n                end \n                else begin\n                    if (write ^ read) begin\n                        if (write)\n                            mem_used[i] <= mem_used[i-1];\n                        else if (read)\n                            mem_used[i] <= mem_used[i+1];     \n                    end\n                end\n            end",
+        "        for (i = 1; i < DEPTH-1; i = i + 1) begin : storage_logic",
+        "          end",
+        "            always @(posedge clk or posedge reset) begin\n                if (reset) begin\n                    mem_used[DEPTH-1] <= 0;\n                end\n                else begin \n                    if (write ^ read) begin            \n                        mem_used[DEPTH-1] <= 0;\n                        if (write)\n                            mem_used[DEPTH-1] <= mem_used[DEPTH-2];\n                    end\n                end\n            end",
+        "        if (DEPTH > 1) begin : gen_blk12",
+        "        always @(posedge clk or posedge reset) begin\n            if (reset) begin\n                mem_used[0] <= 0;\n            end \n            else begin\n                if (write ^ read) begin\n                    if (write)\n                        mem_used[0] <= 1;\n                    else if (read) begin\n                        if (DEPTH > 1)\n                            mem_used[0] <= mem_used[1];\n                        else\n                            mem_used[0] <= 0;\n                    end    \n                end\n            end\n        end",
+        "        always @(posedge clk or posedge reset) begin\n            if (reset) begin\n                wr_ptr <= 0;\n                rd_ptr <= 0;\n            end\n            else begin\n                wr_ptr <= next_wr_ptr;\n                rd_ptr <= next_rd_ptr;\n            end\n        end",
+        "    generate if (USE_MEMORY_BLOCKS == 1) begin : gen_blk11\n\n        assign incremented_wr_ptr = wr_ptr + 1'b1;\n        assign incremented_rd_ptr = rd_ptr + 1'b1;\n        assign next_wr_ptr =  drop_on_error ? curr_sop_ptr : write ?  incremented_wr_ptr : wr_ptr;\n        assign next_rd_ptr = (read) ? incremented_rd_ptr : rd_ptr;\n",
+        "    assign write = in_ready && in_valid;",
+        "    assign read  = internal_out_ready && internal_out_valid  && ok_to_forward;",
+        "        always @(posedge clk, posedge reset) begin\n            if (reset) begin\n                mem[DEPTH-1] <= 0;\n            end \n            else begin\n                if (DEPTH == 1) begin\n                    if (write)\n                        mem[DEPTH-1] <= in_payload;\n                end\n                else if (!mem_used[DEPTH-1])\n                    mem[DEPTH-1] <= in_payload;    \n            end\n        end",
+        "            always @(posedge clk or posedge reset) begin\n                if (reset) begin\n                    mem[i] <= 0;\n                end \n                else if (read || !mem_used[i]) begin\n                    if (!mem_used[i+1])\n                        mem[i] <= in_payload;\n                    else\n                        mem[i] <= mem[i+1];\n                end\n            end",
+        "    end else begin : gen_blk9_else\n\n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    ",
+        "        assign mem_rd_ptr = next_rd_ptr;",
+        "            always @(posedge clk) begin\n                if (in_valid && in_ready)\n                    mem[wr_ptr] <= in_payload;\n\n                internal_out_payload <= mem[mem_rd_ptr];\n            end",
+        "            always @(posedge clk) begin\n                if (in_valid && in_ready)\n                    mem[wr_ptr] = in_payload;\n\n                internal_out_payload = mem[mem_rd_ptr];\n            end",
+        "    generate if (USE_MEMORY_BLOCKS == 1) begin  : gen_blk9\n\n        if (EMPTY_LATENCY == 1) begin : gen_blk10\n",
+        "                else begin : gen_blk8_else\n                    assign out_channel = in_channel;\n                    assign in_payload = in_data;\n                    assign out_data = out_payload;",
+        "            else begin : gen_blk6_else\n                assign out_error = in_error;\n                if (CHANNEL_WIDTH > 0) begin : gen_blk8\n                    assign in_payload = {in_data, in_channel};\n                    assign {out_data, out_channel} = out_payload;\n                end",
+        "                else begin : gen_blk7_else\n                    assign out_channel = in_channel;\n                    assign in_payload = {in_data, in_error};\n                    assign {out_data, out_error} = out_payload;\n                end",
+        "            if (ERROR_WIDTH > 0) begin : gen_blk6\n                if (CHANNEL_WIDTH > 0) begin : gen_blk7\n                    assign in_payload = {in_data, in_error, in_channel};\n                    assign {out_data, out_error, out_channel} = out_payload;\n                end",
+        "        else begin : gen_blk2_else\n            assign out_packet_signals = 0;\n            if (ERROR_WIDTH > 0) begin : gen_blk6\n                if (CHANNEL_WIDTH > 0) begin : gen_blk7\n                    assign in_payload = {in_data, in_error, in_channel};\n                    assign {out_data, out_error, out_channel} = out_payload;\n                end\n                else begin : gen_blk7_else\n                    assign out_channel = in_channel;\n                    assign in_payload = {in_data, in_error};\n                    assign {out_data, out_error} = out_payload;\n                end\n            end\n            else begin : gen_blk6_else\n                assign out_error = in_error;\n                if (CHANNEL_WIDTH > 0) begin : gen_blk8\n                    assign in_payload = {in_data, in_channel};\n                    assign {out_data, out_channel} = out_payload;\n                end\n                else begin : gen_blk8_else\n                    assign out_channel = in_channel;\n                    assign in_payload = in_data;\n                    assign out_data = out_payload;\n                end\n            end\n        end",
+        "            else begin : gen_blk3_else\n                assign out_error = in_error;\n                if (CHANNEL_WIDTH > 0) begin : gen_blk5\n                    assign in_payload = {in_packet_signals, in_data, in_channel};\n                    assign {out_packet_signals, out_data, out_channel} = out_payload;\n                end\n                else begin : gen_blk5_else\n                    assign out_channel = in_channel;\n                    assign in_payload = {in_packet_signals, in_data};\n                    assign {out_packet_signals, out_data} = out_payload;\n                end\n            end",
+        "                if (CHANNEL_WIDTH > 0) begin : gen_blk4\n                    assign in_payload = {in_packet_signals, in_data, in_error, in_channel};\n                    assign {out_packet_signals, out_data, out_error, out_channel} = out_payload;\n                end\n                else begin : gen_blk4_else\n                    assign out_channel = in_channel;\n                    assign in_payload = {in_packet_signals, in_data, in_error};\n                    assign {out_packet_signals, out_data, out_error} = out_payload;\n                end",
+        "            if (ERROR_WIDTH > 0) begin : gen_blk3\n                if (CHANNEL_WIDTH > 0) begin : gen_blk4\n                    assign in_payload = {in_packet_signals, in_data, in_error, in_channel};\n                    assign {out_packet_signals, out_data, out_error, out_channel} = out_payload;\n                end\n                else begin : gen_blk4_else\n                    assign out_channel = in_channel;\n                    assign in_payload = {in_packet_signals, in_data, in_error};\n                    assign {out_packet_signals, out_data, out_error} = out_payload;\n                end\n            end",
+        "        if (USE_PACKETS) begin : gen_blk2\n            if (ERROR_WIDTH > 0) begin : gen_blk3\n                if (CHANNEL_WIDTH > 0) begin : gen_blk4\n                    assign in_payload = {in_packet_signals, in_data, in_error, in_channel};\n                    assign {out_packet_signals, out_data, out_error, out_channel} = out_payload;\n                end\n                else begin : gen_blk4_else\n                    assign out_channel = in_channel;\n                    assign in_payload = {in_packet_signals, in_data, in_error};\n                    assign {out_packet_signals, out_data, out_error} = out_payload;\n                end\n            end\n            else begin : gen_blk3_else\n                assign out_error = in_error;\n                if (CHANNEL_WIDTH > 0) begin : gen_blk5\n                    assign in_payload = {in_packet_signals, in_data, in_channel};\n                    assign {out_packet_signals, out_data, out_channel} = out_payload;\n                end\n                else begin : gen_blk5_else\n                    assign out_channel = in_channel;\n                    assign in_payload = {in_packet_signals, in_data};\n                    assign {out_packet_signals, out_data} = out_payload;\n                end\n            end\n        end",
+        "    generate\n        if (USE_PACKETS) begin : gen_blk2\n            if (ERROR_WIDTH > 0) begin : gen_blk3\n                if (CHANNEL_WIDTH > 0) begin : gen_blk4\n                    assign in_payload = {in_packet_signals, in_data, in_error, in_channel};\n                    assign {out_packet_signals, out_data, out_error, out_channel} = out_payload;\n                end\n                else begin : gen_blk4_else\n                    assign out_channel = in_channel;\n                    assign in_payload = {in_packet_signals, in_data, in_error};\n                    assign {out_packet_signals, out_data, out_error} = out_payload;\n                end\n            end\n            else begin : gen_blk3_else\n                assign out_error = in_error;\n                if (CHANNEL_WIDTH > 0) begin : gen_blk5\n                    assign in_payload = {in_packet_signals, in_data, in_channel};\n                    assign {out_packet_signals, out_data, out_channel} = out_payload;\n                end\n                else begin : gen_blk5_else\n                    assign out_channel = in_channel;\n                    assign in_payload = {in_packet_signals, in_data};\n                    assign {out_packet_signals, out_data} = out_payload;\n                end\n            end\n        end\n        else begin : gen_blk2_else\n            assign out_packet_signals = 0;\n            if (ERROR_WIDTH > 0) begin : gen_blk6\n                if (CHANNEL_WIDTH > 0) begin : gen_blk7\n                    assign in_payload = {in_data, in_error, in_channel};\n                    assign {out_data, out_error, out_channel} = out_payload;\n                end\n                else begin : gen_blk7_else\n                    assign out_channel = in_channel;\n                    assign in_payload = {in_data, in_error};\n                    assign {out_data, out_error} = out_payload;\n                end\n            end\n            else begin : gen_blk6_else\n                assign out_error = in_error;\n                if (CHANNEL_WIDTH > 0) begin : gen_blk8\n                    assign in_payload = {in_data, in_channel};\n                    assign {out_data, out_channel} = out_payload;\n                end\n                else begin : gen_blk8_else\n                    assign out_channel = in_channel;\n                    assign in_payload = in_data;\n                    assign out_data = out_payload;\n                end\n            end\n        end\n    endgenerate",
+        "    generate\n        if (EMPTY_WIDTH > 0) begin : gen_blk1\n            assign in_packet_signals = {in_startofpacket, in_endofpacket, in_empty};\n            assign {out_startofpacket, out_endofpacket, out_empty} = out_packet_signals;\n        end \n        else begin : gen_blk1_else\n            assign out_empty = in_error;\n            assign in_packet_signals = {in_startofpacket, in_endofpacket};\n            assign {out_startofpacket, out_endofpacket} = out_packet_signals;\n        end\n    endgenerate"
+    ]
+}

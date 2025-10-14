@@ -1,0 +1,1 @@
+assign exclusive_update                = !i_core_stall && execute;

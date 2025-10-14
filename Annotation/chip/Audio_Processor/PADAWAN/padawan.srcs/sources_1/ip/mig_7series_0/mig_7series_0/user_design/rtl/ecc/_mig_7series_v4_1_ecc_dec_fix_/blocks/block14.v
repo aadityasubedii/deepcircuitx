@@ -1,0 +1,1 @@
+  always @(posedge clk) syndrome_r <= #TCQ syndrome_ns;

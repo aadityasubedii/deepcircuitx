@@ -1,0 +1,316 @@
+{
+    "line_num": [
+        [
+            1325,
+            1330
+        ],
+        [
+            1319,
+            1324
+        ],
+        [
+            1108,
+            1315
+        ],
+        [
+            1086,
+            1088
+        ],
+        [
+            1077,
+            1084
+        ],
+        [
+            1066,
+            1075
+        ],
+        [
+            1060,
+            1064
+        ],
+        [
+            1055,
+            1056
+        ],
+        [
+            1034,
+            1053
+        ],
+        [
+            1007,
+            1032
+        ],
+        [
+            984,
+            1004
+        ],
+        [
+            960,
+            980
+        ],
+        [
+            938,
+            958
+        ],
+        [
+            916,
+            936
+        ],
+        [
+            913,
+            915
+        ],
+        [
+            894,
+            911
+        ],
+        [
+            875,
+            892
+        ],
+        [
+            855,
+            873
+        ],
+        [
+            811,
+            851
+        ],
+        [
+            769,
+            809
+        ],
+        [
+            727,
+            767
+        ],
+        [
+            723,
+            726
+        ],
+        [
+            705,
+            712
+        ],
+        [
+            694,
+            701
+        ],
+        [
+            684,
+            691
+        ],
+        [
+            674,
+            681
+        ],
+        [
+            629,
+            714
+        ],
+        [
+            620,
+            627
+        ],
+        [
+            611,
+            618
+        ],
+        [
+            602,
+            609
+        ],
+        [
+            593,
+            600
+        ],
+        [
+            582,
+            589
+        ],
+        [
+            573,
+            580
+        ],
+        [
+            564,
+            571
+        ],
+        [
+            555,
+            562
+        ],
+        [
+            552,
+            715
+        ],
+        [
+            529,
+            536
+        ],
+        [
+            518,
+            518
+        ],
+        [
+            510,
+            515
+        ],
+        [
+            508,
+            508
+        ],
+        [
+            497,
+            506
+        ],
+        [
+            493,
+            496
+        ],
+        [
+            480,
+            485
+        ],
+        [
+            469,
+            469
+        ],
+        [
+            461,
+            466
+        ],
+        [
+            459,
+            460
+        ],
+        [
+            448,
+            457
+        ],
+        [
+            444,
+            447
+        ],
+        [
+            437,
+            439
+        ],
+        [
+            423,
+            435
+        ],
+        [
+            416,
+            421
+        ],
+        [
+            393,
+            409
+        ],
+        [
+            382,
+            386
+        ],
+        [
+            373,
+            375
+        ],
+        [
+            367,
+            371
+        ],
+        [
+            354,
+            366
+        ],
+        [
+            349,
+            353
+        ],
+        [
+            341,
+            348
+        ],
+        [
+            334,
+            340
+        ],
+        [
+            332,
+            332
+        ],
+        [
+            331,
+            331
+        ],
+        [
+            324,
+            329
+        ]
+    ],
+    "blocks": [
+        "  always @(posedge clk)\n    if (rst || (wrcal_sanity_chk && ~wrcal_sanity_chk_r))\n      wrcal_done <= #TCQ 1'b0;\n    else if (cal2_done_r)\n      wrcal_done <= #TCQ 1'b1;\n",
+        "  always @(posedge clk)\n    if (rst)\n      cal2_done_r1  <= #TCQ 1'b0;\n    else\n      cal2_done_r1  <= #TCQ cal2_done_r;\n",
+        "  always @(posedge clk) begin\n    if (rst) begin\n      wrcal_dqs_cnt_r       <= #TCQ 'b0;\n      cal2_done_r           <= #TCQ 1'b0;\n      cal2_prech_req_r      <= #TCQ 1'b0;\n      cal2_state_r          <= #TCQ CAL2_IDLE;\n      wrcal_pat_err         <= #TCQ 1'b0;\n      wrcal_pat_resume_r    <= #TCQ 1'b0;\n      wrcal_act_req         <= #TCQ 1'b0;\n      cal2_if_reset         <= #TCQ 1'b0;\n      temp_wrcal_done       <= #TCQ 1'b0;\n      wrlvl_byte_redo       <= #TCQ 1'b0;\n      early1_data           <= #TCQ 1'b0;\n      early2_data           <= #TCQ 1'b0;\n      idelay_ld             <= #TCQ 1'b0;\n      idelay_ld_done        <= #TCQ 1'b0;\n      pat1_detect           <= #TCQ 1'b0;\n      early1_detect         <= #TCQ 1'b0;\n      wrcal_sanity_chk_done <= #TCQ 1'b0;\n      wrcal_sanity_chk_err  <= #TCQ 1'b0;\n    end else begin\n      cal2_prech_req_r <= #TCQ 1'b0;\n      case (cal2_state_r)\n        CAL2_IDLE: begin\n          wrcal_pat_err         <= #TCQ 1'b0;\n          if (wrcal_start) begin\n            cal2_if_reset  <= #TCQ 1'b0;\n            if (SIM_CAL_OPTION == \"SKIP_CAL\")\n              \n              cal2_state_r <= #TCQ CAL2_DONE;\n            else\n              cal2_state_r <= #TCQ CAL2_READ_WAIT;\n          end\n        end\n\n        \n        \n        CAL2_READ_WAIT: begin\n          wrcal_pat_resume_r <= #TCQ 1'b0;\n          cal2_if_reset      <= #TCQ 1'b0;\n          \n          \n          \n          \n          if (pat_data_match_valid_r && (nCK_PER_CLK == 4)) begin\n            if (pat_data_match_r)\n              \n              cal2_state_r <= #TCQ CAL2_NEXT_DQS;\n            else begin\n              if (wrcal_sanity_chk_r)\n                cal2_state_r <= #TCQ CAL2_ERR;\n              \n              \n              else if (early1_data_match_r) begin\n                early1_data <= #TCQ 1'b1;\n                early2_data <= #TCQ 1'b0;\n                wrlvl_byte_redo <= #TCQ 1'b1;\n                cal2_state_r    <= #TCQ CAL2_WRLVL_WAIT;\n              end else if (early2_data_match_r) begin\n                early1_data <= #TCQ 1'b0;\n                early2_data <= #TCQ 1'b1;\n                wrlvl_byte_redo <= #TCQ 1'b1;\n                cal2_state_r    <= #TCQ CAL2_WRLVL_WAIT;\n              \n              \n              end else if (~idelay_ld_done) begin\n                cal2_state_r <= #TCQ CAL2_DQ_IDEL_DEC;\n                idelay_ld    <= #TCQ 1'b1;\n              end else\n                cal2_state_r <= #TCQ CAL2_ERR;\n            end\n          end else if (pat_data_match_valid_r && (nCK_PER_CLK == 2)) begin\n            if ((pat1_data_match_r1 && pat2_data_match_r) ||\n                (pat1_detect && pat2_data_match_r))\n              \n              cal2_state_r <= #TCQ CAL2_NEXT_DQS;\n            else if (pat1_data_match_r1 && ~pat2_data_match_r) begin\n              cal2_state_r <= #TCQ CAL2_READ_WAIT;\n              pat1_detect  <= #TCQ 1'b1;\n            end else begin\n              \n              \n              if (wrcal_sanity_chk_r)\n                cal2_state_r <= #TCQ CAL2_ERR;\n              else if ((early1_data_match_r1 && early2_data_match_r) ||\n                  (early1_detect && early2_data_match_r)) begin\n                early1_data <= #TCQ 1'b1;\n                early2_data <= #TCQ 1'b0;\n                wrlvl_byte_redo <= #TCQ 1'b1;\n                cal2_state_r    <= #TCQ CAL2_WRLVL_WAIT;\n              end else if (early1_data_match_r1 && ~early2_data_match_r) begin\n                early1_detect <= #TCQ 1'b1;\n                cal2_state_r  <= #TCQ CAL2_READ_WAIT;\n              \n              \n              end else if (~idelay_ld_done) begin\n                cal2_state_r <= #TCQ CAL2_DQ_IDEL_DEC;\n                idelay_ld    <= #TCQ 1'b1;\n              end else\n                cal2_state_r <= #TCQ CAL2_ERR;\n            end\n          end else if (not_empty_wait_cnt == 'd31)\n            cal2_state_r <= #TCQ CAL2_ERR;\n        end\n\n        CAL2_WRLVL_WAIT: begin\n          early1_detect <= #TCQ 1'b0;\n          if (wrlvl_byte_done && ~wrlvl_byte_done_r)\n            wrlvl_byte_redo   <= #TCQ 1'b0;\n          if (wrlvl_byte_done) begin\n            if (rd_active_r1 && ~rd_active_r) begin\n            cal2_state_r  <= #TCQ CAL2_IFIFO_RESET;\n            cal2_if_reset <= #TCQ 1'b1;\n            early1_data   <= #TCQ 1'b0;\n            early2_data   <= #TCQ 1'b0;\n          end\n        end\n        end\n\n        CAL2_DQ_IDEL_DEC: begin\n          if (tap_inc_wait_cnt == 'd4) begin\n            idelay_ld      <= #TCQ 1'b0;\n            cal2_state_r   <= #TCQ CAL2_IFIFO_RESET;\n            cal2_if_reset  <= #TCQ 1'b1;\n            idelay_ld_done <= #TCQ 1'b1;\n          end\n        end\n\n        CAL2_IFIFO_RESET: begin\n          if (tap_inc_wait_cnt == 'd15) begin\n            cal2_if_reset      <= #TCQ 1'b0;\n            if (wrcal_sanity_chk_r)\n              cal2_state_r       <= #TCQ CAL2_DONE;\n            else if (idelay_ld_done) begin\n              wrcal_pat_resume_r <= #TCQ 1'b1;\n              cal2_state_r       <= #TCQ CAL2_READ_WAIT;\n            end else\n              cal2_state_r       <= #TCQ CAL2_IDLE;\n          end\n        end\n\n        \n        CAL2_NEXT_DQS: begin\n          \n          \n\n          \n          \n                    \n          if (wrcal_sanity_chk_r && (wrcal_dqs_cnt_r != DQS_WIDTH-1)) begin\n            cal2_prech_req_r   <= #TCQ 1'b0;\n            wrcal_dqs_cnt_r    <= #TCQ wrcal_dqs_cnt_r + 1;\n            cal2_state_r       <= #TCQ CAL2_SANITY_WAIT;\n          end else\n            cal2_prech_req_r  <= #TCQ 1'b1;\n          idelay_ld_done    <= #TCQ 1'b0;\n          pat1_detect       <= #TCQ 1'b0;\n          if (prech_done)\n            if (((DQS_WIDTH == 1) || (SIM_CAL_OPTION == \"FAST_CAL\")) ||\n                (wrcal_dqs_cnt_r == DQS_WIDTH-1)) begin\n              \n              \n              \n              if (wrcal_sanity_chk_r) begin\n                cal2_if_reset    <= #TCQ 1'b1;\n                cal2_state_r     <= #TCQ CAL2_IFIFO_RESET;\n              end else\n                cal2_state_r     <= #TCQ CAL2_DONE;\n            end else begin\n              \n              wrcal_dqs_cnt_r    <= #TCQ wrcal_dqs_cnt_r + 1;\n              cal2_state_r       <= #TCQ CAL2_READ_WAIT;\n            end\n        end\n    \n        CAL2_SANITY_WAIT: begin\n          if (tap_inc_wait_cnt == 'd15) begin\n            cal2_state_r       <= #TCQ CAL2_READ_WAIT;\n            wrcal_pat_resume_r <= #TCQ 1'b1;\n          end\n        end\n\n        \n        CAL2_DONE: begin\n          if (wrcal_sanity_chk && ~wrcal_sanity_chk_r) begin\n            cal2_done_r     <= #TCQ 1'b0;\n            wrcal_dqs_cnt_r <= #TCQ 'd0;\n            cal2_state_r    <= #TCQ CAL2_IDLE;\n          end else\n            cal2_done_r      <= #TCQ 1'b1;\n            cal2_prech_req_r <= #TCQ 1'b0;\n            cal2_if_reset    <= #TCQ 1'b0;\n            if (wrcal_sanity_chk_r)\n              wrcal_sanity_chk_done <= #TCQ 1'b1;\n        end\n\n        \n        CAL2_ERR: begin\n          wrcal_pat_resume_r <= #TCQ 1'b0;\n          if (wrcal_sanity_chk_r)\n            wrcal_sanity_chk_err <= #TCQ 1'b1;\n          else\n            wrcal_pat_err      <= #TCQ 1'b1;\n          cal2_state_r       <= #TCQ CAL2_ERR;\n        end\n      endcase\n    end\n  end",
+        "  always @(posedge clk)\n    cal2_state_r1 <= #TCQ cal2_state_r;\n",
+        "  always @(posedge clk) begin\n    if (rst)\n      not_empty_wait_cnt <= #TCQ 'd0;\n    else if ((cal2_state_r == CAL2_READ_WAIT) && wrcal_rd_wait)\n      not_empty_wait_cnt <= #TCQ not_empty_wait_cnt + 1;\n    else\n      not_empty_wait_cnt <= #TCQ 'd0;\n  end",
+        "  always @(posedge clk) begin\n    if (rst)\n      tap_inc_wait_cnt <= #TCQ 'd0;\n    else if ((cal2_state_r == CAL2_DQ_IDEL_DEC) ||\n             (cal2_state_r == CAL2_IFIFO_RESET) ||\n             (cal2_state_r == CAL2_SANITY_WAIT))\n      tap_inc_wait_cnt <= #TCQ tap_inc_wait_cnt + 1;\n    else\n      tap_inc_wait_cnt <= #TCQ 'd0;\n  end",
+        "  always @(posedge clk) begin\n    wrcal_pat_resume_r1 <= #TCQ wrcal_pat_resume_r;\n    wrcal_pat_resume_r2 <= #TCQ wrcal_pat_resume_r1;\n    wrcal_pat_resume    <= #TCQ wrcal_pat_resume_r2;\n  end",
+        "    end\n  endgenerate",
+        "        always @(posedge clk) begin\n         early1_match_rise0_and_r <= #TCQ &early1_match_rise0_r;\n         early1_match_fall0_and_r <= #TCQ &early1_match_fall0_r;\n         early1_match_rise1_and_r <= #TCQ &early1_match_rise1_r;\n         early1_match_fall1_and_r <= #TCQ &early1_match_fall1_r;\n         early1_data_match_r <= #TCQ (early1_match_rise0_and_r &&\n                                      early1_match_fall0_and_r &&\n                                      early1_match_rise1_and_r &&\n                                      early1_match_fall1_and_r);\n         early1_data_match_r1 <= #TCQ early1_data_match_r;\n\n         early2_match_rise0_and_r <= #TCQ &early2_match_rise0_r && rd_active_r3;\n         early2_match_fall0_and_r <= #TCQ &early2_match_fall0_r && rd_active_r3;\n         early2_match_rise1_and_r <= #TCQ &early2_match_rise1_r && rd_active_r3;\n         early2_match_fall1_and_r <= #TCQ &early2_match_fall1_r && rd_active_r3;\n         early2_data_match_r <= #TCQ (early2_match_rise0_and_r &&\n                                      early2_match_fall0_and_r &&\n                                      early2_match_rise1_and_r &&\n                                      early2_match_fall1_and_r);\n       end",
+        "        always @(posedge clk) begin\n          pat1_match_rise0_and_r <= #TCQ &pat1_match_rise0_r;\n          pat1_match_fall0_and_r <= #TCQ &pat1_match_fall0_r;\n          pat1_match_rise1_and_r <= #TCQ &pat1_match_rise1_r;\n          pat1_match_fall1_and_r <= #TCQ &pat1_match_fall1_r;\n          pat1_data_match_r <= #TCQ (pat1_match_rise0_and_r &&\n                                    pat1_match_fall0_and_r &&\n                                    pat1_match_rise1_and_r &&\n                                    pat1_match_fall1_and_r);\n          pat1_data_match_r1     <= #TCQ pat1_data_match_r;\n\n          pat2_match_rise0_and_r <= #TCQ &pat2_match_rise0_r && rd_active_r3;\n          pat2_match_fall0_and_r <= #TCQ &pat2_match_fall0_r && rd_active_r3;\n          pat2_match_rise1_and_r <= #TCQ &pat2_match_rise1_r && rd_active_r3;\n          pat2_match_fall1_and_r <= #TCQ &pat2_match_fall1_r && rd_active_r3;\n          pat2_data_match_r <= #TCQ (pat2_match_rise0_and_r &&\n                                    pat2_match_fall0_and_r &&\n                                    pat2_match_rise1_and_r &&\n                                    pat2_match_fall1_and_r);\n\n          \n          \n          \n          \n          pat_data_match_valid_r <= #TCQ rd_active_r4 & ~rd_active_r5;\n        end",
+        "        always @(posedge clk) begin\n          if (sr_rise0_r[pt_i] == early2_rise0[pt_i%4])\n            early2_match_rise0_r[pt_i] <= #TCQ 1'b1;\n          else\n            early2_match_rise0_r[pt_i] <= #TCQ 1'b0;\n\n          if (sr_fall0_r[pt_i] == early2_fall0[pt_i%4])\n            early2_match_fall0_r[pt_i] <= #TCQ 1'b1;\n          else\n            early2_match_fall0_r[pt_i] <= #TCQ 1'b0;\n\n          if (sr_rise1_r[pt_i] == early2_rise1[pt_i%4])\n            early2_match_rise1_r[pt_i] <= #TCQ 1'b1;\n          else\n            early2_match_rise1_r[pt_i] <= #TCQ 1'b0;\n\n          if (sr_fall1_r[pt_i] == early2_fall1[pt_i%4])\n            early2_match_fall1_r[pt_i] <= #TCQ 1'b1;\n          else\n            early2_match_fall1_r[pt_i] <= #TCQ 1'b0;\n        end",
+        "        always @(posedge clk) begin\n          if (sr_rise0_r[pt_i] == early1_rise0[pt_i%4])\n            early1_match_rise0_r[pt_i] <= #TCQ 1'b1;\n          else\n            early1_match_rise0_r[pt_i] <= #TCQ 1'b0;\n\n          if (sr_fall0_r[pt_i] == early1_fall0[pt_i%4])\n            early1_match_fall0_r[pt_i] <= #TCQ 1'b1;\n          else\n            early1_match_fall0_r[pt_i] <= #TCQ 1'b0;\n\n          if (sr_rise1_r[pt_i] == early1_rise1[pt_i%4])\n            early1_match_rise1_r[pt_i] <= #TCQ 1'b1;\n          else\n            early1_match_rise1_r[pt_i] <= #TCQ 1'b0;\n\n          if (sr_fall1_r[pt_i] == early1_fall1[pt_i%4])\n            early1_match_fall1_r[pt_i] <= #TCQ 1'b1;\n          else\n            early1_match_fall1_r[pt_i] <= #TCQ 1'b0;\n        end",
+        "        always @(posedge clk) begin\n          if (sr_rise0_r[pt_i] == pat2_rise0[pt_i%4])\n            pat2_match_rise0_r[pt_i] <= #TCQ 1'b1;\n          else\n            pat2_match_rise0_r[pt_i] <= #TCQ 1'b0;\n\n          if (sr_fall0_r[pt_i] == pat2_fall0[pt_i%4])\n            pat2_match_fall0_r[pt_i] <= #TCQ 1'b1;\n          else\n            pat2_match_fall0_r[pt_i] <= #TCQ 1'b0;\n\n          if (sr_rise1_r[pt_i] == pat2_rise1[pt_i%4])\n            pat2_match_rise1_r[pt_i] <= #TCQ 1'b1;\n          else\n            pat2_match_rise1_r[pt_i] <= #TCQ 1'b0;\n\n          if (sr_fall1_r[pt_i] == pat2_fall1[pt_i%4])\n            pat2_match_fall1_r[pt_i] <= #TCQ 1'b1;\n          else\n            pat2_match_fall1_r[pt_i] <= #TCQ 1'b0;\n        end",
+        "        always @(posedge clk) begin\n          if (sr_rise0_r[pt_i] == pat1_rise0[pt_i%4])\n            pat1_match_rise0_r[pt_i] <= #TCQ 1'b1;\n          else\n            pat1_match_rise0_r[pt_i] <= #TCQ 1'b0;\n\n          if (sr_fall0_r[pt_i] == pat1_fall0[pt_i%4])\n            pat1_match_fall0_r[pt_i] <= #TCQ 1'b1;\n          else\n            pat1_match_fall0_r[pt_i] <= #TCQ 1'b0;\n\n          if (sr_rise1_r[pt_i] == pat1_rise1[pt_i%4])\n            pat1_match_rise1_r[pt_i] <= #TCQ 1'b1;\n          else\n            pat1_match_rise1_r[pt_i] <= #TCQ 1'b0;\n\n          if (sr_fall1_r[pt_i] == pat1_fall1[pt_i%4])\n            pat1_match_fall1_r[pt_i] <= #TCQ 1'b1;\n          else\n            pat1_match_fall1_r[pt_i] <= #TCQ 1'b0;\n        end",
+        "    end else if (nCK_PER_CLK == 2) begin: gen_pat_match_div2\n\n      for (pt_i = 0; pt_i < DRAM_WIDTH; pt_i = pt_i + 1) begin: gen_pat_match",
+        "       always @(posedge clk) begin\n         early2_match_rise0_and_r <= #TCQ &early2_match_rise0_r;\n         early2_match_fall0_and_r <= #TCQ &early2_match_fall0_r;\n         early2_match_rise1_and_r <= #TCQ &early2_match_rise1_r;\n         early2_match_fall1_and_r <= #TCQ &early2_match_fall1_r;\n         early2_match_rise2_and_r <= #TCQ &early2_match_rise2_r;\n         early2_match_fall2_and_r <= #TCQ &early2_match_fall2_r;\n         early2_match_rise3_and_r <= #TCQ &early2_match_rise3_r;\n         early2_match_fall3_and_r <= #TCQ &early2_match_fall3_r;\n         early2_data_match_r <= #TCQ (early2_match_rise0_and_r &&\n                                   early2_match_fall0_and_r &&\n                                   early2_match_rise1_and_r &&\n                                   early2_match_fall1_and_r &&\n                                   early2_match_rise2_and_r &&\n                                   early2_match_fall2_and_r &&\n                                   early2_match_rise3_and_r &&\n                                   early2_match_fall3_and_r);\n       end",
+        "       always @(posedge clk) begin\n         early1_match_rise0_and_r <= #TCQ &early1_match_rise0_r;\n         early1_match_fall0_and_r <= #TCQ &early1_match_fall0_r;\n         early1_match_rise1_and_r <= #TCQ &early1_match_rise1_r;\n         early1_match_fall1_and_r <= #TCQ &early1_match_fall1_r;\n         early1_match_rise2_and_r <= #TCQ &early1_match_rise2_r;\n         early1_match_fall2_and_r <= #TCQ &early1_match_fall2_r;\n         early1_match_rise3_and_r <= #TCQ &early1_match_rise3_r;\n         early1_match_fall3_and_r <= #TCQ &early1_match_fall3_r;\n         early1_data_match_r <= #TCQ (early1_match_rise0_and_r &&\n                                   early1_match_fall0_and_r &&\n                                   early1_match_rise1_and_r &&\n                                   early1_match_fall1_and_r &&\n                                   early1_match_rise2_and_r &&\n                                   early1_match_fall2_and_r &&\n                                   early1_match_rise3_and_r &&\n                                   early1_match_fall3_and_r);\n       end",
+        "       always @(posedge clk) begin\n         pat_match_rise0_and_r <= #TCQ &pat_match_rise0_r;\n         pat_match_fall0_and_r <= #TCQ &pat_match_fall0_r;\n         pat_match_rise1_and_r <= #TCQ &pat_match_rise1_r;\n         pat_match_fall1_and_r <= #TCQ &pat_match_fall1_r;\n         pat_match_rise2_and_r <= #TCQ &pat_match_rise2_r;\n         pat_match_fall2_and_r <= #TCQ &pat_match_fall2_r;\n         pat_match_rise3_and_r <= #TCQ &pat_match_rise3_r;\n         pat_match_fall3_and_r <= #TCQ &pat_match_fall3_r;\n         pat_data_match_r <= #TCQ (pat_match_rise0_and_r &&\n                                   pat_match_fall0_and_r &&\n                                   pat_match_rise1_and_r &&\n                                   pat_match_fall1_and_r &&\n                                   pat_match_rise2_and_r &&\n                                   pat_match_fall2_and_r &&\n                                   pat_match_rise3_and_r &&\n                                   pat_match_fall3_and_r);\n         pat_data_match_valid_r <= #TCQ rd_active_r3;\n       end",
+        "        always @(posedge clk) begin\n          if (sr_rise0_r[pt_i] == pat_rise2[pt_i%4])\n            early2_match_rise0_r[pt_i] <= #TCQ 1'b1;\n          else\n            early2_match_rise0_r[pt_i] <= #TCQ 1'b0;\n\n          if (sr_fall0_r[pt_i] == pat_fall2[pt_i%4])\n            early2_match_fall0_r[pt_i] <= #TCQ 1'b1;\n          else\n            early2_match_fall0_r[pt_i] <= #TCQ 1'b0;\n\n          if (sr_rise1_r[pt_i] == pat_rise3[pt_i%4])\n            early2_match_rise1_r[pt_i] <= #TCQ 1'b1;\n          else\n            early2_match_rise1_r[pt_i] <= #TCQ 1'b0;\n\n          if (sr_fall1_r[pt_i] == pat_fall3[pt_i%4])\n            early2_match_fall1_r[pt_i] <= #TCQ 1'b1;\n          else\n            early2_match_fall1_r[pt_i] <= #TCQ 1'b0;\n\n          if (sr_rise2_r[pt_i] == early_rise0[pt_i%4])\n            early2_match_rise2_r[pt_i] <= #TCQ 1'b1;\n          else\n            early2_match_rise2_r[pt_i] <= #TCQ 1'b0;\n\n          if (sr_fall2_r[pt_i] == early_fall0[pt_i%4])\n            early2_match_fall2_r[pt_i] <= #TCQ 1'b1;\n          else\n            early2_match_fall2_r[pt_i] <= #TCQ 1'b0;\n\n          if (sr_rise3_r[pt_i] == early_rise1[pt_i%4])\n            early2_match_rise3_r[pt_i] <= #TCQ 1'b1;\n          else\n            early2_match_rise3_r[pt_i] <= #TCQ 1'b0;\n\n          if (sr_fall3_r[pt_i] == early_fall1[pt_i%4])\n            early2_match_fall3_r[pt_i] <= #TCQ 1'b1;\n          else\n            early2_match_fall3_r[pt_i] <= #TCQ 1'b0;\n        end",
+        "        always @(posedge clk) begin\n          if (sr_rise0_r[pt_i] == pat_rise1[pt_i%4])\n            early1_match_rise0_r[pt_i] <= #TCQ 1'b1;\n          else\n            early1_match_rise0_r[pt_i] <= #TCQ 1'b0;\n\n          if (sr_fall0_r[pt_i] == pat_fall1[pt_i%4])\n            early1_match_fall0_r[pt_i] <= #TCQ 1'b1;\n          else\n            early1_match_fall0_r[pt_i] <= #TCQ 1'b0;\n\n          if (sr_rise1_r[pt_i] == pat_rise2[pt_i%4])\n            early1_match_rise1_r[pt_i] <= #TCQ 1'b1;\n          else\n            early1_match_rise1_r[pt_i] <= #TCQ 1'b0;\n\n          if (sr_fall1_r[pt_i] == pat_fall2[pt_i%4])\n            early1_match_fall1_r[pt_i] <= #TCQ 1'b1;\n          else\n            early1_match_fall1_r[pt_i] <= #TCQ 1'b0;\n\n          if (sr_rise2_r[pt_i] == pat_rise3[pt_i%4])\n            early1_match_rise2_r[pt_i] <= #TCQ 1'b1;\n          else\n            early1_match_rise2_r[pt_i] <= #TCQ 1'b0;\n\n          if (sr_fall2_r[pt_i] == pat_fall3[pt_i%4])\n            early1_match_fall2_r[pt_i] <= #TCQ 1'b1;\n          else\n            early1_match_fall2_r[pt_i] <= #TCQ 1'b0;\n\n          if (sr_rise3_r[pt_i] == early_rise0[pt_i%4])\n            early1_match_rise3_r[pt_i] <= #TCQ 1'b1;\n          else\n            early1_match_rise3_r[pt_i] <= #TCQ 1'b0;\n\n          if (sr_fall3_r[pt_i] == early_fall0[pt_i%4])\n            early1_match_fall3_r[pt_i] <= #TCQ 1'b1;\n          else\n            early1_match_fall3_r[pt_i] <= #TCQ 1'b0;\n        end",
+        "        always @(posedge clk) begin\n          if (sr_rise0_r[pt_i] == pat_rise0[pt_i%4])\n            pat_match_rise0_r[pt_i] <= #TCQ 1'b1;\n          else\n            pat_match_rise0_r[pt_i] <= #TCQ 1'b0;\n\n          if (sr_fall0_r[pt_i] == pat_fall0[pt_i%4])\n            pat_match_fall0_r[pt_i] <= #TCQ 1'b1;\n          else\n            pat_match_fall0_r[pt_i] <= #TCQ 1'b0;\n\n          if (sr_rise1_r[pt_i] == pat_rise1[pt_i%4])\n            pat_match_rise1_r[pt_i] <= #TCQ 1'b1;\n          else\n            pat_match_rise1_r[pt_i] <= #TCQ 1'b0;\n\n          if (sr_fall1_r[pt_i] == pat_fall1[pt_i%4])\n            pat_match_fall1_r[pt_i] <= #TCQ 1'b1;\n          else\n            pat_match_fall1_r[pt_i] <= #TCQ 1'b0;\n\n          if (sr_rise2_r[pt_i] == pat_rise2[pt_i%4])\n            pat_match_rise2_r[pt_i] <= #TCQ 1'b1;\n          else\n            pat_match_rise2_r[pt_i] <= #TCQ 1'b0;\n\n          if (sr_fall2_r[pt_i] == pat_fall2[pt_i%4])\n            pat_match_fall2_r[pt_i] <= #TCQ 1'b1;\n          else\n            pat_match_fall2_r[pt_i] <= #TCQ 1'b0;\n\n          if (sr_rise3_r[pt_i] == pat_rise3[pt_i%4])\n            pat_match_rise3_r[pt_i] <= #TCQ 1'b1;\n          else\n            pat_match_rise3_r[pt_i] <= #TCQ 1'b0;\n\n          if (sr_fall3_r[pt_i] == pat_fall3[pt_i%4])\n            pat_match_fall3_r[pt_i] <= #TCQ 1'b1;\n          else\n            pat_match_fall3_r[pt_i] <= #TCQ 1'b0;\n        end",
+        "  generate\n    genvar pt_i;\n    if (nCK_PER_CLK == 4) begin: gen_pat_match_div4\n      for (pt_i = 0; pt_i < DRAM_WIDTH; pt_i = pt_i + 1) begin: gen_pat_match",
+        "      assign early2_rise0[1] = 2'b0;\n      assign early2_fall0[1] = 2'b1;\n      assign early2_rise1[1] = 2'b1;\n      assign early2_fall1[1] = 2'b0;\n\n      assign early2_rise0[0] = 2'b1;\n      assign early2_fall0[0] = 2'b0;\n      assign early2_rise1[0] = 2'b1;",
+        "      \n      assign early2_rise0[3] = 2'b1;\n      assign early2_fall0[3] = 2'b0;\n      assign early2_rise1[3] = 2'b1;\n      assign early2_fall1[3] = 2'b0;\n\n      assign early2_rise0[2] = 2'b0;\n      assign early2_fall0[2] = 2'b1;",
+        "      assign early1_rise0[1] = 2'b1;\n      assign early1_fall0[1] = 2'b0;\n      assign early1_rise1[1] = 2'b0;\n      assign early1_fall1[1] = 2'b1;\n\n      assign early1_rise0[0] = 2'b0;\n      assign early1_fall0[0] = 2'b1;\n      assign early1_rise1[0] = 2'b1;",
+        "      assign early1_rise0[3] = 2'b1;\n      assign early1_fall0[3] = 2'b0;\n      assign early1_rise1[3] = 2'b0;\n      assign early1_fall1[3] = 2'b1;\n\n      assign early1_rise0[2] = 2'b0;\n      assign early1_fall0[2] = 2'b1;\n      assign early1_rise1[2] = 2'b1;",
+        "    end else if (nCK_PER_CLK == 2) begin: gen_pat_div2\n      \n      assign pat1_rise0[3] = 1'b1;\n      assign pat1_fall0[3] = 1'b0;\n      assign pat1_rise1[3] = 1'b1;\n      assign pat1_fall1[3] = 1'b0;\n\n      assign pat1_rise0[2] = 1'b1;\n      assign pat1_fall0[2] = 1'b0;\n      assign pat1_rise1[2] = 1'b0;\n      assign pat1_fall1[2] = 1'b1;\n\n      assign pat1_rise0[1] = 1'b1;\n      assign pat1_fall0[1] = 1'b0;\n      assign pat1_rise1[1] = 1'b1;\n      assign pat1_fall1[1] = 1'b0;\n\n      assign pat1_rise0[0] = 1'b1;\n      assign pat1_fall0[0] = 1'b0;\n      assign pat1_rise1[0] = 1'b0;\n      assign pat1_fall1[0] = 1'b1;\n\n      \n      assign pat2_rise0[3] = 1'b0;\n      assign pat2_fall0[3] = 1'b1;\n      assign pat2_rise1[3] = 1'b1;\n      assign pat2_fall1[3] = 1'b0;\n\n      assign pat2_rise0[2] = 1'b1;\n      assign pat2_fall0[2] = 1'b0;\n      assign pat2_rise1[2] = 1'b0;\n      assign pat2_fall1[2] = 1'b1;\n\n      assign pat2_rise0[1] = 1'b0;\n      assign pat2_fall0[1] = 1'b1;\n      assign pat2_rise1[1] = 1'b0;\n      assign pat2_fall1[1] = 1'b1;\n\n      assign pat2_rise0[0] = 1'b1;\n      assign pat2_fall0[0] = 1'b0;\n      assign pat2_rise1[0] = 1'b1;\n      assign pat2_fall1[0] = 1'b0;\n\n      \n      \n      assign early1_rise0[3] = 2'b1;\n      assign early1_fall0[3] = 2'b0;\n      assign early1_rise1[3] = 2'b0;\n      assign early1_fall1[3] = 2'b1;\n\n      assign early1_rise0[2] = 2'b0;\n      assign early1_fall0[2] = 2'b1;\n      assign early1_rise1[2] = 2'b1;\n      assign early1_fall1[2] = 2'b0;\n\n      assign early1_rise0[1] = 2'b1;\n      assign early1_fall0[1] = 2'b0;\n      assign early1_rise1[1] = 2'b0;\n      assign early1_fall1[1] = 2'b1;\n\n      assign early1_rise0[0] = 2'b0;\n      assign early1_fall0[0] = 2'b1;\n      assign early1_rise1[0] = 2'b1;\n      assign early1_fall1[0] = 2'b0;\n\n      \n      assign early2_rise0[3] = 2'b1;\n      assign early2_fall0[3] = 2'b0;\n      assign early2_rise1[3] = 2'b1;\n      assign early2_fall1[3] = 2'b0;\n\n      assign early2_rise0[2] = 2'b0;\n      assign early2_fall0[2] = 2'b1;\n      assign early2_rise1[2] = 2'b0;\n      assign early2_fall1[2] = 2'b0;\n\n      assign early2_rise0[1] = 2'b0;\n      assign early2_fall0[1] = 2'b1;\n      assign early2_rise1[1] = 2'b1;\n      assign early2_fall1[1] = 2'b0;\n\n      assign early2_rise0[0] = 2'b1;\n      assign early2_fall0[0] = 2'b0;\n      assign early2_rise1[0] = 2'b1;\n      assign early2_fall1[0] = 2'b1;\n    end",
+        "      assign early_rise0[0] = 1'b1;\n      assign early_fall0[0] = 1'b1;\n      assign early_rise1[0] = 1'b0;\n      assign early_fall1[0] = 1'b0;\n      assign early_rise2[0] = 1'b0;\n      assign early_fall2[0] = 1'b0;\n      assign early_rise3[0] = 1'b1;\n      assign early_fall3[0] = 1'b0;",
+        "      assign early_rise0[1] = 1'b1;\n      assign early_fall0[1] = 1'b0;\n      assign early_rise1[1] = 1'b1;\n      assign early_fall1[1] = 1'b0;\n      assign early_rise2[1] = 1'b0;\n      assign early_fall2[1] = 1'b1;\n      assign early_rise3[1] = 1'b0;\n      assign early_fall3[1] = 1'b0;",
+        "      assign early_rise0[2] = 1'b0;\n      assign early_fall0[2] = 1'b0;\n      assign early_rise1[2] = 1'b1;\n      assign early_fall1[2] = 1'b1;\n      assign early_rise2[2] = 1'b1;\n      assign early_fall2[2] = 1'b1;\n      assign early_rise3[2] = 1'b1;\n      assign early_fall3[2] = 1'b0;",
+        "      assign early_rise0[3] = 1'b1;\n      assign early_fall0[3] = 1'b0;\n      assign early_rise1[3] = 1'b1;\n      assign early_fall1[3] = 1'b0;\n      assign early_rise2[3] = 1'b0;\n      assign early_fall2[3] = 1'b1;\n      assign early_rise3[3] = 1'b1;\n      assign early_fall3[3] = 1'b1;",
+        "      assign pat_rise0[0] = 1'b1;\n      assign pat_fall0[0] = 1'b0;\n      assign pat_rise1[0] = 1'b0;\n      assign pat_fall1[0] = 1'b1;\n      assign pat_rise2[0] = 1'b1;\n      assign pat_fall2[0] = 1'b0;\n      assign pat_rise3[0] = 1'b1;\n      assign pat_fall3[0] = 1'b0;",
+        "      assign pat_rise0[1] = 1'b1;\n      assign pat_fall0[1] = 1'b0;\n      assign pat_rise1[1] = 1'b1;\n      assign pat_fall1[1] = 1'b0;\n      assign pat_rise2[1] = 1'b0;\n      assign pat_fall2[1] = 1'b1;\n      assign pat_rise3[1] = 1'b0;\n      assign pat_fall3[1] = 1'b1;",
+        "      assign pat_rise0[2] = 1'b1;\n      assign pat_fall0[2] = 1'b0;\n      assign pat_rise1[2] = 1'b0;\n      assign pat_fall1[2] = 1'b1;\n      assign pat_rise2[2] = 1'b1;\n      assign pat_fall2[2] = 1'b0;\n      assign pat_rise3[2] = 1'b0;\n      assign pat_fall3[2] = 1'b1;",
+        "      assign pat_rise0[3] = 1'b1;\n      assign pat_fall0[3] = 1'b0;\n      assign pat_rise1[3] = 1'b1;\n      assign pat_fall1[3] = 1'b0;\n      assign pat_rise2[3] = 1'b0;\n      assign pat_fall2[3] = 1'b1;\n      assign pat_rise3[3] = 1'b1;\n      assign pat_fall3[3] = 1'b0;",
+        "  generate\n    if (nCK_PER_CLK == 4) begin: gen_pat_div4\n    \n      assign pat_rise0[3] = 1'b1;\n      assign pat_fall0[3] = 1'b0;\n      assign pat_rise1[3] = 1'b1;\n      assign pat_fall1[3] = 1'b0;\n      assign pat_rise2[3] = 1'b0;\n      assign pat_fall2[3] = 1'b1;\n      assign pat_rise3[3] = 1'b1;\n      assign pat_fall3[3] = 1'b0;\n\n      assign pat_rise0[2] = 1'b1;\n      assign pat_fall0[2] = 1'b0;\n      assign pat_rise1[2] = 1'b0;\n      assign pat_fall1[2] = 1'b1;\n      assign pat_rise2[2] = 1'b1;\n      assign pat_fall2[2] = 1'b0;\n      assign pat_rise3[2] = 1'b0;\n      assign pat_fall3[2] = 1'b1;\n\n      assign pat_rise0[1] = 1'b1;\n      assign pat_fall0[1] = 1'b0;\n      assign pat_rise1[1] = 1'b1;\n      assign pat_fall1[1] = 1'b0;\n      assign pat_rise2[1] = 1'b0;\n      assign pat_fall2[1] = 1'b1;\n      assign pat_rise3[1] = 1'b0;\n      assign pat_fall3[1] = 1'b1;\n\n      assign pat_rise0[0] = 1'b1;\n      assign pat_fall0[0] = 1'b0;\n      assign pat_rise1[0] = 1'b0;\n      assign pat_fall1[0] = 1'b1;\n      assign pat_rise2[0] = 1'b1;\n      assign pat_fall2[0] = 1'b0;\n      assign pat_rise3[0] = 1'b1;\n      assign pat_fall3[0] = 1'b0;\n\n      \n      \n      assign early_rise0[3] = 1'b1;\n      assign early_fall0[3] = 1'b0;\n      assign early_rise1[3] = 1'b1;\n      assign early_fall1[3] = 1'b0;\n      assign early_rise2[3] = 1'b0;\n      assign early_fall2[3] = 1'b1;\n      assign early_rise3[3] = 1'b1;\n      assign early_fall3[3] = 1'b1;\n\n      assign early_rise0[2] = 1'b0;\n      assign early_fall0[2] = 1'b0;\n      assign early_rise1[2] = 1'b1;\n      assign early_fall1[2] = 1'b1;\n      assign early_rise2[2] = 1'b1;\n      assign early_fall2[2] = 1'b1;\n      assign early_rise3[2] = 1'b1;\n      assign early_fall3[2] = 1'b0;\n\n      assign early_rise0[1] = 1'b1;\n      assign early_fall0[1] = 1'b0;\n      assign early_rise1[1] = 1'b1;\n      assign early_fall1[1] = 1'b0;\n      assign early_rise2[1] = 1'b0;\n      assign early_fall2[1] = 1'b1;\n      assign early_rise3[1] = 1'b0;\n      assign early_fall3[1] = 1'b0;\n\n      assign early_rise0[0] = 1'b1;\n      assign early_fall0[0] = 1'b1;\n      assign early_rise1[0] = 1'b0;\n      assign early_fall1[0] = 1'b0;\n      assign early_rise2[0] = 1'b0;\n      assign early_fall2[0] = 1'b0;\n      assign early_rise3[0] = 1'b1;\n      assign early_fall3[0] = 1'b0;\n\n    end else if (nCK_PER_CLK == 2) begin: gen_pat_div2\n      \n      assign pat1_rise0[3] = 1'b1;\n      assign pat1_fall0[3] = 1'b0;\n      assign pat1_rise1[3] = 1'b1;\n      assign pat1_fall1[3] = 1'b0;\n\n      assign pat1_rise0[2] = 1'b1;\n      assign pat1_fall0[2] = 1'b0;\n      assign pat1_rise1[2] = 1'b0;\n      assign pat1_fall1[2] = 1'b1;\n\n      assign pat1_rise0[1] = 1'b1;\n      assign pat1_fall0[1] = 1'b0;\n      assign pat1_rise1[1] = 1'b1;\n      assign pat1_fall1[1] = 1'b0;\n\n      assign pat1_rise0[0] = 1'b1;\n      assign pat1_fall0[0] = 1'b0;\n      assign pat1_rise1[0] = 1'b0;\n      assign pat1_fall1[0] = 1'b1;\n\n      \n      assign pat2_rise0[3] = 1'b0;\n      assign pat2_fall0[3] = 1'b1;\n      assign pat2_rise1[3] = 1'b1;\n      assign pat2_fall1[3] = 1'b0;\n\n      assign pat2_rise0[2] = 1'b1;\n      assign pat2_fall0[2] = 1'b0;\n      assign pat2_rise1[2] = 1'b0;\n      assign pat2_fall1[2] = 1'b1;\n\n      assign pat2_rise0[1] = 1'b0;\n      assign pat2_fall0[1] = 1'b1;\n      assign pat2_rise1[1] = 1'b0;\n      assign pat2_fall1[1] = 1'b1;\n\n      assign pat2_rise0[0] = 1'b1;\n      assign pat2_fall0[0] = 1'b0;\n      assign pat2_rise1[0] = 1'b1;\n      assign pat2_fall1[0] = 1'b0;\n\n      \n      \n      assign early1_rise0[3] = 2'b1;\n      assign early1_fall0[3] = 2'b0;\n      assign early1_rise1[3] = 2'b0;\n      assign early1_fall1[3] = 2'b1;\n\n      assign early1_rise0[2] = 2'b0;\n      assign early1_fall0[2] = 2'b1;\n      assign early1_rise1[2] = 2'b1;\n      assign early1_fall1[2] = 2'b0;\n\n      assign early1_rise0[1] = 2'b1;\n      assign early1_fall0[1] = 2'b0;\n      assign early1_rise1[1] = 2'b0;\n      assign early1_fall1[1] = 2'b1;\n\n      assign early1_rise0[0] = 2'b0;\n      assign early1_fall0[0] = 2'b1;\n      assign early1_rise1[0] = 2'b1;\n      assign early1_fall1[0] = 2'b0;\n\n      \n      assign early2_rise0[3] = 2'b1;\n      assign early2_fall0[3] = 2'b0;\n      assign early2_rise1[3] = 2'b1;\n      assign early2_fall1[3] = 2'b0;\n\n      assign early2_rise0[2] = 2'b0;\n      assign early2_fall0[2] = 2'b1;\n      assign early2_rise1[2] = 2'b0;\n      assign early2_fall1[2] = 2'b0;\n\n      assign early2_rise0[1] = 2'b0;\n      assign early2_fall0[1] = 2'b1;\n      assign early2_rise1[1] = 2'b1;\n      assign early2_fall1[1] = 2'b0;\n\n      assign early2_rise0[0] = 2'b1;\n      assign early2_fall0[0] = 2'b0;\n      assign early2_rise1[0] = 2'b1;\n      assign early2_fall1[0] = 2'b1;\n    end\n  endgenerate",
+        "  always @(posedge clk) begin\n    rd_active_r         <= #TCQ phy_rddata_en;\n    rd_active_r1        <= #TCQ rd_active_r;\n    rd_active_r2        <= #TCQ rd_active_r1;\n    rd_active_r3        <= #TCQ rd_active_r2;\n    rd_active_r4        <= #TCQ rd_active_r3;\n    rd_active_r5        <= #TCQ rd_active_r4;\n  end",
+        "  endgenerate",
+        "        always @(posedge clk) begin\n          sr_rise0_r[rd_i] <= #TCQ mux_rd_rise0_r[rd_i];\n          sr_fall0_r[rd_i] <= #TCQ mux_rd_fall0_r[rd_i];\n          sr_rise1_r[rd_i] <= #TCQ mux_rd_rise1_r[rd_i];\n          sr_fall1_r[rd_i] <= #TCQ mux_rd_fall1_r[rd_i];\n        end",
+        "    end else if (nCK_PER_CLK == 2) begin: gen_sr_div2",
+        "        always @(posedge clk) begin\n          sr_rise0_r[rd_i] <= #TCQ mux_rd_rise0_r[rd_i];\n          sr_fall0_r[rd_i] <= #TCQ mux_rd_fall0_r[rd_i];\n          sr_rise1_r[rd_i] <= #TCQ mux_rd_rise1_r[rd_i];\n          sr_fall1_r[rd_i] <= #TCQ mux_rd_fall1_r[rd_i];\n          sr_rise2_r[rd_i] <= #TCQ mux_rd_rise2_r[rd_i];\n          sr_fall2_r[rd_i] <= #TCQ mux_rd_fall2_r[rd_i];\n          sr_rise3_r[rd_i] <= #TCQ mux_rd_rise3_r[rd_i];\n          sr_fall3_r[rd_i] <= #TCQ mux_rd_fall3_r[rd_i];\n        end",
+        "  generate\n    genvar rd_i;\n    if (nCK_PER_CLK == 4) begin: gen_sr_div4\n      for (rd_i = 0; rd_i < DRAM_WIDTH; rd_i = rd_i + 1) begin: gen_sr",
+        "  always @(posedge clk)\n    if (rst)\n      wrcal_prech_req <= #TCQ 1'b0;\n    else\n      \n      wrcal_prech_req <= #TCQ cal2_prech_req_r;",
+        "  endgenerate",
+        "        always @(posedge clk) begin\n          mux_rd_rise0_r[mux_i] <= #TCQ rd_data_rise0[DRAM_WIDTH*rd_mux_sel_r + mux_i];\n          mux_rd_fall0_r[mux_i] <= #TCQ rd_data_fall0[DRAM_WIDTH*rd_mux_sel_r + mux_i];\n          mux_rd_rise1_r[mux_i] <= #TCQ rd_data_rise1[DRAM_WIDTH*rd_mux_sel_r + mux_i];\n          mux_rd_fall1_r[mux_i] <= #TCQ rd_data_fall1[DRAM_WIDTH*rd_mux_sel_r + mux_i];\n        end",
+        "    end else if (nCK_PER_CLK == 2) begin: gen_mux_rd_div2\n      for (mux_i = 0; mux_i < DRAM_WIDTH; mux_i = mux_i + 1) begin: gen_mux_rd",
+        "        always @(posedge clk) begin\n          mux_rd_rise0_r[mux_i] <= #TCQ rd_data_rise0[DRAM_WIDTH*rd_mux_sel_r + mux_i];\n          mux_rd_fall0_r[mux_i] <= #TCQ rd_data_fall0[DRAM_WIDTH*rd_mux_sel_r + mux_i];\n          mux_rd_rise1_r[mux_i] <= #TCQ rd_data_rise1[DRAM_WIDTH*rd_mux_sel_r + mux_i];\n          mux_rd_fall1_r[mux_i] <= #TCQ rd_data_fall1[DRAM_WIDTH*rd_mux_sel_r + mux_i];\n          mux_rd_rise2_r[mux_i] <= #TCQ rd_data_rise2[DRAM_WIDTH*rd_mux_sel_r + mux_i];\n          mux_rd_fall2_r[mux_i] <= #TCQ rd_data_fall2[DRAM_WIDTH*rd_mux_sel_r + mux_i];\n          mux_rd_rise3_r[mux_i] <= #TCQ rd_data_rise3[DRAM_WIDTH*rd_mux_sel_r + mux_i];\n          mux_rd_fall3_r[mux_i] <= #TCQ rd_data_fall3[DRAM_WIDTH*rd_mux_sel_r + mux_i];\n        end",
+        "  generate\n    genvar mux_i;\n    if (nCK_PER_CLK == 4) begin: gen_mux_rd_div4\n      for (mux_i = 0; mux_i < DRAM_WIDTH; mux_i = mux_i + 1) begin: gen_mux_rd",
+        "  always @(posedge clk) begin\n    rd_mux_sel_r <= #TCQ wrcal_dqs_cnt_r;\n  end",
+        "  always @(posedge clk) begin\n    if (rst) begin\n      for (p = 0; p < DQS_WIDTH; p = p + 1) begin\n        po_coarse_tap_cnt[p] <= #TCQ {3{1'b0}};\n        po_fine_tap_cnt[p]   <= #TCQ {6{1'b0}};\n      end\n    end else if (cal2_done_r && ~cal2_done_r1) begin\n      for (q = 0; q < DQS_WIDTH; q = q + 1) begin\n        po_coarse_tap_cnt[q] <= #TCQ wl_po_coarse_cnt_w[i];\n        po_fine_tap_cnt[q]   <= #TCQ wl_po_fine_cnt_w[i];\n      end\n    end\n  end",
+        "  always @(*) begin\n    for (m = 0; m < DQS_WIDTH; m = m + 1) begin\n      wl_po_coarse_cnt_w[m] = wl_po_coarse_cnt[3*m+:3];\n      wl_po_fine_cnt_w[m]   = wl_po_fine_cnt[6*m+:6];\n    end\n  end",
+        "  generate\n    if (nCK_PER_CLK == 4) begin: gen_rd_data_div4\n      assign rd_data_rise0 = rd_data[DQ_WIDTH-1:0];\n      assign rd_data_fall0 = rd_data[2*DQ_WIDTH-1:DQ_WIDTH];\n      assign rd_data_rise1 = rd_data[3*DQ_WIDTH-1:2*DQ_WIDTH];\n      assign rd_data_fall1 = rd_data[4*DQ_WIDTH-1:3*DQ_WIDTH];\n      assign rd_data_rise2 = rd_data[5*DQ_WIDTH-1:4*DQ_WIDTH];\n      assign rd_data_fall2 = rd_data[6*DQ_WIDTH-1:5*DQ_WIDTH];\n      assign rd_data_rise3 = rd_data[7*DQ_WIDTH-1:6*DQ_WIDTH];\n      assign rd_data_fall3 = rd_data[8*DQ_WIDTH-1:7*DQ_WIDTH];\n    end else if (nCK_PER_CLK == 2) begin: gen_rd_data_div2\n      assign rd_data_rise0 = rd_data[DQ_WIDTH-1:0];\n      assign rd_data_fall0 = rd_data[2*DQ_WIDTH-1:DQ_WIDTH];\n      assign rd_data_rise1 = rd_data[3*DQ_WIDTH-1:2*DQ_WIDTH];\n      assign rd_data_fall1 = rd_data[4*DQ_WIDTH-1:3*DQ_WIDTH];\n    end\n  endgenerate",
+        "   always @(posedge clk) begin\n     po_stg2_wrcal_cnt  <= #TCQ wrcal_dqs_cnt_r;\n     wrlvl_byte_done_r  <= #TCQ wrlvl_byte_done;\n     wrcal_sanity_chk_r <= #TCQ wrcal_sanity_chk;\n   end",
+        "  assign dqsfound_retry        = 1'b0;\n  assign wrcal_read_req        = 1'b0;\n  assign phy_if_reset          = cal2_if_reset;",
+        "  assign dbg_phy_wrcal[88]     = early1_data_match_r;\n  assign dbg_phy_wrcal[89]     = early2_data_match_r;\n  assign dbg_phy_wrcal[90]     = wrcal_sanity_chk_r & pat_data_match_valid_r;\n  assign dbg_phy_wrcal[91]     = wrcal_sanity_chk_r;\n  assign dbg_phy_wrcal[92]     = wrcal_sanity_chk_done;",
+        "  generate\n    if (nCK_PER_CLK == 4) begin: mux_data_4\n      assign dbg_phy_wrcal[56+:8]     = mux_rd_rise2_r;\n      assign dbg_phy_wrcal[64+:8]     = mux_rd_fall2_r;\n      assign dbg_phy_wrcal[72+:8]     = mux_rd_rise3_r;\n      assign dbg_phy_wrcal[80+:8]     = mux_rd_fall3_r;\n    end else begin: mux_data_2\n      assign dbg_phy_wrcal[56+:8] = {8{1'b0}};\n      assign dbg_phy_wrcal[64+:8] = {8{1'b0}};\n      assign dbg_phy_wrcal[72+:8] = {8{1'b0}};\n      assign dbg_phy_wrcal[80+:8] = {8{1'b0}};\n    end\n  endgenerate",
+        "  assign dbg_phy_wrcal[23]     = early2_data;\n  assign dbg_phy_wrcal[24+:8]     = mux_rd_rise0_r;\n  assign dbg_phy_wrcal[32+:8]     = mux_rd_fall0_r;\n  assign dbg_phy_wrcal[40+:8]     = mux_rd_rise1_r;\n  assign dbg_phy_wrcal[48+:8]     = mux_rd_fall1_r;",
+        "  assign dbg_phy_wrcal[4:1]  = cal2_state_r1[3:0];\n  assign dbg_phy_wrcal[5]    = wrcal_sanity_chk_err;\n  assign dbg_phy_wrcal[6]    = wrcal_start;\n  assign dbg_phy_wrcal[7]    = wrcal_done;\n  assign dbg_phy_wrcal[8]    = pat_data_match_valid_r;\n  assign dbg_phy_wrcal[13+:DQS_CNT_WIDTH]= wrcal_dqs_cnt_r;\n  assign dbg_phy_wrcal[17+:5]  = not_empty_wait_cnt;\n  assign dbg_phy_wrcal[22]     = early1_data;",
+        "  generate\n    if (nCK_PER_CLK == 4) begin: match_data_4\n      assign dbg_phy_wrcal[0]    = pat_data_match_r;\n    end else begin:match_data_2\n      assign dbg_phy_wrcal[0]    = 1'b0;\n    end\n  endgenerate",
+        "  assign dbg_final_po_coarse_tap_cnt = po_coarse_tap_cnt_w;",
+        "  assign dbg_final_po_fine_tap_cnt   = po_fine_tap_cnt_w;",
+        "  always @(*) begin\n    for (d = 0; d < DQS_WIDTH; d = d + 1) begin\n      po_fine_tap_cnt_w[(6*d)+:6]   = po_fine_tap_cnt[d];\n      po_coarse_tap_cnt_w[(3*d)+:3] = po_coarse_tap_cnt[d];\n    end\n  end"
+    ]
+}

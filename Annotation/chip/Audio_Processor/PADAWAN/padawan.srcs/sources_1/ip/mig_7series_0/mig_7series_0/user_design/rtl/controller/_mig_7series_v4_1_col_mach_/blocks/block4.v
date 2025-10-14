@@ -1,0 +1,1 @@
+        always @(posedge clk) rd_data_en <= rd_data_en_ns;

@@ -1,0 +1,9 @@
+Module name: tb (Test Bench). 
+
+Module specification: The tb module is designed as a testbench for a Serial Peripheral Interface (SPI) controller, the module tests different functionalities of the SPI controller by simulating various scenarios. 
+
+The input ports for this module include: pclk_i (Primary Clock signal), prst_i (Reset signal), pwrite_i (Write control signal), penable_i (Enable signal), paddr_i (Register address), pwdata_i (Data to be written), sclk_ref_i (SPI clock reference), and miso (Data from slave to master). The output ports include: prdata_o (Data read from the register), pready_o (Ready signal), pslverr_o (Error signal), sclk (SPI Clock signal), mosi (Data from master to slave), and cs (chip select signal). 
+
+It uses internal signals like iteration variable 'i', parameters MAX_TXS, states of SPI's state machine S_IDLE, S_ADDR, S_IDLE_BW_ADDR_DATA, S_DATA, S_IDLE_BW_TXS, ADDR_WIDTH, DATA_WIDTH for defining width of address and data lines and an instance of the module under test, spi_ctlr dut. 
+
+The tasks and blocks inside the tb module include initial blocks for generating clock signals, resetting the system, running tests, and a task block for writing data to a register. During the simulation, it runs a sequence of register writes for various addresses and data, after which the simulation is ended. The signal connections to the `dut` are observed and inspected to ensure the controller's correct operation. It thus serves as a necessary simulation setup for SPI controller verification.

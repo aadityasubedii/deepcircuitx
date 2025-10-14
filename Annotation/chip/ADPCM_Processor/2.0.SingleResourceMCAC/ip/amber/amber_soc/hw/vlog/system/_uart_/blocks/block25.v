@@ -1,0 +1,1 @@
+assign fifo_enable = uart_lcrh_reg[4];

@@ -1,0 +1,15 @@
+Module name: glbl.
+
+Module specification: 
+
+The 'glbl' module is a critical component of a Verilog-based RTL design that provides global control and test signals. This module does not have explicit input and output ports because it serves the broad purpose of defining global control signals in the design. These signals include Joint Test Action Group (JTAG) features for debugging and testing, Global Set Reset (GSR), Global Tri-State (GTS), and Parallel Load (PRLD) control lines. It also includes initialization behavior for the GSR, PRLD, and GTS signals via initial blocks to ensure these signals exhibit specific values during simulation, controlled by the parameters ROC_WIDTH and TOC_WIDTH.
+
+Global signals such as GSR, GTS, GWE, PRLD, various JTAG signals, PROGB_GLBL, CCLKO_GLBL, FCSBO_GLBL, and DO_GLBL among others, have been defined as wires or registers and serve as global control points or connectivities in the design.
+
+The module includes internal register signals like GSR_int, GTS_int, PRLD_int, JTAG_SEL{1..4}_GLBL, JTAG_USER_TDO{1..4}_GLBL, and specific JTAG state signals. These register signals store and manage the state of global signals and JTAG operations. 
+
+Signals GSR, GTS, and PRLD are assigned the respective values of their internal versions using drive strengths of (strong1, weak0) ensuring their values could be force-asserted on these nets.
+
+The module includes two initial blocks where the GSR and PRLD values are set high in the first block, then reset after a delay of ROC_WIDTH. Similarly, in the second initial block, GTS is set high and then reset after a delay of TOC_WIDTH. These blocks model the behavior of global FPGA signals at power up.
+
+This module's functionality is central to the design, and its services are essential to manage signal controls, JTAG operations, and particular state transitions effectively. The module provides a consolidated definition and control of all globally needed signals throughout the RTL design code.

@@ -1,0 +1,1 @@
+      always @(posedge clk) maint_req_r_lcl <= #TCQ new_maint_rank_r;

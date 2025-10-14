@@ -1,0 +1,51 @@
+{
+    "line_num": [
+        [
+            181,
+            190
+        ],
+        [
+            170,
+            179
+        ],
+        [
+            167,
+            167
+        ],
+        [
+            164,
+            165
+        ],
+        [
+            159,
+            162
+        ],
+        [
+            146,
+            154
+        ],
+        [
+            125,
+            144
+        ],
+        [
+            114,
+            123
+        ],
+        [
+            101,
+            112
+        ]
+    ],
+    "blocks": [
+        "always@(posedge reset, posedge clk) begin\n\tif (reset) begin\n\t\twait_rdata_valid_r <= 'd0;\n\tend else begin\n\t    if (o_valid && !o_write && i_accepted)\n\t\t  wait_rdata_valid_r <= 1'd1;\n\t    else if (i_rdata_valid)  \n\t\t  wait_rdata_valid_r <= 1'd0;\n\tend\nend",
+        "always@(posedge reset, posedge clk) begin\n\tif (reset) begin\n\t\tbusy_reading_r <= 'd0;\n\tend else begin\n\t    if (o_valid && !o_write)\n\t\t  busy_reading_r <= 1'd1;\n\t    else if (i_rdata_valid)\n\t\t  busy_reading_r <= 1'd0;\n\tend\nend",
+        "assign o_rdata = i_rdata;",
+        "assign o_ack   = (in_wreq ? (wbuf_used_r == 2'd0) : i_rdata_valid) || (ack_owed_r && pop);\nassign o_valid = (wbuf_used_r != 2'd0 || i_req) && !wait_rdata_valid_r;",
+        "assign o_wdata = wbuf_used_r != 2'd0 ? wbuf_wdata_r[wbuf_rp_r] : i_wdata;\nassign o_write = wbuf_used_r != 2'd0 ? wbuf_write_r[wbuf_rp_r] : i_write;\nassign o_addr  = wbuf_used_r != 2'd0 ? wbuf_addr_r [wbuf_rp_r] : i_addr;\nassign o_be    = wbuf_used_r != 2'd0 ? wbuf_be_r   [wbuf_rp_r] : i_write ? i_be : 16'hffff;",
+        "always @(posedge reset, posedge clk) begin\n\tif (reset) begin\n\t\twbuf_rp_r <= 'd0;\n\tend else begin\n\t\tif (pop) begin\n\t\t\twbuf_rp_r <= !wbuf_rp_r;\n\t\tend\n\tend\nend            ",
+        "always @(posedge reset, posedge clk) begin\n\tif (reset) begin\n\t\twbuf_wdata_r[0] <= 'd0;\n\t\twbuf_wdata_r[1] <= 'd0; \n\t\twbuf_addr_r[0] <= 'd0;\n\t\twbuf_addr_r[1] <= 'd0; \n\t\twbuf_be_r[0] <= 'd0;\n\t\twbuf_be_r[1] <= 'd0; \n\t\twbuf_write_r <= 'd0;\n\t\twbuf_wp_r <= 'd0;\n\tend else begin\n\t\tif (push) begin\n\t\t\twbuf_wdata_r [wbuf_wp_r]   <= i_wdata;\n\t\t\twbuf_addr_r  [wbuf_wp_r]   <= i_addr;\n\t\t\twbuf_be_r    [wbuf_wp_r]   <= i_write ? i_be : 16'hffff;\n\t\t\twbuf_write_r [wbuf_wp_r]   <= i_write;\n\t\t\twbuf_wp_r                  <= !wbuf_wp_r;\n\t\tend\n\tend\nend",
+        "always @(posedge reset, posedge clk) begin\n\tif (reset) begin\n\t\tack_owed_r <= 'd0;\n\tend else begin\n\t    if (push && in_wreq && !o_ack)\n\t\t  ack_owed_r = 1'd1;\n\t    else if (!i_req && o_ack)\n\t\t  ack_owed_r = 1'd0;\n\tend\nend",
+        "always @(posedge reset, posedge clk) begin\n\tif (reset) begin\n\t\twbuf_used_r <= 'd0;\n\tend else begin\n\t\tif (push && pop)\n\t\t\twbuf_used_r     <= wbuf_used_r;\n\t\telse if (push)\n\t\t\twbuf_used_r     <= wbuf_used_r + 1'd1;\n\t\telse if (pop)\n\t\t\twbuf_used_r     <= wbuf_used_r - 1'd1;\n\tend\nend"
+    ]
+}

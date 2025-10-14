@@ -1,0 +1,11 @@
+Module name: a25_write_back. 
+
+Module specification: The a25_write_back module is a Verilog RTL module that manages data read from memory - controlling when new data can be latched based on the deassertion of a memory stall signal (i_mem_stall). Its functionality includes latching incoming data, its validity, load register index, and the data address on the negative edge of the memory stall signal. 
+
+The module has the following input ports: i_clk - the clock signal, i_reset - the reset signal, i_mem_stall - memory stall signal, i_mem_read_data - 32-bit data read from memory, i_mem_read_data_valid - validity signal for the data read, i_mem_load_rd - address from which memory should be fetched, i_daddress - data address input, and i_daddress_valid - validity signal of the data address. 
+
+The output from this module includes: o_wb_read_data - data read from memory, o_wb_read_data_valid - confirmation of data validity, and o_wb_load_rd - the address from where the valid data has been read.
+
+The module uses four main internal signals: mem_read_data_r which holds the memory read data, mem_read_data_valid_r - a signal confirming the read data's validity, mem_load_rd_r - a register storing the memory load index, and daddress_r - a register for the data address. 
+
+The Verilog RTL code for this module can be divided into three main sections: 1) declaration of input, output, and internal registers, 2) a functional block that assigns output based on the internal signals, and 3) sequential blocks that update the internal registers with inputs when the memory is not stalled. These blocks together form the complete function of the a25_write_back module.

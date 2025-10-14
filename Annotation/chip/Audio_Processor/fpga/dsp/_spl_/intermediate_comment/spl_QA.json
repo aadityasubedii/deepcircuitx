@@ -1,0 +1,43 @@
+{
+    "gpt-message": [
+        {
+            "role": "system",
+            "content": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+        },
+        {
+            "role": "user",
+            "content": "Name of the module and its functionality is as follows: \nThe provided code contains two modules:\n\nModule 1:\nModule Name: spl.\nExplanation: This module calculates the maximum value of a two\u2019s complement integer input 'in' when 'peak_en' signal is asserted and decreases the calculated maximum value by one when 'decay_en' signal is asserted. Maximum value calculation starts afresh when 'rst' signal is asserted. Finally, the calculated maximum value is passed to the 'out' signal.\n\nModule 2:\nModule Name: level.\nExplanation: This module calculates the level of the input ('in') based on the enabled state ('en'). When enabled, the input is shifted and the level is increased. If the enabled state is not active and the module is 'busy', the shifting continues according to the binary rule and level calculation continues. The busyness of the module is released when two most significant bits of the shifted input are not equal. The calculated level and the readiness of the module are passed out as output signals."
+        },
+        {
+            "role": "user",
+            "content": "Input and output ports and their explanation is as follows: \nModule: spl\n\nInput Ports: \n1. ck: This is the clock signal.\n2. rst: It is the reset signal which resets the 'max' register to 0.\n3. peak_en: This signal, when high, enables the logic that updates the max value if 'uint' is greater than or equal to 'max'.\n4. decay_en: When high, this signal enables the logic to decrement 'max' by 1 if it is greater than 0.\n5. in[WIDTH-1:0]: This is the input data in two's complement format.\n\nOutput Ports: \n1. out[WIDTH-1:0]: This is the output data which corresponds to the maximum value between the 'max' register and 'uint'. \n\nModule: level\n\nInput Ports: \n1. ck: This is the clock signal.\n2. en: This signal, when high, initializes the logic to calculate the 'level' of the 'in' signal. \n3. in[IN_W-1:0]: This is the input data.\n\nOutput Ports: \n1. level[BITS-1:0]: This output provides the calculated level of the input signal.\n2. ready: This signal indicates the readiness of the module for another level calculation. It is active when the module is not 'busy'."
+        },
+        {
+            "role": "user",
+            "content": "Internal signals and their explanation is as follows: \nModule: spl\n\nInternal Signals:\n1. uint[WIDTH-1:0]: This is the positive representation of the input.\n2. max[WIDTH-1:0]: This is the variable to hold the maximum buffered value.\n\nExplanation: \n1. uint[WIDTH-1:0]: The 'uint' signal holds the positive unsigned integer version of the two's complement input 'in'. It's used to compare against the 'max' signal to decide whether to update 'max' value or not.\n2. max[WIDTH-1:0]: The 'max' signal holds the maximum input value so far when 'peak_en' is asserted. It gets reset to 0 when 'rst' is asserted. It gets reduced by 1 when 'decay_en' is asserted.\n\nModule: level\n\nInternal Signals:\n1. shift[IN_W-1:0]: This is the shifted version of the input.\n2. bits[BITS-1:0]: This holds the calculated level.\n3. busy: This indicates whether the level calculation is ongoing or not.\n\nExplanation: \n1. shift[IN_W-1:0]: The 'shift' signal holds the shifted version of the input signal 'in' and helps to keep track of the level calculations when 'en' is asserted.\n2. bits[BITS-1:0]: The 'bits' signal stores the calculated level of the input signal as the shifting progresses. It starts from 0 on each new calculation triggered by 'en' signal.\n3. busy: The 'busy' signal indicates whether the module is currently busy calculating the level for 'in'. After 'en' is asserted, 'busy' signal remains high until two most significant bits of the shifted 'in' aren't equal."
+        }
+    ],
+    "claude-message": [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+                },
+                {
+                    "type": "text",
+                    "text": "Name of the module and its functionality is as follows: \nThe provided code contains two modules:\n\nModule 1:\nModule Name: spl.\nExplanation: This module calculates the maximum value of a two\u2019s complement integer input 'in' when 'peak_en' signal is asserted and decreases the calculated maximum value by one when 'decay_en' signal is asserted. Maximum value calculation starts afresh when 'rst' signal is asserted. Finally, the calculated maximum value is passed to the 'out' signal.\n\nModule 2:\nModule Name: level.\nExplanation: This module calculates the level of the input ('in') based on the enabled state ('en'). When enabled, the input is shifted and the level is increased. If the enabled state is not active and the module is 'busy', the shifting continues according to the binary rule and level calculation continues. The busyness of the module is released when two most significant bits of the shifted input are not equal. The calculated level and the readiness of the module are passed out as output signals."
+                },
+                {
+                    "type": "text",
+                    "text": "Input and output ports and their explanation is as follows: \nModule: spl\n\nInput Ports: \n1. ck: This is the clock signal.\n2. rst: It is the reset signal which resets the 'max' register to 0.\n3. peak_en: This signal, when high, enables the logic that updates the max value if 'uint' is greater than or equal to 'max'.\n4. decay_en: When high, this signal enables the logic to decrement 'max' by 1 if it is greater than 0.\n5. in[WIDTH-1:0]: This is the input data in two's complement format.\n\nOutput Ports: \n1. out[WIDTH-1:0]: This is the output data which corresponds to the maximum value between the 'max' register and 'uint'. \n\nModule: level\n\nInput Ports: \n1. ck: This is the clock signal.\n2. en: This signal, when high, initializes the logic to calculate the 'level' of the 'in' signal. \n3. in[IN_W-1:0]: This is the input data.\n\nOutput Ports: \n1. level[BITS-1:0]: This output provides the calculated level of the input signal.\n2. ready: This signal indicates the readiness of the module for another level calculation. It is active when the module is not 'busy'."
+                },
+                {
+                    "type": "text",
+                    "text": "Internal signals and their explanation is as follows: \nModule: spl\n\nInternal Signals:\n1. uint[WIDTH-1:0]: This is the positive representation of the input.\n2. max[WIDTH-1:0]: This is the variable to hold the maximum buffered value.\n\nExplanation: \n1. uint[WIDTH-1:0]: The 'uint' signal holds the positive unsigned integer version of the two's complement input 'in'. It's used to compare against the 'max' signal to decide whether to update 'max' value or not.\n2. max[WIDTH-1:0]: The 'max' signal holds the maximum input value so far when 'peak_en' is asserted. It gets reset to 0 when 'rst' is asserted. It gets reduced by 1 when 'decay_en' is asserted.\n\nModule: level\n\nInternal Signals:\n1. shift[IN_W-1:0]: This is the shifted version of the input.\n2. bits[BITS-1:0]: This holds the calculated level.\n3. busy: This indicates whether the level calculation is ongoing or not.\n\nExplanation: \n1. shift[IN_W-1:0]: The 'shift' signal holds the shifted version of the input signal 'in' and helps to keep track of the level calculations when 'en' is asserted.\n2. bits[BITS-1:0]: The 'bits' signal stores the calculated level of the input signal as the shifting progresses. It starts from 0 on each new calculation triggered by 'en' signal.\n3. busy: The 'busy' signal indicates whether the module is currently busy calculating the level for 'in'. After 'en' is asserted, 'busy' signal remains high until two most significant bits of the shifted 'in' aren't equal."
+                }
+            ]
+        }
+    ]
+}

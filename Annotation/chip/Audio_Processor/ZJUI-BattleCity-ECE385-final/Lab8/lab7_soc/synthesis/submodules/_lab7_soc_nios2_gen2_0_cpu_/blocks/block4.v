@@ -1,0 +1,1 @@
+  assign R_ctrl_alu_force_and_nxt = D_ctrl_alu_force_and;

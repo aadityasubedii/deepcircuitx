@@ -1,0 +1,1 @@
+  always @(posedge mmcm_ps_clk) first_rising_ps_clk_r <= #TCQ first_rising_ps_clk_ns;

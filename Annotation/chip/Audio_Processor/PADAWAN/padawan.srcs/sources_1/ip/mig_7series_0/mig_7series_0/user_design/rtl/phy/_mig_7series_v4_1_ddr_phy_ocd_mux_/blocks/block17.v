@@ -1,0 +1,1 @@
+  assign po_stg3_incdec = 1'b0;

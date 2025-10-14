@@ -1,0 +1,20 @@
+sockit_top audio(
+    .clk(clk100mhz),
+	 .playback(playback),
+	 .volume_control(volume_control),
+    .AUD_ADCLRCK(AUD_ADCLRCK), 
+    .AUD_ADCDAT(AUD_ADCDAT), 
+    .AUD_DACLRCK(AUD_DACLRCK), 
+    .AUD_DACDAT(AUD_DACDAT), 
+    .AUD_XCK(AUD_XCK), 
+    .AUD_BCLK(AUD_BCLK), 
+    .AUD_I2C_SCLK(AUD_I2C_SCLK), 
+    .AUD_I2C_SDAT(AUD_I2C_SDAT), 
+    .AUD_MUTE(AUD_MUTE), 
+    .PLL_LOCKED(PLL_LOCKED), 
+    .KEY(1), 
+    .SW(switches),
+	 .audio_in(mem_out), 	
+	 .audio_out(audio_output),
+	 .audio_clk(audio_clk)
+);

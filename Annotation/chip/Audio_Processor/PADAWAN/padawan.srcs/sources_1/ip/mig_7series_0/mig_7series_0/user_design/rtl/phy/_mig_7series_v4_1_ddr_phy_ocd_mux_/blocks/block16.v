@@ -1,0 +1,1 @@
+  assign po_en_stg3 = 1'b0;

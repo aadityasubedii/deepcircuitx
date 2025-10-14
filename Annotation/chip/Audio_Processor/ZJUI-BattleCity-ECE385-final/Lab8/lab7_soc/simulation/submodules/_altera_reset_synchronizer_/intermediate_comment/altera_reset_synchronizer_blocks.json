@@ -1,0 +1,31 @@
+{
+    "line_num": [
+        [
+            81,
+            81
+        ],
+        [
+            75,
+            79
+        ],
+        [
+            68,
+            68
+        ],
+        [
+            56,
+            66
+        ],
+        [
+            51,
+            55
+        ]
+    ],
+    "blocks": [
+        "        assign reset_out = altera_reset_synchronizer_int_chain_out;",
+        "        always @(posedge clk) begin\n            altera_reset_synchronizer_int_chain[DEPTH-2:0] <= altera_reset_synchronizer_int_chain[DEPTH-1:1];\n            altera_reset_synchronizer_int_chain[DEPTH-1] <= reset_in;\n            altera_reset_synchronizer_int_chain_out <= altera_reset_synchronizer_int_chain[0];\n        end",
+        "        assign reset_out = altera_reset_synchronizer_int_chain_out;",
+        "        always @(posedge clk or posedge reset_in) begin\n            if (reset_in) begin\n                altera_reset_synchronizer_int_chain <= {DEPTH{1'b1}};\n                altera_reset_synchronizer_int_chain_out <= 1'b1;\n            end\n            else begin\n                altera_reset_synchronizer_int_chain[DEPTH-2:0] <= altera_reset_synchronizer_int_chain[DEPTH-1:1];\n                altera_reset_synchronizer_int_chain[DEPTH-1] <= 0;\n                altera_reset_synchronizer_int_chain_out <= altera_reset_synchronizer_int_chain[0];\n            end\n        end",
+        "    generate if (ASYNC_RESET) begin\n\n        \n        \n        "
+    ]
+}

@@ -1,0 +1,1 @@
+  assign byte_sel_cnt_w1 = byte_sel_cnt;

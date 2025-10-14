@@ -1,0 +1,1 @@
+assign MaxFrame = ByteCnt[15:0] == MaxFL[15:0] & ~HugEn;

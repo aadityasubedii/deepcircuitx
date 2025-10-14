@@ -1,0 +1,1 @@
+            assign cp_ticks = ticks & {TICKS_WORD_LENGTH{enable_ticks}};

@@ -1,0 +1,1 @@
+  assign not_in_debug_mode = 1'b0;

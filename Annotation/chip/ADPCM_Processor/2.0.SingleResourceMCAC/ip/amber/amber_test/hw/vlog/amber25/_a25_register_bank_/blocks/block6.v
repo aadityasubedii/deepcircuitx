@@ -1,0 +1,1 @@
+assign o_pc = r15_out_rn;

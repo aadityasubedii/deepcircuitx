@@ -1,0 +1,9 @@
+Module name: data_prbs_gen. 
+
+Module specification: 
+
+This Verilog RTL module named data_prbs_gen serves as a pseudo-random bit sequence (PRBS) generator. The module operates under a specific clock (clk_i) when the clock is enabled (clk_en), with an ability to reset the internal states (rst_i). A seed value (prbs_seed_i) or forced seed (prbs_fseed_i) can be used to initiate the PRBS. An additional input signal (prbs_seed_init) is to select from the initial seed or the forced seed. The output of the module is the PRBS (prbs_o) with a width defined by PRBS_WIDTH. 
+
+Internally, the module uses a register named prbs of PRBS_WIDTH to store the PRBS. It uses another internal signal called lfsr_q with width of PRBS_WIDTH + 1, acting as a linear feedback shift register (LFSR). An additional internal variable 'i' is declared but not used in provided code.
+
+The provided module includes two always blocks. The first block works at the positive edge of clock and handles the initialization of the LFSR and the generation of the PRBS sequence based on the clock enable signal. When prbs_seed_init is high, lfsr_q is initialized with the seed value. Else if clock enable signal is high, feedback and shift operations are performed on lfsr_q to generate the PRBS. The second always block works whenever lfsr_q changes and it updates the prbs signal with new PRBS. The prbs_o signal is then assigned the value of prbs in a continuous assignment statement.

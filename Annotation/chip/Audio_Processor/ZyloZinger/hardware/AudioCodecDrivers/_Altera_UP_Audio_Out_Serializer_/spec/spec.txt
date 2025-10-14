@@ -1,0 +1,13 @@
+Module name: Altera_UP_Audio_Out_Serializer. 
+
+Module specification: The Altera_UP_Audio_Out_Serializer functions as a bridge between parallel audio data streams and serialized audio data stream. It plays a key role in organizing the resultant serialized output for audio. The process includes managing the flow of data with FIFOs for both the left and right channels and includes necessary operational checks for FIFO such as its availability prior to writing or reading any data.
+
+The module takes several inputs which include 'clk' (the main system clock which operates the entire module), 'reset' (resets all values within the module), 'bit_clk_rising_edge' & 'bit_clk_falling_edge' (help in synchronization during the synchronization process), 'left_right_clk_rising_edge' & 'left_right_clk_falling_edge' (decides whether the incoming data belongs to left or right channel), 'left_channel_data' & 'right_channel_data' (incoming audio data streams of each channel), 'left_channel_data_en' & 'right_channel_data_en' (enable signals to write data into the FIFO of each channel). 
+
+The module produces outputs via 'left_channel_fifo_write_space' & 'right_channel_fifo_write_space' (indicate available space for writing new data to the FIFO of individual channels), 'serial_audio_out_data' (the serialized stereo audio data stream). 
+
+Various internal signals are used to control the flow of data and maintaining status of the FIFO buffers. Read operations for the FIFO buffers are controlled by signals 'read_left_channel' and 'read_right_channel'. Signals 'left_channel_fifo_is_empty' & 'left_channel_fifo_is_full' and 'right_channel_fifo_is_empty' & 'right_channel_fifo_is_full' prevent overflow and underflow conditions in the FIFOs, and 'left_channel_fifo_used' and 'right_channel_fifo_used' maintain the quantity of words within individual FIFO buffers. For the conversion of parallel input data into its serial output, the module uses the shift register 'data_out_shift_reg'.
+
+The code blocks consist of multiple always blocks (responsible for checking reset conditions, controlling the data shift operations and ensuring alternation between the FIFO reads), assign blocks (direct the FIFO reads adapting to channel's empty status), and two instances of Altera_UP_SYNC_FIFO (handle FIFO management for left and right channels).
+ 
+The Audio Out Serializer translates the left-right channel audio data into a serial audio data stream. It carefully handles the flow of data through both channels employing FIFOs and safely manages situations of overflow and underflow.

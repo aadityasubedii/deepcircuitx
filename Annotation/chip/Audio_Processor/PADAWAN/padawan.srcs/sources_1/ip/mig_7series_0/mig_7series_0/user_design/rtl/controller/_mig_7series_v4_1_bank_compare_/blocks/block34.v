@@ -1,0 +1,1 @@
+  always @(posedge clk) req_periodic_rd_r_lcl <= #TCQ req_periodic_rd_ns;

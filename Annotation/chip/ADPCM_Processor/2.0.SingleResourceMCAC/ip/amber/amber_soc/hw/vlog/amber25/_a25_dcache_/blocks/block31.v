@@ -1,0 +1,1 @@
+        assign tag_wenable_way[i]  = tag_wenable && ( select_way[i] || source_sel[C_INIT] );

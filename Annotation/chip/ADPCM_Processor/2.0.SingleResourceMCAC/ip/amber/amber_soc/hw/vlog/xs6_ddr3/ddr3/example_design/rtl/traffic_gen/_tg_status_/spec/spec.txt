@@ -1,0 +1,11 @@
+Module name: tg_status. 
+
+Module specification: The 'tg_status' module is mainly used for detecting and reporting errors within a larger system. It serves the role of an error checking or status monitoring module, providing crucial debug information in case of data errors, which is likely within the context of a memory controller. Upon detecting a data error, the module activates 'error_status', during which it locks various pieces of error data into the 'error_status' register. This status data includes the checksum data, the read data, the comparison address, the comparison burst length, and inquires the status of the memory controller buffers (whether commands, writes are full or reads are empty). The 'error_status' can be cleared by a reset signal or a manual_clear_error signal. 
+
+Inputs include clk_i (clock signal), rst_i (reset signal), manual_clear_error (manual error clear signal), data_error_i (data error signal), cmp_data_i (data that was being compared), rd_data_i (read data from memory), cmp_addr_i (comparison data address), cmp_bl_i (comparison data burst length), mcb_cmd_full_i (indicates full command buffer), mcb_wr_full_i (indicates full write buffer), and mcb_rd_empty_i (indicates empty read buffer). 
+
+The outputs include error_status (a register that holds error status information) and error (indicates an error has been set). 
+
+Internally, the module uses two signals: data_error_r, which is a delayed version of the external data error signal and is used to secure error's stability over one clock cycle; and error_set, which indicates that an error has been detected and error_status has been set. 
+
+The Verilog module 'tg_status' encompasses different sections. After declaration of inputs, outputs and the two internal signals, two always blocks control the operation of the module. The first always block is responsible for transferring the data error value to data_error_r and thus delaying it by one clock cycle. The second always block manages the error status and its initialization, setting, and preservation, including latching relevant error information onto 'error_status' and setting the error_set signal upon detection of an error.

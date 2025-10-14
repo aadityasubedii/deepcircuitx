@@ -1,0 +1,1 @@
+    assign tdqs_n = {DQS_BITS{1'bz}};

@@ -1,0 +1,1 @@
+assign last_sample = valid_reg & (start_of_vsync | end_of_vsync);

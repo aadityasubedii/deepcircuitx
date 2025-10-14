@@ -1,0 +1,11 @@
+  assign sync_pulse_split       = sync_pulse;
+  assign mem_refclk_split       = mem_refclk;
+  assign freq_refclk_split      = freq_refclk;
+  assign mem_refclk_div4_split  = mem_refclk_div4;
+  assign phy_ctl_clk_split0     = _phy_clk;
+  assign phy_ctl_wd_split0      = phy_ctl_wd;
+  assign phy_ctl_wr_split0      = phy_ctl_wr;
+  assign phy_clk_split0         = phy_clk;
+  assign phy_cmd_wr_en_split0   = phy_cmd_wr_en;
+  assign phy_data_wr_en_split0  = phy_data_wr_en;
+  assign phy_rd_en_split0       = phy_rd_en;

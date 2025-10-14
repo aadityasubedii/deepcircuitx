@@ -1,0 +1,1 @@
+else if ( WAYS == 3 ) begin : check_hit_3ways

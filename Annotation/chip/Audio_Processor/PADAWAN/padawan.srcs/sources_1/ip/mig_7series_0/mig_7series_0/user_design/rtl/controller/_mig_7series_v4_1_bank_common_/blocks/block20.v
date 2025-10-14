@@ -1,0 +1,10 @@
+  generate begin : maint_controller
+
+
+
+      assign maint_idle_lcl = ~(maint_req_r && ~periodic_rd_cntr_r) && ~maint_wip_r_lcl;
+
+
+
+
+      wire maint_wip_ns =

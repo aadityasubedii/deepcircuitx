@@ -1,0 +1,1 @@
+assign o_out   = product[32:1]; 

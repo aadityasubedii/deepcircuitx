@@ -1,0 +1,1 @@
+      assign rd_data_buf_addr_r = rd_data_buf_addr_ns;

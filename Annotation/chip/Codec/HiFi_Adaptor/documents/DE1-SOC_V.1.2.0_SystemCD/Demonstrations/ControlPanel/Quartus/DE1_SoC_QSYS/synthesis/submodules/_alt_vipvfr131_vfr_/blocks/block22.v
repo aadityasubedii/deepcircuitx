@@ -1,0 +1,1 @@
+localparam SLAVE_DATA_REQUIREDWIDTH = 32; 

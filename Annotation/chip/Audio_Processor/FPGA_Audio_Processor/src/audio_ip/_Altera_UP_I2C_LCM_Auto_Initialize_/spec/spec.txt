@@ -1,0 +1,13 @@
+Module name: Altera_UP_I2C_LCM_Auto_Initialize. 
+
+Module specification: 
+
+The Altera_UP_I2C_LCM_Auto_Initialize module is used for the automated initialization of an I2C Liquid Crystal Monolithic (LCM) module used in display technologies. It adheres to I2C protocol standards, supervising control signals and managing data communication, error control, and system completion notifications.
+
+The module consists of multiple input ports; clk (system clock), reset (initialize system to default states), clear_error (clear any previously set error signals), ack (acknowledge signal), and transfer_complete (indicates completion of data transfers). These input ports maintain overall flow and control of the operation process.
+
+There are seven output ports; data_out (transmitted data), data_size (size of data to be sent), transfer_data (signals start of data transfers), send_start_bit (signals start of communication), send_stop_bit (signals end of communication), auto_init_complete (signals that initialization process has been completed), and auto_init_error (signals error during initialization process).
+
+Internal signals such as ns_i2c_auto_init and s_i2c_auto_init depict next and current state machine statuses. Other internal signals include change_state (signifies necessity of state change), finished_auto_init (signifies completion of initialization process), rom_address_counter (keeps track of ROM addresses), and rom_data (holds ROM data values). 
+
+The design utilizes a finite state machine with different operational states that are clearly defined in the code (AUTO_STATE). The module begins with 'check status' and progresses through sending start bit, transferring byte 0 and 1, waiting, sending stop bit, increasing counter, and finally reaches the 'done' state. The individual blocks of code under each state indicate specific actions taken at that particular state. Different sections include handling of data transfers and I2C communication details, error management, memory address tracking, and state transitions, ensuring a complete and efficient process of initialization.

@@ -1,0 +1,1 @@
+    wire idle = (o_state == sync_1);

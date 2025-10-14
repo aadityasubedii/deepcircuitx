@@ -1,0 +1,1 @@
+assign non_violating_rst = RST & Rst_condition1;         

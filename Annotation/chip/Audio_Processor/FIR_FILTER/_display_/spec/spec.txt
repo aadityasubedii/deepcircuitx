@@ -1,0 +1,9 @@
+Module name: display. 
+
+Module specification: The 'display' module serves as a display controller, masterminding the generation of X and Y coordinates alongside color information for a digital display unit or plotter. It manages a state machine and dynamically updates the Y coordinate until it reaches a preset maximum (ymax). Once ymax is attained, the module reverts to its initial state, ready for another cycle. A designated delay (defined by 'sweep_delay') and a freeze capacity allow for pausing the coordinate plotting.
+
+The module employs several input and output ports serving different functions. Input ports include: `clock` (drives state changes), `reset` (returns the display to its initial state), `freeze` (halts the coordinate plotting), and `data` (a 16-bit port for color output data). Output ports encompass: `x` and `y` (registered outputs for display coordinates), `color` (3-bit output relaying color information), and `plot` (a signal indicating whether or not the module is currently plotting).
+
+Key internal signals underpin the operation of this module. `sweep_delay` affects the rate at which the Y coordinate updates; `xmax` and `ymax` define the maximum values for X and Y coordinates; `delay_counter` is a registry that numbers clock cycles. Other internal signals - `st`, `streg`, `st_ploty`, `st_done` - act as registers and local parameters determining the state machine’s status.
+
+The code is logically divided into different blocks each with their individual functions. The first block sets up the state control. The second block handles the state register updates. Two additional blocks use clock edge to update delay_counter, X, and Y coordinates. Finally, two assignment statements are used to assign the values to plot and color.

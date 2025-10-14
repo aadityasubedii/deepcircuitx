@@ -1,0 +1,43 @@
+{
+    "gpt-message": [
+        {
+            "role": "system",
+            "content": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+        },
+        {
+            "role": "user",
+            "content": "Name of the module and its functionality is as follows: \nModule name: tg_status. \n\nExplanation: The module 'tg_status' is used to monitor error conditions in a system. It captures and retains information about data error events and the conditions at the time of the error. It takes inputs such as clock signal, reset signal, data error flag, comparison data, read data, comparison address, comparison block length, and memory buffer status signals. If a data error occurs (data_error_i signal goes high) that wasn't previously stored, the current comparison data, read data, comparison address, block length, and buffer statuses are stored into 'error_status' output register. Once an error is stored, further errors are ignored until a reset or manual clear error is received. The output 'error' flag indicates if an error was detected and stored."
+        },
+        {
+            "role": "user",
+            "content": "Input and output ports and their explanation is as follows: \nInput ports: \n\n- clk_i: This is the clock input signal. It is used to synchronize the operations of this module.\n- rst_i: This is a reset input signal. A high signal on rst_i or manual_clear_error resets the error_status and error_set registers.\n- manual_clear_error: This is a manual error clearing input. A high signal on this input clears the stored error, allowing subsequent errors to be captured.\n- data_error_i: This is the data error input status. When this goes high, if there is no previous error stored, the module stores the error condition details.\n- cmp_data_i: These are the comparison data input signals. It represents the data that is being compared or checked for the error.\n- rd_data_i: This is the read data input signal. It represents the data returned for a particular address that is being used in comparison.\n- cmp_addr_i: This is the comparison address input signal. It represents the address from which data is read for comparison.\n- cmp_bl_i: This is the comparison block length input signal. It represents the block length of the data being read.\n- mcb_cmd_full_i, mcb_wr_full_i, mcb_rd_empty_i: These are the input signals depicting the status of Memory Buffer Full (Cmd, Write) or Empty Read conditions.\n\nOutput ports: \n\n- error_status: This is the error status output register. If a data error is captured, error_status contains details of the data error, including the address, data being compared, return data and buffer statuses.\n- error: This signal serves as an error flag. When it is high, it indicates that a data error has been captured and stored.\n\nExplanation: The input signals represent different variables that are involved in the error detection and status storage process. The statuses of these inputs at the time of the error occurrence are stored in the output register 'error_status'. The 'error' output signal shows if an error was detected and stored."
+        },
+        {
+            "role": "user",
+            "content": "Internal signals and their explanation is as follows: \nInternal signals: data_error_r, error_set. \n\nExplanation: \n\n- data_error_r: This is an internal register storing the status of data_error_i from the last clock cycle, enabling the code to monitor changes in data_error_i signal between consecutive clock cycles. It is used to detect the rising edge of a new data error.\n  \n- error_set: This signal acts as a flag to denote if an error has been registered or not. When an error occurs for the first time, error_set is made high, indicating that the error is recorded. It helps in ignoring subsequent errors until a reset or manual clear error command occurs."
+        }
+    ],
+    "claude-message": [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+                },
+                {
+                    "type": "text",
+                    "text": "Name of the module and its functionality is as follows: \nModule name: tg_status. \n\nExplanation: The module 'tg_status' is used to monitor error conditions in a system. It captures and retains information about data error events and the conditions at the time of the error. It takes inputs such as clock signal, reset signal, data error flag, comparison data, read data, comparison address, comparison block length, and memory buffer status signals. If a data error occurs (data_error_i signal goes high) that wasn't previously stored, the current comparison data, read data, comparison address, block length, and buffer statuses are stored into 'error_status' output register. Once an error is stored, further errors are ignored until a reset or manual clear error is received. The output 'error' flag indicates if an error was detected and stored."
+                },
+                {
+                    "type": "text",
+                    "text": "Input and output ports and their explanation is as follows: \nInput ports: \n\n- clk_i: This is the clock input signal. It is used to synchronize the operations of this module.\n- rst_i: This is a reset input signal. A high signal on rst_i or manual_clear_error resets the error_status and error_set registers.\n- manual_clear_error: This is a manual error clearing input. A high signal on this input clears the stored error, allowing subsequent errors to be captured.\n- data_error_i: This is the data error input status. When this goes high, if there is no previous error stored, the module stores the error condition details.\n- cmp_data_i: These are the comparison data input signals. It represents the data that is being compared or checked for the error.\n- rd_data_i: This is the read data input signal. It represents the data returned for a particular address that is being used in comparison.\n- cmp_addr_i: This is the comparison address input signal. It represents the address from which data is read for comparison.\n- cmp_bl_i: This is the comparison block length input signal. It represents the block length of the data being read.\n- mcb_cmd_full_i, mcb_wr_full_i, mcb_rd_empty_i: These are the input signals depicting the status of Memory Buffer Full (Cmd, Write) or Empty Read conditions.\n\nOutput ports: \n\n- error_status: This is the error status output register. If a data error is captured, error_status contains details of the data error, including the address, data being compared, return data and buffer statuses.\n- error: This signal serves as an error flag. When it is high, it indicates that a data error has been captured and stored.\n\nExplanation: The input signals represent different variables that are involved in the error detection and status storage process. The statuses of these inputs at the time of the error occurrence are stored in the output register 'error_status'. The 'error' output signal shows if an error was detected and stored."
+                },
+                {
+                    "type": "text",
+                    "text": "Internal signals and their explanation is as follows: \nInternal signals: data_error_r, error_set. \n\nExplanation: \n\n- data_error_r: This is an internal register storing the status of data_error_i from the last clock cycle, enabling the code to monitor changes in data_error_i signal between consecutive clock cycles. It is used to detect the rising edge of a new data error.\n  \n- error_set: This signal acts as a flag to denote if an error has been registered or not. When an error occurs for the first time, error_set is made high, indicating that the error is recorded. It helps in ignoring subsequent errors until a reset or manual clear error command occurs."
+                }
+            ]
+        }
+    ]
+}

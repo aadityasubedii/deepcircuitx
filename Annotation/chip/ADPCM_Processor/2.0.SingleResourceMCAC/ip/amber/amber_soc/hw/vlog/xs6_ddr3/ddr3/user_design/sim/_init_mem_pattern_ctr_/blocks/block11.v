@@ -1,0 +1,1 @@
+assign   fixed_addr_o = 32'h00001234;

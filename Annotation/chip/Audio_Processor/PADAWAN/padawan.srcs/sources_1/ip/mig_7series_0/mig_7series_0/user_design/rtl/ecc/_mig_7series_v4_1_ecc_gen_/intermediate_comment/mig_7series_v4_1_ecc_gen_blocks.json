@@ -1,0 +1,56 @@
+{
+    "line_num": [
+        [
+            196,
+            198
+        ],
+        [
+            193,
+            193
+        ],
+        [
+            191,
+            191
+        ],
+        [
+            189,
+            189
+        ],
+        [
+            187,
+            187
+        ],
+        [
+            184,
+            200
+        ],
+        [
+            182,
+            182
+        ],
+        [
+            147,
+            175
+        ],
+        [
+            127,
+            129
+        ],
+        [
+            117,
+            125
+        ]
+    ],
+    "blocks": [
+        "      for (s=0; s<ECC_WIDTH; s=s+1) begin : h_row\n        assign h_rows[s*CODE_WIDTH+n] = ht_matrix[n][s];\n      end",
+        "         assign ht_matrix[n] = {{1{1'b1}}, {ECC_WIDTH-1{1'b0}}};",
+        "         assign ht_matrix[n] = {{7{1'b1}}, {ECC_WIDTH-7{1'b0}}};",
+        "         assign ht_matrix[n] = {{5{1'b1}}, {ECC_WIDTH-5{1'b0}}};",
+        "         assign ht_matrix[n] = {{3{1'b1}}, {ECC_WIDTH-3{1'b0}}};",
+        "  generate\n    for (n=0; n<CODE_WIDTH; n=n+1) begin : ht\n      if (n == 0)                \n         assign ht_matrix[n] = {{3{1'b1}}, {ECC_WIDTH-3{1'b0}}};\n      else if (n == COMBOS_3 && n < DATA_WIDTH)    \n         assign ht_matrix[n] = {{5{1'b1}}, {ECC_WIDTH-5{1'b0}}};\n      else if ((n == COMBOS_3+COMBOS_5) && n < DATA_WIDTH)    \n         assign ht_matrix[n] = {{7{1'b1}}, {ECC_WIDTH-7{1'b0}}};\n      else if (n == DATA_WIDTH)   \n         assign ht_matrix[n] = {{1{1'b1}}, {ECC_WIDTH-1{1'b0}}};\n      else assign ht_matrix[n] = next_combo(ht_matrix[n-1]);\n      \n      for (s=0; s<ECC_WIDTH; s=s+1) begin : h_row\n        assign h_rows[s*CODE_WIDTH+n] = ht_matrix[n][s];\n      end\n    end\n  endgenerate ",
+        "  genvar n;",
+        "  function [ECC_WIDTH-1:0] next_combo (input [ECC_WIDTH-1:0] i);\n    integer index;\n    integer dump_index;\n    reg seen0;\n    reg trig1;\n\n    reg [ECC_WIDTH-1:0] ones;\n    begin\n      seen0 = 1'b0;\n      trig1 = 1'b0;\n      ones = 0;\n      for (index=0; index<ECC_WIDTH; index=index+1)\n        begin\n          \n          \n          if (trig1) next_combo[index] = i[index];\n          else begin\n            next_combo[index] = 1'b0;\n            ones = ones + i[index];\n            if (i[index] && seen0) begin\n              trig1 = 1'b1;\n              for (dump_index=index-1; dump_index>=0;dump_index=dump_index-1)\n                if (dump_index>=index-ones) next_combo[dump_index] = 1'b1;  \n            end               \n            seen0 = ~i[index];\n          end \n        end            \n    end \n  endfunction ",
+        "  function integer combos (input integer n, k);\n    combos = factorial(n)/(factorial(k)*factorial(n-k));\n  endfunction ",
+        "  function integer factorial (input integer i);\n    integer index;\n    if (i == 1) factorial = 1;\n    else begin\n      factorial = 1;\n      for (index=2; index<=i; index=index+1)\n        factorial = factorial * index;\n    end\n  endfunction "
+    ]
+}

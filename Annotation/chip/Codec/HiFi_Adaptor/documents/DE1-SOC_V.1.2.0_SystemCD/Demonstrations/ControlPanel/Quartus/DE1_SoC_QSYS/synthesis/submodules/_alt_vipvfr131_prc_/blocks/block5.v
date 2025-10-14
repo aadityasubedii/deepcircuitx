@@ -1,0 +1,1 @@
+		assign ready_out = dout_ready;

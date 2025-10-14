@@ -1,0 +1,16 @@
+{
+    "line_num": [
+        [
+            269,
+            302
+        ],
+        [
+            225,
+            233
+        ]
+    ],
+    "blocks": [
+        "generate \nif ((C_MEM_TYPE == \"DDR\" || C_MEM_TYPE == \"DDR2\" || C_MEM_TYPE == \"DDR3\") &&\n     (SKIP_IN_TERM_CAL == 1'b0)\n     ) begin : gen_zio\n\nIOBUF IOBUF_ZIO (\n    .O  (ZIO_IN),\n    .IO (ZIO_Pin),\n    .I  (ZIO_OUT),\n    .T  (ZIO_TOUT)\n    );\n\n\nIODRP2 IODRP2_ZIO       (\n      .DATAOUT(),\n      .DATAOUT2(),\n      .DOUT(ZIO_OUT),\n      .SDO(ZIO_IODRP_SDO),\n      .TOUT(ZIO_TOUT),\n      .ADD(IODRP_ADD),\n      .BKST(IODRP_BKST),\n      .CLK(UI_CLK),\n      .CS(ZIO_IODRP_CS),\n      .IDATAIN(ZIO_IN),\n      .IOCLK0(IOCLK),\n      .IOCLK1(1'b1),\n      .ODATAIN(RZQ_ZIO_ODATAIN),\n      .SDI(IODRP_SDI),\n      .T(RZQ_ZIO_TRISTATE)\n      );\n\n\nend \nendgenerate",
+        "always@(posedge UI_CLK,posedge RST)\nif (RST)        \n   begin\n        ZIO_IN_R1 <= 1'b0; \n        ZIO_IN_R2 <= 1'b0;\n\n        RZQ_IN_R1 <= 1'b0; \n        RZQ_IN_R2 <= 1'b0;         \n   end"
+    ]
+}

@@ -1,0 +1,1 @@
+assign sync_out = sync_in ^ invert_sync_nxt;

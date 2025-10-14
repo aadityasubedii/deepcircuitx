@@ -1,0 +1,1 @@
+  assign act_wait_r = act_wait_r_lcl;

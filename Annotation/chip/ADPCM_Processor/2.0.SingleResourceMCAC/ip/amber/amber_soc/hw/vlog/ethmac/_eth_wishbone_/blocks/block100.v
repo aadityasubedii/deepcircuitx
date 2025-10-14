@@ -1,0 +1,1 @@
+assign TxRetryPulse   = TxRetry_wb   & ~TxRetry_wb_q;

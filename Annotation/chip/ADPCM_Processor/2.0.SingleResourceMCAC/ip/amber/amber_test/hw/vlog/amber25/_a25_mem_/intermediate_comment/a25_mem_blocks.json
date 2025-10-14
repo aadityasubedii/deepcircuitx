@@ -1,0 +1,51 @@
+{
+    "line_num": [
+        [
+            215,
+            240
+        ],
+        [
+            200,
+            210
+        ],
+        [
+            198,
+            198
+        ],
+        [
+            183,
+            196
+        ],
+        [
+            181,
+            181
+        ],
+        [
+            177,
+            177
+        ],
+        [
+            169,
+            175
+        ],
+        [
+            167,
+            167
+        ],
+        [
+            159,
+            165
+        ]
+    ],
+    "blocks": [
+        "a25_dcache u_dcache (\n\t.clk                      ( clk                 ),\n\t.reset                    ( reset               ),\n\t.scan_enable              ( scan_enable         ),\n\t.test_mode                ( test_mode           ),\n\n    .i_fetch_stall              ( i_fetch_stall         ),\n    .i_exec_stall               ( i_exec_stall          ),\n    .o_stall                    ( cache_stall           ),\n     \n    .i_request                  ( sel_cache_p           ),\n    .i_exclusive                ( i_exclusive           ),\n    .i_write_data               ( i_write_data          ),\n    .i_write_enable             ( i_write_enable        ),\n    .i_address                  ( i_daddress            ),\n    .i_address_nxt              ( i_daddress_nxt        ),\n    .i_byte_enable              ( i_byte_enable         ),\n\n    .i_cache_enable             ( i_cache_enable        ),\n    .i_cache_flush              ( i_cache_flush         ),\n    .o_read_data                ( cache_read_data       ),\n    \n    .o_wb_cached_req            ( cached_wb_req         ),\n    .i_wb_cached_rdata          ( i_wb_cached_rdata     ),\n    .i_wb_cached_ready          ( i_wb_cached_ready     )\n);",
+        "always @( posedge reset, posedge clk ) begin\n\tif (reset) begin\n\t\tmem_read_data_r <= 'd0;\n\t\tmem_read_data_valid_r <= 'd0;\n\t\tmem_load_rd_r <= 'd0;\n\tend else if ( !wb_stop || o_mem_stall ) begin\n\t\tmem_read_data_r         <= mem_read_data_c;\n\t\tmem_load_rd_r           <= mem_load_rd_c;\n\t\tmem_read_data_valid_r   <= mem_read_data_valid_c;\n\tend\nend",
+        "assign wb_stop = uncached_wb_stop_r || cached_wb_stop_r;",
+        "always @( posedge reset, posedge clk ) begin\n\tif (reset) begin\n\t\tuncached_wb_stop_r <= 'd0;\n\t\tcached_wb_stop_r <= 'd0;\n\t\tmem_stall_r <= 'd0;\n\t\tdaddress_valid_stop_r <= 'd0;\n\tend else begin\n\t\tuncached_wb_stop_r      <= (uncached_wb_stop_r || (uncached_data_access_p&&!cache_stall)) && (i_fetch_stall || o_mem_stall);\n\t\tcached_wb_stop_r        <= (cached_wb_stop_r   || cached_wb_req)          && (i_fetch_stall || o_mem_stall);\n\t\tdaddress_valid_stop_r   <= (daddress_valid_stop_r || daddress_valid_p)    && (i_fetch_stall || o_mem_stall);\n\t\t\n\t\tmem_stall_r <= o_mem_stall;\n\tend\nend",
+        "assign daddress_valid_p = i_daddress_valid && !daddress_valid_stop_r;",
+        "assign void_output = (fetch_only_stall_r && fetch_only_stall) || (fetch_only_stall_r && mem_read_data_valid_r);",
+        "always @( posedge reset, posedge clk ) begin\n\tif (reset) begin\n\t\tfetch_only_stall_r <= 'd0;\n\tend else begin\n\t\tfetch_only_stall_r <= fetch_only_stall;\n\tend\nend",
+        "assign fetch_only_stall     = i_fetch_stall && !o_mem_stall;",
+        "always @( posedge reset, posedge clk ) begin\n\tif (reset) begin\n\t\tuncached_wb_req_r <= 'd0;\n\tend else begin\n\t\tuncached_wb_req_r <=  (o_wb_uncached_req || uncached_wb_req_r) && !i_wb_uncached_ready;\n\tend\nend"
+    ]
+}

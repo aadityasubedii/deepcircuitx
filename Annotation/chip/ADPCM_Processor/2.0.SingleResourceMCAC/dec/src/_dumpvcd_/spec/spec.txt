@@ -1,0 +1,9 @@
+Module name: dumpvcd. 
+
+Module specification: The dumpvcd module is designed to perform a dumping operation of Value Change Dump (VCD) files which are critical for debugging hardware designs by recording changes in the values of specified signals over time. The module does not possess conventional I/O ports; instead, it operates and interacts with globally defined signals and macro definitions including `AMBER_DUMP_VCD, `AMBER_DUMP_START, `AMBER_DUMP_LENGTH, `AMBER_VCD_FILE, `U_TB, among others. 
+
+This module uses several internal signals such as `U_TB.clk_count, `U_DECOMPILE.xINSTRUCTION_EXECUTE, `U_EXECUTE.o_write_enable, `U_EXECUTE.o_exclusive, `U_EXECUTE.o_write_data, `U_EXECUTE.base_address, `U_EXECUTE.pc, all registers within the execute unit (`U_EXECUTE.u_register_bank.r0 to r15), `U_FETCH, `U_CACHE, `U_DECODE, `U_WISHBONE, `U_AMBER, `U_MEM and `U_DCACHE (the last two if `AMBER_A25_CORE is defined). 
+
+These internal signals represent the important aspects of the functioning module, such as clock count, instruction execution, write operations, memory management, instruction fetch, cache utilization, instruction decode, and others.
+
+The dumpvcd module primarily consists of two code blocks. An initial block, active only if AMBER_DUMP_VCD is defined, that sets up the VCD dump file and specifies the signals to be dumped. And an always block, active on the positive edge of a clock, handles the start and end of the dump process based on the clock count and given macro definitions. It also includes conditional automatic test termination post dump completion, contingent on the definition of `AMBER_TERMINATE.

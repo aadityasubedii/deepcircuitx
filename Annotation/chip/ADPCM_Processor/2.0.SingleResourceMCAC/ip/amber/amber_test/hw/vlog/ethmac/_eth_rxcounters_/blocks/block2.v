@@ -1,0 +1,1 @@
+assign IFGCounterEq24 = (IFGCounter[4:0] == 5'h18) | r_IFG; 

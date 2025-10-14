@@ -1,0 +1,1 @@
+assign sclr_state = (sof_cvi_int & sof_cvo_int);

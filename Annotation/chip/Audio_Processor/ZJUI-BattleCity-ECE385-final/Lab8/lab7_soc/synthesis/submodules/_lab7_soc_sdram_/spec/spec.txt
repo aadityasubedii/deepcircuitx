@@ -1,0 +1,11 @@
+Module Name: lab7_soc_sdram and lab7_soc_sdram_input_efifo_module
+
+Module Specification: 
+
+The lab7_soc_sdram and lab7_soc_sdram_input_efifo_module consist of two modules playing different roles within the architecture. 
+
+The "lab7_soc_sdram_input_efifo_module" is a simple Elastic FIFO (First In, First Out) that handles write and read data from the FIFO. It has inputs signals for the clock synchronization, read and write enables, frame data, and reset. The output signals represent various states of the FIFO, such as empty, full or almost full. It uses an internal 2-bit register, entries, to track the number of entries in the FIFO. Two 62-bit registers, entry_0 and entry_1, are used to retrieve or store data. The rd_address and wr_address are used to select where to read from and write to within the FIFO, respectively.
+
+The "lab7_soc_sdram" module is a Synchronous Dynamic Random Access Memory (SDRAM) interface. It uses the elastic FIFO module and handles reading and writing data from the SDRAM. This includes various memory states, addressing, refreshing operations, setting the command lines, and transferring data. It has numerous input signals related to address, control signals of the SDRAM, and system clock/reset signals. The output signals represent data output, data valid flag, request wait flag, and various control and bus signals. 'zs_dq' is an important 'inout' port which acts as both an input and output port for data transmissions to and from the SDRAM. This module is distinguished by its large number of internal signals used for control flow, data handling, and addressing.
+
+In short, these modules together form a necessary combination for data management and control for a synchronous dynamic random access memory, with one providing an elastic FIFO for smooth data operations and the other providing a comprehensive interface for the SDRAM.

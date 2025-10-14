@@ -1,0 +1,1 @@
+  always @(posedge clk) po_stg23_sel_r <= #TCQ po_stg23_sel_ns;

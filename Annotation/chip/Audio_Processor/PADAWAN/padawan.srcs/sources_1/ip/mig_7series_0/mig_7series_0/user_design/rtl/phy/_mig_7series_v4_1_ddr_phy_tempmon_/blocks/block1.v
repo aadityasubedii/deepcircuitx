@@ -1,0 +1,19 @@
+  always @(posedge clk) begin
+      temp_cmp_four_inc_max_102  <= #TCQ temp_cmp_four_inc_max_101;
+      temp_cmp_three_inc_max_102 <= #TCQ temp_cmp_three_inc_max_101;
+      temp_cmp_two_inc_max_102   <= #TCQ temp_cmp_two_inc_max_101;
+      temp_cmp_one_inc_max_102   <= #TCQ temp_cmp_one_inc_max_101;
+      temp_cmp_neutral_max_102   <= #TCQ temp_cmp_neutral_max_101;
+      temp_cmp_one_dec_max_102   <= #TCQ temp_cmp_one_dec_max_101;
+      temp_cmp_two_dec_max_102   <= #TCQ temp_cmp_two_dec_max_101;
+      temp_cmp_three_dec_max_102 <= #TCQ temp_cmp_three_dec_max_101;
+      temp_cmp_three_inc_min_102 <= #TCQ temp_cmp_three_inc_min_101;
+      temp_cmp_two_inc_min_102   <= #TCQ temp_cmp_two_inc_min_101;
+      temp_cmp_one_inc_min_102   <= #TCQ temp_cmp_one_inc_min_101;
+      temp_cmp_neutral_min_102   <= #TCQ temp_cmp_neutral_min_101;
+      temp_cmp_one_dec_min_102   <= #TCQ temp_cmp_one_dec_min_101;
+      temp_cmp_two_dec_min_102   <= #TCQ temp_cmp_two_dec_min_101;
+      temp_cmp_three_dec_min_102 <= #TCQ temp_cmp_three_dec_min_101;
+      temp_cmp_four_dec_min_102  <= #TCQ temp_cmp_four_dec_min_101;
+      update_temp_102            <= #TCQ update_temp_101;
+  end

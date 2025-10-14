@@ -1,0 +1,9 @@
+  assign dbrk0_goto1 = 1'b0;
+  assign dbrk1_armed = 1'b0;
+  assign dbrk1_trigout = 1'b0;
+  assign dbrk1_break_pulse = 1'b0;
+  assign dbrk1_traceoff = 1'b0;
+  assign dbrk1_traceon = 1'b0;
+  assign dbrk1_traceme = 1'b0;
+  assign dbrk1_goto0 = 1'b0;
+  assign dbrk1_goto1 = 1'b0;

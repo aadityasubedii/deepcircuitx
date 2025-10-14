@@ -1,0 +1,1 @@
+	assign xCounter_clear = (xCounter == (C_HORZ_TOTAL_COUNT-1));

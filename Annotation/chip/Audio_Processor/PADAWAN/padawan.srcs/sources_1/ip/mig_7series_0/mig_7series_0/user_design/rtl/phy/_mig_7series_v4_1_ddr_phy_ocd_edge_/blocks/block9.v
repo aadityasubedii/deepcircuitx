@@ -1,0 +1,1 @@
+  always @(posedge clk) o2f_r <= #TCQ o2f_ns;

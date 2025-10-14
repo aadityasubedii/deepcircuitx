@@ -1,0 +1,1 @@
+assign resolution_valid_update = resolution_valid_nxt ^ resolution_valid;

@@ -1,0 +1,1 @@
+wire clr_bclk = (bclk_divider == 2'b11 && !lrck_divider[6]);

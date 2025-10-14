@@ -1,0 +1,13 @@
+Module name: a23_register_bank. 
+
+Module specification: The a23_register_bank is a Verilog module designed for a microprocessor named A23. It primarily serves as a register bank, managing different modes such as USR, SVC, IRQ, and FIQR. The module is equipped to perform operations like loading user mode registers and handling exceptions. It comes with control lines to directly read and write register data. Also, it includes mechanism to select specific registers through muxing logic. Registers get updated at every positive edge of the system clock, unless a stall signal is triggered. 
+
+The module takes multiple input ports such as the system clock(i_clk), fetch stall signal(i_fetch_stall), mode selection control signals(i_mode_idec, i_mode_exec, i_mode_rds_exec), register selection vectors(i_rm_sel, i_rds_sel, i_rn_sel), write enable signals(i_pc_wen, i_reg_bank_wen), values to be updated(i_pc, i_reg), and status flags and masks(i_status_bits_flags, i_status_bits_irq_mask, i_status_bits_firq_mask). 
+
+Output ports of the module are the different register values(o_rm, o_rs, o_rd, o_rn) and the current program counter value(o_pc).
+
+The module uses a number of internal signals including different registers (r0 to r15 and registers cutting across different modes like r8_firq to r14_firq, r13_svc to r14_svc, r13_irq to r14_irq) for data storage. Furthermore, we have boolean flags for execution of specific mode programs(usr_exec, svc_exec, irq_exec, firq_exec) and similar flags for decoding phase(usr_idec, svc_idec, irq_idec, firq_idec). 
+
+The primary code blocks consists of register definitions, mode assignments, and a synchronous block running at the positive edge of system clock, which carries out the job of updating the register values based on different condition checks, corresponding to the various modes of operation. 
+
+This module encapsulates all the necessary logic for a register bank functionality, offering a highly structured and efficient methodology to handle operations for diverse modes.

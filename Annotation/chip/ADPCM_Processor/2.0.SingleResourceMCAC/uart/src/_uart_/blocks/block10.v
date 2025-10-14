@@ -1,0 +1,1 @@
+assign wb_read_ack = i_wb_stb && !i_wb_we &&  o_wb_ack;

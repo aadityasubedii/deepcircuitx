@@ -1,0 +1,43 @@
+{
+    "gpt-message": [
+        {
+            "role": "system",
+            "content": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+        },
+        {
+            "role": "user",
+            "content": "Name of the module and its functionality is as follows: \nModule name: fpmodulus.\nExplanation: The 'fpmodulus' module is designed to compute the modulus of two input numbers 'num1' and 'num2'. It uses a finite state machine (FSM) with several states such as START, SET_MOD, SET_IF, CHECK_IF, CALC_MOD, ASSIGN_MOD, and DONE to control the flow of the computation. The module checks if 'num1' is larger than 'num2' and calculates their difference until 'num1' is less than 'num2', thus efficiently finding the modulus. The result 'mod' and a 'donefmod' signal flagging completion of the operation are provided as outputs."
+        },
+        {
+            "role": "user",
+            "content": "Input and output ports and their explanation is as follows: \nInput ports: startfmod, clk, rst, num1, num2.\nExplanation:\n- startfmod: A signal that initiates the modulus computation process when set high.\n- clk: Clock signal used to synchronize the operations of the module.\n- rst: Reset signal that ensures the module\u2019s state machine starts in the initial state when held low.\n- num1: First input number on which the modulus operation is performed.\n- num2: Second input number which is used as the divisor in the modulus operation.\n\nOutput ports: mod, donefmod.\nExplanation:\n- mod: This is the output where the result (modulus) of num1 % num2 is stored.\n- donefmod: A signal that indicates the completion of the modulus computation. It is set high once the operation is completed."
+        },
+        {
+            "role": "user",
+            "content": "Internal signals and their explanation is as follows: \nInternal signals: c_here, STATE, NEXT_STATE, a1_in1, a1_in2, gt1_in1, gt1_in2, c_num2, a1_out, gt1.\nExplanation:\n- c_here: A counter or control signal used in the CALC_MOD state, possibly for managing iterations or conditions in processing.\n- STATE: The current state of the finite state machine (FSM). It controls the operation flow depending on the state the FSM is in.\n- NEXT_STATE: Determines the next state the FSM should move to after the current clock cycle. This decision is based on the conditions met in the current state.\n- a1_in1, a1_in2: Input operands for the 'adder1' module which performs addition. In CALC_MOD state, 'a1_in1' is assigned 'mod', and 'a1_in2' is assigned a manipulated version of 'num2'.\n- gt1_in1, gt1_in2: Input operands for the 'fpgt1' (floating point greater than comparator) module. They are used in the SET_IF state where 'gt1_in1' is assigned 'mod' and 'gt1_in2' is assigned 'num2' to check if the current modulus is greater than 'num2'.\n- c_num2: A constant or control register storing a specific configuration or value needed within the module, initialized to a binary number.\n- a1_out: The output from the 'adder1' module which appears to be involved in computing new values of 'mod' during the CALC_MOD processing.\n- gt1: Output from the 'fpgt1' module indicating if 'gt1_in1' (mod) is greater than 'gt1_in2' (num2). This influences transitions in the FSM, particularly in the CHECK_IF state to decide the next operation (whether to continue calculating the modulus or to end the operation)."
+        }
+    ],
+    "claude-message": [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+                },
+                {
+                    "type": "text",
+                    "text": "Name of the module and its functionality is as follows: \nModule name: fpmodulus.\nExplanation: The 'fpmodulus' module is designed to compute the modulus of two input numbers 'num1' and 'num2'. It uses a finite state machine (FSM) with several states such as START, SET_MOD, SET_IF, CHECK_IF, CALC_MOD, ASSIGN_MOD, and DONE to control the flow of the computation. The module checks if 'num1' is larger than 'num2' and calculates their difference until 'num1' is less than 'num2', thus efficiently finding the modulus. The result 'mod' and a 'donefmod' signal flagging completion of the operation are provided as outputs."
+                },
+                {
+                    "type": "text",
+                    "text": "Input and output ports and their explanation is as follows: \nInput ports: startfmod, clk, rst, num1, num2.\nExplanation:\n- startfmod: A signal that initiates the modulus computation process when set high.\n- clk: Clock signal used to synchronize the operations of the module.\n- rst: Reset signal that ensures the module\u2019s state machine starts in the initial state when held low.\n- num1: First input number on which the modulus operation is performed.\n- num2: Second input number which is used as the divisor in the modulus operation.\n\nOutput ports: mod, donefmod.\nExplanation:\n- mod: This is the output where the result (modulus) of num1 % num2 is stored.\n- donefmod: A signal that indicates the completion of the modulus computation. It is set high once the operation is completed."
+                },
+                {
+                    "type": "text",
+                    "text": "Internal signals and their explanation is as follows: \nInternal signals: c_here, STATE, NEXT_STATE, a1_in1, a1_in2, gt1_in1, gt1_in2, c_num2, a1_out, gt1.\nExplanation:\n- c_here: A counter or control signal used in the CALC_MOD state, possibly for managing iterations or conditions in processing.\n- STATE: The current state of the finite state machine (FSM). It controls the operation flow depending on the state the FSM is in.\n- NEXT_STATE: Determines the next state the FSM should move to after the current clock cycle. This decision is based on the conditions met in the current state.\n- a1_in1, a1_in2: Input operands for the 'adder1' module which performs addition. In CALC_MOD state, 'a1_in1' is assigned 'mod', and 'a1_in2' is assigned a manipulated version of 'num2'.\n- gt1_in1, gt1_in2: Input operands for the 'fpgt1' (floating point greater than comparator) module. They are used in the SET_IF state where 'gt1_in1' is assigned 'mod' and 'gt1_in2' is assigned 'num2' to check if the current modulus is greater than 'num2'.\n- c_num2: A constant or control register storing a specific configuration or value needed within the module, initialized to a binary number.\n- a1_out: The output from the 'adder1' module which appears to be involved in computing new values of 'mod' during the CALC_MOD processing.\n- gt1: Output from the 'fpgt1' module indicating if 'gt1_in1' (mod) is greater than 'gt1_in2' (num2). This influences transitions in the FSM, particularly in the CHECK_IF state to decide the next operation (whether to continue calculating the modulus or to end the operation)."
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,1 @@
+  assign po_dec_done = (PO_INITIAL_DLY == 0) ? 1 : po_delay_done_r4;

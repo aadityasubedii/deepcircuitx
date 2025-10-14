@@ -1,0 +1,1 @@
+  assign ociram_wr_data = jtag_ram_access ? MonDReg[31 : 0] : writedata;

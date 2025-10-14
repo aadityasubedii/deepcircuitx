@@ -1,0 +1,1 @@
+  assign tr_data = 0 ? tr_data_reg : 0;

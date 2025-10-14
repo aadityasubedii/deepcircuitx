@@ -1,0 +1,15 @@
+Module Name: mcb_soft_calibration_top
+Module Specification: 
+This module serves as the top-level module for the Memory Controller Block (MCB) soft calibration. It orchestrates calibration processes for memory configurations, as defined by the parameters at the start of the module definition. This module interfaces with the 'mcb_soft_calibration' sub-module to perform calibration based on specified input parameters, passes signals through flip-flops for processing, and also has conditionally compiled blocks based on memory types and calibration modes.
+
+Input and Output Ports:
+The input ports include:
+UI_CLK(User Interface Clock), RST(Reset Signal), IOCLK(I/O Clock), PLL_LOCK (Phase Locked Loop status), SELFREFRESH_REQ(Self Refresh Request), SELFREFRESH_MCB_MODE(Self-refresh mode status), MCB_UOSDO(UO output status), MCB_UODONECAL(UO calibration completed), MCB_UOREFRSHFLAG(UO refresh flag), MCB_UODATA(UO data), MCB_UODATAVALID(UO data validation), MCB_UOCMDREADY(UO command ready), MCB_UO_CAL_START(UO calibration start), RZQ_Pin(RZQ pin input), and ZIO_Pin(ZIO pin input).
+Output ports include:
+DONE_SOFTANDHARD_CAL (indicates calibration completion), SELFREFRESH_MCB_REQ(initiates self-refresh mode in MCB), SELFREFRESH_MODE(notifies self-refresh mode status), various MCB_UI signals(commands and status updates), CKE_Train(CKE training signal), RZQ_Pin(RZQ pin output), and ZIO_Pin(ZIO pin output).
+
+Internal Signals:
+Internal signals used primarily for interfacing and preservation of statuses of I/O delay reduction block (IODRP2) and I/O buffers (IOBUF). These signals also cater to aspects like holding command and control signals for the memory interface, self-refresh request, and impedance-related properties. They also assist in timing control and synchronization.
+
+Code Blocks:
+Various logical and functional blocks throughout the code contribute to the module's functionality. They include a soft MCB calibration block which manages memory calibration, 'always' block used for synchronous updating of internal registers, I/O Buffer and I/O Delay Reduction Blocks for clock and data signal alignment, and implicit Generate-If statements for conditional generation of I/O block for ZIO impedance adjustment.

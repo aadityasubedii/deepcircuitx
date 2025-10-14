@@ -1,0 +1,11 @@
+Module name: a25_register_bank.
+
+Module specification: This module is designed as a register bank for a processor like ARM, consisting of various registers and combinational assignments which handles writing, reading, as well as stalls in different processor's operating modes. It receives a wide variety of inputs, including clock signal, reset command, mode selection input, write enables and data inputs to perform these operations effectively.
+
+The input ports are clk, reset, scan_enable, test_mode, i_core_stall, i_mem_stall, i_mode_idec, i_mode_exec, i_mode_rds_exec, i_firq_not_user_mode, i_rm_sel, i_rs_sel, i_rn_sel, i_pc_wen, i_reg_bank_wen, i_pc, i_reg, i_wb_read_data, i_wb_read_data_valid, i_wb_read_data_rd, i_wb_mode, i_status_bits_flags, i_status_bits_irq_mask and i_status_bits_firq_mask. These inputs primarily deal with receiving instruction operands, select signals, mode information, etc.
+
+The output ports are o_rm, o_rs, o_rd, o_rn, and o_pc. These ports reflect the final state of the PC and internal registers after the arithmetic or data operations are performed in the processor's instruction set.
+
+This module harnesses the power of a variety of internal signals including various individual registers (like r0 to r15), mode-specific registers such as supervisor mode, interrupt mode, and fast interrupt to store data and hold return addresses, following the principle operations. It also includes enable signals for execution modes and interrupt decodes.
+
+The blocks of Verilog codes perform a wide array of functionalities. The always@ block synchronizes register updates with the clock and handles reset conditions. These registers handle various actions like feeding new data during different operations in the processor, interruption handling, and passing the correct register values based on the current mode of operation. The several assign statements control the data flow within the processor, handle different modes of operation and interrupts, and direct the execution flow. The case blocks manage different operation scenarios and assign the correct processing routine based on the status of the operation.

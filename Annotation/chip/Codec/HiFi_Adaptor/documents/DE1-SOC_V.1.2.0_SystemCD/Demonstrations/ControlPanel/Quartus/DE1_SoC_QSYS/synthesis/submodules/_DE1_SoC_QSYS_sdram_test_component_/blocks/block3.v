@@ -1,0 +1,1 @@
+  assign mask = read_mask;

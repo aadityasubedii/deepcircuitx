@@ -1,0 +1,1 @@
+  assign rst_phaser_ref = rst_phaser_ref_sync_r[RST_DIV_SYNC_NUM-1];

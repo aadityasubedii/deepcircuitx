@@ -1,0 +1,9 @@
+Module name: glbl. 
+
+Module specification: The 'glbl' module is primarily a global control module for an FPGA device, which internally initializes and manages certain global control signals and a JTAG interface. It doesn't have explicitly defined input or output ports and appears self-contained, meaning it operates with internally declared parameters and signals. Parameters ROC_WIDTH and TOC_WIDTH, likely used for setting delay times, are initially declared and set.
+
+In terms of internal signals, it uses control signals such as `GSR`, `GTS`, `GWE`, and `PRLD`, whose exact functionality would be dependent on the larger design context. Other signals are associated with programming and data flow (`PROGB_GLBL`, `CCLKO_GLBL`, `FCSBO_GLBL`, `DO_GLBL`, `DI_GLBL`) and with phase synchronization (`p_up_tmp`, `PLL_LOCKG`).
+
+Signals related to JTAG interface (`JTAG_TDO_GLBL`, `JTAG_TCK_GLBL`, `JTAG_TDI_GLBL`, `JTAG_TMS_GLBL`, `JTAG_TRST_GLBL`, `JTAG_CAPTURE_GLBL`, `JTAG_RESET_GLBL`, `JTAG_SHIFT_GLBL`, `JTAG_UPDATE_GLBL`, `JTAG_RUNTEST_GLBL`, `JTAG_SEL1_GLBL` to `JTAG_SEL4_GLBL` and `JTAG_USER_TDO1_GLBL` to `JTAG_USER_TDO4_GLBL`) are also present, suggesting implementation of a JTAG state machine.
+
+The module implements initial blocks that set `GSR_int`, `PRLD_int`, and `GTS_int` to 1 initially and after a certain delay as specified by ROC_WIDTH or TOC_WIDTH, reset these signals to 0. The `assign` statements at end could be controlling the strength of signals `GSR`, `GTS` and `PRLD`. The specific functions and interactions of all signals within a much larger project context are not clear from this excerpt of the code. The module seems to be crucial in FPGA's internal control, initialization, and communication mechanisms.

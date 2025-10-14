@@ -1,0 +1,1 @@
+assign rst_tmp    = (~PLL_LOCK_R2 && ~SELFREFRESH_MODE); 

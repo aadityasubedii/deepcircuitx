@@ -1,0 +1,7 @@
+Module Name: shift
+
+Module Specification: The shift module is a parameterized Verilog design capable of performing both arithmetic and logical shifting operations on its input operands. The module takes three inputs - a (a `WIDTH` bit wide operand to be shifted), b (a `WIDTH` bit wide shift amount), and control (a signal that controls the type of shift operation). The functionality of the module is governed by the control signal. For control = 0, arithmetic shifting is performed, with a being shifted to the right by `b2` bits if b is negative, and to the left by `b2` bits if b is positive. For control = 1, logical shifting takes place where a is shifted to the right (if b is positive) or to the left (if b is negative), using zeros to fill the empty bits, irrespective of b being positive or negative.
+
+The output port is c, a `WIDTH` bit wide result of the shift operation. Internally, the module uses a register `neg` to determine if the shift amount `b` is negative. If it is, the two's complement of `b` is calculated and stored in `b2`. If `b` is not negative, then `b2` is simply `b`.
+
+The module's operation is divided across various sections within the code. It first checks the sign of `b`, and calculates `b2`. Then, based on the control signal, it decides whether to perform arithmetic or logical shifting. For each of these cases, it checks whether `b` is negative or positive and accordingly performs the shift operation and updates the output `c`.

@@ -1,0 +1,221 @@
+{
+    "line_num": [
+        [
+            294,
+            294
+        ],
+        [
+            292,
+            292
+        ],
+        [
+            290,
+            290
+        ],
+        [
+            286,
+            286
+        ],
+        [
+            284,
+            284
+        ],
+        [
+            282,
+            282
+        ],
+        [
+            281,
+            281
+        ],
+        [
+            277,
+            278
+        ],
+        [
+            276,
+            276
+        ],
+        [
+            268,
+            268
+        ],
+        [
+            267,
+            267
+        ],
+        [
+            260,
+            260
+        ],
+        [
+            258,
+            258
+        ],
+        [
+            246,
+            246
+        ],
+        [
+            244,
+            244
+        ],
+        [
+            242,
+            242
+        ],
+        [
+            240,
+            240
+        ],
+        [
+            239,
+            239
+        ],
+        [
+            238,
+            238
+        ],
+        [
+            236,
+            236
+        ],
+        [
+            235,
+            235
+        ],
+        [
+            231,
+            231
+        ],
+        [
+            229,
+            229
+        ],
+        [
+            225,
+            225
+        ],
+        [
+            221,
+            221
+        ],
+        [
+            220,
+            220
+        ],
+        [
+            205,
+            205
+        ],
+        [
+            203,
+            203
+        ],
+        [
+            198,
+            199
+        ],
+        [
+            190,
+            197
+        ],
+        [
+            189,
+            189
+        ],
+        [
+            186,
+            186
+        ],
+        [
+            185,
+            185
+        ],
+        [
+            181,
+            181
+        ],
+        [
+            180,
+            180
+        ],
+        [
+            179,
+            179
+        ],
+        [
+            178,
+            178
+        ],
+        [
+            169,
+            169
+        ],
+        [
+            168,
+            168
+        ],
+        [
+            167,
+            167
+        ],
+        [
+            144,
+            154
+        ],
+        [
+            136,
+            142
+        ],
+        [
+            124,
+            134
+        ]
+    ],
+    "blocks": [
+        "  output mmcm_lbclk_edge_aligned;",
+        "  assign poc_backup = poc_backup_r;",
+        "  always @(posedge clk) poc_backup_r <= #TCQ poc_backup_ns;",
+        "  always @(posedge clk) edge_aligned_r <= #TCQ edge_aligned_ns;",
+        "  wire indicate_alignment = ~rst && centering && done_ns;",
+        "  always @(*) prev_valid_ns = (~rst && ~ktap_at_right_edge && ~ktap_at_left_edge && ~edge_aligned_r) && prev_valid_r | done_ns;",
+        "  always @(posedge clk) prev_valid_r <= #TCQ prev_valid_ns;",
+        "  always @(posedge clk) diffs_eq_r <= #TCQ diffs_eq_ns;\n",
+        "  always @(*) diffs_eq_ns = centering && ((done_r && done_ns) ? diffs_eq : diffs_eq_r);",
+        "  always @(*) prev_ns = done_ns ? diff_r : prev_r;",
+        "  always @(posedge clk) prev_r <= #TCQ prev_ns;",
+        "  assign diff = diff_r;",
+        "  always @(posedge clk) diff_r <= #TCQ diff_ns;",
+        "  assign window_center = window_center_r;",
+        "  always @(posedge clk) window_center_r <= #TCQ window_center_ns;",
+        "  wire [TAPCNTRWIDTH:0] window_center_ns = center(left, center_diff_r, TAPSPERKCLK);",
+        "  always @(posedge clk) center_diff_r <= #TCQ center_diff_ns;",
+        "  reg [TAPCNTRWIDTH-1:0] center_diff_r;",
+        "  wire [TAPCNTRWIDTH-1:0] center_diff_ns = mod_sub(right, left, TAPSPERKCLK);",
+        "  assign right = use_noise_window ? rise_trail_right : rise_lead_right;",
+        "  assign left = use_noise_window ? rise_lead_left : rise_trail_left;",
+        "  assign edge_center = edge_center_r;",
+        "  always @(posedge clk) edge_center_r <= #TCQ edge_center_ns;",
+        "  always @(posedge clk) edge_diff_r <= #TCQ edge_diff_ns;",
+        "  always @(posedge clk) rise_trail_center_offset_r <= #TCQ rise_trail_center_offset_ns;",
+        "  always @(posedge clk) rise_lead_center_offset_r <= #TCQ rise_lead_center_offset_ns;",
+        "  assign mmcm_edge_detect_done = done_r;  ",
+        "  always @(posedge clk) done_r <= #TCQ done_ns;",
+        "  output [1:0] run_ends;\n  assign run_ends = run_ends_r;",
+        "  always @(*) begin\n    run_ends_ns = run_ends_r;\n    if (reset_run_ends) run_ends_ns = 2'b0;\n    else case (run_ends_r) \n           2'b00 : run_ends_ns = run_ends_r + {1'b0, run_end_r3 && run_polarity_held_r};\n\t   2'b01, 2'b10 : run_ends_ns = run_ends_r + {1'b0, run_end_r3};\n\t  endcase \n  end ",
+        "  always @(posedge clk) run_ends_r <= #TCQ run_ends_ns;",
+        "  always @(*) run_polarity_held_ns = run_end ? run_polarity : run_polarity_held_r;",
+        "  always @(posedge clk) run_polarity_held_r <= #TCQ run_polarity_held_ns;",
+        "  always @(posedge clk) run_end_r3 <= #TCQ run_end_r2;",
+        "  always @(posedge clk) run_end_r2 <= #TCQ run_end_r1;",
+        "  always @(posedge clk) run_end_r1 <= #TCQ run_end_r;",
+        "  always @(posedge clk) run_end_r <= #TCQ run_end;",
+        "  always @ (posedge clk) run_too_small_r3 <= #TCQ run_too_small_r2;",
+        "  always @ (posedge clk) run_too_small_r2 <= #TCQ run_too_small_r1;",
+        "  always @ (posedge clk) run_too_small_r1 <= #TCQ run_too_small & (run_ends_r == 'd1);  ",
+        "  function [TAPCNTRWIDTH:0] center (input [TAPCNTRWIDTH-1:0] left, \n                                    input [TAPCNTRWIDTH-1:0] diff,\n                                    input integer base);\n    integer center_ii;\n    begin\n      center_ii = ({left, 1'b0} + diff < base * 2)\n                    ? {left, 1'b0} + diff + 32'h0\n\t            : {left, 1'b0} + diff - base * 2;\n      center = center_ii[TAPCNTRWIDTH:0];\n    end\n  endfunction ",
+        "  function [TAPCNTRWIDTH-1:0] mod_sub (input [TAPCNTRWIDTH-1:0] a, \n                                       input [TAPCNTRWIDTH-1:0] b,\n                                       input integer base); \n    begin\n      mod_sub = (a>=b) ? a-b : a+base-b;\n    end\n  endfunction ",
+        "  function [TAPCNTRWIDTH-1:0] offset (input [TAPCNTRWIDTH-1:0] a, \n                                      input [1:0] b,\n                                      input integer base);\n    integer offset_ii;\n    begin\n      offset_ii = (a + b * NINETY) < base\n                     ? (a + b * NINETY) \n                     : (a + b * NINETY - base);\n      offset = offset_ii[TAPCNTRWIDTH-1:0];\n    end\n  endfunction "
+    ]
+}

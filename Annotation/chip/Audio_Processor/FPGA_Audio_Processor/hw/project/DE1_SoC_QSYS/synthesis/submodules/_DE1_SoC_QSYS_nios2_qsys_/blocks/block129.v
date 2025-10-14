@@ -1,0 +1,1 @@
+  assign W_mem_baddr = W_alu_result[26 : 0];

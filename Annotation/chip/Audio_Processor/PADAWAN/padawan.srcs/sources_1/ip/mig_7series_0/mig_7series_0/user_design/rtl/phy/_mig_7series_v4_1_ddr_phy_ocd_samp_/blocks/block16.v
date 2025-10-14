@@ -1,0 +1,1 @@
+  always @(posedge clk) samps_r <= #TCQ samps_ns;

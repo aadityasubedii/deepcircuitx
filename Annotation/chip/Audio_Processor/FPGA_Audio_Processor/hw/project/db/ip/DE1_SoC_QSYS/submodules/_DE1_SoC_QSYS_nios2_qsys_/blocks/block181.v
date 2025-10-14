@@ -1,0 +1,1 @@
+  assign R_stb_data = R_rf_b[7 : 0];

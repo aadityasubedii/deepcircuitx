@@ -1,0 +1,1 @@
+  always @(posedge clk) rd_merge_data_r <= #TCQ rd_merge_data;

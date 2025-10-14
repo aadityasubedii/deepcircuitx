@@ -1,0 +1,1 @@
+  assign edge_capture_wr_strobe = chipselect && ~write_n && (address == 3);

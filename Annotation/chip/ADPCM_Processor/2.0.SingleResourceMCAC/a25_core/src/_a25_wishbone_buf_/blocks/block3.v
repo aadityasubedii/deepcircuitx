@@ -1,0 +1,1 @@
+assign o_rdata = i_rdata;

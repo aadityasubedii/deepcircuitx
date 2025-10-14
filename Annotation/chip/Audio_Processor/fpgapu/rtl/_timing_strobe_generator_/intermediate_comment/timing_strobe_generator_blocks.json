@@ -1,0 +1,36 @@
+{
+    "line_num": [
+        [
+            53,
+            53
+        ],
+        [
+            42,
+            52
+        ],
+        [
+            37,
+            37
+        ],
+        [
+            28,
+            36
+        ],
+        [
+            21,
+            25
+        ],
+        [
+            10,
+            12
+        ]
+    ],
+    "blocks": [
+        "  assign o_beat_stb = o_tick_stb & (r_beat_counter == TICKS_PER_BEAT-1);",
+        "  always @(posedge i_clk) begin\n    if (i_rst) begin\n      r_beat_counter <= 0;\n    end else if (o_tick_stb) begin\n      if (r_beat_counter == TICKS_PER_BEAT-1) begin\n        r_beat_counter <= 0;\n      end else begin\n        r_beat_counter <= r_beat_counter + 1;\n      end\n    end\n  end",
+        "  assign o_tick_stb = (r_tick_counter == CLOCKS_PER_TICK-1);",
+        "  always @(posedge i_clk) begin\n    if (i_rst) begin\n      r_tick_counter <= 0;\n    end else if (r_tick_counter == CLOCKS_PER_TICK-1) begin\n      r_tick_counter <= 0;\n    end else begin\n      r_tick_counter <= r_tick_counter + 1;\n    end\n  end",
+        "  always @* begin\n    \n    $display(\"CLOCKS_PER_TICK: %d\", CLOCKS_PER_TICK);\n    $display(\"TICK_WIDTH: %d\", TICK_WIDTH);\n  end",
+        "  function integer divide_round(input integer dividend, input integer divisor);\n    divide_round = (dividend + (divisor / 2)) / divisor;\n  endfunction"
+    ]
+}

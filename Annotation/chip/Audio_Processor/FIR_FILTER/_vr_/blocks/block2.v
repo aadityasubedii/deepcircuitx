@@ -1,0 +1,1 @@
+assign LEDG[8] = pause ? blink_cnt[25] : 0;

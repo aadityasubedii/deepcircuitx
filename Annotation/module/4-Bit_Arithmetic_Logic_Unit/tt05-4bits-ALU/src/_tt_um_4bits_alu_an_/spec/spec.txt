@@ -1,0 +1,9 @@
+Module name: tt_um_4bits_alu_an. 
+
+Module specification: The module tt_um_4bits_alu_an incorporates an embedded Arithmetic Logic Unit (ALU) designed to perform a variety of arithmetic and logical operations. This functionality is driven by inputs which include an 8-bit `ui_in` that splits into two 4-bit operands ("A" from bits [7:4] and "B" from bits [3:0]), and an 8-bit bidirectional bus `uio_in` carrying an operation code (lower four bits) as well as a carry-in bit (fifth bit). The module has output ports `uo_out`, where the ALU operation results are stored, `uio_out` which is hardcoded to zero, and `uio_oe` also set to zero, indicating non-utilization of bidirectional functionality for outputs. Control signals include an enable (`ena`), clock (`clk`), and an active-low reset (`rst_n`).
+
+Internally, the module uses key signals such as `A` and `B` as ALU operands, `c_in` for the carry input, and `opcode` for operation determination. The `alu` submodule processes these signals based on the current operation outputting the results to `uo_out`.
+
+The tt_um_4bits_alu_an Verilog module features an instantiation of another module `alu`, handling the operational logic using a typical select (`case`) statement within a procedural block (`always @(*)`), which is triggered on changes to any operands or controls. This submodule reacts to the reset signal and decodes the operation code to perform the corresponding ALU operation, from basic arithmetic to logical comparisons, directly manipulating its internal register `out` to produce the desired result. 
+
+Overall, the design showcases structured handling and separation of data interpretation from processing, strictly using procedural abstraction and signal management for clear, modifiable computational logic.

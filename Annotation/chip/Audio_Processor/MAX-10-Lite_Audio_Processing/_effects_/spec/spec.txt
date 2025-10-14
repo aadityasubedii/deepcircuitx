@@ -1,0 +1,7 @@
+Module name: effects. 
+
+Module specification: The effects module is a specialized digital sound effects component parameterized by a resolution parameter (RESOLUTION), and it primarily fulfills two functions: clipping and echo. The entity operates synchronously on the incoming clock signal 'data_CLK'. The input ports include 'data_CLK', for the provision of the operating clock, a 10-bit switch signal 'SW' that activates or deactivates the two main functions, and a 'data_in' port which accepts incoming sound data with a size dictated by RESOLUTION. The action on the switch signal's first bit (SW[0]) enables or disables the clipping effect and the second bit (SW[1]) manages the echo effect. 'Data_out' is the output port that outputs the processed audio data, having the same resolution as the input data.
+
+An internal signal 'L1' of a size comparable to the resolution is wired inside to pass on the output from the clipping operation to the echo operation as input. This aids in the step-wise transformation of the data.
+
+The clipping unit 'clipL' works to potentially limit the amplitude of the incoming data based on the activation of the first bit of the switch signal. Its output is fed into the echo unit 'eL' which depending on the state of the second bit of the switch signal, adds an echo effect to the incoming data. The final processed data, which is possibly clipped and/or echoed, is then output through 'data_out'.

@@ -1,0 +1,1 @@
+assign SR0 = ({SRS,EXP,MANT});

@@ -1,0 +1,1 @@
+  assign E_rf_ecc_recoverable_valid = 1'b0;

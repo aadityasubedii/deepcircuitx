@@ -1,0 +1,1 @@
+  always @(posedge clk) rise_lead_r <= #TCQ rise_lead_ns;

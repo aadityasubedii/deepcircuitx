@@ -1,0 +1,1 @@
+assign active_sample_count_nxt = (update_active_sample) ? {next_active_sample_count, 1'b1} : active_sample_count;

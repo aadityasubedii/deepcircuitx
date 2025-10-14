@@ -1,0 +1,43 @@
+{
+    "gpt-message": [
+        {
+            "role": "system",
+            "content": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+        },
+        {
+            "role": "user",
+            "content": "Name of the module and its functionality is as follows: \nModule name: TD_Detect.\nExplanation: The TD_Detect module is designed to differentiate between NTSC and PAL video signals based on the vertical synchronization (VS) and horizontal synchronization (HS) input signals. When the module detects a rising edge on the iTD_HS signal or a low level on the iRST_N reset signal, it performs operations to determine the stability and type of the video signal. The oTD_Stable output is set high if either NTSC or PAL format is detected as stable. The oNTSC and oPAL outputs specifically indicate whether the signal conforms to the NTSC or PAL standards, respectively, based on the count of vertical synchronization pulses detected between horizontal synchronization pulses. If the reset iRST_N is low, all internal states and counters are reset."
+        },
+        {
+            "role": "user",
+            "content": "Input and output ports and their explanation is as follows: \nInput ports: iTD_VS, iTD_HS, iRST_N.\nExplanation: iTD_VS and iTD_HS are the vertical and horizontal synchronization signals, respectively, received from a video source. These signals are essential for detecting the type of video signal (NTSC or PAL). The iRST_N is the reset signal, which when set low, resets the internal states and counters to their default states ensuring the detection process starts afresh upon reset.\n\nOutput ports: oTD_Stable, oNTSC, oPAL.\nExplanation: oTD_Stable is an output signal that indicates if a stable video signal (either NTSC or PAL) has been detected. The oNTSC and oPAL outputs indicate specifically whether the detected stable video signal conforms to the NTSC or PAL standards, respectively. These outputs help in configuring other system components based on the type of video signal detected."
+        },
+        {
+            "role": "user",
+            "content": "Internal signals and their explanation is as follows: \nInternal signals: NTSC, PAL, Pre_VS, Stable_Cont.\n\nExplanation:\n- NTSC: This is a register used to indicate whether the currently detected video signal is conforming to NTSC standards. It is set when the count of vertical synchronization pulses (kept by Stable_Cont) measured between horizontal synchronization pulses falls within a specific range indicative of the NTSC format.\n  \n- PAL: Similar to the NTSC register, this register indicates whether the detected video signal conforms to PAL standards. It is set based on a different range of count values in Stable_Cont, specific to the PAL format.\n  \n- Pre_VS: This register holds the previous state of the vertical synchronization signal (iTD_VS). It is used to detect transitions in this signal from low to high, which are critical for timing measurements that determine the video standard.\n  \n- Stable_Cont: This is an 8-bit counter used to count the number of cycle intervals between successive high transitions in the vertical synchronization signal iTD_VS. This counter is incremented on each cycle where the iTD_VS is low and is reset when iTD_VS transitions to high. The value of this counter is crucial in determining whether the incoming video format is NTSC or PAL based on predefined count ranges."
+        }
+    ],
+    "claude-message": [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+                },
+                {
+                    "type": "text",
+                    "text": "Name of the module and its functionality is as follows: \nModule name: TD_Detect.\nExplanation: The TD_Detect module is designed to differentiate between NTSC and PAL video signals based on the vertical synchronization (VS) and horizontal synchronization (HS) input signals. When the module detects a rising edge on the iTD_HS signal or a low level on the iRST_N reset signal, it performs operations to determine the stability and type of the video signal. The oTD_Stable output is set high if either NTSC or PAL format is detected as stable. The oNTSC and oPAL outputs specifically indicate whether the signal conforms to the NTSC or PAL standards, respectively, based on the count of vertical synchronization pulses detected between horizontal synchronization pulses. If the reset iRST_N is low, all internal states and counters are reset."
+                },
+                {
+                    "type": "text",
+                    "text": "Input and output ports and their explanation is as follows: \nInput ports: iTD_VS, iTD_HS, iRST_N.\nExplanation: iTD_VS and iTD_HS are the vertical and horizontal synchronization signals, respectively, received from a video source. These signals are essential for detecting the type of video signal (NTSC or PAL). The iRST_N is the reset signal, which when set low, resets the internal states and counters to their default states ensuring the detection process starts afresh upon reset.\n\nOutput ports: oTD_Stable, oNTSC, oPAL.\nExplanation: oTD_Stable is an output signal that indicates if a stable video signal (either NTSC or PAL) has been detected. The oNTSC and oPAL outputs indicate specifically whether the detected stable video signal conforms to the NTSC or PAL standards, respectively. These outputs help in configuring other system components based on the type of video signal detected."
+                },
+                {
+                    "type": "text",
+                    "text": "Internal signals and their explanation is as follows: \nInternal signals: NTSC, PAL, Pre_VS, Stable_Cont.\n\nExplanation:\n- NTSC: This is a register used to indicate whether the currently detected video signal is conforming to NTSC standards. It is set when the count of vertical synchronization pulses (kept by Stable_Cont) measured between horizontal synchronization pulses falls within a specific range indicative of the NTSC format.\n  \n- PAL: Similar to the NTSC register, this register indicates whether the detected video signal conforms to PAL standards. It is set based on a different range of count values in Stable_Cont, specific to the PAL format.\n  \n- Pre_VS: This register holds the previous state of the vertical synchronization signal (iTD_VS). It is used to detect transitions in this signal from low to high, which are critical for timing measurements that determine the video standard.\n  \n- Stable_Cont: This is an 8-bit counter used to count the number of cycle intervals between successive high transitions in the vertical synchronization signal iTD_VS. This counter is incremented on each cycle where the iTD_VS is low and is reset when iTD_VS transitions to high. The value of this counter is crucial in determining whether the incoming video format is NTSC or PAL based on predefined count ranges."
+                }
+            ]
+        }
+    ]
+}

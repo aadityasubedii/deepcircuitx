@@ -1,0 +1,1 @@
+  assign start_strobe = writedata[2] && control_wr_strobe;

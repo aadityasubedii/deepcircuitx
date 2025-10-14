@@ -1,0 +1,1 @@
+  assign ociram_addr = jtag_ram_access ? MonAReg[9 : 2] : address[7 : 0];

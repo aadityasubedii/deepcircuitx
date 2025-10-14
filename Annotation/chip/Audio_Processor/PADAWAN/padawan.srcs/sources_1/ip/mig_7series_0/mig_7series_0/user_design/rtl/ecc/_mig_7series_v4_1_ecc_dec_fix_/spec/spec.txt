@@ -1,0 +1,9 @@
+Module name: mig_7series_v4_1_ecc_dec_fix. 
+
+Module specification: The 'mig_7series_v4_1_ecc_dec_fix' module is a hardware model designed to decode and correct Error Correction Code (ECC) for memory systems, mainly implemented with Micron's MIG (Memory Interface Generator) 7 series. The module's operations are synchronized by the input clock (clk) and can be reset by the reset signal (rst). The module receives raw data (phy_rddata) and the parity check matrix (h_rows) as inputs. The control signal correct_en decides whether the detected errors in incoming data will be corrected or not. Another control signal ecc_status_valid indicates the validity of ECC error status. 
+
+The module corrects detected errors and generates the corrected data (rd_data). Error status signals, ecc_single and ecc_multiple, signal the presence of single and multiple bit errors in the decoded data respectively. 
+
+Internally, the module uses temporary wires and registers (syndrome_ns, syndrome_r, ecc_rddata_ns, ecc_rddata_r) to handle syndrome calculation and payload data extraction. The H-matrix (h_matrix) transforms the parity check matrix from a linear format to a 2D matrix, facilitating ECC operations. An internal flip_bits wire array stores the bitwise complement of error positions. Additional internal signals like zero and odd are used to check error conditions in the data.
+
+The module is divided into several operation blocks, including syndrome generation (ecc_word, ecc_bit), payload extraction (extract_payload), H-matrix generation (h_col, h_bit), bit flipping (flip_word, flip_bit), read data generation and potential correction (conditional based on correct_en), raw_bit copying (copy_raw_bits), and ECC status computation (compute_status). These operation blocks collaboratively ensure efficient decoding and correction of ECC in the memory system.

@@ -1,0 +1,1 @@
+  always @(posedge clk) simp_stg3_final_r <= #TCQ simp_stg3_final_ns;

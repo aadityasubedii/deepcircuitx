@@ -1,0 +1,1 @@
+  always @(posedge clk) po_counter_read_val_r <= #TCQ po_counter_read_val[5:0];

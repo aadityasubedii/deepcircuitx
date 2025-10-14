@@ -1,0 +1,1 @@
+        assign enable = enable_reg;

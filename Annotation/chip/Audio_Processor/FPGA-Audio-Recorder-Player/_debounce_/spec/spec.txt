@@ -1,0 +1,9 @@
+Module name: debounce. 
+
+Module specification: The debounce module is a Verilog RTL code designed to stabilize switch signals and reduce the occurrence of false triggering due to electric noise, otherwise known as switch bouncing. This is achieved through continuous synchronization of the input signal, 'i_btn', to the system clock 'clk' using two internal signals, 'sync_0' and 'sync_1'. 
+
+The debounce module is comprised of two inputs (clk, i_btn) and three outputs (o_state, o_ondn, o_onup). 'clk' is the clock signal orchestrating the timing of operations inside the module, whilst 'i_btn' serves as the raw input signal being debounced. 'o_state' is the final debounced state of 'i_btn'. Further, 'o_ondn' and 'o_onup' are output signals indicating when 'o_state' undergoes a state change, consequently reflecting the state of the debounced input.
+
+Internally, the module main components are signals 'sync_0', 'sync_1', 'counter', 'idle', and 'max'. Signals 'sync_0' and 'sync_1' stabilize the 'i_btn' pulse edges relative to the clock signal. The 'counter' increments on every clock cycle when 'idle' is false and resets when true. 'idle' verifies the system's steady state based on a matching condition between 'o_state' and 'sync_1'. Meanwhile, 'max' gets activated when the 'counter' reaches its maximum value signifying that the bouncing has settled and a genuine 'i_btn' signal is registered.
+
+The module blocks are primarily: synchronization of 'i_btn' with 'sync_0' and 'sync_1'; counter control based on 'idle' status, registering 'o_state' alterations, and resetting the counter; 'o_state' toggling whenever 'max' holds true; and finally defining 'o_ondn' and 'o_onup' signals depending on 'max', 'idle', and 'o_state' values. This structure provides a meticulous and robust noise filtration mechanism, thus delivering a reliable debounced signal.

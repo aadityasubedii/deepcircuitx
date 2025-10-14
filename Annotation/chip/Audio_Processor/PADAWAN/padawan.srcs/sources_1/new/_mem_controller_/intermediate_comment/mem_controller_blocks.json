@@ -1,0 +1,71 @@
+{
+    "line_num": [
+        [
+            286,
+            301
+        ],
+        [
+            128,
+            276
+        ],
+        [
+            123,
+            125
+        ],
+        [
+            111,
+            120
+        ],
+        [
+            95,
+            108
+        ],
+        [
+            78,
+            78
+        ],
+        [
+            60,
+            60
+        ],
+        [
+            59,
+            59
+        ],
+        [
+            58,
+            58
+        ],
+        [
+            57,
+            57
+        ],
+        [
+            56,
+            56
+        ],
+        [
+            55,
+            55
+        ],
+        [
+            54,
+            54
+        ]
+    ],
+    "blocks": [
+        " always @(posedge clk_100MHz)begin\n    if(counterEnable==0)begin\n        counter <= 0;\n        delay_done <= 0;\n    end\n    \n    else if(counter < 60) begin\n        counter <= counter + 1;\n        delay_done <= 0;\n    end\n    \n    else begin\n        counter <= 0;\n        delay_done <= 1;\n    end\n   end     ",
+        "always @ (posedge clk_100MHz)\nbegin\n    if (rst == 1)begin\n        pstate <= WAIT;\n        counterEnable <= 0;\n        write_zero <= 0;\n        get_data<=0;\n        data_ready<=0;\n        mem_bank<=0;\n        end\n    else begin\n    if (pulse==1)nstate<=LEAVEDELETE;\n    case (pstate)\n    \n        BANK : begin\n            if(mem_bank==7)nstate<=INC_BLOCK;\n            else nstate <= BANK;  \n            if(recording[mem_bank] == 1)begin\n                get_data <= 1;\n                counterEnable <= 1;\n                RamCEn<=0;\n                RamOEn<=1;\n                WEn_d1<=0;\n                pstate<=BANK_ACK;\n            end\n            else if(playing[mem_bank] == 1)begin\n                get_data<=0;\n                RamCEn <= 0;\n                RamOEn <= 0;\n                WEn_d1 <= 1;\n                counterEnable <= 1;\n                pstate<=BANK_ACK;\n            end\n            else begin\n                get_data<=0;\n                RamCEn <= 1;\n                RamOEn <= 1;\n                WEn_d1 <= 1;\n                data_ready <= 1;\n                pstate <= FLAG;\n            end            \n        end\n        \n        FLAG : begin\n            data_ready <= 0;\n            mem_bank <= mem_bank + 1;\n            pstate <= nstate;\n        end\n        \n        BANK_ACK : begin\n            get_data<=0;\n            if (counter==55)begin \n                data_ready<=1;\n                RamCEn<=1;\n                RamOEn<=1;\n                WEn_d1<=1;\n            end\n            else data_ready<=0;\n            if(delay_done == 1)begin\n                pstate <= nstate;\n                mem_bank <= mem_bank + 1;\n                counterEnable <= 0;\n             end\n        end\n        \n        INC_BLOCK: begin\n            increment <= 1;\n            mix_data<=1;\n            nstate <= WAIT;\n            pstate <= WAIT;\n        end\n        \n    \n        WAIT: begin\n            mix_data <= 0;\n            increment <= 0;\n            if(pulse == 1)begin\n                pstate <= BANK;\n            end\n            else if(delete == 1)begin\n                pstate <= ENTERDELETE;                \n            end\n            else \n                pstate <= WAIT;\n            end\n    \n        ENTERDELETE: begin\n            if (max_delete_block==0)begin\n                if (max_block==0)\n                    max_delete_block<=mem_block_addr;\n                else\n                    max_delete_block<=max_block;\n            end\n            nstate<=DELETE;\n            mem_bank<=delete_bank;\n            write_zero <= 1;    \n            pstate<=DELETE;\n        end\n        DELETE : begin\n            RamCEn <= 0;\n            RamOEn <= 1;\n            WEn_d1 <= 0; \n            counterEnable <= 1;\n            pstate <= DELETE_ACK;\n        end\n             \n        DELETE_ACK : begin\n            if(delay_done == 1)begin\n                pstate <= DELETE_INC;\n                RamCEn <= 1;\n                RamOEn <= 1;\n                WEn_d1 <= 1;\n                counterEnable <= 0;\n            end\n        end \n         \n        DELETE_INC : begin\n            if(delete_address < max_delete_block)begin\n                delete_address<=delete_address+1;\n                pstate <= nstate;\n            end\n            else begin\n                delete_clear <= 1; \n                delete_address<=0;\n                write_zero<=0;\n                max_delete_block<=0; \n                mem_bank<=0;    \n                pstate <= ONECYCLE;  \n            end  \n        end \n                     \n        ONECYCLE: begin \n           delete_clear<=0;\n           pstate <=WAIT;\n        end\n        \n        LEAVEDELETE: begin\n            mem_bank<=0;\n            write_zero<=0;\n            counterEnable<=1;\n            if(delay_done==1)begin\n                counterEnable<=0;\n                pstate<=BANK;\n            end\n        end\n    endcase \n     \n   end \nend         ",
+        "always @(posedge(clk_100MHz))begin\n    RamWEn<=WEn_d1;\nend",
+        "always @ (posedge(clk_100MHz)) begin\n    if (rst==1)addrblock44khz<=0;\n    else if (address_enable==0)addrblock44khz<=0;\n    else if(increment==1)begin\n        if(max_block==0 || addrblock44khz < max_block)\n            addrblock44khz <= addrblock44khz + 1;\n        else\n            addrblock44khz <= 0;\n    end\nend",
+        "always @ (posedge(clk_100MHz))begin\n    if(rst == 1)begin\n        count <= 0;\n        pulse <= 0;\n    end\n    else if( count < MHz44cnt)begin\n        count <= count + 1;\n        pulse <= 0;\n    end\n    else begin \n        pulse <= 1; \n        count <= 0;\n    end      \nend",
+        "    assign address_enable = playing || recording;",
+        "    initial addrblock44khz = 0;",
+        "    initial mem_bank=0;",
+        "    initial mix_data=0;",
+        "    initial data_ready = 0;",
+        "    initial get_data = 0;  ",
+        "    initial write_zero = 0;    ",
+        "    initial delete_clear = 0;"
+    ]
+}

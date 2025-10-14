@@ -1,0 +1,126 @@
+{
+    "line_num": [
+        [
+            124,
+            124
+        ],
+        [
+            123,
+            123
+        ],
+        [
+            122,
+            122
+        ],
+        [
+            121,
+            121
+        ],
+        [
+            120,
+            120
+        ],
+        [
+            119,
+            119
+        ],
+        [
+            118,
+            118
+        ],
+        [
+            117,
+            117
+        ],
+        [
+            93,
+            115
+        ],
+        [
+            91,
+            91
+        ],
+        [
+            90,
+            90
+        ],
+        [
+            89,
+            89
+        ],
+        [
+            88,
+            88
+        ],
+        [
+            87,
+            87
+        ],
+        [
+            86,
+            86
+        ],
+        [
+            85,
+            85
+        ],
+        [
+            84,
+            84
+        ],
+        [
+            74,
+            83
+        ],
+        [
+            73,
+            73
+        ],
+        [
+            69,
+            71
+        ],
+        [
+            67,
+            69
+        ],
+        [
+            64,
+            65
+        ],
+        [
+            62,
+            63
+        ],
+        [
+            40,
+            92
+        ]
+    ],
+    "blocks": [
+        "        assign av_waitrequest = 1'b0;",
+        "        assign av_readdata = 16'b0;",
+        "        assign genlock_enable = 2'b00;",
+        "        assign write_trigger_ack = 1'b0;",
+        "        assign write_trigger = 1'b0;",
+        "        assign clear_underflow_sticky = 1'b0;",
+        "        assign status_update_int = 1'b0;",
+        "        assign enable = 1'b1;",
+        "        always @ (posedge rst or posedge clk) begin\n            if (rst) begin\n                genlock_enable_reg <= 2'b0;\n                interrupt_enable <= 2'b0;\n                enable_reg <= 1'b0;\n                status_update_int_reg <= 1'b0;\n                genlocked_int_reg <= 1'b0;\n                \n                is_mode_match <= {NO_OF_MODES_INT{1'b0}};\n                genlocked_reg <= 1'b0;\n                clear_underflow_sticky_reg <= 1'b0;\n                write_trigger_ack_reg <= 1'b0;\n            end else begin\n                {genlock_enable_reg, interrupt_enable, enable_reg} <= (av_write && av_address == 8'd0) ? av_writedata[4:0] : {genlock_enable_reg, interrupt_enable, enable_reg};\n                status_update_int_reg <= (mode_change | status_update_int_reg) & ~(clear_interrupts & av_writedata[1]) & interrupt_enable[0];\n                genlocked_int_reg <= ((genlocked ^ genlocked_reg) | genlocked_int_reg) & ~(clear_interrupts & av_writedata[2]) & interrupt_enable[1];\n                \n                is_mode_match <= (mode_change) ? mode_match : is_mode_match;\n                genlocked_reg <= genlocked;\n                clear_underflow_sticky_reg <= ((av_write && av_address == 8'd1 && av_writedata[2]) | clear_underflow_sticky_reg) & underflow_sticky;\n                write_trigger_ack_reg <= av_write_ack;\n            end\n        end",
+        "        assign genlock_enable = genlock_enable_reg;",
+        "        assign clear_underflow_sticky = clear_underflow_sticky_reg;",
+        "        assign clear_interrupts = av_write && av_address == 8'd2;",
+        "        assign status_update_int = status_update_int_reg | genlocked_int_reg;",
+        "        assign write_trigger_ack = write_trigger_ack_reg;",
+        "        assign write_trigger = av_write & ~is_side_registers;",
+        "        assign is_side_registers = av_address <= 8'd4;",
+        "        assign av_waitrequest = av_write & ~(av_write_ack | is_side_registers);",
+        "        assign av_readdata = (av_address == 8'd1) ? {{12{1'b0}}, genlocked,\n                                                                 underflow_sticky,\n                                                                 1'b0,\n                                                                 enable_resync} :\n                             (av_address == 8'd2) ? {{13{1'b0}}, genlocked_int_reg,\n                                                                 status_update_int_reg,\n                                                                 1'b0} :\n                             (av_address == 8'd3) ? usedw_output :\n                             (av_address == 8'd4) ? is_mode_match_output :\n                             {{11{1'b0}}, genlock_enable, interrupt_enable, enable_reg};",
+        "        assign enable = enable_reg;",
+        "        end else begin\n            assign is_mode_match_output = {{16-NO_OF_MODES_INT{1'b0}}, is_mode_match};\n        end",
+        "        if(NO_OF_MODES_INT >= 16) begin\n            assign is_mode_match_output = is_mode_match[15:0];\n        end else begin",
+        "        else\n            assign usedw_output = {{16-USED_WORDS_WIDTH{1'b0}}, usedw};",
+        "        if(USED_WORDS_WIDTH >= 16)\n            assign usedw_output = usedw[15:0];",
+        "generate\n    if(USE_CONTROL) begin\n        reg enable_reg;\n        reg write_trigger_ack_reg;\n        \n        wire is_side_registers;\n        reg [1:0] interrupt_enable;\n        reg status_update_int_reg;\n        reg genlocked_reg;\n        reg genlocked_int_reg;\n        reg [1:0] genlock_enable_reg;\n        \n        wire [15:0] usedw_output;\n        wire [15:0] is_mode_match_output;\n        \n        reg [NO_OF_MODES_INT-1:0] is_mode_match;\n        wire clear_interrupts;\n        \n        reg clear_underflow_sticky_reg;\n        \n        wire mode_write;\n        \n        if(USED_WORDS_WIDTH >= 16)\n            assign usedw_output = usedw[15:0];\n        else\n            assign usedw_output = {{16-USED_WORDS_WIDTH{1'b0}}, usedw};\n        \n        if(NO_OF_MODES_INT >= 16) begin\n            assign is_mode_match_output = is_mode_match[15:0];\n        end else begin\n            assign is_mode_match_output = {{16-NO_OF_MODES_INT{1'b0}}, is_mode_match};\n        end\n        \n        assign enable = enable_reg;\n        assign av_readdata = (av_address == 8'd1) ? {{12{1'b0}}, genlocked,\n                                                                 underflow_sticky,\n                                                                 1'b0,\n                                                                 enable_resync} :\n                             (av_address == 8'd2) ? {{13{1'b0}}, genlocked_int_reg,\n                                                                 status_update_int_reg,\n                                                                 1'b0} :\n                             (av_address == 8'd3) ? usedw_output :\n                             (av_address == 8'd4) ? is_mode_match_output :\n                             {{11{1'b0}}, genlock_enable, interrupt_enable, enable_reg};\n        assign av_waitrequest = av_write & ~(av_write_ack | is_side_registers);\n        assign is_side_registers = av_address <= 8'd4;\n        assign write_trigger = av_write & ~is_side_registers;\n        assign write_trigger_ack = write_trigger_ack_reg;\n        assign status_update_int = status_update_int_reg | genlocked_int_reg;\n        assign clear_interrupts = av_write && av_address == 8'd2;\n        assign clear_underflow_sticky = clear_underflow_sticky_reg;\n        assign genlock_enable = genlock_enable_reg;\n        "
+    ]
+}

@@ -1,0 +1,11 @@
+Module name: coeff_memory. 
+
+Module specification: The coeff_memory module primarily serves as a memory unit designed to store and retrieve coefficient data. Built around a register array 'coeffmem' of size 512 with each element of 16-bit width acting as the memory block, it can write or read the data based on control signals. It consists of two main operational blocks: one responding to a write request, and the other to a read request.
+
+The input ports consist of 'write_enable', 'read_enable', 'Sclk', 'in_data', 'coeffwrite', and 'coeffread'. 'write_enable' and 'read_enable' are control signals that initiate the writing and reading processes, respectively. 'Sclk', the system clock, synchronizes the data reading and writing into/from memory. 'in_data' is the 16-bit data input written into the memory when 'write_enable' is high. 'coeffwrite' and 'coeffread' are address signals that pinpoint the specific location in the memory for writing and reading operations, respectively.
+
+The module has an output port 'data_coeff', which presents the value of coefficient memory at the position indicated by `coeffread` when `read_enable` is high, and presents 0 if `read_enable` is low.
+
+The module uses the internal register array 'coeffmem' as the memory for storing coefficients. 
+
+The module features two significant sections of code performing distinct functions. The first block, under the @(posedge Sclk) condition, awaits the rising edge of the system clock to validate the 'write_enable' signal and consequently performs the write operation into the 'coeffmem'. In the case where 'write_enable' isn't set, the module ensures the retention of the old value at the address. The second part of the code assigns the memory value at position 'coeffread' to 'data_coeff' if 'read_enable' is high and assigns 0 otherwise.

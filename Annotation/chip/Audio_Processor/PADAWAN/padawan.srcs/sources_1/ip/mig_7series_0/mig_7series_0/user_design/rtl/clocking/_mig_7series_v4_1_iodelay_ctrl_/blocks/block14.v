@@ -1,0 +1,1 @@
+      assign sys_rst_i = sys_rst;

@@ -1,0 +1,1 @@
+wire set_lrck = (lrck_divider == 8'hff);

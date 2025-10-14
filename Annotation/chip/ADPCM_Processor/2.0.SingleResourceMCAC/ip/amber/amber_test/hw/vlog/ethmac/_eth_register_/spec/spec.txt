@@ -1,0 +1,23 @@
+Module name: eth_register. 
+
+Module specification: 
+
+The 'eth_register' is a Verilog module designed to function as a register with synchronous and asynchronous reset capabilities. It accepts a parameterized width for data storage, and it controls the reading and writing of data based on specific input signals. 
+
+The module takes five input ports: 
+
+1. DataIn: A data input port whose width is given by the parameter WIDTH. This port feeds data into the module. 
+2. Write: A control signal. When set high, it triggers the module to accept and store the input data from the DataIn port.
+3. Clk: The clock signal for synchronizing the internal operations of the module.
+4. Reset: An asynchronous reset signal. When high, it resets the output data port to a predefined RESET_VALUE immediately.
+5. SyncReset: A synchronous reset signal. When set high, it resets the output data port to a predefined RESET_VALUE at the next clock cycle.
+
+The module has a single output port: 
+
+1. DataOut: An output port that emits the stored data. Its width is also defined by the WIDTH parameter.
+
+This module utilizes an internal register signal, DataOut, which retains and dispenses of the data. DataOut holds the previous data or RESET_VALUE depending on the state of the input control signals. 
+
+In terms of the code blocks: 
+
+1. The 'always' block: This block executes at every positive edge of the clock signal or upon a high on the Reset signal. It checks the Reset signal first, followed by the SyncReset signal, and then the Write signal. If Reset or SyncReset is detected high, it updates the DataOut register with RESET_VALUE. If Write signal is detected high and no reset signal is high, it reads and stores the data input into DataOut at the next clock edge. Thus, this block controls the main functionality of the module.

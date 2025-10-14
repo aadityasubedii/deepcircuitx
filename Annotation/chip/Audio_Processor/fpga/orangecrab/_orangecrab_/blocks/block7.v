@@ -1,0 +1,23 @@
+    dsp #(.PLL_HZ(24000000)) dsp (
+        .ext_ck(ext_ck),
+        .tx(tx),
+        .spi_sck(spi_sck),
+        .spi_cs(spi_cs),
+        .spi_mosi(spi_mosi),
+        .spi_miso(spi_miso),
+        .test(test),
+        .led_ck(led_ck),
+        .led_data(led_data),
+        .sck(sck),
+        .ws(ws),
+        .sd_in0(sd_in0),
+        .sd_in1(sd_in1),
+        .sd_in2(sd_in2),
+        .sd_in3(sd_in3),
+        .o_sck(o_sck),
+        .o_ws(o_ws),
+        .o_sd(o_sd),
+        .ext_sck(ext_sck),
+        .ext_ws(ext_ws),
+        .ext_sd(ext_sd)
+    );

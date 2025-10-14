@@ -1,0 +1,9 @@
+Module name: a23_register_bank. 
+
+Module Specification: The a23_register_bank module primarily serves as a storage unit within a processor design that stores values in multiple 32-bit registers. A prominent feature of the module is its ability to handle different execution modes like user mode, supervisor mode, IRQ execution mode, and FIRQ execution mode. Each mode uses the module differently so that the module supports the processor's overall functionality.
+
+The module receives several inputs, including the clock signal (i_clk), various mode controls and command signals (like i_fetch_stall, i_reg_bank_wen), program counter (i_pc), status bits, and register value (i_reg). These inputs collectively allow synchronous operations and provide data for storage in the registers. The output ports supply values from destination/source registers and the program counter for use in other modules.
+
+Internally, the module uses signals representing physical and banked registers (like r0-r14, r15, r13_svc, etc.), mode representations signals (like usr_exec, svc_exec, etc.), and output versions of the registers (like r0_out, r1_out, etc.). These play critical roles in maintaining the working state of the register bank and supporting module functionality across different execution modes.
+
+The module can be divided into several blocks or sections: initial declaration and assigning values to registers, handling different register selections, assigning different register outcomes based on the execution mode or instruction decode phase, and a synchronous block updating register values according to the write enables signals and execution modes. Each of these sections collectively allows the module to handle and appropriately store and supply the values needed for the processor's overall functioning.

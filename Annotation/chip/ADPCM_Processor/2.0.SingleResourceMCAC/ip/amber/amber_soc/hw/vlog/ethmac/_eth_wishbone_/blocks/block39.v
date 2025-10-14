@@ -1,0 +1,1 @@
+assign WriteRxDataToFifo_wb = WriteRxDataToFifoSync2 & ~WriteRxDataToFifoSync3;

@@ -1,0 +1,1 @@
+    always @(posedge clk) sync_access <= !ce_n;

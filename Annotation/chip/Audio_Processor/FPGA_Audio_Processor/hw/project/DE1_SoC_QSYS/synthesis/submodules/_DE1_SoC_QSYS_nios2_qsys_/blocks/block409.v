@@ -1,0 +1,1 @@
+  assign cpu_d_read = d_read;

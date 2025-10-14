@@ -1,0 +1,1 @@
+        always @(posedge clk) rd_data_addr <= #TCQ rd_data_addr_ns;

@@ -1,0 +1,1 @@
+assign exclusive_access = i_exclusive && i_cache_enable;

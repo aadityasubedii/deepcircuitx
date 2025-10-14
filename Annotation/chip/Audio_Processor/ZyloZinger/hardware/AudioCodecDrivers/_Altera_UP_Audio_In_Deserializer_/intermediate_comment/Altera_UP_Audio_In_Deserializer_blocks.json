@@ -1,0 +1,21 @@
+{
+    "line_num": [
+        [
+            164,
+            172
+        ],
+        [
+            150,
+            159
+        ],
+        [
+            139,
+            148
+        ]
+    ],
+    "blocks": [
+        "always @(posedge clk)\nbegin\n\tif (reset == 1'b1)\n\t\tdata_in_shift_reg\t<= {AUDIO_DATA_WIDTH{1'b0}};\n\telse if (bit_clk_rising_edge & valid_audio_input)\n\t\tdata_in_shift_reg\t<= \n\t\t\t{data_in_shift_reg[(AUDIO_DATA_WIDTH - 1):1], \n\t\t\t serial_audio_in_data};\nend",
+        "always @(posedge clk)\nbegin\n\tif (reset == 1'b1)\n\t\tright_audio_fifo_read_space\t\t\t<= 8'h00;\n\telse\n\tbegin\n\t\tright_audio_fifo_read_space[7]\t\t<= right_channel_fifo_is_full;\n\t\tright_audio_fifo_read_space[6:0]\t<= right_channel_fifo_used;\n\tend\nend",
+        "always @(posedge clk)\nbegin\n\tif (reset == 1'b1)\n\t\tleft_audio_fifo_read_space\t\t\t<= 8'h00;\n\telse\n\tbegin\n\t\tleft_audio_fifo_read_space[7]\t\t<= left_channel_fifo_is_full;\n\t\tleft_audio_fifo_read_space[6:0]\t\t<= left_channel_fifo_used;\n\tend\nend"
+    ]
+}

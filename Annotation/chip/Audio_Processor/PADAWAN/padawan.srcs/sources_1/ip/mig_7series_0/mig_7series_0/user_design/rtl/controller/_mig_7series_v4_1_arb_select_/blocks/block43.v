@@ -1,0 +1,1 @@
+      always @(posedge clk) col_periodic_rd_r <= #TCQ col_periodic_rd_ns;

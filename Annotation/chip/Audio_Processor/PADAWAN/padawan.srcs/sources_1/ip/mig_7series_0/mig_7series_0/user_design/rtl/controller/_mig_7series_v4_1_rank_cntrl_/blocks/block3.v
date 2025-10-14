@@ -1,0 +1,1 @@
+      always @(posedge clk) periodic_rd_timer_r <= #TCQ periodic_rd_timer_ns;

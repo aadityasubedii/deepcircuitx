@@ -1,0 +1,15 @@
+Module name: boot_mem128. 
+
+Module specification: 
+
+The module boot_mem128 is an implementation of a memory interface, specifically for the boot process of a system using the Wishbone protocol for system interconnections. It supports both read and write operations and comes with a debugging functionality controlled by the AMBER_WISHBONE_DEBUG directive.
+
+The module's input ports include the clock (clk), the reset signal, scan test inputs from scan_in0 to scan_in4, scan enable toggle, test mode toggle, Wishbone protocol signals such as address(i_wb_adr), select(i_wb_sel), write enable(i_wb_we), data(i_wb_dat), cycle(i_wb_cyc) and strobe(i_wb_stb). 
+
+The output ports include scan test outputs scan_out0 to scan_out4, Wishbone protocol signals such as data(o_wb_dat), acknowledge(o_wb_ack), error(o_wb_err). 
+
+The module also has internal signals like start_write, start_read, read_data, write_data, byte_enable, and address. These signals guide the read and write operations by providing triggers, data, byte lane activity, and address for memory operations. Debug related signals like jitter_r and start_read_r are also included within the module.
+
+The Verilog code is organized into different sections spanning memory operation initiation, debugging directives, error handling, mapping data between input and output ports, and data writing/reading blocks. Configurations for different directives (`ifdef verilog, `ifdef AMBER_WISHBONE_DEBUG) are implemented to accommodate different functionality modes, especially to enhance debug effectiveness or to adapt to different FPGA targets. Memory is either instantiated as multiple 1024x8 instances or as one single instance depending on the presence of the “verilog” directive. 
+
+In summary, boot_mem128 module is a robust and flexible memory interface for a boot system, designed with the scope of adjustable functionality in different environments.

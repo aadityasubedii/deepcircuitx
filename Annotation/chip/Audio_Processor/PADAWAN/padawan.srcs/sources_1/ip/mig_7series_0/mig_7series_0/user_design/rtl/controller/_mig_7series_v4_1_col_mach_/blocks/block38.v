@@ -1,0 +1,1 @@
+    if(nPHY_WRLAT == 2) begin : offset_pipe_1

@@ -1,0 +1,1 @@
+  assign mmcm_edge_detect_done = done_r;  

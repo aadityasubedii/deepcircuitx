@@ -1,0 +1,1 @@
+  wire accept_req_lcl = periodic_rd_ack_r_lcl || (accept_r && use_addr);

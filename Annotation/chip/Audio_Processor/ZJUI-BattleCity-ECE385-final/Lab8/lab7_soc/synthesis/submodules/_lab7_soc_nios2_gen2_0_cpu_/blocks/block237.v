@@ -1,0 +1,4 @@
+`ifdef NO_PLI
+defparam lab7_soc_nios2_gen2_0_cpu_ociram_sp_ram.lpm_file = "lab7_soc_nios2_gen2_0_cpu_ociram_default_contents.dat";
+`else
+defparam lab7_soc_nios2_gen2_0_cpu_ociram_sp_ram.lpm_file = "lab7_soc_nios2_gen2_0_cpu_ociram_default_contents.hex";

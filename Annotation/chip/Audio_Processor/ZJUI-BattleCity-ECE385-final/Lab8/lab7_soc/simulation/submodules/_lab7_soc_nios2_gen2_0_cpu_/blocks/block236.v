@@ -1,0 +1,1 @@
+  assign E_valid = E_valid_from_R & ~E_rf_ecc_valid_any;

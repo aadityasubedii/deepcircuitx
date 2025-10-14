@@ -1,0 +1,1 @@
+assign Initialize_Crc = StateIdle | StatePreamble | (|DlyCrcCnt);

@@ -1,0 +1,1 @@
+assign WAnWBnMAG = (WAnWBnEXP < 27) ? ({WAnWBnMANT[11:4], 7'b0000000} >> (26 - WAnWBnEXP)) : ({WAnWBnMANT[11:4], 7'b0000000} << (WAnWBnEXP - 26));

@@ -1,0 +1,1 @@
+assign v_sync = vid_v_sync_reg;

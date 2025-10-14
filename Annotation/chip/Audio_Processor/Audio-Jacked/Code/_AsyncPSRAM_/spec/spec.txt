@@ -1,0 +1,11 @@
+Module name: AsyncPSRAM. 
+
+Module specification: The AsyncPSRAM is a module designed to interact with Asynchronous Pseudo Static Random Access Memory (PSRAM). It is controlled by a finite state machine (FSM) featuring three states: st_RESET, st_COUNT, and st_HOLD for command execution, command update, and latching addresses and data, respectively. 
+
+The input ports include 'sysclk' for system clock synchronization, 'rst' for reset purposes, 'mem_data_out' for data output from memory to module, 'mem_addr' for identifying memory address, 'mem_byte_en' for deciding the memory segment under operation, 'command' to determine if it's a read/write operation, and 'go' signal to initiate an operation.
+
+Output ports include 'mem_idle' to signify if memory is occupied, 'mem_data_in' for data input from the module to memory, 'MEM_ADDR_OUT' for supplying the address to memory, 'MEM_CEN', 'MEM_OEN', 'MEM_WEN', 'MEM_LBN', 'MEM_UBN' as control signals, 'MEM_ADV' indicating address validity, and 'MEM_DATA', the bidirectional data port.
+
+Internally, several signals assist operations. These include 'a' and 'b' which help with data transfers, 'outp' the wire to transfer read data from memory to 'mem_data_in', 'waitcount' and 'waitcount2' for counting cycles during operations, 'current_cmd' to reflect the ongoing command, and 'state' to represent the FSM state.
+
+The code is divided into sections corresponding to tasks such as clock synchronization, reset and operation handling, and FSM control. The FSM operation outlines three states - st_RESET (idle/reset mode), st_COUNT (count/wait time for write and read operation), and st_HOLD (holding state after an operation), providing a structured and clear operation processing regimen. This comprehensive, detailed overview ensures the memory can be read and written to efficiently and rapidly, meeting PSRAM's inherent needs.

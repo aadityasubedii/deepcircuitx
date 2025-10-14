@@ -1,0 +1,1 @@
+  assign D_ctrl_rd_ctl_reg = D_op_rdctl;

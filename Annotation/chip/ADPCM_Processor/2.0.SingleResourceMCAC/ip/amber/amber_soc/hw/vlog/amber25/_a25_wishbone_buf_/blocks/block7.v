@@ -1,0 +1,7 @@
+always @(posedge i_clk)
+    if (push && pop)
+        wbuf_used_r     <= wbuf_used_r;
+    else if (push)
+        wbuf_used_r     <= wbuf_used_r + 1'd1;
+    else if (pop)
+        wbuf_used_r     <= wbuf_used_r - 1'd1;

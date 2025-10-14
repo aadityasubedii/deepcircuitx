@@ -1,0 +1,1 @@
+    	assign is_std = vid_std[15:0];

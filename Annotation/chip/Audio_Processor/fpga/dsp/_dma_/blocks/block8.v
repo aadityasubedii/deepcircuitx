@@ -1,0 +1,1 @@
+    assign dbus_rdt = reading ? rdt(io_addr) : 0;

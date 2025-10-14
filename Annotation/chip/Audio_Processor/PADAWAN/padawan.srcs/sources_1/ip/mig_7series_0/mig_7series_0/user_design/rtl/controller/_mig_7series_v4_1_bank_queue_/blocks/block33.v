@@ -1,0 +1,1 @@
+  always @(posedge clk) idle_r_lcl <= #TCQ idle_ns_lcl;

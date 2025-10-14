@@ -1,0 +1,66 @@
+{
+    "line_num": [
+        [
+            192,
+            192
+        ],
+        [
+            191,
+            191
+        ],
+        [
+            179,
+            190
+        ],
+        [
+            177,
+            177
+        ],
+        [
+            170,
+            172
+        ],
+        [
+            142,
+            167
+        ],
+        [
+            131,
+            131
+        ],
+        [
+            122,
+            130
+        ],
+        [
+            120,
+            120
+        ],
+        [
+            112,
+            114
+        ],
+        [
+            98,
+            109
+        ],
+        [
+            90,
+            97
+        ]
+    ],
+    "blocks": [
+        "    assign o_wb_ack = i_wb_stb && ( start_write || start_read_d2 );",
+        "    assign o_wb_dat = wb_rdata32 ;                  ",
+        "    always @( posedge i_clk )\n        begin\n        start_read_d1   <= start_read;\n        start_read_d2   <= start_read_d1;\n        if ( start_read_d1 )\n            begin\n            wb_rdata32 <= addr_d1[1:0] == 2'd0 ? rd_data[ 31: 0] :\n                          addr_d1[1:0] == 2'd1 ? rd_data[ 63:32] :\n                          addr_d1[1:0] == 2'd2 ? rd_data[ 95:64] :\n                                                 rd_data[127:96] ;\n            end\n        end",
+        "    assign rd_data = ram [addr_d1[27:2]];",
+        "    for (i=0;i<16;i=i+1) begin : masked\n        assign masked_wdata[8*i+7:8*i] = wr_mask[i] ? rd_data[8*i+7:8*i] : wr_data[8*i+7:8*i];\n        end",
+        "    always @( posedge i_clk )\n        begin\n        wr_en          <= start_write;\n        wr_mask        <= i_wb_adr[3:2] == 2'd0 ? { 12'hfff, ~i_wb_sel          } : \n                          i_wb_adr[3:2] == 2'd1 ? { 8'hff,   ~i_wb_sel, 4'hf    } : \n                          i_wb_adr[3:2] == 2'd2 ? { 4'hf,    ~i_wb_sel, 8'hff   } : \n                                                  {          ~i_wb_sel, 12'hfff } ; \n        wr_data        <= {4{i_wb_dat}};\n\n                          \n        addr_d1        <= i_mem_ctrl ? {5'd0, i_wb_adr[24:2]} : i_wb_adr[29:2];\n        \n        if ( wr_en )\n            begin\n            ram [addr_d1[27:2]]  <= masked_wdata;\n            `ifdef AMBER_MEMIF_DEBUG\n            $write(\"%09d  \", `U_TB.clk_count);\n            $display(\"Main memory write: address %h, data %h, be %d%d%d%d\",\n                        {2'd0, addr_d1, 2'd0}, wr_data[31:0], \n                        ~wr_mask[addr_d1[1:0]*4+3],\n                        ~wr_mask[addr_d1[1:0]*4+2],\n                        ~wr_mask[addr_d1[1:0]*4+1],\n                        ~wr_mask[addr_d1[1:0]*4+0]                        );\n            `endif\n            end\n        end",
+        "    assign o_wb_dat = wb_rdata128 ;                  ",
+        "    always @( posedge i_clk )\n        begin\n        start_read_d1   <= start_read;\n        start_read_d2   <= start_read_d1;\n        if ( start_read_d1 )\n            begin\n            wb_rdata128 <= rd_data;\n            end\n        end",
+        "    assign rd_data = ram [addr_d1[27:2]];",
+        "    for (i=0;i<16;i=i+1) begin : masked\n        assign masked_wdata[8*i+7:8*i] = wr_mask[i] ? rd_data[8*i+7:8*i] : wr_data[8*i+7:8*i];\n        end",
+        "    always @( posedge i_clk )\n        begin\n        wr_en          <= start_write;\n        wr_mask        <= ~ i_wb_sel; \n        wr_data        <= i_wb_dat;\n\n                          \n        addr_d1        <= i_mem_ctrl ? {5'd0, i_wb_adr[24:2]} : i_wb_adr[29:2];\n        \n        if ( wr_en )\n            ram [addr_d1[27:2]]  <= masked_wdata;\n        end",
+        "generate\nif (WB_DWIDTH == 128) \n    begin : wb128\n    reg     [127:0]      wb_rdata128 = 'd0;\n\n    \n    \n    "
+    ]
+}

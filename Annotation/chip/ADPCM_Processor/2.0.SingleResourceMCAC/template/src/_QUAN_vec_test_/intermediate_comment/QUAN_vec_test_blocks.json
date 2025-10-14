@@ -1,0 +1,16 @@
+{
+    "line_num": [
+        [
+            53,
+            92
+        ],
+        [
+            41,
+            51
+        ]
+    ],
+    "blocks": [
+        "initial\nbegin\n  $timeformat(-9,2,\"ns\", 16);\n`ifdef SDFSCAN\n  $sdf_annotate(\"sdf/QUAN_tsmc18_scan.sdf\", test.top);\n`endif\n  #10;\n\n\n\n\nfor(rate=0;rate<4;rate=rate+1) begin\n\nfor(law=0;law<2;law=law+1) begin\n\t$display(\"%s %s\", rates[rate], laws[law]);\n\t$readmemh({\"../model/adpcm-itu/vector_out/\",laws[law],\"/enc/\",rates[rate],\"/nrm/homing/dln.t\"}, DLNs);\n\t$readmemh({\"../model/adpcm-itu/vector_out/\",laws[law],\"/enc/\",rates[rate],\"/nrm/homing/ds.t\"}, DSs);\n\t$readmemh({\"../model/adpcm-itu/vector_out/\",laws[law],\"/enc/\",rates[rate],\"/nrm/homing/I.t\"}, Is);\n\tRATE = rate;\n\tfor (j = 0; j < 19879; j=j+1) begin\n\t\t#1 DLN = DLNs[j];\n\t\tDS = DSs[j];\n\t\t#10;\n`ifdef VERBOSE\n\t\t$display(\"DLN = %h\",DLN);\n\t\t$display(\"DS = %b\",DS);\n\t\t$display(\"I = %h\",I);\n`endif\n\t\tif (I!=Is[j]) begin\n\t\t\t$display(\"TEST #%7d FAIL for RATE = %b, DS = %b, DLN = %d = 0x%h. I = %h instead of %h\", j, RATE, DS, DLN, DLN, I, Is[j]);\n`ifdef BREAKONERR\n\t\t\t$stop;\n`endif\n\t\tend else begin\n\t\t\t\n\t\tend\n\tend\nend\n\nend",
+        "initial \nbegin\n\trates[0] = \"40\";\n\trates[1] = \"32\";\n\trates[2] = \"24\";\n\trates[3] = \"16\";\n\t\n\t\n\tlaws[0] = \"aa\";\n\tlaws[1] = \"uu\"; \nend"
+    ]
+}

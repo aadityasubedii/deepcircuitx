@@ -1,0 +1,21 @@
+{
+    "line_num": [
+        [
+            123,
+            123
+        ],
+        [
+            119,
+            121
+        ],
+        [
+            95,
+            117
+        ]
+    ],
+    "blocks": [
+        "assign prbs_o = prbs;",
+        "always @ (lfsr_q[PRBS_WIDTH:1]) begin\n       prbs = lfsr_q[PRBS_WIDTH:1];\nend",
+        "always @ (posedge clk_i)\nbegin\n   if (prbs_seed_init && EYE_TEST == \"FALSE\"  || rst_i )  \n\n\n      begin\n        lfsr_q <= #TCQ  {prbs_seed_i + prbs_fseed_i[31:0] + 32'h55555555};\n\n      end\n   else   if (clk_en) begin\n     \n        lfsr_q[32:9] <= #TCQ  lfsr_q[31:8];\n        lfsr_q[8]    <= #TCQ  lfsr_q[32] ^ lfsr_q[7];\n        lfsr_q[7]    <= #TCQ  lfsr_q[32] ^ lfsr_q[6];\n        lfsr_q[6:4]  <= #TCQ  lfsr_q[5:3];\n        \n        lfsr_q[3]    <= #TCQ  lfsr_q[32] ^ lfsr_q[2];\n        lfsr_q[2]    <= #TCQ  lfsr_q[1] ;\n        lfsr_q[1]    <= #TCQ  lfsr_q[32];\n       \n        \n         end\nend"
+    ]
+}

@@ -1,0 +1,1 @@
+wire write_clk = test_mode ? clk : ~(cs & ws);

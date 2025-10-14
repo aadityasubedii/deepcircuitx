@@ -1,0 +1,8 @@
+Module name: PISO.
+Module specification: The PISO (Parallel-In-Serial-Out) Shift register module is designed to convert parallel input data into serial output. The main input ports are Frame, Sclk (system clock), clear, p2s_enable (parallel to serial enable), and data_in (40-bit parallel input data). Whereas, the main output ports are Output (serial output) and output_ready (indicates completion of serial output).
+
+The module functionality is driven by various signals. On a clear signal, the module resets Output and output_ready to an undefined state 'x' and 0, respectively. When the p2s_enable is high, the module captures the data_in into a temporary storage and signals readiness for outputting data. The module begins serial output upon positive edge of the system clock after the p2s_enable and continues irrespective of further changes in the p2s_enable signal until the data is completely shifted out. 
+
+Internally, the module utilizes the following signals: bit_count, frame_start, out_rdy (output ready), and temp. The signals bit_count and temp aid in the serial output process, with bit_count acting as an index counter and temp serving as temporary storage for the input data. Frame_start denotes the start of the serial output process, while out_rdy raises when there is data ready for outputting. 
+
+The main blocks in the code handle: clearing the outputs, enabling the parallel to serial conversion, initiating the serial output, handling remaining bits following the initiation of output, and resetting the module to its default state. The clear and reset functionalities ensure that the module outputs can be reset to safe states when not in active operation.

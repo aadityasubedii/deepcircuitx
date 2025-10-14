@@ -1,0 +1,1 @@
+assign RetryMax = RetryCnt[3:0] == MaxRet[3:0];

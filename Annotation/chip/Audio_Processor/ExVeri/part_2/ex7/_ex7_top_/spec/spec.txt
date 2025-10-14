@@ -1,0 +1,11 @@
+Module name: ex7_top. 
+
+Module specification: The ex7_top module is a top-level module that integrates a linear feedback shift register (lfsr_7) and two hexadecimal-to-7-segment decoders (hex_to_7seg). The purpose of this module is to create 7-segment display outputs based on the clock input and user key input. 
+
+This module has two input ports: CLOCK_50 and KEY[3:3]. The CLOCK_50 is the master clock for the system and is used to determine when to shift the register value in the lfsr_7. KEY[3:3] is a 1-bit input that serves as an enable signal for the lfsr_7 register. The values of the "KEY[3:3]" input controls when the shifting operation takes place in the lfsr_7.  
+
+This module has two output ports: HEX0[6:0] and HEX1[6:0]. HEX0 and HEX1 are 7-bit outputs that represent two halves of the generated 7-segment display. These outputs are fed from the two 'hex_to_7seg' modules, which convert respective parts of the lfsr_7's shift register output ('sreg_out') to 7-segment display values. 
+
+The internal signals used are 'sreg_out[6:0]' and 'enable'. 'sreg_out' holds the output value from the lfsr_7 shift operation and feeds the hex_to_7seg modules. The 'enable' signal, which is the inversion of "KEY[3]", controls whether the lfsr_7 shift operation occurs or not. 
+
+The module code has three main parts. First, the 'enable' signal is derived from the KEY[3] input. In the second part, the lfsr_7 shift operation occurs based on the 'enable' signal and the CLOCK_50. In the final part, the 'hex_to_7seg' modules convert the lfsr_7's shift register output ('sreg_out') to 7-segment display values, driving the HEX0 and HEX1 outputs.

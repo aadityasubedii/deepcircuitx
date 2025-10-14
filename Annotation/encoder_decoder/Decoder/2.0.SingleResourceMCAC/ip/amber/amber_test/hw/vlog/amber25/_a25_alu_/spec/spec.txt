@@ -1,0 +1,9 @@
+Module name: a25_alu. 
+
+Module specification: The `a25_alu` module is a versatile arithmetic logic unit capable of performing a variety of operations on two 32-bit inputs, named `i_a_in` and `i_b_in`. It uses a 9-bit function selector (`i_function`) to dictate specific operations such as arithmetic calculations, logical operations, input manipulation (swapping or NOT operations), and output selection. The module outputs the results of these operations on a 32-bit port `o_out` and provides a 4-bit status flag output `o_flags`, which includes flags for the sign of the result, zero condition, carry out, and overflow condition.
+
+Inputs include `i_a_in` and `i_b_in` for data; `i_barrel_shift_carry` and `i_status_bits_carry` for carrying forward carry information from previous operations; and `i_function` for operation control. The outputs are `o_out` for the operation result and `o_flags` for operation status flags.
+
+Internally, the module uses signals such as `a`, `b`, and `b_not` for handling inputs and their NOT versions based on the control signals. There are also various operation result signals like `and_out`, `or_out`, `xor_out`, and other specific output format signals. Carry-related signals like `carry_in`, `carry_out`, `fadder_out`, and `fadder_carry_out` manage arithmetic operations and their carry propagation. Settings such as `swap_sel` and `not_sel` manage the swapping and NOT operations on inputs as dictated by `i_function`.
+
+The Verilog code is divided into sections for initializing these internal signals based on input conditions, configuring arithmetic operations possibly optimized for specific FPGA architectures (specific code blocks are present for Xilinx Spartan-6 and Virtex-6), and selecting the final output based on the operation results. The assembly of the `o_out` and `o_flags` based on the `out_sel` decisions and the computation results encapsulates the conclusion of this configurable module’s operation process.

@@ -1,0 +1,1 @@
+  assign W_br_taken = R_ctrl_br_uncond | (R_ctrl_br & W_cmp_result);

@@ -1,0 +1,9 @@
+Module name: Zero_detector
+
+Module specification: The 'Zero_detector' module is a hardware module designed to manage the sleep mode of a system based on the input signals namely 'InputL' and 'InputR'. It operates by continuously monitoring these two 16-bit input signals for zero levels. The input signals are triggered at the positive edge of the 'in_status' control signal. The functionality of the module is controlled by a reset line 'Reset_n', which when goes low, resets the internal signals 'sleep_count' and 'sleep_status' to zero. 
+
+The main functionality of this module revolves around the aforementioned internal signals: 'sleep_count' and 'sleep_status'. 'sleep_count' is a 10-bit register that increments when both 'InputL' and 'InputR' are zero and resets otherwise. 'sleep_status' is a 1-bit register signal that switches to high when 'sleep_count' reaches 800 and maintains there as long as both input signals remain zero indicating that the system can enter sleep mode. The reset in 'sleep_status' brings the system back to active mode. 
+
+The module's main code is structured into several blocks that handle different tasks including reset operations and the detection of zero levels in inputs. If 'Reset_n' is low, 'sleep_count' and 'sleep_status' are reset. Then it checks if both 'InputL' and 'InputR' are zero, 'sleep_count' increments and 'sleep_status' remains zero. If either of them registers a non-zero value, 'sleep_count' resets and 'sleep_status' remains zero. 
+
+Finally, if 'sleep_count' reaches or exceeds 800, it remains constant at this value and 'sleep_status' switches to indicating sleep mode. This module also includes two inputs 'OutReady' and 'col' that are not utilized in the current implementation. The 'Zero_detector' module plays an integral role in power management of the system by controlling the transition between active and sleep modes based on the input signals.

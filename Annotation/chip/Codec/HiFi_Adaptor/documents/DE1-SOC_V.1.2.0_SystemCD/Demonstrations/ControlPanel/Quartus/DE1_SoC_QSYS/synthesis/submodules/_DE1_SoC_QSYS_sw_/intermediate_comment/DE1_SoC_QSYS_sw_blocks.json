@@ -1,0 +1,91 @@
+{
+    "line_num": [
+        [
+            220,
+            220
+        ],
+        [
+            205,
+            217
+        ],
+        [
+            193,
+            202
+        ],
+        [
+            181,
+            190
+        ],
+        [
+            169,
+            178
+        ],
+        [
+            157,
+            166
+        ],
+        [
+            145,
+            154
+        ],
+        [
+            133,
+            142
+        ],
+        [
+            121,
+            130
+        ],
+        [
+            109,
+            118
+        ],
+        [
+            97,
+            106
+        ],
+        [
+            85,
+            94
+        ],
+        [
+            84,
+            84
+        ],
+        [
+            83,
+            83
+        ],
+        [
+            74,
+            80
+        ],
+        [
+            73,
+            73
+        ],
+        [
+            64,
+            70
+        ]
+    ],
+    "blocks": [
+        "  assign edge_detect = d1_data_in ^  d2_data_in;",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n        begin\n          d1_data_in <= 0;\n          d2_data_in <= 0;\n        end\n      else if (clk_en)\n        begin\n          d1_data_in <= data_in;\n          d2_data_in <= d1_data_in;\n        end\n    end",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n          edge_capture[9] <= 0;\n      else if (clk_en)\n          if (edge_capture_wr_strobe)\n              edge_capture[9] <= 0;\n          else if (edge_detect[9])\n              edge_capture[9] <= -1;\n    end",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n          edge_capture[8] <= 0;\n      else if (clk_en)\n          if (edge_capture_wr_strobe)\n              edge_capture[8] <= 0;\n          else if (edge_detect[8])\n              edge_capture[8] <= -1;\n    end",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n          edge_capture[7] <= 0;\n      else if (clk_en)\n          if (edge_capture_wr_strobe)\n              edge_capture[7] <= 0;\n          else if (edge_detect[7])\n              edge_capture[7] <= -1;\n    end",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n          edge_capture[6] <= 0;\n      else if (clk_en)\n          if (edge_capture_wr_strobe)\n              edge_capture[6] <= 0;\n          else if (edge_detect[6])\n              edge_capture[6] <= -1;\n    end",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n          edge_capture[5] <= 0;\n      else if (clk_en)\n          if (edge_capture_wr_strobe)\n              edge_capture[5] <= 0;\n          else if (edge_detect[5])\n              edge_capture[5] <= -1;\n    end",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n          edge_capture[4] <= 0;\n      else if (clk_en)\n          if (edge_capture_wr_strobe)\n              edge_capture[4] <= 0;\n          else if (edge_detect[4])\n              edge_capture[4] <= -1;\n    end",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n          edge_capture[3] <= 0;\n      else if (clk_en)\n          if (edge_capture_wr_strobe)\n              edge_capture[3] <= 0;\n          else if (edge_detect[3])\n              edge_capture[3] <= -1;\n    end",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n          edge_capture[2] <= 0;\n      else if (clk_en)\n          if (edge_capture_wr_strobe)\n              edge_capture[2] <= 0;\n          else if (edge_detect[2])\n              edge_capture[2] <= -1;\n    end",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n          edge_capture[1] <= 0;\n      else if (clk_en)\n          if (edge_capture_wr_strobe)\n              edge_capture[1] <= 0;\n          else if (edge_detect[1])\n              edge_capture[1] <= -1;\n    end",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n          edge_capture[0] <= 0;\n      else if (clk_en)\n          if (edge_capture_wr_strobe)\n              edge_capture[0] <= 0;\n          else if (edge_detect[0])\n              edge_capture[0] <= -1;\n    end",
+        "  assign edge_capture_wr_strobe = chipselect && ~write_n && (address == 3);",
+        "  assign irq = |(edge_capture & irq_mask);",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n          irq_mask <= 0;\n      else if (chipselect && ~write_n && (address == 2))\n          irq_mask <= writedata[9 : 0];\n    end",
+        "  assign data_in = in_port;",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n          readdata <= 0;\n      else if (clk_en)\n          readdata <= {32'b0 | read_mux_out};\n    end"
+    ]
+}

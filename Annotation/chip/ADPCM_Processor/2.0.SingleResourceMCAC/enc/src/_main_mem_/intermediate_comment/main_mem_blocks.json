@@ -1,0 +1,66 @@
+{
+    "line_num": [
+        [
+            223,
+            224
+        ],
+        [
+            206,
+            221
+        ],
+        [
+            204,
+            204
+        ],
+        [
+            197,
+            199
+        ],
+        [
+            161,
+            194
+        ],
+        [
+            153,
+            153
+        ],
+        [
+            150,
+            151
+        ],
+        [
+            136,
+            148
+        ],
+        [
+            134,
+            134
+        ],
+        [
+            127,
+            129
+        ],
+        [
+            103,
+            124
+        ],
+        [
+            95,
+            102
+        ]
+    ],
+    "blocks": [
+        "\tassign o_wb_dat = wb_rdata32 ;                  \n\tassign o_wb_ack = i_wb_stb && ( start_write || start_read_d2 );",
+        "\talways @( posedge reset, posedge clk ) begin\n\t\tif (reset) begin\n\t\t\tstart_read_d1 <= 'd0;\n\t\t\tstart_read_d2 <= 'd0;\n\t\t\twb_rdata32 <= 'd0;\n\t\tend else begin\n\t\t\tstart_read_d1   <= start_read;\n\t\t\tstart_read_d2   <= start_read_d1;\n\t\t\tif ( start_read_d1 ) begin\n\t\t\t\twb_rdata32 <= addr_d1[1:0] == 2'd0 ? rd_data[ 31: 0] :\n\t\t\t\t\t\t  addr_d1[1:0] == 2'd1 ? rd_data[ 63:32] :\n\t\t\t\t\t\t  addr_d1[1:0] == 2'd2 ? rd_data[ 95:64] :\n\t\t\t\t\t\t\t\t             rd_data[127:96] ;\n\t\t\tend\n\t\tend\n\tend",
+        "\tassign rd_data = ram [addr_d1[27:2]];",
+        "\tfor (i=0;i<16;i=i+1) begin : masked\n\t\tassign masked_wdata[8*i+7:8*i] = wr_mask[i] ? rd_data[8*i+7:8*i] : wr_data[8*i+7:8*i];\n\tend",
+        "\talways @( posedge reset, posedge clk ) begin\n\t\tif (reset) begin\n\t\t\twr_en <= 'd0;\n\t\t\twr_mask <= 'd0;\n\t\t\twr_data <= 'd0;\n\t\t\taddr_d1 <= 'd0;\n\t\t\tfor (k=0; k<(2**(MAIN_MSB-2)); k=k+1) begin\n\t\t\t\tram[k] <= 'd0;\n\t\t\tend\n\t\tend else begin\n\t\t\twr_en          <= start_write;\n\t\t\twr_mask        <= i_wb_adr[3:2] == 2'd0 ? { 12'hfff, ~i_wb_sel          } : \n\t\t\t\t\t  i_wb_adr[3:2] == 2'd1 ? { 8'hff,   ~i_wb_sel, 4'hf    } : \n\t\t\t\t\t  i_wb_adr[3:2] == 2'd2 ? { 4'hf,    ~i_wb_sel, 8'hff   } : \n\t\t\t\t\t\t                    {          ~i_wb_sel, 12'hfff } ; \n\t\t\twr_data        <= {4{i_wb_dat}};\n\n\t\t\t\t\t  \n\t\t\taddr_d1        <= i_mem_ctrl ? {5'd0, i_wb_adr[24:2]} : i_wb_adr[29:2];\n\n\t\t\tif ( wr_en ) begin\n\t\t\t\tram [addr_d1[27:2]]  <= masked_wdata;\n\t\t\t\t`ifdef AMBER_MEMIF_DEBUG\n\t\t\t\t$write(\"%09d  \", `U_TB.clk_count);\n\t\t\t\t$display(\"Main memory write: address %h, data %h, be %d%d%d%d\",\n\t\t\t\t\t\t{2'd0, addr_d1, 2'd0}, wr_data[31:0], \n\t\t\t\t\t\t~wr_mask[addr_d1[1:0]*4+3],\n\t\t\t\t\t\t~wr_mask[addr_d1[1:0]*4+2],\n\t\t\t\t\t\t~wr_mask[addr_d1[1:0]*4+1],\n\t\t\t\t\t\t~wr_mask[addr_d1[1:0]*4+0]                        );\n\t\t\t\t`endif\n\t\t\tend\n\t\tend\n\tend",
+        "    end",
+        "\tassign o_wb_dat = wb_rdata128 ;                  \n\tassign o_wb_ack = i_wb_stb && ( start_write || start_read_d2 );",
+        "\talways @( posedge reset, posedge clk ) begin\n\t\tif (reset) begin\n\t\t\tstart_read_d1 <= 'd0;\n\t\t\tstart_read_d2 <= 'd0;\n\t\t\twb_rdata128 <= 'd0;\n\t\tend else begin\n\t\t\tstart_read_d1   <= start_read;\n\t\t\tstart_read_d2   <= start_read_d1;\n\t\t\tif ( start_read_d1 ) begin\n\t\t\t\twb_rdata128 <= rd_data;\n\t\t\tend\n\t\tend\n\tend",
+        "\tassign rd_data = ram [addr_d1[27:2]];",
+        "\tfor (i=0;i<16;i=i+1) begin : masked\n\t\tassign masked_wdata[8*i+7:8*i] = wr_mask[i] ? rd_data[8*i+7:8*i] : wr_data[8*i+7:8*i];\n\tend",
+        "\talways @( posedge reset, posedge clk ) begin\n\t\tif (reset) begin\n\t\t\twr_en <= 'd0;\n\t\t\twr_mask <= 'd0;\n\t\t\twr_data <= 'd0;\n\t\t\taddr_d1 <= 'd0;\n\t\t\tfor (k=0; k<(2**(MAIN_MSB-2)); k=k+1) begin\n\t\t\t\tram[k] <= 'd0;\n\t\t\tend\n\t\tend else begin\n\t\t\twr_en          <= start_write;\n\t\t\twr_mask        <= ~ i_wb_sel; \n\t\t\twr_data        <= i_wb_dat;\n\n\t\t\t\n\t\t\taddr_d1        <= i_mem_ctrl ? {5'd0, i_wb_adr[24:2]} : i_wb_adr[29:2];\n\n\t\t\tif ( wr_en ) begin\n\t\t\t\tram [addr_d1[27:2]]  <= masked_wdata;\n\t\t\tend\n\t\tend\n\tend",
+        "generate\nif (WB_DWIDTH == 128) \n    begin : wb128\n\treg     [127:0]      wb_rdata128;\n\n\t\n\t\n\t"
+    ]
+}

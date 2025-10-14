@@ -1,0 +1,1 @@
+       assign of_data_full_v[1]    = 0;

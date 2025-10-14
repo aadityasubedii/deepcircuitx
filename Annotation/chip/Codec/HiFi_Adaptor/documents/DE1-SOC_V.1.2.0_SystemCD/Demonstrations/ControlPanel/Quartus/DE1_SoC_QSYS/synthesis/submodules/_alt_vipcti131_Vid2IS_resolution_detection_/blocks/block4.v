@@ -1,0 +1,1 @@
+assign update_total_sample = (end_of_active_line && second_active_line) && (next_total_sample_count != total_sample_count[14:1] || !total_sample_count[0]) && first_start_of_line;

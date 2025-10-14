@@ -1,0 +1,1 @@
+  assign retired_pcb = 32'b0;

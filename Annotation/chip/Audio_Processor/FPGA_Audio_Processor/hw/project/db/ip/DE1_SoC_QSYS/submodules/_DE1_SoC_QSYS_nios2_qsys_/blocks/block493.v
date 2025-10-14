@@ -1,0 +1,1 @@
+  assign ociram_wr_en = jtag_ram_access ? jtag_ram_wr : avalon_ram_wr;

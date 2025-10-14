@@ -1,0 +1,1 @@
+  always @(posedge clk) req_data_buf_addr_r <= #TCQ req_data_buf_addr_ns;

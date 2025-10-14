@@ -1,0 +1,86 @@
+{
+    "line_num": [
+        [
+            203,
+            216
+        ],
+        [
+            196,
+            196
+        ],
+        [
+            190,
+            193
+        ],
+        [
+            185,
+            185
+        ],
+        [
+            179,
+            182
+        ],
+        [
+            174,
+            174
+        ],
+        [
+            168,
+            171
+        ],
+        [
+            163,
+            163
+        ],
+        [
+            159,
+            160
+        ],
+        [
+            156,
+            198
+        ],
+        [
+            154,
+            154
+        ],
+        [
+            120,
+            123
+        ],
+        [
+            113,
+            116
+        ],
+        [
+            106,
+            109
+        ],
+        [
+            99,
+            102
+        ],
+        [
+            96,
+            125
+        ]
+    ],
+    "blocks": [
+        "    function integer log2ceil;\n        input integer val;\n        integer i;\n\n        begin\n            i = 1;\n            log2ceil = 0;\n\n            while (i < val) begin\n                log2ceil = log2ceil + 1;\n                i = i << 1;\n            end\n        end\n    endfunction",
+        "            assign out_error = 1'b0;",
+        "            assign out_error = out_payload[\n              DATA_WIDTH + PACKET_WIDTH + PCHANNEL_W + EMPTY_WIDTH + PERROR_W - 1 : \n              DATA_WIDTH + PACKET_WIDTH + PCHANNEL_W + EMPTY_WIDTH\n            ];",
+        "            assign out_empty = 1'b0;",
+        "            assign out_empty = out_payload[\n              DATA_WIDTH + PACKET_WIDTH + PCHANNEL_W + EMPTY_WIDTH - 1 : \n              DATA_WIDTH + PACKET_WIDTH + PCHANNEL_W\n            ];",
+        "            assign out_channel = 1'b0;",
+        "            assign out_channel = out_payload[\n              DATA_WIDTH + PACKET_WIDTH + PCHANNEL_W - 1 : \n              DATA_WIDTH + PACKET_WIDTH\n            ];",
+        "            assign {out_startofpacket, out_endofpacket} = 2'b0;",
+        "            assign {out_startofpacket, out_endofpacket} = \n                out_payload[DATA_WIDTH + PACKET_WIDTH - 1 : DATA_WIDTH];",
+        "    generate\n        \n        if (USE_PACKETS) begin\n            assign {out_startofpacket, out_endofpacket} = \n                out_payload[DATA_WIDTH + PACKET_WIDTH - 1 : DATA_WIDTH];\n        end else begin\n            \n            assign {out_startofpacket, out_endofpacket} = 2'b0;\n        end\n   \n        \n        if (USE_CHANNEL) begin\n            assign out_channel = out_payload[\n              DATA_WIDTH + PACKET_WIDTH + PCHANNEL_W - 1 : \n              DATA_WIDTH + PACKET_WIDTH\n            ];\n        end else begin\n            \n            assign out_channel = 1'b0;\n        end\n\n        \n        if (EMPTY_WIDTH) begin\n            assign out_empty = out_payload[\n              DATA_WIDTH + PACKET_WIDTH + PCHANNEL_W + EMPTY_WIDTH - 1 : \n              DATA_WIDTH + PACKET_WIDTH + PCHANNEL_W\n            ];\n        end else begin\n            \n            assign out_empty = 1'b0;\n        end\n\n        \n        if (USE_ERROR) begin\n            assign out_error = out_payload[\n              DATA_WIDTH + PACKET_WIDTH + PCHANNEL_W + EMPTY_WIDTH + PERROR_W - 1 : \n              DATA_WIDTH + PACKET_WIDTH + PCHANNEL_W + EMPTY_WIDTH\n            ];\n        end else begin\n            \n            assign out_error = 1'b0;\n        end\n    endgenerate",
+        "    assign out_data = out_payload[DATA_WIDTH - 1 : 0];",
+        "            assign in_payload[\n                DATA_WIDTH + PACKET_WIDTH + PCHANNEL_W + EMPTY_WIDTH + PERROR_W - 1 : \n                DATA_WIDTH + PACKET_WIDTH + PCHANNEL_W + EMPTY_WIDTH\n            ] = in_error;",
+        "            assign in_payload[\n                DATA_WIDTH + PACKET_WIDTH + PCHANNEL_W + EMPTY_WIDTH - 1 : \n                DATA_WIDTH + PACKET_WIDTH + PCHANNEL_W\n            ] = in_empty;",
+        "            assign in_payload[\n              DATA_WIDTH + PACKET_WIDTH + PCHANNEL_W - 1 : \n              DATA_WIDTH + PACKET_WIDTH\n            ] = in_channel;",
+        "            assign in_payload[\n                DATA_WIDTH + PACKET_WIDTH - 1 : \n                DATA_WIDTH\n            ] = {in_startofpacket, in_endofpacket};",
+        "    generate\n        \n        if (PACKET_WIDTH) begin\n            assign in_payload[\n                DATA_WIDTH + PACKET_WIDTH - 1 : \n                DATA_WIDTH\n            ] = {in_startofpacket, in_endofpacket};\n        end\n        \n        if (USE_CHANNEL) begin\n            assign in_payload[\n              DATA_WIDTH + PACKET_WIDTH + PCHANNEL_W - 1 : \n              DATA_WIDTH + PACKET_WIDTH\n            ] = in_channel;\n        end\n        \n        if (EMPTY_WIDTH) begin\n            assign in_payload[\n                DATA_WIDTH + PACKET_WIDTH + PCHANNEL_W + EMPTY_WIDTH - 1 : \n                DATA_WIDTH + PACKET_WIDTH + PCHANNEL_W\n            ] = in_empty;\n        end\n        \n        if (USE_ERROR) begin\n            assign in_payload[\n                DATA_WIDTH + PACKET_WIDTH + PCHANNEL_W + EMPTY_WIDTH + PERROR_W - 1 : \n                DATA_WIDTH + PACKET_WIDTH + PCHANNEL_W + EMPTY_WIDTH\n            ] = in_error;\n        end\n    endgenerate"
+    ]
+}

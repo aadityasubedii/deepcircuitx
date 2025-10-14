@@ -1,0 +1,1 @@
+assign AUD_DACDAT = sr_out[15];

@@ -1,0 +1,14 @@
+Module name: Data_Memory.
+Module specification: 
+
+The Data_Memory is a storage module designed in Verilog, which uses a register array for storing and retrieving data on command. 
+
+The module includes five input ports: dataInAdd, dataIn, regWrite, regRead, and clock. 'dataInAdd' is a 16-bit address input which identifies the register where data needs to be written or read from. 'dataIn' is a 16-bit data input which is written into the register addressed by 'dataInAdd' when 'regWrite', the write enable signal, is active. 'regRead' is the read enable signal, which when active, results in data from the register addressed by 'dataInAdd' being output. 'clock' is the clock input that governs the timing of read/write operations, which occur at the rising edge of the clock signal. 
+
+The module has a single 16-bit output port, 'dataOut', which holds the data read from the desired register when 'regRead' is active.
+
+Internally, the module has an array of registers ('registers') which consists of 1024 16-bit entries representing the core storage block. An additional 16-bit internal register 'Out' holds the data being read, which is then assigned to 'dataOut'.
+
+The module code is organized into blocks delineated by initial and always statements. The always block contains conditions checking for 'regRead' and 'regWrite' signals. When 'regRead' is active, data from the register indexed by 'dataInAdd' is assigned to 'Out'. When 'regWrite' is active, data from 'dataIn' is written to the register addressed by 'dataInAdd'. The data in 'Out' is always assigned to 'dataOut', for output from the module. 
+
+This encapsulates the operation of the Data_Memory module, which is used for storing and retrieving data from its register array using the actively addressed port on the clock's rising edge.

@@ -1,0 +1,1 @@
+assign EndOp = BitCounter==63;

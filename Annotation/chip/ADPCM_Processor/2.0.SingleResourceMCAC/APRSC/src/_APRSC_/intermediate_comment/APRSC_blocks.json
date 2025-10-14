@@ -1,0 +1,31 @@
+{
+    "line_num": [
+        [
+            1344,
+            1354
+        ],
+        [
+            1262,
+            1340
+        ],
+        [
+            1193,
+            1260
+        ],
+        [
+            1173,
+            1186
+        ],
+        [
+            1161,
+            1170
+        ]
+    ],
+    "blocks": [
+        "always @( posedge reset, posedge clk_inv) begin\n\tif (reset) begin\n\t\tread_done <= 1'b1;\n\tend else begin\n\t\tif (i_wb_stb & i_wb_cyc) begin\n\t\t\tread_done <= 1'b0;\n\t\tend else begin\n\t\t\tread_done <= 1'b1;\n\t\tend\n\tend\nend",
+        "always @(posedge reset, posedge clk) begin\n\tif (reset) begin\n\t\tstart_read\t<= 1'b0;\n\t\tstart_read_buf_1 <= 1'b0;\n\t\tstart_read_buf_2 <= 1'b0;\n\n\t\to_wb_dat\t<= 32'h0000_0000;\n\n\t\tack1 <= 1'b0;\n\t\tack2 <= 1'b0;\n\n\t\tse1  <= 15'h0000;\n\t\tse2  <= 15'h0000;\n\n\t\ta2p1 <= 16'h0000;\n\t\ta2p2 <= 16'h0000;\n\n\t\tsr_out1  <= 16'h0000;\n\t\tsr_out2  <= 16'h0000;\n\n\t\treq     <= 1'b0;\n\t\ttr      <= 1'b0;\n\t\tdq      <= 16'h0000;\n\t\trate_in <= 2'b00;\n\n\t\ta2p_read <= 1'b0;\n\n\tend else begin\n\n\t\tack1  <= MACdone;\n\t\tack2  <= ack1;\n\n\t\tse1 <= se;\n\t\tse2 <= se1;\n\n\t\ta2p1 <= a2p_int;\n\t\ta2p2 <= a2p1;\n\n\t\tsr_out1  <= sr_int;\n\t\tsr_out2  <= sr_out1;\n\n\t\tif (pulseDelay1) begin\n\t\t\ta2p_read <= 1'b0;\n\t\tend\n\n\t\t\n\t\tif (i_wb_stb & i_wb_cyc & i_wb_we) begin\n\t\t\tcase (i_wb_adr[15:0])\n\t\t\t\tAPRSC_REQ:\treq <= i_wb_dat[0];\n\t\t\t\tAPRSC_TR:\ttr  <= i_wb_dat[0];\n\t\t\t\tAPRSC_DQ:\tdq  <= i_wb_dat[15:0];\n\t\t\t\tAPRSC_RATE: rate_in <= i_wb_dat[1:0];\n\t\t\t\tdefault:\treq <= req;\n\t\t\tendcase\n\t\t\tstart_read <= 1'b0;\n\t\tend\n\n\t\t\n\t\tif (i_wb_stb & i_wb_cyc & (~i_wb_we)) begin\n\t\t\tcase (i_wb_adr[15:0])\n\t\t\t\tAPRSC_ACK:\to_wb_dat    <= {31'h0000_0000, ack2};\n\t\t\t\tAPRSC_A2P:\tbegin\n\t\t\t\t\to_wb_dat    <= {16'h0000, a2p2};\n\t\t\t\t\ta2p_read\t<= 1'b1;\n\t\t\t\tend\n\t\t\t\tAPRSC_SE:\to_wb_dat    <= {17'h00000, se2};\n\t\t\t\tAPRSC_SR:\to_wb_dat    <= {16'h0000, sr_out2};\n\t\t\t\tdefault:\to_wb_dat    <= 32'hdead_beef;\n\t\t\tendcase\n\t\t\tstart_read_buf_1 <= 1'b1;\n\t\t\tstart_read_buf_2 <= start_read_buf_1;\n\t\t\tstart_read       <= start_read_buf_2;\n\t\tend else begin\n\t\t\tstart_read_buf_1 <= 1'b0;\n\t\t\tstart_read_buf_2 <= 1'b0;\n\t\t\tstart_read     <= 1'b0;\n\t\tend\n\tend\nend",
+        "always @(posedge negCoPrclk_int or posedge reset) begin\n\tif(reset) begin\n\t\tMACstart\t<=\t1'b0;\n\t\tse\t\t<=\t15'h0000;\n\t\tsez\t\t<=\t15'h0000;\n\t\ta2p\t\t<=\t16'h0000;\n\t\tstate\t\t<=\t2'b00;\n\t\tsr_out\t\t<=\t16'h0000;\n\tend\n\telse begin\n\t\tcase(state)\n\t\t\t2'b00: begin\n\t\t\t\tse     <= se;\n\t\t\t\tsez    <= sez;\n\t\t\t\ta2p    <= a2p;\n\t\t\t\tsr_out <= sr_out;\n\n\t\t\t\tif(req2) begin\n\t\t\t\t\tstate    <= 2'b01;\n\t\t\t\t\tMACstart <= 1'b1;\n\t\t\t\tend\n\t\t\t\telse begin\n\t\t\t\t\tstate    <= 2'b00;\n\t\t\t\t\tMACstart <= 1'b0;\n\t\t\t\tend\n\t\t\tend\n\t\t\t2'b01: begin\n\t\t\t\tif(!MACdone) begin\n\t\t\t\t\tstate    <= 2'b01;\n\t\t\t\t\tse       <= se;\n\t\t\t\t\tsez      <= sez;\n\t\t\t\t\ta2p      <= a2p;\n\t\t\t\t\tsr_out   <= sr_out;\n\t\t\t\t\tMACstart <= 1'b1;\n\t\t\t\tend\n\t\t\t\telse begin\n\t\t\t\t\tstate    <= 2'b10;\n\t\t\t\t\tMACstart <= 1'b0;\n\t\t\t\t\tse       <= se_int;\n\t\t\t\t\tsez      <= sez_int;\n\t\t\t\t\ta2p      <= a2p_int;\n\t\t\t\t\tsr_out   <= sr_int;\n\t\t\t\tend\n\t\t\tend\n\t\t\t2'b10: begin\n\t\t\t\tMACstart <= 1'b0;\n\t\t\t\tse       <= se;\n\t\t\t\tsez      <= sez;\n\t\t\t\ta2p      <= a2p;\n\t\t\t\tsr_out   <= sr_out;\n\t\t\t\tif(!req2) begin\n\t\t\t\t\tstate <= 2'b00;\n\t\t\t\tend\n\t\t\t\telse begin\n\t\t\t\t\tstate <= 2'b10;\n\t\t\t\tend\n\t\t\tend\n\t\t\tdefault: begin\n\t\t\t\tstate    <= 2'b00;\n\t\t\t\tMACstart <= 1'b0;\n\t\t\t\tse       <= se;\n\t\t\t\tsez      <= sez;\n\t\t\t\ta2p      <= a2p;\n\t\t\t\tsr_out   <= sr_out;\n\t\t\tend\n\t\tendcase\n\tend\nend ",
+        "always @(posedge CoPrclk_int, posedge reset) begin\n\tif(reset) begin\n\t\tpulseDelay1 \t<= 1'b0;\n\t\tpulseDelay\t<= 1'b0;\n\tend\n\telse if(a2p_read) begin\n\t\tpulseDelay1\t<= 1'b1;\n\t\tpulseDelay\t<= pulseDelay1;\n\tend\n\telse begin\n\t\tpulseDelay1\t<= 1'b0;\n\t\tpulseDelay\t<= pulseDelay1;\n\tend\nend",
+        "always @(posedge CoPrclk_int or posedge reset) begin\n\tif(reset) begin\n\t\treq2\t\t<=\t1'b0;\n\t\treq1\t\t<=\t1'b0;\n\tend\n\telse begin\n\t\treq2\t\t<=\treq1;\t\n\t\treq1\t\t<=\treq;\n\tend\nend"
+    ]
+}

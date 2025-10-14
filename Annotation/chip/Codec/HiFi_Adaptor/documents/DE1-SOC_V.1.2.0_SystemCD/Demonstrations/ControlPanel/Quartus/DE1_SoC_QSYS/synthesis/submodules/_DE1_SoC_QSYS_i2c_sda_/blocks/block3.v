@@ -1,0 +1,1 @@
+  assign bidir_port = data_dir ? data_out : 1'bZ;

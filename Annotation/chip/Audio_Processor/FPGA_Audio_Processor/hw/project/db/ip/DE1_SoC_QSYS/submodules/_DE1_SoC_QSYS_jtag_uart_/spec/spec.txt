@@ -1,0 +1,25 @@
+Module name: DE1_SoC_QSYS_jtag_uart
+
+Module specification: 
+
+The DE1_SoC_QSYS_jtag_uart is a module designed to handle interactions with a JTAG UART. It uses FIFO buffers, and includes several flags and interrupts tied to the state of these buffers. It negotiates data flow, where the FIFO write and read operations get triggered based on the chip's select state and the wait-request signal. The module incorporates functionality relating to communication over JTAG in an FPGA context. 
+
+Input ports:
+- av_address - Address for addressing within the module
+- av_chipselect - Signal for chip selection.
+- av_read_n - Read command input.
+- av_write_n - Write command input.
+- av_writedata - Data to be written into FIFO.
+- clk - Clock signal.
+- rst_n - Negative edge Reset signal.
+
+Output ports:
+- av_irq - Output interrupt request signal.
+- av_readdata - Data read from FIFO.
+- av_waitrequest - Wait Request signal.
+- dataavailable - Signal signifies data availability.
+- readyfordata - Signal signifies readiness for data reception.
+
+Internal signals include activity determining module status, pause_irq serving an interrupt signal, r_val for valid data existence, t_dav as a status flag, fifo_AE and fifo_AF as FIFO buffer status flags, read_0 signifying read operation initiation, ien_AE and ien_AF enabling interrupts based on FIFO status, woverflow indicating full FIFO buffer and rd_wfifo, wr_rfifo flags related to read and write operations.
+
+The module integrates DE1_SoC_QSYS_jtag_uart_scfifo_w and DE1_SoC_QSYS_jtag_uart_scfifo_r, which deal with writing to and reading from FIFO buffers respectively. It includes several always blocks which adjust these internal signals based on state of input signals and statuses of the FIFO buffers. There are separate blocks for reset conditions, managing FIFO flags, write-read commands, and simulation signals related to data transmission. Overall this module integrates responsibilities of managing the status flags, commands and data operations of JTAG communication.

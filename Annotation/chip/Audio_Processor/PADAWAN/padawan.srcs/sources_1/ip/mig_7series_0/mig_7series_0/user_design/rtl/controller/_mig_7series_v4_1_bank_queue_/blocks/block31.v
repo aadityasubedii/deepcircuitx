@@ -1,0 +1,1 @@
+  assign idle_r = idle_r_lcl;

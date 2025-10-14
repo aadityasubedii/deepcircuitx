@@ -1,0 +1,1 @@
+wire [(SLAVE_DATA_REQUIREDWIDTH * NO_REGISTERS)-1:0] registers;

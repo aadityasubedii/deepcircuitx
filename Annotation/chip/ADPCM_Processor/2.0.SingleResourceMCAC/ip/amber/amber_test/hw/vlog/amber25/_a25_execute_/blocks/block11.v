@@ -1,0 +1,1 @@
+assign status_bits_mode_rds_oh_update  = !i_core_stall;

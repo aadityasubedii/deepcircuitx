@@ -1,0 +1,1 @@
+  always @(posedge clk) pd_out_r <= #TCQ pos_edge_samp;

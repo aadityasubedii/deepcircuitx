@@ -1,0 +1,1 @@
+    assign internal_out_ready = out_ready || !out_valid;

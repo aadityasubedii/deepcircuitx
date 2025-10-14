@@ -1,0 +1,46 @@
+{
+    "line_num": [
+        [
+            323,
+            333
+        ],
+        [
+            320,
+            320
+        ],
+        [
+            319,
+            319
+        ],
+        [
+            318,
+            318
+        ],
+        [
+            315,
+            315
+        ],
+        [
+            314,
+            314
+        ],
+        [
+            300,
+            300
+        ],
+        [
+            113,
+            294
+        ]
+    ],
+    "blocks": [
+        "always @(posedge clock or posedge reset)\n\tif (reset) begin\n\t\tdata_out_d1 <= {(BITS_PER_SYMBOL * SYMBOLS_PER_BEAT){1'b0}};\n\t\tsop_out_d1 <= 1'b0;\n\t\teop_out_d1 <= 1'b0;\n\tend\n\telse begin\n\t\tdata_out_d1 <= data_out;\n\t\tsop_out_d1 <= sop_out;\n\t\teop_out_d1 <= eop_out;\n\tend",
+        "assign sop_out = valid_out ? pre_sop_out : sop_out_d1;",
+        "assign eop_out = valid_out ? pre_eop_out : eop_out_d1;",
+        "assign data_out = valid_out ? pre_data_out : data_out_d1;",
+        "assign valid_out = internal_output_is_valid & ena;",
+        "assign stall = !ready_out;",
+        "assign stopped = ~status;",
+        "always @(posedge clock or posedge reset)\n\tif (reset) begin\t\t\n\t\tstate <= IDLE;\n\t\tstatus <= 1'b0;\n\t\tclear_enable <= 1'b1;\n\t\tcmd <= 1'b0;\n\t\tinternal_output_is_valid <= 1'b0;\n\t\tpre_sop_out <= 1'b0;\n\t\tpre_eop_out <= 1'b0;\n\t\tcomplete <= 1'b0;\n\t\tinput_valid_shift_reg <= {READ_LATENCY{1'b0}};\n\t\tdiscard_remaining_data_of_read_word <= 1'b0;\n\t\tread <= 1'b0;\n\t\treads_issued <= {PACKET_SAMPLES_REQUIREDWIDTH{1'b0}};\n\tend\n\telse begin\n\t\t\n\t\t\n\t\treads_issued <= read & ena & ~reads_complete ? reads_issued + 1'b1 : reads_issued;\n\t\n\t\t\n\t\t\n\t\tif(ena) begin\n\t\t\tinput_valid_shift_reg[READ_LATENCY-1] <= (read);\n\t\t\tfor(i=0;i<READ_LATENCY-1;i=i+1) begin\n\t\t\t\tinput_valid_shift_reg[i] <= input_valid_shift_reg[i+1];\n\t\t\tend\n\t\tend\n\t\t\n\t\tcase (state)\t\t\t\n\t\t\t\n\t\t\tIDLE :\tbegin\n\t\t\t\t\n\t\t\t\t\n\t\t\t\treads_issued <= {PACKET_SAMPLES_REQUIREDWIDTH{1'b0}};\n\t\t\t\n\t\t\t\t\n\t\t\t\tif( ena & discard_remaining_data_of_read_word) begin\n\t\t\t\t\tdiscard_remaining_data_of_read_word <= 0;\n\t\t\t\tend\n\t\t\t\t\n\t\t\t\t\n\t\t\t\tclear_enable <= 1'b0;\n\t\t\t\t\n\t\t\t\t\n\t\t\t\tif (pre_eop_out & ena) begin\n\t\t\t\t\tpre_eop_out <= 1'b0;\t\t\t\n\t\t\t\tend\n\t\t\t\t\n\t\t\t\t\n\t\t\t\tcomplete <= 1'b0;\n\t\t\t\t\n\t\t\t\tif (enable & !discard_remaining_data_of_read_word) begin\t\n\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\tclear_enable <= 1'b1;\n\t\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\tstatus <= 1'b1;\n\t\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\tcmd <= 1'b1;\n\t\t\t\t\tcmd_addr <= packet_addr;\n\t\t\t\t\tcmd_length_of_burst <= packet_words;\n\t\t\t\t\t\n\t\t\t\t\tpacket_samples_reg <= packet_samples;\n\t\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\tinternal_output_is_valid <= 1'b1;\n\t\t\t\t\tpre_sop_out <= 1'b1;\n\t\t\t\t\tpre_data_out <= packet_type;\n\t\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\tstate <= WAITING;\n\t\t\t\t\t\n\t\t\t\t\n\t\t\t\tend else begin\n\t\t\t\t\t\n\t\t\t\t\tstatus <= 1'b0;\n\t\t\t\t\tstate <= IDLE;\n\t\t\t\t\tcmd <= 1'b0;\n\t\t\t\t\tinternal_output_is_valid <= 1'b0;\n\t\t\t\t\tpre_sop_out <= 1'b0;\n\t\t\t\tend\n\t\t\tend\n\t\t\t\n\t\t\t\n\t\t\tWAITING : begin \n\t\t\t\t \n\t\t\t\t\n\t\t\t\tclear_enable <= 1'b0;\t\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\n\t\t\t\t\n\t\t\t\tif (cmd & ena) begin\n\t\t\t\t\tcmd <= 1'b0;\t\t\t\n\t\t\t\tend\n\t\t\t\t\n\t\t\t\t\n\t\t\t\tif(ena) begin\n\t\t\t\t\t\n\t\t\t\t\tinternal_output_is_valid <= 1'b0;\n\t\t\t\t\tpre_sop_out <= 1'b0;\n\t\t\t\t\tstate <= RUNNING;\n\t\t\t\tend\n\t\t\tend\n\n\t\t\t\n\t\t\tRUNNING : begin\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t\n\t\t\t\tif(ena) begin\n\t\t\t\t\tinternal_output_is_valid <= input_valid_shift_reg[0];\n\t\t\t\tend\n\t\t\t\t\t\t\t\n\t\t\t\t\n\t\t\t\tif ((cmd & ena) | !cmd & !reads_complete) begin\n\t\t\t\t\tcmd <= 1'b0;\n\t\t\t\t\tread <= 1'b1;\t\t\t\t\t\n\t\t\t\tend\t\t\t\n\t\t\t\t\t\t\t\n\t\t\t\t\n\t\t\t\t\n\t\t\t\tif (reads_complete & ena) begin\n\t\t\t\t\t\n\t\t\t\t\tread <= 1'b0;\n\t\t\t\tend\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t\n\t\t\t\tpre_data_out <= ena ? data : pre_data_out;\n\n\t\t\t\t\n\t\t\t\t\n\t\t\t\tif(input_valid_shift_reg==1 & reads_complete & ena) begin\n\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\tdiscard_remaining_data_of_read_word <= 1;\n\t\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\tpre_eop_out <= 1'b1;\n\t\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\tstate <= ENDING;\n\t\t\t\t\t\n\t\t\t\tend else begin\n\t\t\t\t\tstate <= RUNNING;\n\t\t\t\t\tpre_eop_out <= 1'b0;\n\t\t\t\tend\n\t\t\tend\n\t\t\t\n\t\t\tENDING : begin \n\t\t\t\t\n\t\t\t\tinternal_output_is_valid <= 1'b1;\n\t\t\t\n\t\t\t\t\n\t\t\t\tif( ena & discard_remaining_data_of_read_word) begin\n\t\t\t\t\tdiscard_remaining_data_of_read_word <= 0;\n\t\t\t\tend\n\t\t\t\t\n\t\t\t\t\n\t\t\t\tif(ena) begin\n\t\t\t\t\t\n\t\t\t\t\tstatus <= 1'b0;\n\t\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\tcomplete <= 1'b1;\n\t\t\t\t\tpre_eop_out <= 1'b0;\n\t\t\t\t\tstate <= IDLE;\n\t\t\t\t\tinternal_output_is_valid <= 1'b0;\n\t\t\t\tend\n\t\t\t\t\n\t\t\tend\n\t\t\t\n\t\tendcase\n\tend\t\t\t"
+    ]
+}

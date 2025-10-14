@@ -1,0 +1,1 @@
+    always @(negedge dqs_in[ 3]) dqs_neg_timing_check( 3);

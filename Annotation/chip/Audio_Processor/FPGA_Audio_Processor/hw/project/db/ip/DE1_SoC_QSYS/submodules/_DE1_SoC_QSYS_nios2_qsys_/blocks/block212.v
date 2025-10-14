@@ -1,0 +1,1 @@
+  assign W_rf_wren = (R_wr_dst_reg & W_valid) | ~reset_n;

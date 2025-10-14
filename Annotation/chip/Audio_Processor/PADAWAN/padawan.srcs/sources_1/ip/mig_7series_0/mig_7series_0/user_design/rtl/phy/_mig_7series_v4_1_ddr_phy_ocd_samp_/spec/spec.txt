@@ -1,0 +1,26 @@
+Module name: mig_7series_v4_1_ddr_phy_ocd_samp. 
+
+Module specification: This module is designed to handle on-chip delay calibration sampling operations for a Double Data Rate (DDR) Physical Interface (PHY). The operations are controlled by a state machine and able to function in both complex and simple scanning modes. 
+
+Input ports: 
+1. complex_oclkdelay_calib_start: starts the on-chip delay calibration in complex scanning mode.
+2. clk: the clock signal for synchronization.
+3. rst: the reset signal for the module and the state machine.
+4. reset_scan: resets the scanning operation.
+5. ocal_num_samples_inc: increments the number of samples for delay calibration.
+6. match: a 2-bit bus used for matching operation.
+7. phy_rddata_en_1: enables the first set of physical read data.
+8. taps_set: sets the number of delay units.
+9. phy_rddata_en_2: enables the second set of physical read data.
+
+Output ports: 
+1. samp_done: indicates that the sampling operation is completed.
+2. oclk_calib_resume: resumes the on-chip clock calibration process.
+3. rd_victim_sel: a 3-bit bus that selects the data to read from a multiplexer.
+4. samp_result: a 2-bit bus that provides the sampling result after comparison of different threshold values.
+
+Internal signals: 
+The module uses a series of internal signals and registers, most notably 'samples' for the number of samples, 'zero_ns', 'zero_r', 'oneeighty_ns', oneeighty_r' for the calibration process, and 'sm_ns', 'sm_r' for the state machine operation. There are also signals designed to handle threshold comparison results ('samp_result_ns', 'samp_result_r'), operation ends (data_end, samp_end), and various control and count signals.
+
+Code blocks: 
+The module code contains a state machine controlling the main operations. The states adjust and handle registers, control signals and counters. The aggregating sampling and data counting is handled within state 1, while initialization and command handling is done within state 0. Reset operation and edge-triggered operations are controlled by separate code sections. The module includes function to calculate log base 2 of an integer and constant parameters to control and execute device specific operations. The overall logic flow of the module based on these parameters, functions, states and intermediate signals ensures accurate and efficient operation of the delay calibration process.

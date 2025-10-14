@@ -1,0 +1,13 @@
+Module name: main_controller.
+
+Module specification:
+
+The main_controller module is a complex construct that serves as a pivotal part of a larger system. Focusing on managing states involved in data reading and writing, the module is triggered by various control signals like Start, Frame, Reset_n, among others. Its primary functionality is to detect and hold the present and the next state, keep count through these various states, and feed appropriate enable signals, providing an overall coordination for the system behavior.
+
+The main_controller module takes in several input ports: Sclk and Dclk, which are clock signals used to synchronize the data transfer and state changes; Start, a control signal indicating the beginning of an operation; Reset_n, an active low signal guiding the system to its initial state; Frame, a signal indicating the start of the next data frame; in_flag, a control that signifies when the input data is ready; flag_zeroL and flag_zeroR that flag when the left and right data channels are zero. These inputs are used to steer the state transitions and operations of the module.
+
+The output ports, which are a combination of registers and signals, shape the stages of writing operations as well as mirror the state of the system. They include rjwrite, coeffwrite, and datawrite for writing output data; rj_enable, coeff_enable, and data_enable, signals to enable or disable writing operation; Clear signal to return the system to its initial state; Frame_out, Dclk_out, and Sclk_out, mirror signals of input Frame, Dclk, and Sclk respectively; work_enable, sleep_flag, and InReady signals indicating the functioning state and readiness of the system.
+
+The internal signals, i.e., state_present, state_next, count, count_rj, count_coeff, count_data, and tk, function to track the current state, the next state, and the count of data processed in each state. Both state_present and state_next are integral to sustaining the flow of the program, as they respectively hold the current and next state of the state machine. The tk signal acts as a crucial element in synchronization among different parts of the system as it controls read/write operations.
+
+The main_controller module exhibits a robust architecture consisting of different blocks for each state such as start of operation, waiting for input data, reading data, resetting, and sleeping. Each block consists of logical commands that effectively control the flow of the program from one state to the other, providing carefully measured responses to various signals and data inputs, leading to the smooth functioning of the overall system.

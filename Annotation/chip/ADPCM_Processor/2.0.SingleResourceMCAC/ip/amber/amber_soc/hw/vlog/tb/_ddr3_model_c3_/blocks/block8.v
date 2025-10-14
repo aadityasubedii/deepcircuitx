@@ -1,0 +1,1 @@
+    always @(posedge dqs_in[24]) dqs_neg_timing_check(24);

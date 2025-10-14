@@ -1,0 +1,4 @@
+Line number: 
+[1751, 1777]
+Comment: 
+This code defines a power-on reset mechanism for a dynamic random-access memory (DRAM). Whenever positive edge of a clock signal (`posedge clk`) is detected, if a reset signal is active (`rst`) or the physical control is not ready (`~phy_ctl_ready`), both power-on reset flags are cleared (`cnt_pwron_reset_done_r` and `cnt_pwron_cke_done_r`). But, if the initial simulation options are to skip power-up delay or initialization (`SIM_INIT_OPTION == "SKIP_PU_DLY" || "SKIP_INIT"`), the flags are set. For DDR3 type DRAM, if the power-on reset has not completed (`!cnt_pwron_reset_done_r`), the completion is checked against `PWRON_RESET_DELAY_CNT`, same check is done for command clock enable delay (`PWRON_CKE_DELAY_CNT`). If DRAM type is not DDR3, the reset is marked as done, and command clock enable delay check is similar to DDR3.

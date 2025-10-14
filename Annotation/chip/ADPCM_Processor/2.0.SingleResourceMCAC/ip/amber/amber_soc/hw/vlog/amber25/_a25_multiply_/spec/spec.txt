@@ -1,0 +1,11 @@
+Module name: a25_multiply.
+
+Module specification: The a25_multiply is a sequential process module designed to perform multiplication or accumulation of two 32-bit numbers. The module facilitates two modes of operation - multiplication and accumulation, controlled by the 2-bit `i_function` input. The module inputs include `i_clk`, `i_core_stall`, `i_a_in`, `i_b_in`, `i_function` and `i_execute`. `i_a_in` and `i_b_in` serve as operands for the arithmetic operation while the `i_clk` input helps in synchronizing the module operation. The `i_core_stall` input is used for pausing the operations. `i_execute` input starts an operation based on the stage of the `count` variable. 
+
+The outputs from the module are `o_out` which gives the result of either multiplication or accumulation operation. `o_flags` provides status of the result like an overflow or the result being zero and `o_done` signals the completion of the operation. 
+
+The module uses several internal signals like `enable`, `accumulate`, `multiplier`, `multiplier_bar`, `sum`, `sum34_b`, `count`, `count_nxt`, `product`, `product_nxt`, `flags_nxt`, `sum_acc1` etc. to manipulate, update and control the inputs and module functionality based on the operation sequence and conditions.
+
+The implementation can be primarily divided into two sections: setting of the operational signals based on input flags and handling the multiplication/accumulation sequence controlled by the `count` variable. Specific hardware blocks are created based on conditional preprocessor statements, providing FPGA-specific optimizations. Other crucial blocks include the always block for next state logic, implementing the sequence of operations based on the `count` and `i_function` values. There's also another always block following it which assigns next state values to the signals on the positive edge of the clock, when the core is not stalled. 
+
+Finally, the module outputs (`o_out` and `o_flags`) are assigned their respective signals. The whole block empowers the overall arithmetic operation and facilitates flexible operation modes along with useful status flags for the performed operation.

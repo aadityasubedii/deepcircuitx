@@ -1,0 +1,1 @@
+      assign clk_ref_ibufg = clk_ref_i;

@@ -1,0 +1,1 @@
+        assign start_of_sample = 1'b1;

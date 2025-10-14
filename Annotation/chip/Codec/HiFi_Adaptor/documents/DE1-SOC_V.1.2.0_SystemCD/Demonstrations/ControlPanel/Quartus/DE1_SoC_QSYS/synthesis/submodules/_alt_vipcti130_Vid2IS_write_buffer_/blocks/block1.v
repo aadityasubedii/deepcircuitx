@@ -1,0 +1,1 @@
+assign packet_out = write_buffer_packet | early_eop;

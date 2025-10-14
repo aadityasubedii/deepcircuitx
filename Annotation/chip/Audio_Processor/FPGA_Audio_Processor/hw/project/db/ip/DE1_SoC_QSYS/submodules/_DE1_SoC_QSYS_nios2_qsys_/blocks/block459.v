@@ -1,0 +1,1 @@
+  assign trigger_state_1 = trigger_state;

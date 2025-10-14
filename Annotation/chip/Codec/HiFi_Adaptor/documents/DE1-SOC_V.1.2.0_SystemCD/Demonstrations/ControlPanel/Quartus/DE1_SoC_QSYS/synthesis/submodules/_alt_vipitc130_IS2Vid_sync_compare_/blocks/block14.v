@@ -1,0 +1,1 @@
+assign sof_cvi_int = sof_cvi & ~sof_cvi_reg;

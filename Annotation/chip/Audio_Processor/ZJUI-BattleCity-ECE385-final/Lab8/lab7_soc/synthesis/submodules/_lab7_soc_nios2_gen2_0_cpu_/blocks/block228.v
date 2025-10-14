@@ -1,0 +1,16 @@
+      .cpu_d_write                 (cpu_d_write),
+      .cpu_d_writedata             (cpu_d_writedata),
+      .d_address                   (d_address),
+      .d_read                      (d_read),
+      .d_waitrequest               (d_waitrequest),
+      .d_write                     (d_write),
+      .dbrk_break                  (dbrk_break),
+      .dbrk_goto0                  (dbrk_goto0),
+      .dbrk_goto1                  (dbrk_goto1),
+      .dbrk_traceme                (dbrk_traceme),
+      .dbrk_traceoff               (dbrk_traceoff),
+      .dbrk_traceon                (dbrk_traceon),
+      .dbrk_trigout                (dbrk_trigout),
+      .debugack                    (debugack),
+      .reset_n                     (reset_n)
+    );

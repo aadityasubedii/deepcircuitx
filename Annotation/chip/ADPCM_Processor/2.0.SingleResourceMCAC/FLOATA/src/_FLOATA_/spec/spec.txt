@@ -1,0 +1,11 @@
+Module name: FLOATA. 
+
+Module specification: The FLOATA module is part of a floating-point converter in Verilog. It takes a 16-bit input (DQ) and converts it into a floating-point format resulting in an 11-bit output (DQ0). 
+
+The input ports include reset, clk, scan_in0 to scan_in4, scan_enable, test_mode, and DQ. The 'reset' port resets the system, while 'clk' synchronizes the actions within the module. 'scan_in0' to 'scan_in4' and 'scan_enable' are used for scan-chain testing purposes, although no corresponding actions are defined in the given code. 'test_mode' toggles the testing mode on or off. 'DQ' represents the original 16-bit number to be converted to floating point notation. 
+
+The output ports are scan_out0 to scan_out4 and DQ0. 'scan_out0' to 'scan_out4' are outputs for scan-chain testing, yet again, they don't have corresponding codes in this module. 'DQ0' is the final 11-bit wide floating point value of the original input ('DQ').
+
+The internal signals are DQS, MAG, EXP, and MANT. DQS stores the sign of the input number. MAG stores the absolute value of the input number, removing the sign bit. EXP, a 4-bit register, stores the exponent of the input number, with its value determined by the position of the highest non-zero bit in MAG. MANT, a 6-bit signal, stores the mantissa of the input number, assigned by right shifting MAG by the number of positions represented by EXP.
+
+The code's main blocks include the section for assigning the sign, magnitude, and exponent, and the case block to calculate the exponent value based on the highest non-zero bit in the magnitude. There is also the section for assigning the mantissa and the final concatenation of the sign, exponent, and mantissa to form the output.

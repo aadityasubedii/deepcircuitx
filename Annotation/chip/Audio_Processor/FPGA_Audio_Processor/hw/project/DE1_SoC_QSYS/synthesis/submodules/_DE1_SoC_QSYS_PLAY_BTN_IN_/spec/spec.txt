@@ -1,0 +1,11 @@
+Module name: DE1_SoC_QSYS_PLAY_BTN_IN.
+
+Module specification: The DE1_SoC_QSYS_PLAY_BTN_IN module's primary function is interfacing with a Play button on the DE1_SoC FPGA board. It facilitates read/write operations from addressable registers and generates an interrupt when a button press (rising edge) is detected and interrupts are unhindered by masks.
+
+Input ports include `address` (3-bit wide, selecting register for read/write operations), `chipselect` (enables read/write operations), `clk` (system clock signal), `in_port` (mirror of Play button state), `reset_n` (active low reset signal), `write_n` (enables write operations when active low), and `writedata` (32-bit wide, data to be written into a register). 
+
+Output ports consist of `irq` (interrupt request signal) and `readdata` (32-bit wide, data read from a selected register). 
+
+Internal signals include `clk_en`, `read_mux_out`, `data_in`, `irq_mask`, `irq`, `edge_capture`, `edge_capture_wr_strobe`, `edge_detect`, `d1_data_in`, `d2_data_in`. These signals handle functionalities such as selectively enabling operations based on clock signal, managing input data from the Play button, controlling interrupt requests, managing edge detections and captures for button operations, and internal data storage for registering current and past states of the button.
+
+The code is divided into sections that handle different aspects of operations: readdata generation logic (handling data read from registers), irq_mask handling logic (controlling interrupt requests), irq and edge_capture generation logic (managing interrupts and button press events), and data-in propagation logic (registering states of Play button) which collectively enable the successful interfacing of the DE1_SoC Play button with FPGA board.

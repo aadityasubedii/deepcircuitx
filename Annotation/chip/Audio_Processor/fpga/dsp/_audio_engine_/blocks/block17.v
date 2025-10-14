@@ -1,0 +1,1 @@
+    assign done = seq_done;

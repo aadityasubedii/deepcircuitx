@@ -1,0 +1,1 @@
+        always @(posedge clk) ecc_status_valid <= #TCQ ecc_status_valid_ns;

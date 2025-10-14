@@ -1,0 +1,1 @@
+  assign R_src2 = {R_src2_hi, R_src2_lo};

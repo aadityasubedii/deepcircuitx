@@ -1,0 +1,43 @@
+{
+    "gpt-message": [
+        {
+            "role": "system",
+            "content": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+        },
+        {
+            "role": "user",
+            "content": "Name of the module and its functionality is as follows: \nModule name: cmd_prbs_gen.\nExplanation: This module is a pseudo-random binary sequence (PRBS) generator used in testing communication circuits. It is parameterized by command type (PRBS_CMD), pseudo-random binary sequence width (PRBS_WIDTH), seed width (SEED_WIDTH), and others. Depending on the command (\"ADDRESS\", \"INSTR\", \"BLEN\"), different kinds of pseudo-random binary sequences are generated. Operation is mainly implemented in three generate-if blocks, and they correspond to different PRBS_CMD condition checks. For \"INSTR\" and \"BLEN\", 20-bit shift register is used, while for \"ADDRESS\", either 32-bit or 64-bit shift register is used.-"
+        },
+        {
+            "role": "user",
+            "content": "Input and output ports and their explanation is as follows: \nInput ports:\n\n1. clk_i: This is the clock input to the module. It is used to synchronize the operation of the module. \n2. prbs_seed_init: This is a signal used to initiate the pseudo-random sequence generation at the start of operation.\n3. clk_en: This is a clock enable signal. It is used to either enable or halt the operation of the pseudo-random binary sequence (PRBS) generator.\n4. prbs_seed_i: This is the initial seed for the pseudorandom binary sequence (PRBS) generator. It is a vector with a width of SEED_WIDTH.\n\nExplanation: These input ports are used to control the operation of the PRBS generator. The clk_i is used to synchronize the operation, prbs_seed_init is used to start the operation and load the initial seed, clk_en allows or pauses the computation, and prbs_seed_i provides the initial seed for the PRBS generator.\n\nOutput ports:\n\n1. prbs_o: This is the output of the pseudo-random binary sequence (PRBS). It is a vector with a width of SEED_WIDTH.\n\nExplanation: The output port prbs_o holds the generated pseudorandom binary sequence. This output can be used by other modules for testing communication circuits."
+        },
+        {
+            "role": "user",
+            "content": "Internal signals and their explanation is as follows: \nInternal signals: \n\n1. ZEROS \n2. prbs\n3. lfsr_q\n\nExplanation:\n\n1. ZEROS: This is an internal wire signal with a width of ADDR_WIDTH. It is universally assigned zero 'b0 in the same module. In the gen20_taps block, this signal is used with the lfsr_q signal to generate the pseudo-random sequence prbs.\n\n2. prbs: This is a register signal with a width of SEED_WIDTH. This is the main signal that carries the generated pseudo-random binary sequence (PRBS). It is filled with the bits of lfsr_q based on the conditions of the PRBS_CMD parameter or filled with zeros when the command is either \"INSTR\" or \"BLEN\".\n\n3. lfsr_q: This is a register signal with a width of PRBS_WIDTH. It is used as the linear feedback shift register (LFSR) as the core part of the PRBS generation. Depending on the PRBS_CMD and PRBS_WIDTH parameters, the LFSR structure is altered and the new values of lfsr_q contribute to the prbs signal in each clock cycle."
+        }
+    ],
+    "claude-message": [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+                },
+                {
+                    "type": "text",
+                    "text": "Name of the module and its functionality is as follows: \nModule name: cmd_prbs_gen.\nExplanation: This module is a pseudo-random binary sequence (PRBS) generator used in testing communication circuits. It is parameterized by command type (PRBS_CMD), pseudo-random binary sequence width (PRBS_WIDTH), seed width (SEED_WIDTH), and others. Depending on the command (\"ADDRESS\", \"INSTR\", \"BLEN\"), different kinds of pseudo-random binary sequences are generated. Operation is mainly implemented in three generate-if blocks, and they correspond to different PRBS_CMD condition checks. For \"INSTR\" and \"BLEN\", 20-bit shift register is used, while for \"ADDRESS\", either 32-bit or 64-bit shift register is used.-"
+                },
+                {
+                    "type": "text",
+                    "text": "Input and output ports and their explanation is as follows: \nInput ports:\n\n1. clk_i: This is the clock input to the module. It is used to synchronize the operation of the module. \n2. prbs_seed_init: This is a signal used to initiate the pseudo-random sequence generation at the start of operation.\n3. clk_en: This is a clock enable signal. It is used to either enable or halt the operation of the pseudo-random binary sequence (PRBS) generator.\n4. prbs_seed_i: This is the initial seed for the pseudorandom binary sequence (PRBS) generator. It is a vector with a width of SEED_WIDTH.\n\nExplanation: These input ports are used to control the operation of the PRBS generator. The clk_i is used to synchronize the operation, prbs_seed_init is used to start the operation and load the initial seed, clk_en allows or pauses the computation, and prbs_seed_i provides the initial seed for the PRBS generator.\n\nOutput ports:\n\n1. prbs_o: This is the output of the pseudo-random binary sequence (PRBS). It is a vector with a width of SEED_WIDTH.\n\nExplanation: The output port prbs_o holds the generated pseudorandom binary sequence. This output can be used by other modules for testing communication circuits."
+                },
+                {
+                    "type": "text",
+                    "text": "Internal signals and their explanation is as follows: \nInternal signals: \n\n1. ZEROS \n2. prbs\n3. lfsr_q\n\nExplanation:\n\n1. ZEROS: This is an internal wire signal with a width of ADDR_WIDTH. It is universally assigned zero 'b0 in the same module. In the gen20_taps block, this signal is used with the lfsr_q signal to generate the pseudo-random sequence prbs.\n\n2. prbs: This is a register signal with a width of SEED_WIDTH. This is the main signal that carries the generated pseudo-random binary sequence (PRBS). It is filled with the bits of lfsr_q based on the conditions of the PRBS_CMD parameter or filled with zeros when the command is either \"INSTR\" or \"BLEN\".\n\n3. lfsr_q: This is a register signal with a width of PRBS_WIDTH. It is used as the linear feedback shift register (LFSR) as the core part of the PRBS generation. Depending on the PRBS_CMD and PRBS_WIDTH parameters, the LFSR structure is altered and the new values of lfsr_q contribute to the prbs signal in each clock cycle."
+                }
+            ]
+        }
+    ]
+}

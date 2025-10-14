@@ -1,0 +1,1 @@
+  assign av_ld_getting_data = d_read & ~d_waitrequest;

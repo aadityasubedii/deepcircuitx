@@ -1,0 +1,1 @@
+assign fill_state       = c_state == CS_FILL ;

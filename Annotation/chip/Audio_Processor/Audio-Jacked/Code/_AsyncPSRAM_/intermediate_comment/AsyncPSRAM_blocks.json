@@ -1,0 +1,16 @@
+{
+    "line_num": [
+        [
+            94,
+            184
+        ],
+        [
+            83,
+            87
+        ]
+    ],
+    "blocks": [
+        "always @(posedge sysclk) begin\n\tif (rst) begin\n\t\tstate <= st_RESET;\n\t\tmem_idle <= 1'b1;\n\t\tmem_data_in <= 0;\n\t\tcurrent_cmd <= 1;\n\t\tMEM_CEN <= 1'b1;\n\t\tMEM_OEN <= 1'b1;\n\t\tMEM_WEN <= 1'b1;\n\t\tMEM_ADDR_OUT <= 0;\n\t\tMEM_LBN <= 1;\n\t\tMEM_UBN <= 1;\t\t\n\t\tend\n\telse\n\tcase (state)\n\t\tst_RESET: begin\t\t\t\t\t\t\n\t\t\tif (go)\n\t\t\t\tstate <= st_COUNT;\n\t\t\telse\n\t\t\t\tstate <= st_RESET;\n\t\t\t\n\t\t\tif (go) begin\t\t\t\t\t\n\t\t\t\tMEM_ADDR_OUT <= mem_addr;\t\n\t\t\t\tmem_idle <= 1'b0;\t\t\t\n\t\t\t\tcurrent_cmd <= command;\t\t\n\t\t\t\tMEM_OEN <= ~command;\t\t\n\t\t\t\tMEM_WEN <= command;\n\t\t\t\tMEM_CEN <= 1'b0;\n\t\t\t\tMEM_LBN <= mem_byte_en[0];\t\n\t\t\t\tMEM_UBN <= mem_byte_en[1];\n\t\t\tend\n\t\t\telse begin\n\t\t\t\tMEM_ADDR_OUT <= 26'hXXXXXXX;\t\n\t\t\t\tcurrent_cmd <= 1'b1;\n\t\t\t\tmem_idle <= 1'b1;\n\t\t\t\tMEM_OEN <= 1'b1;\n\t\t\t\tMEM_WEN <= 1'b1;\n\t\t\t\tMEM_CEN <= 1'b1;\n\t\t\t\tMEM_LBN <= 1;\n\t\t\t\tMEM_UBN <= 1;\n\t\t\tend\n\t\tend\n\t\t\n\t\tst_COUNT: begin\n\t\t\t\n\t\t\tif (((waitcount == 8) && (current_cmd == 0)) || (waitcount == 9))  \n\t\t\t\tstate <= st_HOLD; \n\t\t\telse\n\t\t\t\tstate <= st_COUNT;\n\t\t\t\t\n\t\t\tif ((waitcount == 8 ) && (current_cmd == 0)) begin\t\n\t\t\t\tMEM_OEN <= 1'b1;\t\t\n\t\t\t\tMEM_WEN <= 1'b1;\n\t\t\t\tMEM_CEN <= 1'b1;\n\t\t\t\twaitcount <= 0;\n\t\t\t\tmem_idle <= 1'b1;\t\t\n\t\t\tend\n\t\t\telse if (waitcount == 9) begin\t\n\t\t\t\tMEM_OEN <= 1'b1;\t\t\t\n\t\t\t\tMEM_WEN <= 1'b1;\n\t\t\t\tMEM_CEN <= 1'b1;\n\t\t\t\twaitcount <= 0;\n\t\t\t\tmem_idle <= 1'b1;\n\t\t\t\tif (current_cmd == 1)\n\t\t\t\t\tmem_data_in <= outp;\t\n\t\t\t\telse\n\t\t\t\t\t$display(\"Got to 7th waitstate without a read command! (Should never happen.)\");\n\t\t\t\tend\n\t\t\telse\t\t\t\t\t\t\t\n\t\t\t\twaitcount <= waitcount + 1;\n\t\tend\t\n\t\t st_HOLD: begin\n\t\t\t\n\t\t\tif (waitcount2 == 2)\n\t\t\t\tstate <= st_RESET; \n\t\t\telse\n\t\t\t\tstate <= st_HOLD;\n\t\t\t\n\t\t\tmem_idle <= 1'b1;\n\t\t\tMEM_OEN <= 1'b1;\n\t\t\tMEM_WEN <= 1'b1;\n\t\t\tMEM_CEN <= 1'b1;\n\t\t\t\t\n\t\t\tif (waitcount2 == 2)\n\t\t\t\twaitcount2 <= 0;\n\t\t\telse\t\t\t\t\t\t\t\n\t\t\t\twaitcount2 <= waitcount2 + 1;\n\t\tend\n\t\n\tendcase\nend",
+        "always @ (posedge sysclk)\nbegin\n    b <= MEM_DATA;\n    a <= mem_data_out;\nend"
+    ]
+}

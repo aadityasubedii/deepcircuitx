@@ -1,0 +1,1 @@
+  assign CODE = (&cs_n) ? 24'h494e48 : txt_code;

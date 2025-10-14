@@ -1,0 +1,15 @@
+Module name: Altera_UP_Audio_Out_Serializer. 
+
+Module specification: The Altera_UP_Audio_Out_Serializer is an audio output serialization module designed to handle the left and right stereo channels of audio data, employing two synchronous FIFOs for data management and buffering. The system utilises a main clock (clk), a bit clock (bit_clk_rising_edge, bit_clk_falling_edge), and a left-right clock (left_right_clk_rising_edge, left_right_clk_falling_edge), for synchronization. 
+
+The input data for the left and right channels are denoted as left_channel_data and right_channel_data respectively, which are enabled by left_channel_data_en and right_channel_data_en. Upon reset, serializer's output and FIFO space indicators for both channels are set low. 
+
+The module provides output in form of serialized audio data (serial_audio_out_data) and indicates available space in the FIFOs for both channels (left_channel_fifo_write_space and right_channel_fifo_write_space). 
+
+Internal signals are defined for additional control and data handling processes such as indicating timing to read from the left or right channels' FIFOs (read_left_channel, read_right_channel), and indicating whether the FIFO is empty or full for both channels. 
+
+The Verilog code also includes built-in checks for buffer availability, inserting zero in the FIFOs in case of reset, and the condition to read for each channel. 
+
+The code comprises separate blocks for handling audio data for the left and right channels through Altera_UP_SYNC_FIFO instances, synchronizing the audio data manageability with available memory in the FIFOs, and allowing for organized serialization of audio output. 
+
+In summary, the module provides a comprehensive solution to audio output serialization, optimally managing audio data with synchronized FIFOs and providing appropriate reset condition handling for seamless functionality across systems.

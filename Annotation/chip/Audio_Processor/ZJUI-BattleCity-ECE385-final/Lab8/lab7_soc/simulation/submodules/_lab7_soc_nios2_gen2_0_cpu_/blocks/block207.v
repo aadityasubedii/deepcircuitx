@@ -1,0 +1,1 @@
+  assign E_st_stall = d_write_nxt;

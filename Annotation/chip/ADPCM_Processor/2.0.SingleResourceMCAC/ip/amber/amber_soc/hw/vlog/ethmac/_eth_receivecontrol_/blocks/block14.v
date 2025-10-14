@@ -1,0 +1,1 @@
+assign IncrementByteCnt = RxValid & DetectionWindow & ~ByteCntEq18 & (~DlyCrcEn | DlyCrcEn & DlyCrcCnt[2]);

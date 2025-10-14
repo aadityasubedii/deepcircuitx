@@ -1,0 +1,51 @@
+{
+    "line_num": [
+        [
+            269,
+            270
+        ],
+        [
+            244,
+            267
+        ],
+        [
+            213,
+            238
+        ],
+        [
+            197,
+            209
+        ],
+        [
+            183,
+            195
+        ],
+        [
+            169,
+            181
+        ],
+        [
+            160,
+            166
+        ],
+        [
+            148,
+            154
+        ],
+        [
+            140,
+            146
+        ]
+    ],
+    "blocks": [
+        "\tAudio_Out_Serializer.AUDIO_DATA_WIDTH = AUDIO_DATA_WIDTH;\n",
+        "Altera_UP_Audio_Out_Serializer Audio_Out_Serializer (\n\t\n\t.clk\t\t\t\t\t\t(CLOCK_50),\n\t.reset\t\t\t\t\t\t(reset),\n\t\n\t.bit_clk_rising_edge\t\t\t(bclk_rising_edge),\n\t.bit_clk_falling_edge\t\t\t(bclk_falling_edge),\n\t.left_right_clk_rising_edge\t\t(done_dac_channel_sync & dac_lrclk_rising_edge),\n\t.left_right_clk_falling_edge\t\t(done_dac_channel_sync & dac_lrclk_falling_edge),\n\t\n\t.left_channel_data\t\t\t(writedata_left),\n\t.left_channel_data_en\t\t\t(write_s & (left_channel_write_space != 8'd0)),\n\n\t.right_channel_data\t\t\t(writedata_right),\n\t.right_channel_data_en\t\t\t(write_s & (right_channel_write_space != 8'd0)),\n\t\n\t\n\n\t\n\t.left_channel_fifo_write_space\t(left_channel_write_space),\n\t.right_channel_fifo_write_space\t(right_channel_write_space),\n\n\t.serial_audio_out_data\t\t\t(AUD_DACDAT)\n);",
+        "Altera_UP_Audio_In_Deserializer Audio_In_Deserializer (\n\t\n\t.clk\t\t\t\t\t\t(CLOCK_50),\n\t.reset\t\t\t\t\t(reset),\n\t\n\t.bit_clk_rising_edge\t\t\t(bclk_rising_edge),\n\t.bit_clk_falling_edge\t\t\t(bclk_falling_edge),\n\t.left_right_clk_rising_edge\t\t(adc_lrclk_rising_edge),\n\t.left_right_clk_falling_edge\t\t(adc_lrclk_falling_edge),\n\n\t.done_channel_sync\t\t\t(done_adc_channel_sync),\n\n\t.serial_audio_in_data\t\t\t(AUD_ADCDAT),\n\n\t.read_left_audio_data_en\t\t(read_s & (left_channel_read_available != 8'd0)),\n\t.read_right_audio_data_en\t\t(read_s & (right_channel_read_available != 8'd0)),\n\n\t\n\n\t\n\t.left_audio_fifo_read_space\t\t(left_channel_read_available),\n\t.right_audio_fifo_read_space\t\t(right_channel_read_available),\n\n\t.left_channel_data\t\t\t(new_left_channel_audio),\n\t.right_channel_data\t\t\t(new_right_channel_audio)\n);",
+        "Altera_UP_Clock_Edge DAC_Left_Right_Clock_Edges (\n\t\n\t.clk\t\t\t(CLOCK_50),\n\t.reset\t\t(reset),\n\t\n\t.test_clk\t\t(AUD_DACLRCK),\n\t\n\t\n\n\t\n\t.rising_edge\t(dac_lrclk_rising_edge),\n\t.falling_edge\t(dac_lrclk_falling_edge)\n);",
+        "Altera_UP_Clock_Edge ADC_Left_Right_Clock_Edges (\n\t\n\t.clk\t\t\t(CLOCK_50),\n\t.reset\t\t(reset),\n\t\n\t.test_clk\t\t(AUD_ADCLRCK),\n\t\n\t\n\n\t\n\t.rising_edge\t(adc_lrclk_rising_edge),\n\t.falling_edge\t(adc_lrclk_falling_edge)\n);",
+        "Altera_UP_Clock_Edge Bit_Clock_Edges (\n\t\n\t.clk\t\t\t(CLOCK_50),\n\t.reset\t\t(reset),\n\t\n\t.test_clk\t\t(AUD_BCLK),\n\t\n\t\n\n\t\n\t.rising_edge\t(bclk_rising_edge),\n\t.falling_edge\t(bclk_falling_edge)\n);",
+        "assign read_ready = (left_channel_read_available != 8'd0) & (right_channel_read_available != 8'd0);\nassign write_ready = (left_channel_write_space != 8'd0) & (right_channel_write_space != 8'd0);\nassign readdata_left = new_left_channel_audio;\nassign readdata_right = new_right_channel_audio;\n\n\n",
+        "always @ (posedge CLOCK_50)\nbegin\n\tif (reset == 1'b1)\n\t\tdone_dac_channel_sync <= 1'b0;\n\telse if (dac_lrclk_falling_edge == 1'b1)\n\t\tdone_dac_channel_sync <= 1'b1;\nend",
+        "always @ (posedge CLOCK_50)\nbegin\n\tif (reset == 1'b1)\n\t\tdone_adc_channel_sync <= 1'b0;\n\telse if (adc_lrclk_rising_edge == 1'b1)\n\t\tdone_adc_channel_sync <= 1'b1;\nend"
+    ]
+}

@@ -1,0 +1,1 @@
+  always @(posedge clk) app_rdy_r <= #TCQ app_rdy_ns;

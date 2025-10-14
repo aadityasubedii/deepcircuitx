@@ -1,0 +1,1 @@
+      assign wr_data_addr = col_wr_data_buf_addr_r;

@@ -1,0 +1,1 @@
+  assign pass_open_bank_ns = pass_open_bank_ns_lcl;

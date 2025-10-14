@@ -1,0 +1,9 @@
+Module name: sine_generator.
+
+Module specification: 
+
+The sine_generator is a hardware module in Verilog that generates sine values based on a precomputed lookup table. It takes a 32-bit input, called i_phase, which serves as the phase input for the sine function. The output is a 9-bit signal, o_compare, which is the manipulated sine value corresponding to the given phase. 
+
+Internally, this module utilizes several wire signals including: a 2-bit wide wire w_quadrant to determine which quadrant of the sine function we are in; a 6-bit wide wire w_index that initially indexes the sine lookup table; w_adjusted_index that adjusts the w_index based on the w_quadrant indicating the symmetry of the sine function; w_output, which is the sine lookup table driven value; w_output_reflected, that reflects the w_output based on the quadrant; and w_adjusted_output, which finalizes the output value taking into account the sine function's different quadrants. 
+
+An overview of this module's operation is as follows: At initialization, the lookup table is filled with precomputed sine values. The top two bits of i_phase are used to determine the quadrant (w_quadrant) and the next six bits are designated to locate the index for the sine lookup table (w_index). The index is adjusted (w_adjusted_index) according to the symmetry of the sine function. The output from the table (w_output) is reflected if necessary (w_output_reflected), and adjusted based on the quadrant (w_adjusted_output). Finally, the adjusted output is right-shifted by 2 bits and assigned as the output. The module delivers accurate sine values using an efficient and robust quadrant- and amplitude-adjusted method.

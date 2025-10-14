@@ -1,0 +1,1 @@
+  assign switch_for_mux = {itm_valid, atm_valid, dtm_valid};

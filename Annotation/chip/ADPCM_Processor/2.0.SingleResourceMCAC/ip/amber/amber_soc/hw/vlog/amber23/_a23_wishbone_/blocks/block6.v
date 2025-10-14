@@ -1,0 +1,1 @@
+assign wait_write_ack = o_wb_stb && o_wb_we && !i_wb_ack;

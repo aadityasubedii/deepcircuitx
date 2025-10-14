@@ -1,0 +1,1 @@
+  always @(posedge clk) zero_r <= #TCQ zero_ns;

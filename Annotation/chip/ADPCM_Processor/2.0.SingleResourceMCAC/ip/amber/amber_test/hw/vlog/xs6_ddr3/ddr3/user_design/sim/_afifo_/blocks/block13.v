@@ -1,0 +1,1 @@
+assign rd_data = mem[rd_addr];

@@ -1,0 +1,41 @@
+{
+    "line_num": [
+        [
+            75,
+            94
+        ],
+        [
+            64,
+            71
+        ],
+        [
+            50,
+            59
+        ],
+        [
+            25,
+            25
+        ],
+        [
+            23,
+            23
+        ],
+        [
+            16,
+            16
+        ],
+        [
+            8,
+            12
+        ]
+    ],
+    "blocks": [
+        "    initial begin\n        $display(\"start\");\n\n        wait(!wb_rst);\n        @(posedge wb_clk);\n        @(posedge wb_clk);\n        @(posedge wb_clk);\n        @(posedge wb_clk);\n        @(posedge wb_clk);\n\n        for (i = 0; i < 16; i = i + 1) begin\n            write(ADDR+(i*4), i + (i << 8) + (i << 16));\n            wait(ack);\n            wait(!ack);\n            @(posedge wb_clk);\n        end\n\n        $display(\"done\");\n        \n    end",
+        "    always @(posedge wb_clk) begin\n        if (ack) begin\n            wb_dbus_cyc <= 0;\n            wb_dbus_adr <= 32'hZ;\n            wb_dbus_dat <= 32'hZ;\n            wb_dbus_we <= 0;\n        end\n    end",
+        "    task write(input [31:0] addr, input [31:0] data);\n\n        begin\n            wb_dbus_cyc <= 1;\n            wb_dbus_adr <= addr;\n            wb_dbus_dat <= data;\n            wb_dbus_we <= 1;\n        end\n\n    endtask",
+        "    assign wb_rst = rst;",
+        "    assign wb_clk = ck;",
+        "    always #42 ck <= !ck;",
+        "    initial begin\n        $dumpfile(\"dsp.vcd\");\n        $dumpvars(0, tb);\n        #500000 $finish;\n    end"
+    ]
+}

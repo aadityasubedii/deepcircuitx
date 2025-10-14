@@ -1,0 +1,1 @@
+        assign clear_underflow_sticky = clear_underflow_sticky_reg;

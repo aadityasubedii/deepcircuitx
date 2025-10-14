@@ -1,0 +1,1 @@
+assign ResetByteCnt = RxEndFrm;

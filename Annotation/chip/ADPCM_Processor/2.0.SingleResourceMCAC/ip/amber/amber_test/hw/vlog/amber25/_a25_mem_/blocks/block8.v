@@ -1,0 +1,1 @@
+assign fetch_only_stall     = i_fetch_stall && !o_mem_stall;

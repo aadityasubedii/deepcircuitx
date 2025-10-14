@@ -1,0 +1,11 @@
+Module name: stereo_audio_parallelizer. 
+
+Module specification: This module is designed to restructure a single sequential stereo audio signal into two parallel signals for the left and right audio channels. An incoming stereo signal is respectively mapped to the `o_left` and `o_right` based on the `i_is_left` flag. The module utilizes a clock input `clk` and a reset `reset` to manage state and timing. 
+
+Input ports for the module include `reset`, `clk`, `i_valid`, `i_is_left`, `i_audio`, and `o_ready`. `reset` is used to initialize the module, while `clk` manages the input and output data flow. `i_valid` indicates that the current data and `i_is_left` flag are valid. `i_is_left` denotes whether the `i_audio` is for the left or right channel. `i_audio` is the input audio data holding either left or right channel's audio. `o_ready` signifies if the destination is set to receive data. 
+
+The output ports - `i_ready`, `o_valid`, `o_left`, and `o_right` - serve different purposes. `i_ready` allows or stops the incoming data based on various conditions; `o_valid` indicates the validity of the stereo audio data. `o_left` and `o_right` hold the parallelized data for the left and right channels respectively. 
+
+The internal signals encompass `i_ready`, `o_left`, and `o_right`. `i_ready` shows the readiness of the module to accept further data. `o_left` and `o_right` hold the left and right audio channel data after parallelization. 
+
+The code can be segmented into four main sections: parameter definition and port declaration, `o_valid` assignment, the always block running at positive edge of the clock or reset, and the inner conditions controlling the data assignment and readiness control logic. The parameter definition and port declaration declare the width of the audio data and the input/output ports. `o_valid` is inversely assigned the value of `i_ready`. The always block orchestrates the functioning of each clock cycle, including initialization and dynamic responses to signal changes. The inner conditions manage the cases of data assignment for `o_left` and `o_right` and control the `i_ready` based on `i_is_left` or `o_ready`.

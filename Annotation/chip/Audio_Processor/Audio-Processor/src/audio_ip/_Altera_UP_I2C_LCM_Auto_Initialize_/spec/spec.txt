@@ -1,0 +1,13 @@
+Module name: Altera_UP_I2C_LCM_Auto_Initialize. 
+
+Module specification: The Altera_UP_I2C_LCM_Auto_Initialize module is designed to execute the initialization sequence for a Liquid Crystal Module (LCM), communicated via the I2C protocol. The process, governed by a finite state machine, sends start bits, transfers data, sends stop bits, and manages potential errors.
+
+The initialization procedure operates by configuring multiple parameters such as input format, power, positioning, contrast settings, brightness offset, and gamma correction among others, which are sequentially extracted from a ROM based on a counter.
+
+The module is synchronous relative to an input clock and can be reset with a reset signal. Inputs include clock (clk), reset, an error-clearing signal (clear_error), an acknowledgement signal (ack) from the I2C protocol, and a data transfer completion signal (transfer_complete). Relative to I2C protocol data transfer, a data transfer complete signal (transfer_complete) is also required.
+
+The outputs include configuration data (data_out) to be sent through I2C, the size of said data (data_size), signals to commence data transfer (transfer_data), send start and stop bits (send_start_bit and send_stop_bit), and signals indicating completion of initialization (auto_init_complete) or if an error occurred (auto_init_error).
+
+Internally, this module uses signals such as ns_i2c_auto_init (next state of initialization), s_i2c_auto_init (current state of initialization), rom_address_counter (reader address counter for ROM), rom_data (data read from ROM) and a flag for completion of initialization (finished_auto_init). The module uses multiple always blocks to manage the initialization process, ranging from the state machine transition rules to data preparation for I2C transfers.
+
+In summary, Altera_UP_I2C_LCM_Auto_Initialize is a comprehensive module focusing on initialization of an LCM module through I2C protocol, operated by a robust state machine and necessary safety measures to handle errors during the process.

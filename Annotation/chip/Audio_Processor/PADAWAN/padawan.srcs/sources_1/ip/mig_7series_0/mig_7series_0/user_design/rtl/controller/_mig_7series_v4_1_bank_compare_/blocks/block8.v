@@ -1,0 +1,1 @@
+  assign maint_hit = (req_rank_r_lcl == maint_rank_r) || maint_zq_r || maint_sre_r;

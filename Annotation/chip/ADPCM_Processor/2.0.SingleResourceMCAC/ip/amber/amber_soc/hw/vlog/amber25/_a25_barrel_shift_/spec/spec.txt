@@ -1,0 +1,9 @@
+Module name: a25_barrel_shift. 
+
+Module specification: The a25_barrel_shift module is designed to perform shifting operations on a 32-bit input. It operates on a variety of input signals: the 32-bit 'i_in' to be shifted, 'i_carry_in' for handling carry-in bits, 'i_shift_amount' to determine the amount of shifting, 'i_shift_imm_zero' to specify if shifting operation is immediate and 'i_function', a 2-bit signal, to specify operation to the 'a25_shifter' sub-modules. This module employs two instances of 'a25_shifter': one for quick shifting and one for full shifting. 
+
+In terms of the output, the module generates a 32-bit 'o_out' post the shifting operation which could be driven by either quick shift or full shift operation, 'o_carry_out' that corresponds to the carry output after the operation and 'o_stall', a signal to indicate if the module is in a stalled state.
+
+Internally, the module leverages several signals: 'quick_out', 'quick_carry_out' which are wire signals storing outputs for quick shift operation, 'full_out' and 'full_carry_out' that perform a similar function for full shift operation, and registered versions of the full shift outputs: 'full_out_r', 'full_carry_out_r'. There is another registered signal 'use_quick_r' which is utilized to hold the choice for the kind of shifting.
+
+The code is sectioned into three main parts: assignments of output ports, an always block tasked with updating the registered signals and instantiation of two 'a25_shifter' sub-modules. The logic to decide whether to use quick shift or full shift output is also embedded within the assignments. Any non-zero shift amount other than the lower two bits results in a stall operation if quick shift operation has been selected.

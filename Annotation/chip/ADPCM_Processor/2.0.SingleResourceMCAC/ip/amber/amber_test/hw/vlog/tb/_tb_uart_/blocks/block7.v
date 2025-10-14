@@ -1,0 +1,1 @@
+assign txfifo_empty = txfifo_wp == txfifo_rp;

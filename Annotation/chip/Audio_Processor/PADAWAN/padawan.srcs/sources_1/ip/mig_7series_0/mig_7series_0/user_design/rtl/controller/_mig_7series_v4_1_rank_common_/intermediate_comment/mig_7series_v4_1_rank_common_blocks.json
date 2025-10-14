@@ -1,0 +1,341 @@
+{
+    "line_num": [
+        [
+            512,
+            512
+        ],
+        [
+            504,
+            510
+        ],
+        [
+            484,
+            494
+        ],
+        [
+            482,
+            482
+        ],
+        [
+            481,
+            481
+        ],
+        [
+            475,
+            490
+        ],
+        [
+            467,
+            474
+        ],
+        [
+            461,
+            463
+        ],
+        [
+            438,
+            442
+        ],
+        [
+            436,
+            437
+        ],
+        [
+            433,
+            433
+        ],
+        [
+            422,
+            432
+        ],
+        [
+            406,
+            406
+        ],
+        [
+            404,
+            405
+        ],
+        [
+            403,
+            403
+        ],
+        [
+            400,
+            401
+        ],
+        [
+            392,
+            392
+        ],
+        [
+            390,
+            390
+        ],
+        [
+            389,
+            389
+        ],
+        [
+            386,
+            387
+        ],
+        [
+            375,
+            375
+        ],
+        [
+            373,
+            373
+        ],
+        [
+            370,
+            371
+        ],
+        [
+            367,
+            369
+        ],
+        [
+            363,
+            363
+        ],
+        [
+            361,
+            361
+        ],
+        [
+            359,
+            359
+        ],
+        [
+            357,
+            357
+        ],
+        [
+            355,
+            355
+        ],
+        [
+            353,
+            353
+        ],
+        [
+            350,
+            352
+        ],
+        [
+            349,
+            349
+        ],
+        [
+            348,
+            348
+        ],
+        [
+            347,
+            347
+        ],
+        [
+            329,
+            346
+        ],
+        [
+            288,
+            288
+        ],
+        [
+            287,
+            287
+        ],
+        [
+            286,
+            286
+        ],
+        [
+            275,
+            285
+        ],
+        [
+            255,
+            255
+        ],
+        [
+            249,
+            249
+        ],
+        [
+            247,
+            251
+        ],
+        [
+            236,
+            245
+        ],
+        [
+            231,
+            235
+        ],
+        [
+            225,
+            228
+        ],
+        [
+            223,
+            224
+        ],
+        [
+            212,
+            222
+        ],
+        [
+            201,
+            201
+        ],
+        [
+            197,
+            199
+        ],
+        [
+            196,
+            196
+        ],
+        [
+            188,
+            195
+        ],
+        [
+            181,
+            184
+        ],
+        [
+            180,
+            180
+        ],
+        [
+            172,
+            179
+        ],
+        [
+            166,
+            171
+        ],
+        [
+            158,
+            158
+        ],
+        [
+            156,
+            156
+        ],
+        [
+            152,
+            155
+        ],
+        [
+            143,
+            151
+        ],
+        [
+            139,
+            142
+        ],
+        [
+            134,
+            134
+        ],
+        [
+            132,
+            132
+        ],
+        [
+            129,
+            131
+        ],
+        [
+            127,
+            127
+        ],
+        [
+            119,
+            126
+        ],
+        [
+            113,
+            118
+        ],
+        [
+            97,
+            103
+        ]
+    ],
+    "blocks": [
+        "  assign maint_ref_zq_wip = maint_ref_zq_wip_r;",
+        "  always @(posedge clk)\n    if(rst)\n      maint_ref_zq_wip_r <= #TCQ 1'b0;\n    else if((zq_request || |refresh_request) && insert_maint_r1)\n      maint_ref_zq_wip_r <= #TCQ 1'b1;\n    else if(~maint_wip_r)\n      maint_ref_zq_wip_r <= #TCQ 1'b0;",
+        "               \n      assign periodic_rd_r = periodic_rd_r_lcl;\n      assign periodic_rd_rank_r = periodic_rd_rank_r_lcl;\n      \n    end else begin\n    \n      \n      assign clear_periodic_rd_request = {RANKS{1'b0}};\n      assign periodic_rd_r = 1'b0;\n      assign periodic_rd_rank_r = {RANK_WIDTH{1'b0}};\n    ",
+        "               periodic_rd_grant_r & {RANKS{periodic_rd_ack_r}};",
+        "      assign clear_periodic_rd_request =",
+        "      always @(posedge clk) periodic_rd_rank_r_lcl <=\n                             #TCQ periodic_rd_rank_ns;\n\n\n\n\n      assign clear_periodic_rd_request =\n               periodic_rd_grant_r & {RANKS{periodic_rd_ack_r}};\n\n               \n      assign periodic_rd_r = periodic_rd_r_lcl;\n      assign periodic_rd_rank_r = periodic_rd_rank_r_lcl;\n      \n    end else begin\n    \n      ",
+        "      always @(periodic_rd_grant_r or periodic_rd_rank_r_lcl\n               or upd_last_master_r) begin\n        periodic_rd_rank_ns = periodic_rd_rank_r_lcl;\n        if (upd_last_master_r)\n          for (i=0; i<RANKS; i=i+1)\n            if (periodic_rd_grant_r[i])\n                  periodic_rd_rank_ns = i[RANK_WIDTH-1:0];\n      end",
+        "      always @(posedge clk) periodic_rd_grant_r = upd_last_master_ns\n                                                   ? periodic_rd_grant_ns\n                                                   : periodic_rd_grant_r;",
+        "      always @(posedge clk) begin\n\tif (rst) periodic_rd_r_cnt <= #TCQ 1'b0;\n\telse if (periodic_rd_r_lcl && periodic_rd_ack_r)\n\t   periodic_rd_r_cnt <= ~periodic_rd_r_cnt;\n      end",
+        "      always @(posedge clk) periodic_rd_r_lcl <= #TCQ periodic_rd_ns;\n",
+        "      always @(posedge clk) upd_last_master_r <= #TCQ upd_last_master_ns;",
+        "  generate\n    \n    if ( PERIODIC_RD_TIMER_DIV != 0 ) begin : periodic_read_request\n\n\n      reg periodic_rd_r_cnt;\n      wire int_periodic_rd_ack_r = (periodic_rd_ack_r && periodic_rd_r_cnt);\n      reg upd_last_master_r;\n      wire periodic_rd_busy = upd_last_master_r || periodic_rd_r_lcl;\n      wire upd_last_master_ns =\n             init_calib_complete && (|periodic_rd_request && ~periodic_rd_busy);",
+        "  assign app_zq_ack = app_zq_ack_r;",
+        "  always @(posedge clk) app_zq_ack_r <= #TCQ app_zq_ack_ns;\n  ",
+        "  always @(posedge clk) app_zq_r <= #TCQ app_zq_ns;",
+        "  assign app_zq_ns = init_calib_complete && (app_zq_req || app_zq_r && zq_request);\n  assign app_zq_ack_ns = app_zq_r && ~zq_request;",
+        "  assign app_ref_ack = app_ref_ack_r;",
+        "  always @(posedge clk) app_ref_ack_r <= #TCQ app_ref_ack_ns;",
+        "  always @(posedge clk) app_ref_r <= #TCQ app_ref_ns;",
+        "  assign app_ref_ns = init_calib_complete && (app_ref_req || app_ref_r && |refresh_request);\n  assign app_ref_ack_ns = app_ref_r && ~|refresh_request;",
+        "  assign app_sr_active = app_sr_active_r;",
+        "  always @(posedge clk) app_sr_active_r <= #TCQ app_sr_active_ns;",
+        "  wire app_sr_active_ns =\n    insert_maint_r1 ? maint_sre_r && ~maint_srx_r : app_sr_active_r;",
+        "  output app_sr_active;\n  reg app_sr_active_r;\n  ",
+        "  assign maint_rank_r = maint_rank_r_lcl;",
+        "  assign maint_req_r = maint_req_r_lcl;",
+        "  assign maint_srx_r = maint_srx_r_lcl;",
+        "  assign maint_sre_r = maint_sre_r_lcl;",
+        "  assign maint_zq_r = maint_zq_r_lcl;",
+        "  endgenerate",
+        "      always @(posedge clk) maint_srx_r_lcl <= #TCQ maint_srx_ns;\n\n    end ",
+        "      always @(posedge clk) maint_sre_r_lcl <= #TCQ maint_sre_ns;",
+        "      always @(posedge clk) maint_zq_r_lcl <= #TCQ maint_zq_ns;",
+        "      always @(posedge clk) maint_rank_r_lcl <= #TCQ maint_rank_ns;",
+        "      always @(maint_grant_r or maint_rank_r_lcl or maint_zq_ns\n               or maint_sre_ns or maint_srx_ns or present or rst\n               or upd_last_master_pls) begin\n        if (rst) maint_rank_ns = {RANK_WIDTH{1'b0}};\n        else begin\n          maint_rank_ns = maint_rank_r_lcl;\n          if (maint_zq_ns || maint_sre_ns || maint_srx_ns) begin\n            maint_rank_ns = maint_rank_r_lcl + ONE[RANK_WIDTH-1:0];\n            for (i=0; i<8; i=i+1)\n              if (~present[maint_rank_ns])\n                     maint_rank_ns = maint_rank_ns + ONE[RANK_WIDTH-1:0];\n          end\n          else\n            if (upd_last_master_pls)\n              for (i=0; i<RANKS; i=i+1)\n                if (maint_grant_r[i]) maint_rank_ns = i[RANK_WIDTH-1:0];\n        end\n      end",
+        "      always @(posedge clk) maint_req_r_lcl <= #TCQ new_maint_rank_r;",
+        "      always @(posedge clk) new_maint_rank_r <= #TCQ upd_last_master_r;",
+        "      always @(posedge clk) upd_last_master_r <= #TCQ upd_last_master_ns;",
+        "  generate\n    begin : maintenance_request\n\n\n      reg upd_last_master_r;\n      reg new_maint_rank_r;\n      wire maint_busy = upd_last_master_r || new_maint_rank_r ||\n                        maint_req_r_lcl || maint_wip_r;\n      wire [RANKS+1:0] maint_request = {sre_request, zq_request, refresh_request[RANKS-1:0]};\n      \n      wire upd_last_master_ns = |maint_request && ~maint_wip_r;",
+        "  endgenerate",
+        "        assign inhbt_srx = |ckesr_timer_r;",
+        "        always @(posedge clk) ckesr_timer_r <= #TCQ ckesr_timer_ns;\n        \n        assign inhbt_srx = |ckesr_timer_r;\n      \n      end ",
+        "        always @(insert_maint_r1 or ckesr_timer_r or maint_sre_r_lcl) begin\n        \n          ckesr_timer_ns = ckesr_timer_r;\n\n          if (insert_maint_r1 && maint_sre_r_lcl)\n            ckesr_timer_ns = nCKESR_CLKS[CKESR_TIMER_WIDTH-1:0];\n          else if(|ckesr_timer_r)\n            ckesr_timer_ns = ckesr_timer_r - ONE[CKESR_TIMER_WIDTH-1:0];\n        \n        end",
+        "      begin : ckesr_timer\n        \n        reg [CKESR_TIMER_WIDTH-1:0] ckesr_timer_r = {CKESR_TIMER_WIDTH{1'b0}};\n        reg [CKESR_TIMER_WIDTH-1:0] ckesr_timer_ns = {CKESR_TIMER_WIDTH{1'b0}};\n        ",
+        "        always @(init_calib_complete or sre_request_r)\n          sre_request = init_calib_complete && sre_request_r;\n      \n      end ",
+        "        always @(posedge clk) sre_request_r <= #TCQ sre_request_ns;\n        ",
+        "  generate begin : sr_cntrl\n      \n      \n      begin : sre_request_logic\n\n        reg sre_request_r;\n        wire sre_clears_sre_request = insert_maint_r1 && maint_sre_r_lcl;\n\n        wire sre_request_ns = ~rst && ((sre_request_r && ~sre_clears_sre_request)\n                              || (app_sr_req && init_calib_complete && ~maint_sre_r_lcl));\n        ",
+        "  endgenerate",
+        "        always @(init_calib_complete or zq_request_r)\n                  zq_request = init_calib_complete && zq_request_r;\n      end ",
+        "        always @(posedge clk) zq_request_r <= #TCQ zq_request_ns;",
+        "      begin : zq_request_logic\n        wire zq_clears_zq_request = insert_maint_r1 && maint_zq_r_lcl;\n        reg zq_request_r;\n        wire zq_request_ns = ~rst && (DRAM_TYPE == \"DDR3\") &&\n                           ((~init_calib_complete && (ZQ_TIMER_DIV != 0)) ||\n                            (zq_request_r && ~zq_clears_zq_request) ||\n                            zq_tick ||\n                            (app_zq_req && init_calib_complete));",
+        "        always @(maint_prescaler_tick_r_lcl or zq_timer_r)\n                  zq_tick = (zq_timer_r ==\n                       ONE[ZQ_TIMER_WIDTH-1:0] && maint_prescaler_tick_r_lcl);\n      end ",
+        "        always @(posedge clk) zq_timer_r <= #TCQ zq_timer_ns;",
+        "        always @(init_calib_complete or maint_prescaler_tick_r_lcl\n                 or zq_tick or zq_timer_r) begin\n          zq_timer_ns = zq_timer_r;\n          if (~init_calib_complete || zq_tick)\n                zq_timer_ns = ZQ_TIMER_DIV[ZQ_TIMER_WIDTH-1:0];\n          else if (|zq_timer_r && maint_prescaler_tick_r_lcl)\n                   zq_timer_ns = zq_timer_r - ONE[ZQ_TIMER_WIDTH-1:0];\n        end",
+        "  generate\n    if (DRAM_TYPE == \"DDR3\") begin : zq_cntrl\n      reg zq_tick = 1'b0;\n      if (ZQ_TIMER_DIV !=0) begin : zq_timer\n        reg [ZQ_TIMER_WIDTH-1:0] zq_timer_r;\n        reg [ZQ_TIMER_WIDTH-1:0] zq_timer_ns;",
+        "  assign refresh_tick = refresh_tick_lcl;",
+        "  endgenerate",
+        "      always @(posedge clk) refresh_timer_r <= #TCQ refresh_timer_ns;\n      assign refresh_tick_lcl = (refresh_timer_r ==\n                  ONE[REFRESH_TIMER_WIDTH-1:0]) && maint_prescaler_tick_r_lcl;\n    end",
+        "      always @(init_calib_complete or maint_prescaler_tick_r_lcl\n               or refresh_tick_lcl or refresh_timer_r) begin\n        refresh_timer_ns = refresh_timer_r;\n        if (~init_calib_complete || refresh_tick_lcl)\n              refresh_timer_ns = REFRESH_TIMER_DIV[REFRESH_TIMER_WIDTH-1:0];\n        else if (|refresh_timer_r && maint_prescaler_tick_r_lcl)\n                 refresh_timer_ns =\n                   refresh_timer_r - ONE[REFRESH_TIMER_WIDTH-1:0];\n      end",
+        "  generate\n    begin : refresh_timer\n      reg [REFRESH_TIMER_WIDTH-1:0] refresh_timer_r;\n      reg [REFRESH_TIMER_WIDTH-1:0] refresh_timer_ns;",
+        "  assign maint_prescaler_tick_r = maint_prescaler_tick_r_lcl;",
+        "  endgenerate",
+        "      always @(posedge clk) maint_prescaler_tick_r_lcl <=\n                             #TCQ maint_prescaler_tick_ns;\n    end",
+        "      always @(posedge clk) maint_prescaler_r <= #TCQ maint_prescaler_ns;",
+        "      always @(init_calib_complete or maint_prescaler_r\n               or maint_prescaler_tick_ns) begin\n        maint_prescaler_ns = maint_prescaler_r;\n        if (~init_calib_complete || maint_prescaler_tick_ns)\n           maint_prescaler_ns = MAINT_PRESCALER_DIV[MAINT_PRESCALER_WIDTH-1:0];\n        else if (|maint_prescaler_r)\n       maint_prescaler_ns = maint_prescaler_r - ONE[MAINT_PRESCALER_WIDTH-1:0];\n      end",
+        "  generate\n    begin : maint_prescaler\n      reg [MAINT_PRESCALER_WIDTH-1:0] maint_prescaler_r;\n      reg [MAINT_PRESCALER_WIDTH-1:0] maint_prescaler_ns;\n      wire maint_prescaler_tick_ns =\n             (maint_prescaler_r == ONE[MAINT_PRESCALER_WIDTH-1:0]);",
+        "  function integer clogb2 (input integer size); \n    begin\n      size = size - 1;\n      for (clogb2=1; size>1; clogb2=clogb2+1)\n            size = size >> 1;\n    end\n  endfunction "
+    ]
+}

@@ -1,0 +1,1 @@
+         assign vid_clk_int = vid_clk;

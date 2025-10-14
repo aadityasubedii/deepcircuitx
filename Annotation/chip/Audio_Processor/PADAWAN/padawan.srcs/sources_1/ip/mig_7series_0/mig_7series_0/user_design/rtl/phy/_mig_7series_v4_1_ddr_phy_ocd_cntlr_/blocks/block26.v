@@ -1,0 +1,1 @@
+  assign oclk_init_delay_done = 1'b1;

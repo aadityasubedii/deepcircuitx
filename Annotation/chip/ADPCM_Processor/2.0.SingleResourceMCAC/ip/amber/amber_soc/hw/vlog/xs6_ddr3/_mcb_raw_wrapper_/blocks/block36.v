@@ -1,0 +1,1 @@
+    if( C_MEM_TYPE == "DDR2") begin : gen_cketrain_a

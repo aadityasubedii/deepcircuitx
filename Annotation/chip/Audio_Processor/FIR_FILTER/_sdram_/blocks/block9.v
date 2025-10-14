@@ -1,0 +1,1 @@
+  assign cas_addr = f_select ? { {4{1'b0}},f_addr[7 : 0] } : { {4{1'b0}},active_addr[7 : 0] };

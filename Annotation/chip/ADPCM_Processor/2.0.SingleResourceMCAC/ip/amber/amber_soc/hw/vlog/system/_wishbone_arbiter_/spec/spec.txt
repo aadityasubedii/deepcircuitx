@@ -1,0 +1,10 @@
+Module name: wishbone_arbiter
+Module specification: 
+
+The wishbone_arbiter is a crucial module in System-on-Chip (SoC) designs, serving as an arbiter for a wishbone bus. The module is designed to control and coordinate the communication between two master ports and eight slave ports over the bus. It manages who gets control of the bus when both master ports request simultaneous access. The decision is based on hold registers ('m0_wb_hold_r', 'm1_wb_hold_r'). It also determines the current slave to process the request based on the master address ('master_adr') and regulates the signals to and from the masters and the current slave. 
+
+The module has multiple input and output ports. The input ports include clock signal (i_wb_clk), address, select, write command, data from both masters (i_m0_wb_*, i_m1_wb_*), and acknowledgment, data and error signals from all slaves (i_s0_wb_* to i_s7_wb_*). The output ports include data, acknowledgment, error signals to both masters (o_m0_wb_*, o_m1_wb_*) and address, select, write command, data, valid command, and valid data signal to all slaves (o_s0_wb_* to o_s7_wb_*). 
+
+Internally, the module uses optimization signals like 'm0_wb_hold_r', 'm1_wb_hold_r' which store if a master is on hold, 'current_master', 'current_master_r', 'next_master', 'select_master' that help determine which master should execute, and 'current_slave' which indicates the slave the current master is interacting with. They also include signals like 'master_*' which represent corresponding signals of the executing master. The internal signals form the core logic for request grant arbitration.
+
+The Verilog code is structured into various sections. The first section declares all the input, output ports. The next part includes the internal signals used by the module, closely followed by the assignment and always block that determine the control logic of data transfer. The subsequent sections manipulate the bus signals based on the current master and slave. Lastly, it's managing the acknowledgment, data, and error signals to the master.

@@ -1,0 +1,7 @@
+Module name: audio_effects. 
+
+Module specification: The audio_effects module operates on the positive edge of an input clock signal, processing audio data based on control signals and volume control parameters. The module accepts an audio data sample on its 16-bit 'audio_input' port. The processing happens when the 'sample_req' signal is active, nominating the sample for processing. Another input 'sample_end' indicates the end of an audio sample. The volume is controlled by a 2-bit 'volume_control' input. The module functions are dictated by a 4-bit 'control' signal. The audio_effects module outputs the processed audio data on a 16-bit 'audio_output' port.
+
+Internally, the module uses a register 'romdata' as a look-up table to simulate sine waveform and the 'index' register for indexing this table. Another internal register 'last_sample' holds the last audio sample received when 'sample_end' is active, while register 'dat' stores the processed data value which is directly linked to the 'audio_output'. 
+
+The module has an initial block to initialize the romdata look-up table with pre-defined sine waveform values. The 'always' block of the module processes the audio data and digital effects based on the 'control' signal. If 'FEEDBACK' control is active, the last received audio sample multiplied by volume control is used. If the 'SINE' control is active, the output is fetched from the 'romdata' look-up table. When neither 'SINE' nor 'FEEDBACK' are active, it outputs a zero.

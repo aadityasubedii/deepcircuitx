@@ -1,0 +1,1 @@
+      assign  p5_arb_en_i        =  p5_arb_en;

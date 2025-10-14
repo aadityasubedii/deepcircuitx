@@ -1,0 +1,9 @@
+Module name: audio_echo_effect. 
+
+Module specification: The audio_echo_effect module is a hardware design which implements an audio echo effect. It accepts serialized stereo audio input and deserializes it using a submodule called `stereo_audio_parallelizer`. Another submodule, `sample_processor`, processes this data and applies the audio effect, potentially delaying the samples. Then, a third submodule, `stereo_audio_serializer`, serializes the processed audio back to a format that can be transmitted out. The output is flagged to indicate the left channel using `o_is_left` signal. 
+
+Input and output ports include `reset` (system reset), `clk` (system clock), `i_valid` (current input audio data validity), `i_is_left` (indicates if current audio is left channel), `i_audio` (audio data input), `o_ready` (readiness of output receiving module), `i_ready` (module's readiness to accept new input), `o_valid` (current output data validity), `o_is_left` (indicates if output data is left channel) and `o_audio` (audio data output). 
+
+Internal signals include `parallelizer_valid`, `parallelizer_ready`, `parallelizer_left`, `parallelizer_right`, `processor_valid`, `processor_ready`, `processor_left`, `processor_right`, `serializer_valid`, `serializer_ready`, `serializer_is_left` and `serializer_audio`. These are used to maintain the interface between the main module and the submodules and to carry data and its validity status between them. 
+
+The code is segmented into three blocks, each representing a submodule (`stereo_audio_parallelizer`, `sample_processor`, `stereo_audio_serializer`), which work together to implement the audio echo effect by deserializing the audio data, processing it and then serializing it back for output. This specification depicts a comprehensive and detailed overview of the module's design and operation.

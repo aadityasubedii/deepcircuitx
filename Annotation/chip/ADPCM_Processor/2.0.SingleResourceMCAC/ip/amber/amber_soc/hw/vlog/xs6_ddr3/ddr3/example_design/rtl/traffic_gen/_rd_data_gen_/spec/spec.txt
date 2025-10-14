@@ -1,0 +1,11 @@
+Module name: rd_data_gen. 
+
+Module specification: The rd_data_gen is a Verilog RTL-based hardware module primarily used for scalable data generation and read operations. Key functionalities include address width configuration, data width configuration, burst length adjustments, and tailored design capability for different FPGA family types, particularly SPARTAN6 or VIRTEX6.
+
+The module comprises multiple input ports, including clk_i (input clock), rst_i (system reset), prbs_fseed_i (seed for pseudo-random data generation), data_mode_i (data pattern setting), cmd_valid_i (valid command indication), fixed_data_i (fixed data input), addr_i (address data), bl_i (burst length data), data_rdy_i (data reading readiness), as well as one control signal rd_mdata_en. Every input port forwards control or data inputs for the operations within the module.
+
+Output ports include cmd_rdy_o (command readiness indicator), last_word_o (indicates the last word in a data transmission), user_bl_cnt_is_1_o (used to keep track of the user's burst count), data_valid_o (data validity indicator), and data_o (actual data output).
+
+Internal signals such as prbs_data, cmd_start, adata, hdata, ndata, data, cmd_rdy, data_valid, user_burst_cnt, user_bl_cnt_is_1, cmd_start_b, data_port_fifo_rdy are paramount in ensuring efficient command, control, state, and data flows coordination.
+
+The code is divided into several sections. Initialization and parameter setup section at the beginning outlines the requirements and architectural details specific to the FPGA family. This is followed by input and output port declarations. The complex functionality as per parameters is handled through conditional assignments and procedural blocks. Data generation instantiation is handled separately for SPARTAN6 and VIRTEX6, reflected by the SP6_DGEN and V6_DGEN blocks. The module uses pipelining and employs principles of synchronous digital design to ensure timing control and to maintain data continuity and synchronization.

@@ -1,0 +1,1 @@
+       assign phy_din[HIGHEST_LANE_B1*80+320-1:320] = 0;

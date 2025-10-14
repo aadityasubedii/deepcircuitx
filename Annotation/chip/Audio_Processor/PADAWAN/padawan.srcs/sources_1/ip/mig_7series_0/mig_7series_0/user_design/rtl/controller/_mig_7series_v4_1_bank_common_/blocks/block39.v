@@ -1,0 +1,1 @@
+  assign periodic_rd_ack_r = periodic_rd_ack_r_lcl;

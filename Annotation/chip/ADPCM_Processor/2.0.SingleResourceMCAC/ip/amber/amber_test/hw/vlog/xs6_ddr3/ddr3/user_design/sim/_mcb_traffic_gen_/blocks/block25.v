@@ -1,0 +1,1 @@
+assign dcount_rst = counts_rst | rst_ra[0];

@@ -1,0 +1,23 @@
+Module name: padawan. 
+
+Module specification: 
+
+This padawan module is a digital realization of an audio effect processor. It receives audio data in digital format, applies a series of processes (overdrive, chorus, tremelo effect) based on the control of a 16-bit switch input (sw), and delivers the processed audio data through an output Pulse Width Modulation (PWM) channel. It also drives LEDs that visualize the processed audio data.
+
+Input Ports:
+
+1. sw (16 bits): This switch input enables different audio effects.
+2. CLK100MHZ: This is the operating clock for the module.
+3. vauxp3, vauxn3: These are auxiliary audio data inputs.
+
+Output Ports:
+
+1. LED (16 bits): This drives LEDs for user feedback.
+2. AUD_PWM: The processed audio output.
+3. AUD_SD: A 1-bit static output, possibly for mode configuration.
+
+Additionally, a multitude of internal signals and registers are defined for the operation of this module. The audio data is received and processed in these different registers, covering audio_data and CLK_AUDIO from the XADC module to process audio signals. A significant set are the p1 to p32 registers that hold temporary audio data during processing, while tremelo-related and overdrive-related parameters dictate the behavior of tremelo and overdrive effects. The audio_reg and next_state registers hold transformed audio data and keep track of the sequential state-based flow of audio data processing, respectively. 
+
+The code consists of different structured blocks, each performing specific functions - data acquisition from XADC, stages of audio data processing (Start, Overdrive, Chorus, Tremelo, Output) managed sequentially with an always block at CLK100MHZ edge. Then the processed audio data gets assigned to 'PWM', which feeds into a PWM module.
+
+Overall, the padawan module reads and processes incoming audio data, adds audio effects based on user-controlled inputs, and delivers processed audio data to a PWM channel and LED indicators.

@@ -1,0 +1,1 @@
+  assign run_polarity = run_polarity_r;

@@ -1,0 +1,1 @@
+  assign left = use_noise_window ? rise_lead_left : rise_trail_left;

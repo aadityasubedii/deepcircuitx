@@ -1,0 +1,1 @@
+  assign DRP_SDI = shift_through_reg[0]; 

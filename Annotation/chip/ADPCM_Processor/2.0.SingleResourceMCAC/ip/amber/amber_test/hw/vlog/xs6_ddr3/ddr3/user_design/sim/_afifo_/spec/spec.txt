@@ -1,0 +1,15 @@
+Module name: afifo. 
+
+Module specification: This module implements an asynchronous FIFO (First In First Out) queue. The magnitude of data held is steered by two primary parameters - DSIZE and FIFO_DEPTH, which signify the data width and depth of the queue respectively. Its operation and sync are handled by two distinct clocks "wr_clk" and "rd_clk" for writing and reading operations, accordingly. 
+
+Input ports are set to regulate the queue's operations. This includes 'wr_clk' which directs writing data to the FIFO, 'rst' for reset signals, 'wr_en' for enabling the write operation, 'wr_data' indicating data for the operation, 'rd_en' for enabling read operation, and 'rd_clk' directing the read operation from the queue. 
+
+Data received from the queue is transferred via 'rd_data' output port. Flags like 'full', 'empty', and 'almost_full' signal the state of the FIFO queue and they all are output ports.
+
+Internally, the queue is initialized and maintained using signals such as 'mem', 'rd_gray', 'rd_gray_nxt', 'wr_gray', 'wr_gray_nxt', 'buf_avail', 'buf_filled', 'wr_addr', 'rd_addr', 'wr_ptr', 'rd_ptr', and 'rd_ptr_tmp' which help in managing the FIFO queue's writes/reads, buffers, memory, addresses, data pointers, and other operational dependencies.
+
+There exist different blocks or sections inside the code, each performing distinctive functions - synchronization blocks 'RDSYNC' and 'WRSYNC' allow for module synchronization, assign blocks for data read and write, procedural blocks for managing pointer movements, filled and available buffer controls. These blocks collectively support the FIFO functionality of reading, writing, and managing control and status flags inside the FIFO queue. 
+
+TCQ, a recurring term in the code, denotes the delay interval associated with the propagation of certain signals, a quality deducible from the code itself yet unreferenced in comments. In essence, we infer it as a system term underlying the rise or fall times of specific signal transitions.
+
+Other parameters set such as ASIZE, SYNC depict mechanisms associated with address size and read-write operation type respectively. Customizations such as these afford resilience for this module to cater to a dynamic range of user requirements.

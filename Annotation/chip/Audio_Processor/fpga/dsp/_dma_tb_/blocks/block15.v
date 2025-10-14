@@ -1,0 +1,1 @@
+    always #42 wb_clk <= !wb_clk;

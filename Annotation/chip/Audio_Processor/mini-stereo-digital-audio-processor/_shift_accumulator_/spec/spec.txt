@@ -1,0 +1,9 @@
+Module name: shift_accumulator. 
+
+Module specification: The shift_accumulator is a Verilog RTL module that functions as a shift accumulator, making use of a 40-bit wide shift register named `shift_reg`. It is controlled by various input signals, including four control signals - `shift_en`, `clear`, `load`, and `sclk` - and one 40-bit data signal - `in_bk`. 
+
+The `shift_en` signal enables or disables the shift operation on the input data when loading into the shift register. The `load` signal allows the module to accept new input from `in_bk`, contingent on the state of `shift_en`. The `clear` signal resets the shift register to its initial zero state. The `sclk` is the clock signal, with operations internal to the module synchronized with its negative edge. 
+
+The final input signal, `in_bk`, is the data that is loaded into, and potentially shifted within, `shift_reg`. This loading and shifting activity happens under `load` and `shift_en` control and timed with `sclk`. During each clock cycle, `shift_reg` is either cleared (under the influence of the `clear` signal), loaded with 'in_bk' and shifted (if both `load` and `shift_en` are asserted), or loaded with `in_bk` without any shift (if `load` is asserted but `shift_en` is not), or it just retains its previous state. 
+
+After any operation ('clear', 'load and shift', 'load without shift', or 'retain previous state'), the current state of `shift_reg` is assigned to the sole output port `out_bk`. Therefore, the `out_bk` signal outputs the current state of the shift register during each clock cycle, serving as an encapsulation of the operation chosen and performed in that cycle.

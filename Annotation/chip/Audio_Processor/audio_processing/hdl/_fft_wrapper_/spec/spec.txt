@@ -1,0 +1,11 @@
+Module name: fft_wrapper. 
+
+Module specification: The module fft_wrapper is designed to act as a wrapper for a Fast Fourier Transform (FFT) core. The functionality of this module is to receive a complex signal input, control the FFT core to transform the signal, and output the magnitude of the transformed signal. 
+
+The input ports for the fft_wrapper are 'clk', 'start', 'unload', 'xn_re', 'xn_im', 'fwd_inv', and 'fwd_inv_we'. The 'clk' signal synchronizes the system. The 'start' signal triggers the FFT computation and 'unload' controls the data unloading from the FFT core. The 'xn_re' and 'xn_im' represent the real and imaginary parts of the complex signal input to the FFT core, respectively. 'fwd_inv' is a control signal for selecting forward or inverse FFT and 'fwd_inv_we' is the write enable input for 'fwd_inv'. 
+
+The output ports are 'xn_index', 'Magnitude', and 'xk_index'. The 'xn_index' and 'xk_index' signals provide the ordering/indexing of input and output complex numbers in the FFT core. The 'Magnitude' port outputs the magnitude of the FFT result.
+
+Internally, the module leverages several signals including 'dv', 'rfd', 'busy', 'done', 'edone', 'xk_re', 'xk_im', 'blk_exp', 'temp_re', 'temp_im', and 'mag_out'. Signals like 'dv', 'rfd', 'busy', 'done', and 'edone' are used to validate, synchronize and control the data flow and the FFT computation operation. On the other hand, 'xk_re', 'xk_im', 'temp_re', 'temp_im', and 'mag_out' are used in the computation of the magnitude of the FFT output.
+
+Within the code, two major blocks can be distinguished. The 'fft_core' is an instantiated module for performing the FFT computation, and an 'always' block is being used to perform the magnitude calculation whenever a new valid output is available from the FFT core.

@@ -1,0 +1,1 @@
+  assign R_ctrl_rd_ctl_reg_nxt = D_ctrl_rd_ctl_reg;

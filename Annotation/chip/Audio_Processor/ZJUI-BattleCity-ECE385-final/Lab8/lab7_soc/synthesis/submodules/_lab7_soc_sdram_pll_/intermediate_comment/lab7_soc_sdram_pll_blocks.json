@@ -1,0 +1,126 @@
+{
+    "line_num": [
+        [
+            305,
+            319
+        ],
+        [
+            302,
+            304
+        ],
+        [
+            299,
+            301
+        ],
+        [
+            296,
+            297
+        ],
+        [
+            293,
+            295
+        ],
+        [
+            290,
+            292
+        ],
+        [
+            283,
+            288
+        ],
+        [
+            277,
+            282
+        ],
+        [
+            266,
+            267
+        ],
+        [
+            217,
+            239
+        ],
+        [
+            208,
+            210
+        ],
+        [
+            158,
+            160
+        ],
+        [
+            155,
+            157
+        ],
+        [
+            129,
+            154
+        ],
+        [
+            117,
+            118
+        ],
+        [
+            98,
+            119
+        ],
+        [
+            96,
+            97
+        ],
+        [
+            87,
+            91
+        ],
+        [
+            83,
+            92
+        ],
+        [
+            80,
+            82
+        ],
+        [
+            75,
+            79
+        ],
+        [
+            72,
+            74
+        ],
+        [
+            67,
+            71
+        ],
+        [
+            64,
+            66
+        ]
+    ],
+    "blocks": [
+        "\tassign\n\t\tc0 = wire_sd1_clk[0],\n\t\tc1 = wire_sd1_clk[1],\n\t\tlocked = wire_sd1_locked,\n\t\tphasedone = 1'b0,\n\t\treaddata = {{30{1'b0}}, (read & ((w_select_control & w_pfdena) | (w_select_status & w_phasedone))), (read & ((w_select_control & w_pll_areset_in) | (w_select_status & w_locked)))},\n\t\tscandataout = 1'b0,\n\t\tscandone = 1'b0,\n\t\tw_locked = wire_stdsync2_dout,\n\t\tw_pfdena = pfdena_reg,\n\t\tw_phasedone = 1'b1,\n\t\tw_pll_areset_in = prev_reset,\n\t\tw_reset = ((write & w_select_control) & writedata[0]),\n\t\tw_select_control = ((~ address[1]) & address[0]),\n\t\tw_select_status = ((~ address[1]) & (~ address[0]));",
+        "\talways @ ( posedge clk or  posedge reset)\n\t\tif (reset == 1'b1) prev_reset <= 1'b0;\n\t\telse  prev_reset <= w_reset;",
+        "\tinitial\n\t\tprev_reset = 0;\n\t",
+        "\tassign\n\t\twire_pfdena_reg_ena = (write & w_select_control);",
+        "\talways @ ( posedge clk or  posedge reset)\n\t\tif (reset == 1'b1) pfdena_reg <= {1{1'b1}};\n\t\telse if  (wire_pfdena_reg_ena == 1'b1)   pfdena_reg <= writedata[1];",
+        "\tinitial\n\t\tpfdena_reg = {1{1'b1}};\n\t",
+        "\tlab7_soc_sdram_pll_altpll_lqa2   sd1\n\t( \n\t.areset((w_pll_areset_in | areset)),\n\t.clk(wire_sd1_clk),\n\t.inclk({{1{1'b0}}, clk}),\n\t.locked(wire_sd1_locked));",
+        "\tlab7_soc_sdram_pll_stdsync_sv6   stdsync2\n\t( \n\t.clk(clk),\n\t.din(wire_sd1_locked),\n\t.dout(wire_stdsync2_dout),\n\t.reset_n((~ reset)));",
+        "\treg\tpfdena_reg;\n\twire\twire_pfdena_reg_ena;",
+        "module  lab7_soc_sdram_pll\n\t( \n\taddress,\n\tareset,\n\tc0,\n\tc1,\n\tclk,\n\tconfigupdate,\n\tlocked,\n\tphasecounterselect,\n\tphasedone,\n\tphasestep,\n\tphaseupdown,\n\tread,\n\treaddata,\n\treset,\n\tscanclk,\n\tscanclkena,\n\tscandata,\n\tscandataout,\n\tscandone,\n\twrite,\n\twritedata) ;",
+        "\tassign\n\t\tclk = {wire_pll7_clk[4:0]},\n\t\tlocked = (wire_pll7_locked & pll_lock_sync);",
+        "\talways @ ( posedge wire_pll7_locked or  posedge areset)\n\t\tif (areset == 1'b1) pll_lock_sync <= 1'b0;\n\t\telse  pll_lock_sync <= 1'b1;",
+        "\tinitial\n\t\tpll_lock_sync = 0;\n\t",
+        "(* ALTERA_ATTRIBUTE = {\"SUPPRESS_DA_RULE_INTERNAL=C104;SUPPRESS_DA_RULE_INTERNAL=R101\"} *)\nmodule  lab7_soc_sdram_pll_altpll_lqa2\n\t( \n\tareset,\n\tclk,\n\tinclk,\n\tlocked) ;\n\tinput   areset;\n\toutput   [4:0]  clk;\n\tinput   [1:0]  inclk;\n\toutput   locked;\n`ifndef ALTERA_RESERVED_QIS\n\n`endif\n\ttri0   areset;\n\ttri0   [1:0]  inclk;\n`ifndef ALTERA_RESERVED_QIS\n\n`endif\n\n\treg\tpll_lock_sync;\n\twire  [4:0]   wire_pll7_clk;\n\twire  wire_pll7_fbout;\n\twire  wire_pll7_locked;\n\n\t",
+        "\tassign\n\t\tdout = wire_dffpipe3_q;",
+        "module  lab7_soc_sdram_pll_stdsync_sv6\n\t( \n\tclk,\n\tdin,\n\tdout,\n\treset_n) ;\n\tinput   clk;\n\tinput   din;\n\toutput   dout;\n\tinput   reset_n;\n\n\twire  [0:0]   wire_dffpipe3_q;\n\n\tlab7_soc_sdram_pll_dffpipe_l2c   dffpipe3\n\t( \n\t.clock(clk),\n\t.clrn(reset_n),\n\t.d(din),\n\t.q(wire_dffpipe3_q));\n\tassign\n\t\tdout = wire_dffpipe3_q;\nendmodule ",
+        "`timescale 1 ps / 1 ps\n",
+        "\tassign\n\t\tena = 1'b1,\n\t\tprn = 1'b1,\n\t\tq = dffe6a,\n\t\tsclr = 1'b0;",
+        "\talways @ ( posedge clock or  negedge prn or  negedge clrn)\n\t\tif (prn == 1'b0) dffe6a <= {1{1'b1}};\n\t\telse if (clrn == 1'b0) dffe6a <= 1'b0;\n\t\telse if  (ena == 1'b1)   dffe6a <= (dffe5a & (~ sclr));\n\tassign\n\t\tena = 1'b1,\n\t\tprn = 1'b1,\n\t\tq = dffe6a,\n\t\tsclr = 1'b0;\nendmodule ",
+        "\tinitial\n\t\tdffe6a = 0;\n\t",
+        "\talways @ ( posedge clock or  negedge prn or  negedge clrn)\n\t\tif (prn == 1'b0) dffe5a <= {1{1'b1}};\n\t\telse if (clrn == 1'b0) dffe5a <= 1'b0;\n\t\telse if  (ena == 1'b1)   dffe5a <= (dffe4a & (~ sclr));\n\t",
+        "\tinitial\n\t\tdffe5a = 0;\n\t",
+        "\talways @ ( posedge clock or  negedge prn or  negedge clrn)\n\t\tif (prn == 1'b0) dffe4a <= {1{1'b1}};\n\t\telse if (clrn == 1'b0) dffe4a <= 1'b0;\n\t\telse if  (ena == 1'b1)   dffe4a <= (d & (~ sclr));\n\t",
+        "\tinitial\n\t\tdffe4a = 0;\n\t"
+    ]
+}

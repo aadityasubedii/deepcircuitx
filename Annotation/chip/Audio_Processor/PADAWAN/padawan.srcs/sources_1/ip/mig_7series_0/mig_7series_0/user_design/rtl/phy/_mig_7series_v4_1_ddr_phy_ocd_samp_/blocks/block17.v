@@ -1,0 +1,1 @@
+  always @(posedge clk) data_cnt_r <= #TCQ data_cnt_ns;

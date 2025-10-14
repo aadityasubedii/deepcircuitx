@@ -1,0 +1,1 @@
+            assign cp_ticks = 1'b0;

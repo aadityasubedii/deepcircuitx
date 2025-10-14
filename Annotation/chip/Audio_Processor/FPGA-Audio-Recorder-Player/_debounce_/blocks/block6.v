@@ -1,0 +1,1 @@
+    always @(posedge clk) sync_1 <= sync_0;

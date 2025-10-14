@@ -1,0 +1,9 @@
+Module name: clipping. 
+
+Module specification: The 'clipping' module is designed to facilitate data scaling in a digital system. Functionally, it manipulates an input data signal 'data_in' based on the state of an 'enable' signal. When 'enable' is high, the 'data_in' is left-shifted as defined by the 'SHIFT' parameter and a part thereof is clipped, resulting in a modified 'data_out'. Conversely, when 'enable' is low, 'data_in' is passed through unaltered.
+
+This module has multiple ports, including two inputs: 'clk', a clock signal that synchronizes data processing, and 'enable', the control signal governing data manipulation. It also accommodates another input 'data_in', a multi-bit signal defined by the 'RESOLUTION' parameter, which acts as the source of data for the module. The module outputs through a single port 'data_out', a registrated multi-bit (of the same width as 'data_in') signal, which either relays 'data_in' as is or outputs a shifted and clipped version of 'data_in' depending on the state of 'enable'.
+
+Internally, the module employs a partial signal 'data_out[RESOLUTION - SHIFT - 1]' that clips a portion of 'data_in' during the data modification process when 'enable' is set high. 
+
+The module consists of an always block, a clocked process that activates on the rising edge of 'clk'. Within this block, a conditional statement switches behavior based on 'enable': if 'enable' is inactive, 'data_in' is assigned to 'data_out' directly; otherwise, 'data_in' undergoes a partial clipping and a full left-shift before being assigned to 'data_out'. This module stands as a versatile tool for controlled data scaling in digital circuits.

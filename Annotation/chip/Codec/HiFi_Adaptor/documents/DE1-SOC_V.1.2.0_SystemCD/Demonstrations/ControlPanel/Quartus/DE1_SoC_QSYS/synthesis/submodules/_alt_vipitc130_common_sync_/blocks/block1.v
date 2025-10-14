@@ -1,0 +1,1 @@
+        assign data_out = data_out_sync1;

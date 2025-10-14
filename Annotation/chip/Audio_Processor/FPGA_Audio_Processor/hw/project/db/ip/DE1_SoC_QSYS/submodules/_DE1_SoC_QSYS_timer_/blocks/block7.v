@@ -1,0 +1,1 @@
+  assign snap_h_wr_strobe = chipselect && ~write_n && (address == 5);

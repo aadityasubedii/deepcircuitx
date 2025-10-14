@@ -1,0 +1,15 @@
+	assign
+		c0 = wire_sd1_clk[0],
+		c1 = wire_sd1_clk[1],
+		locked = wire_sd1_locked,
+		phasedone = 1'b0,
+		readdata = {{30{1'b0}}, (read & ((w_select_control & w_pfdena) | (w_select_status & w_phasedone))), (read & ((w_select_control & w_pll_areset_in) | (w_select_status & w_locked)))},
+		scandataout = 1'b0,
+		scandone = 1'b0,
+		w_locked = wire_stdsync2_dout,
+		w_pfdena = pfdena_reg,
+		w_phasedone = 1'b1,
+		w_pll_areset_in = prev_reset,
+		w_reset = ((write & w_select_control) & writedata[0]),
+		w_select_control = ((~ address[1]) & address[0]),
+		w_select_status = ((~ address[1]) & (~ address[0]));

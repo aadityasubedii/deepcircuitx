@@ -1,0 +1,1 @@
+        assign data_end = col_size ? offset_r[0] : 1'b1;

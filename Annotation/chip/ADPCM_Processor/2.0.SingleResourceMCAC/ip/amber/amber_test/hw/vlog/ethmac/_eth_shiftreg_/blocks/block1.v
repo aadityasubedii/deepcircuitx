@@ -1,0 +1,1 @@
+assign ShiftedBit = ShiftReg[7];

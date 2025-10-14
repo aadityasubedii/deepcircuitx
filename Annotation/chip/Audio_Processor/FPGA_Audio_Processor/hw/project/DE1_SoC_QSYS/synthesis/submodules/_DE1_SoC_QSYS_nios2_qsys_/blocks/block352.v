@@ -1,0 +1,1 @@
+  assign sync_timer_next = sync_timer_reached_zero ? sync_timer : (sync_timer - 1);

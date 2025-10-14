@@ -1,0 +1,1 @@
+      always @(posedge clk) wr_data_indx_r <= #TCQ wr_data_indx_ns;

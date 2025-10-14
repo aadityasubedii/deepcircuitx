@@ -1,0 +1,1 @@
+  assign rst_ref[0]  = rst_ref_sync_r[0][RST_SYNC_NUM-1];

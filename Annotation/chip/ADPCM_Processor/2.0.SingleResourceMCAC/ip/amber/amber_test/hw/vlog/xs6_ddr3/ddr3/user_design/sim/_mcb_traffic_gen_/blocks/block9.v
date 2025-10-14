@@ -1,0 +1,1 @@
+assign cmd_rd_en = ~mcb_cmd_full_i & mcb_cmd_en_o;

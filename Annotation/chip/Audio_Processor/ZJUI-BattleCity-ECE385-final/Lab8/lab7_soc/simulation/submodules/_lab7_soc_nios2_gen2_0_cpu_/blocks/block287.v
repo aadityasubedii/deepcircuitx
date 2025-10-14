@@ -1,0 +1,1 @@
+  assign F_pcb = {F_pc, 2'b00};

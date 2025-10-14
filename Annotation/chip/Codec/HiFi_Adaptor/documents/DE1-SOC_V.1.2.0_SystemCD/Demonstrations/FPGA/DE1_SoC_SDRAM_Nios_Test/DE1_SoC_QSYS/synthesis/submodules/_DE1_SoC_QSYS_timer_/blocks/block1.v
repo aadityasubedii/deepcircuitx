@@ -1,0 +1,1 @@
+  assign status_wr_strobe = chipselect && ~write_n && (address == 0);

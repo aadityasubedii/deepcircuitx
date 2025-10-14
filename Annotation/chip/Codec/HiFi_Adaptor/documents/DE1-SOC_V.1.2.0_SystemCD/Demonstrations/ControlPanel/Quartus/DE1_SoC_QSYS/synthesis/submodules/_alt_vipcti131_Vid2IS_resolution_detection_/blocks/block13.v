@@ -1,0 +1,1 @@
+assign reset_f1 = reset_sample | (update_active_line_f0 & active_line_count_f0[0]);

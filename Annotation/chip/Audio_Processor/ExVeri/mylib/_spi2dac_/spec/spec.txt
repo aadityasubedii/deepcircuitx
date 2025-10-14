@@ -1,0 +1,9 @@
+Module name: spi2dac. 
+
+Module specification: The spi2dac module is a Serial Peripheral Interface (SPI) to Digital-to-Analog Converter (DAC) conversion module, responsible for generating signals needed by an external DAC and maintaining precise control over the output signal. 
+
+The primary inputs to this module are 'sysclk' (the system clock used for synchronization of operations), 'data_in[9:0]' (the 10-bit digital data to be converted to analog), and 'load' (a control signal that triggers the conversion process). The outputs are 'dac_sdi' (the data signal to the DAC), 'dac_cs' (the chip select signal for the DAC), 'dac_sck' (clock signal for the DAC), and 'dac_ld' (a signal indicating when data should be loaded for conversion). 
+
+Internally, the module has several variables and signals such as 'clk_1MHZ' (a clock that runs at 1 MHz), 'ctr' (a counter used to generate the 1MHz clock), 'tick' (signal indicating a complete 1MHz cycle), 'sr_state' and 'state' (variables for maintaining the state of different finite state machines), 'dac_start' (signal determining whether the DAC should start), 'shift_reg[15:0]' (a shift register holding the content to be sent to DAC), among others.
+
+The module divides itself into several sections or blocks. One segment generates a 1MHz clock from the provided system clock. Another part is a state machine that changes states depending upon 'load' input and current state. The module also includes a state machine driven by the 1MHz clock pulse for timing the DAC output signals. There is a segment that manages the shift register, preparing and shifting its content for transmission to DAC. Overall, it forms a synchronised system for receiving digital input and outputting the necessary signals for DAC operation.

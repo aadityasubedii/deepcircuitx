@@ -1,0 +1,1 @@
+  input [3:0] ram_init_addr;

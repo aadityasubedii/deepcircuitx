@@ -1,0 +1,1 @@
+  assign fifo_wrptr_plus1 = fifo_wrptr + 1;

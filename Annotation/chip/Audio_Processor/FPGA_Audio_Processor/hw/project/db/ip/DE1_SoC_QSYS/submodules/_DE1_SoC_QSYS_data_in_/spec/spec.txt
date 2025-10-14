@@ -1,0 +1,11 @@
+Module name: DE1_SoC_QSYS_data_in. 
+
+Module specification: The DE1_SoC_QSYS_data_in is an RTL-based Verilog module specifically designed for a QSYS system in an Altera DE1-SoC FPGA board. The module's primary functionality involves serving as a multiplexer and memory element, assigning 16-bits of input data from the 'in_port' to a 32-bit register 'readdata' based on a 2-bit 'address' input.
+
+The module features four input ports: 2-bit 'address' which is fundamental for data selection, a system clock 'clk' for synchronization of data transfer, a 16-bit 'in_port' serving as the input for data, and 'reset_n', an active low reset signal. Output is provided through 'readdata', a 32-bit output port where the pre-processed data, padded with zeroes, is transmitted to other parts of the system.
+
+Inside the module, 'clk_en', a clock enable signal, acts as a timing control, while 'data_in' acts as an equivalent of 'in_port', collecting the incoming data. 'read_mux_out', another internal wire, serves as an intermediary for data selected based on the address signal. 
+
+The module contains a block that checks for clock edges and reset condition to manage data transfer. If 'reset_n' is activated, readdata is reset to zero, and if not, data proceeds to be written to 'readdata' at every positive edge of 'clk'. There is an additional block that assigns the 'in_port' input to 'data_in', allowing for initial receipt of data. 
+
+This module, in essence, is designed to handle and process data using an address-based selection system, synchronized to respond to clock edges and reset conditions.

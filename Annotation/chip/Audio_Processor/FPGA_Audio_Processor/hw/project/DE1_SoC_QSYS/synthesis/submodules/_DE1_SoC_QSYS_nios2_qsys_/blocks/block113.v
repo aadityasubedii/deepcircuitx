@@ -1,0 +1,1 @@
+  assign jtag_debug_module_clk = clk;

@@ -1,0 +1,1 @@
+  assign maint_prescaler_tick_r = maint_prescaler_tick_r_lcl;

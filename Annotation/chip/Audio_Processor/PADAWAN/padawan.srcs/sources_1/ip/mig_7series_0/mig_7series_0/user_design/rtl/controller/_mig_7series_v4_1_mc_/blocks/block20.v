@@ -1,0 +1,1 @@
+  always @(posedge clk) mc_read_idle_r <= #TCQ mc_read_idle_ns;

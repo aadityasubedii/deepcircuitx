@@ -1,0 +1,1 @@
+  assign mc_wrdata_mask = {2*nCK_PER_CLK*DQ_WIDTH/8{1'b0}};

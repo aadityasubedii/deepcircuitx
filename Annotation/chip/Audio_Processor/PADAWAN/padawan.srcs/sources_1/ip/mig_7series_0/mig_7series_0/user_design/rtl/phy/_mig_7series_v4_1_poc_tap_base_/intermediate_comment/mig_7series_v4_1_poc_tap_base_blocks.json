@@ -1,0 +1,146 @@
+{
+    "line_num": [
+        [
+            220,
+            293
+        ],
+        [
+            210,
+            215
+        ],
+        [
+            203,
+            203
+        ],
+        [
+            202,
+            202
+        ],
+        [
+            200,
+            200
+        ],
+        [
+            199,
+            199
+        ],
+        [
+            196,
+            196
+        ],
+        [
+            194,
+            194
+        ],
+        [
+            190,
+            190
+        ],
+        [
+            188,
+            188
+        ],
+        [
+            185,
+            185
+        ],
+        [
+            183,
+            183
+        ],
+        [
+            179,
+            179
+        ],
+        [
+            177,
+            177
+        ],
+        [
+            173,
+            173
+        ],
+        [
+            171,
+            171
+        ],
+        [
+            167,
+            167
+        ],
+        [
+            165,
+            165
+        ],
+        [
+            161,
+            161
+        ],
+        [
+            160,
+            160
+        ],
+        [
+            159,
+            159
+        ],
+        [
+            155,
+            155
+        ],
+        [
+            151,
+            151
+        ],
+        [
+            149,
+            149
+        ],
+        [
+            142,
+            142
+        ],
+        [
+            138,
+            138
+        ],
+        [
+            135,
+            135
+        ],
+        [
+            117,
+            123
+        ]
+    ],
+    "blocks": [
+        "  always @(*) begin\n    \n    if (rst == 1'b1) begin\n      \n \n      psen_int = 1'b0;\n      sm_ns = 2'd0;\n      run_polarity_ns = 1'b0;\n      run_ns = {TAPCNTRWIDTH{1'b0}};\n      run_end_int = 1'b0;\n      samp_cntr_ns = {SAMPCNTRWIDTH{1'b0}};\n      samps_hi_ns = {SAMPCNTRWIDTH+1{1'b0}};\n      tap_ns = {TAPCNTRWIDTH{1'b0}};\n      samp_wait_ns = MMCM_SAMP_WAIT[SAMP_WAIT_WIDTH-1:0];\n      samps_hi_held_ns = {SAMPCNTRWIDTH+1{1'b0}};\n    end else begin\n\n \n      psen_int = 1'b0;\n      sm_ns = sm_r;\n      run_polarity_ns = run_polarity_r;\n      run_ns = run_r;\n      run_end_int = 1'b0;\n      samp_cntr_ns = samp_cntr_r;\n      samps_hi_ns = samps_hi_r;\n      tap_ns = tap_r;\n      samp_wait_ns = samp_wait_r;\n      if (|samp_wait_r) samp_wait_ns = samp_wait_r - ONE[SAMP_WAIT_WIDTH-1:0];\n      samps_hi_held_ns = samps_hi_held_r;\n\n\n      case (sm_r)\n        2'd0: begin\n\t  if (~|samp_wait_r && poc_sample_pd | POC_USE_METASTABLE_SAMP == \"TRUE\") begin\n\t    if (POC_USE_METASTABLE_SAMP == \"TRUE\") samp_wait_ns = ONE[SAMP_WAIT_WIDTH-1:0];\n\t    if ({1'b0, samp_cntr_r} == samples) sm_ns = 2'd1;\n\t    samps_hi_ns = samps_hi_r + {{SAMPCNTRWIDTH{1'b0}}, pd_out_sel};\n\t    samp_cntr_ns = samp_cntr_r + ONE[SAMPCNTRWIDTH-1:0];\n\t  end\n        end\n\t\n\t2'd1:begin\n\t   sm_ns = 2'd2;\n        end\n\n        2'd2:begin\n\t  sm_ns = 2'd3;\n\t  psen_int = 1'b1;\n\t  samp_cntr_ns = {SAMPCNTRWIDTH{1'b0}};\n\t  samps_hi_ns = {SAMPCNTRWIDTH+1{1'b0}};\n\t  samps_hi_held_ns = samps_hi_r;\n\t  tap_ns = (tap_r < TAPSPERKCLK[TAPCNTRWIDTH-1:0] - ONE[TAPCNTRWIDTH-1:0])\n\t             ? tap_r + ONE[TAPCNTRWIDTH-1:0]\n\t\t     : {TAPCNTRWIDTH{1'b0}};\n\n\t  if (run_polarity_r) begin\n\t    if (samps_zero_r) run_polarity_ns = 1'b0;\n\t  end else begin\n\t    if (samps_one_r) run_polarity_ns = 1'b1;\n\t  end\n\t  if (new_polarity) begin\n            run_ns ={TAPCNTRWIDTH{1'b0}};\n\t    run_end_int = 1'b1;\n\t  end else run_ns = run_r + ONE[TAPCNTRWIDTH-1:0];\n        end\n\n        2'd3:begin\n\t  samp_wait_ns = MMCM_SAMP_WAIT[SAMP_WAIT_WIDTH-1:0] - ONE[SAMP_WAIT_WIDTH-1:0];\n\t  if (psdone) sm_ns = 2'd0;\n        end\n\t\n      endcase \n    end \n  end ",
+        "  always @(*) begin\n    samps_zero_ns = samps_zero_r;\n    samps_one_ns = samps_one_r;\n    samps_zero_ns = samps_lo >= samps_solid_thresh;\n    samps_one_ns = samps_hi_r >= samps_solid_thresh;\n  end ",
+        "  assign samps_one = samps_one_r;",
+        "  assign samps_zero = samps_zero_r;",
+        "  always @(posedge clk) samps_one_r <= #TCQ samps_one_ns;",
+        "  always @(posedge clk) samps_zero_r <= #TCQ samps_zero_ns;",
+        "  assign sm = sm_r;",
+        "  always @(posedge clk) sm_r <= #TCQ sm_ns;",
+        "  assign tap = tap_r;",
+        "  always @(posedge clk) tap_r <= #TCQ tap_ns;",
+        "  assign samps_hi_held = samps_hi_held_r;",
+        "  always @(posedge clk) samps_hi_held_r <= #TCQ samps_hi_held_ns;",
+        "  assign samps_hi = samps_hi_r;",
+        "  always @(posedge clk) samps_hi_r <= #TCQ samps_hi_ns;",
+        "  assign samp_cntr = samp_cntr_r;",
+        "  always @(posedge clk) samp_cntr_r <= #TCQ samp_cntr_ns;",
+        "  assign run_polarity = run_polarity_r;",
+        "  always @(posedge clk) run_polarity_r <= #TCQ run_polarity_ns;",
+        "  assign run_too_small = run_too_small_r;",
+        "  always @(posedge clk) run_too_small_r <= #TCQ run_too_small_ns;",
+        "  always @(*) run_too_small_ns = run_end && (run <  TAPSPERKCLK/4);",
+        "  assign run_end = run_end_int;",
+        "  assign run = run_r;",
+        "  always @(posedge clk) run_r <= #TCQ run_ns;",
+        "  assign psincdec = 1'b1;",
+        "  always @(posedge clk) pd_out_r <= #TCQ pd_out;",
+        "  always @(posedge clk) samp_wait_r <= #TCQ samp_wait_ns;",
+        "  function integer clogb2 (input integer size); \n    begin\n      size = size - 1;\n      for (clogb2=1; size>1; clogb2=clogb2+1)\n            size = size >> 1;\n    end\n  endfunction "
+    ]
+}

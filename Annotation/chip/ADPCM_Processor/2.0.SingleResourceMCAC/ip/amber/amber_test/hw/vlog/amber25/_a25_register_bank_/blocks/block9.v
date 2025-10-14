@@ -1,0 +1,1 @@
+assign r15_out_rn     = {6'd0, r15, 2'd0};

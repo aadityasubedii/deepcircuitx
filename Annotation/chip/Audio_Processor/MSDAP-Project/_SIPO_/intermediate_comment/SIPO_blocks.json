@@ -1,0 +1,11 @@
+{
+    "line_num": [
+        [
+            13,
+            52
+        ]
+    ],
+    "blocks": [
+        "always@(posedge Dclk or posedge clear)\nbegin\n  if (clear ==1'b1)\n   begin \n    data_L = 16'b0;\n\tdata_R = 16'b0;\n\tinput_ready =1'b0;\n\tframe_start=1'b0;\n   end\n  else\n   begin \n     if(Frame ==1'b1)\n\t  begin \n\t    bit_count = 4'd15;\n\t\tinput_ready = 1'b0;\n\t\tdata_L[bit_count]=InputL;\n\t\tdata_R[bit_count]=InputR;\n\t\tframe_start=1'b1;\n\t  end\n\t else if(frame_start==1'b1)\n\t  begin \n\t    bit_count=bit_count-1;\n\t\tdata_L[bit_count]=InputL;\n\t\tdata_R[bit_count]=InputR;\n\t\tif(bit_count ==0)\n\t\t begin\n\t\t frame_start=0;\n\t\t input_ready=1'b1;\n\t\t end\n\t  end\n     else\n\t\tbegin\n\t\t\tbit_count = 4'd15;\n\t\t\tdata_L = 16'd0;\n\t\t\tdata_R = 16'd0;\t\t\t\n\t\t\tinput_ready = 1'b0;\n\t\t\tframe_start = 1'b0;\n\t\tend\n\tend\n end"
+    ]
+}

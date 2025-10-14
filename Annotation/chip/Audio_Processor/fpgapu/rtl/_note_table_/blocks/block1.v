@@ -1,0 +1,1 @@
+  assign o_compare = note_table[i_note];

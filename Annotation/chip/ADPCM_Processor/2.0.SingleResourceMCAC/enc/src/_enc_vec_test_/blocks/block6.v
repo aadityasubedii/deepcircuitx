@@ -1,0 +1,1 @@
+assign test_status_set = `U_TEST_MODULE.test_status_set;

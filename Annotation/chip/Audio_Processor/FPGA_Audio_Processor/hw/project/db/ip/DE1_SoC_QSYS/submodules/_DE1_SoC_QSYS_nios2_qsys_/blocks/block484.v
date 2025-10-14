@@ -1,0 +1,1 @@
+  assign ocireg_mrs = writedata[0];

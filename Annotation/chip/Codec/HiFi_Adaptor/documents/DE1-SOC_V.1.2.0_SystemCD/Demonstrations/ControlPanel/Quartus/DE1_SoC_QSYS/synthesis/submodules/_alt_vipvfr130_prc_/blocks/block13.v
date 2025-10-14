@@ -1,0 +1,1 @@
+assign packet_type = registers[SLAVE_DATA_REQUIREDWIDTH+3:SLAVE_DATA_REQUIREDWIDTH];

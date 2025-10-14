@@ -1,0 +1,1 @@
+assign cumlative_dq_lane_error_r = cumlative_dq_lane_error_reg;     

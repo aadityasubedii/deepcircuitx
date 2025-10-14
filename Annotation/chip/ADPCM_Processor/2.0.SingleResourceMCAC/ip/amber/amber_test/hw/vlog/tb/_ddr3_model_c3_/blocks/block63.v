@@ -1,0 +1,1 @@
+    always @(posedge dqs_in[ 2]) dqs_pos_timing_check( 2);

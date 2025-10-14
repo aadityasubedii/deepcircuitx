@@ -1,0 +1,61 @@
+{
+    "line_num": [
+        [
+            313,
+            314
+        ],
+        [
+            310,
+            311
+        ],
+        [
+            302,
+            308
+        ],
+        [
+            295,
+            300
+        ],
+        [
+            282,
+            289
+        ],
+        [
+            271,
+            280
+        ],
+        [
+            261,
+            267
+        ],
+        [
+            251,
+            259
+        ],
+        [
+            241,
+            249
+        ],
+        [
+            158,
+            234
+        ],
+        [
+            150,
+            156
+        ]
+    ],
+    "blocks": [
+        "assign transfer_complete = \n\t\t(s_i2c_transceiver == I2C_STATE_6_COMPLETE) ? 1'b1 : 1'b0;",
+        "assign enable_clk\t= ~(s_i2c_transceiver == I2C_STATE_0_IDLE) &&\n\t\t\t~(s_i2c_transceiver == I2C_STATE_6_COMPLETE);",
+        "assign i2c_sdata\t= \n\t(s_i2c_transceiver == I2C_STATE_2_START_BIT) ? 1'b0 :\n\t(s_i2c_transceiver == I2C_STATE_5_STOP_BIT) ? 1'b0 :\n\t((s_i2c_transceiver == I2C_STATE_4_TRANSFER_ACK) & read_byte) ? 1'b0 :\n\t((s_i2c_transceiver == I2C_STATE_3_TRANSFER_BYTE) & ~read_byte) ? \n\t\tcurrent_byte[current_bit]\n\t\t: 1'bz;",
+        "assign i2c_sclk\t\t= (I2C_BUS_MODE == 1'b0) ? \n\t\t\t\t\t\tclk_400KHz :\n\t\t\t\t\t\t((s_i2c_transceiver == I2C_STATE_3_TRANSFER_BYTE) |\n\t\t\t\t\t\t(s_i2c_transceiver == I2C_STATE_4_TRANSFER_ACK)) ?\n\t\t\t\t\t\t\tclk_400KHz :\n\t\t\t\t\t\t\t1'b0;",
+        "always @(posedge clk)\nbegin\n\tif (reset == 1'b1)\n\t\tcurrent_byte <= 8'h00;\n\telse if ((s_i2c_transceiver == I2C_STATE_0_IDLE) || \n\t\t\t (s_i2c_transceiver == I2C_STATE_2_START_BIT))\n\t\tcurrent_byte <= data_in;\nend",
+        "always @(posedge clk)\nbegin\n\tif (reset == 1'b1)\n\t\tcurrent_bit\t<= 3'h0;\n\telse if ((s_i2c_transceiver == I2C_STATE_3_TRANSFER_BYTE) && \n\t\t\t(change_output_bit_en == 1'b1))\n\t\tcurrent_bit <= current_bit - 3'h1;\n\telse if (s_i2c_transceiver != I2C_STATE_3_TRANSFER_BYTE)\n\t\tcurrent_bit <= num_bits_to_transfer;\nend",
+        "always @(posedge clk)\nbegin\n\tif (reset == 1'b1)\n\t\tdata_from_i2c <= 8'h00;\n\telse if (start_and_stop_en & (s_i2c_transceiver == I2C_STATE_3_TRANSFER_BYTE))\n\t\tdata_from_i2c <= {data_from_i2c[6:0], i2c_sdata};\nend",
+        "always @(posedge clk)\nbegin\n\tif (reset == 1'b1)\n\t\tack <= 1'b0;\n\telse if (clear_ack == 1'b1)\n\t\tack <= 1'b0;\n\telse if (start_and_stop_en & (s_i2c_transceiver == I2C_STATE_4_TRANSFER_ACK))\n\t\tack <= i2c_sdata ^ I2C_BUS_MODE;\nend",
+        "always @(posedge clk)\nbegin\n\tif (reset == 1'b1)\n\t\ti2c_scen <= 1'b1;\n\telse if (change_output_bit_en & (s_i2c_transceiver == I2C_STATE_2_START_BIT))\n\t\ti2c_scen <= 1'b0;\n\telse if (s_i2c_transceiver == I2C_STATE_5_STOP_BIT)\n\t\ti2c_scen <= 1'b1;\nend",
+        "always @(*)\nbegin\n\t\n\tns_i2c_transceiver = I2C_STATE_0_IDLE;\n\n    case (s_i2c_transceiver)\n\tI2C_STATE_0_IDLE:\n\t\tbegin\n\t\t\tif ((send_start_bit == 1'b1) && (clk_400KHz == 1'b0))\n\t\t\t\tns_i2c_transceiver = I2C_STATE_1_PRE_START;\n\t\t\telse if (send_start_bit == 1'b1)\n\t\t\t\tns_i2c_transceiver = I2C_STATE_2_START_BIT;\n\t\t\telse if (send_stop_bit == 1'b1)\n\t\t\t\tns_i2c_transceiver = I2C_STATE_5_STOP_BIT;\n\t\t\telse if (transfer_data == 1'b1)\n\t\t\t\tns_i2c_transceiver = I2C_STATE_3_TRANSFER_BYTE;\n\t\t\telse\n\t\t\t\tns_i2c_transceiver = I2C_STATE_0_IDLE;\n\t\tend\n\tI2C_STATE_1_PRE_START:\n\t\tbegin\n\t\t\tif (start_and_stop_en == 1'b1)\n\t\t\t\tns_i2c_transceiver = I2C_STATE_2_START_BIT;\n\t\t\telse\n\t\t\t\tns_i2c_transceiver = I2C_STATE_1_PRE_START;\n\t\tend\n\tI2C_STATE_2_START_BIT:\n\t\tbegin\n\t\t\tif (change_output_bit_en == 1'b1)\n\t\t\tbegin\n\t\t\t\tif ((transfer_data == 1'b1) && (I2C_BUS_MODE == 1'b0))\n\t\t\t\t\tns_i2c_transceiver = I2C_STATE_3_TRANSFER_BYTE;\n\t\t\t\telse\n\t\t\t\t\tns_i2c_transceiver = I2C_STATE_6_COMPLETE;\n\t\t\tend\n\t\t\telse\n\t\t\t\tns_i2c_transceiver = I2C_STATE_2_START_BIT;\n\t\tend\n\tI2C_STATE_3_TRANSFER_BYTE:\n\t\tbegin\n\t\t\tif ((current_bit == 3'h0) && (change_output_bit_en == 1'b1))\n\t\t\tbegin\n\t\t\t\tif ((I2C_BUS_MODE == 1'b0) || (num_bits_to_transfer == 3'h6))\n\t\t\t\t\tns_i2c_transceiver = I2C_STATE_4_TRANSFER_ACK;\n\t\t\t\telse\n\t\t\t\t\tns_i2c_transceiver = I2C_STATE_6_COMPLETE;\n\t\t\tend\n\t\t\telse\n\t\t\t\tns_i2c_transceiver = I2C_STATE_3_TRANSFER_BYTE;\n\t\tend\n\tI2C_STATE_4_TRANSFER_ACK:\n\t\tbegin\n\t\t\tif (change_output_bit_en == 1'b1)\n\t\t\t\tns_i2c_transceiver = I2C_STATE_6_COMPLETE;\n\t\t\telse\n\t\t\t\tns_i2c_transceiver = I2C_STATE_4_TRANSFER_ACK;\n\t\tend\n\tI2C_STATE_5_STOP_BIT:\n\t\tbegin\n\t\t\tif (start_and_stop_en == 1'b1)\n\t\t\t\tns_i2c_transceiver = I2C_STATE_6_COMPLETE;\n\t\t\telse\n\t\t\t\tns_i2c_transceiver = I2C_STATE_5_STOP_BIT;\n\t\tend\n\tI2C_STATE_6_COMPLETE:\n\t\tbegin\n\t\t\tif (transfer_data == 1'b0)\n\t\t\t\tns_i2c_transceiver = I2C_STATE_0_IDLE;\n\t\t\telse\n\t\t\t\tns_i2c_transceiver = I2C_STATE_6_COMPLETE;\n\t\tend\n\tdefault:\n\t\tbegin\n\t\t\tns_i2c_transceiver = I2C_STATE_0_IDLE;\n\t\tend\n\tendcase\nend",
+        "always @(posedge clk)\nbegin\n\tif (reset == 1'b1)\n\t\ts_i2c_transceiver <= I2C_STATE_0_IDLE;\n\telse\n\t\ts_i2c_transceiver <= ns_i2c_transceiver;\nend"
+    ]
+}

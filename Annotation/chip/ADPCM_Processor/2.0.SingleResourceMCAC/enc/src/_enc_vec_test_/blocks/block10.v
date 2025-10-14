@@ -1,0 +1,1 @@
+`include "../include/a25_localparams.vh"

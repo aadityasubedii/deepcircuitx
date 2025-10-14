@@ -1,0 +1,1 @@
+assign read_audio_in = (streg == st_rc_ram_nextaddr) || (streg == st_start && audio_in_available);

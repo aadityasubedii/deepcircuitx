@@ -1,0 +1,1 @@
+  assign addr_col = a[9 : 0];

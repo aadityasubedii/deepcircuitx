@@ -1,0 +1,1 @@
+assign rx_fifo_pop_not_empty = rx_fifo_pop && !rx_fifo_empty;

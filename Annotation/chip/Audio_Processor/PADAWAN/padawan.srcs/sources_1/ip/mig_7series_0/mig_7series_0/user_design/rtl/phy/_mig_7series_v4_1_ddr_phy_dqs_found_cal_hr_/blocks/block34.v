@@ -1,0 +1,9 @@
+	  always @(posedge clk) begin
+        if (rst || rank_done_r)
+          retry_cnt[20+:10] <= #TCQ 'b0;
+        else if ((rd_byte_data_offset[rnk_cnt_r][12+:6] > (nCL + nAL + LATENCY_FACTOR - 1)) &&
+                 ~pi_dqs_found_all_bank[2])
+          retry_cnt[20+:10] <= #TCQ retry_cnt[20+:10] + 1;
+        else
+          retry_cnt[20+:10] <= #TCQ retry_cnt[20+:10];
+      end

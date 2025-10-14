@@ -1,0 +1,6 @@
+		@(posedge clk) begin
+			i_wb_adr <= wb_address_test;	
+			i_wb_cyc <= 1'b1;			
+			i_wb_stb <= 1'b1;			
+			i_wb_we  <= 1'b0;			
+		end

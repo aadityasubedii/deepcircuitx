@@ -1,0 +1,1 @@
+assign WAnWBn = (WAnWBnS) ? (17'h10000 - {2'b00, WAnWBnMAG}) : (WAnWBnMAG);

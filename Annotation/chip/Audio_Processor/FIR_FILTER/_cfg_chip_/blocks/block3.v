@@ -1,0 +1,1 @@
+	always @ (posedge clock50, posedge start) counter <= start?0:counter+1;

@@ -1,0 +1,1 @@
+        assign data_out[(i*BPS)+(BPS-1):(i*BPS)] = write_buffer_data[i];

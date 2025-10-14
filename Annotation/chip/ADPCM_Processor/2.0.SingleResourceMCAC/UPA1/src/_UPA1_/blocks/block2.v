@@ -1,0 +1,1 @@
+assign UA1=(UGA1+ULA1);

@@ -1,0 +1,46 @@
+{
+    "line_num": [
+        [
+            129,
+            146
+        ],
+        [
+            88,
+            114
+        ],
+        [
+            78,
+            86
+        ],
+        [
+            69,
+            76
+        ],
+        [
+            56,
+            67
+        ],
+        [
+            37,
+            54
+        ],
+        [
+            14,
+            19
+        ],
+        [
+            8,
+            11
+        ]
+    ],
+    "blocks": [
+        "    always @(posedge clk or reset) begin\n        if (reset) begin\n            i_ready <= 1'b1;\n            o_valid <= 1'b0;\n        end else begin\n            if (i_valid) begin\n                i_ready <= 1'b0;\n                o_result <= i_current + i_buffer;\n                o_buffer <= i_buffer;\n                repeat (2) @(posedge clk);\n                o_valid <= 1'b1;\n            end\n            if (o_valid && o_ready) begin\n                o_valid <= 1'b0;\n                i_ready <= 1'b1;\n            end\n        end\n    end",
+        "    initial begin\n        reset = 1;\n        i_valid = 0;\n        o_ready = 1;\n        i_audio = 0;\n        repeat (2) @(posedge clk) reset = 1'b1;\n        repeat (2) @(posedge clk) reset = 1'b0;\n\n        out_data(16'h1000);\n        out_data(16'h2000);\n        out_data(16'h3000);\n        out_data(16'h4000);\n\n        out_data(16'h0001);\n        out_data(16'h0002);\n        out_data(16'h0003);\n        out_data(16'h0004);\n\n        out_data(16'h0005);\n        out_data(16'h0006);\n        out_data(16'h0007);\n        out_data(16'h0008);\n\n        repeat (16) @(posedge clk);\n\n        $finish;\n    end",
+        "    task out_data(input [audio_width-1:0] audio);\n        begin\n            i_valid <= 1'b1;\n            i_audio <= audio;\n            wait (i_ready) @(posedge clk);\n            i_valid <= 1'b0;\n            @(posedge clk);\n        end\n    endtask",
+        "    always @(posedge clk or reset) begin\n        if (reset) begin\n        end else begin\n            if (o_valid) begin\n                $write(\"%08h\\n\", o_audio);\n            end\n        end\n    end",
+        "    process #(.audio_width(audio_width)) process_(\n        .reset(reset),\n        .clk(clk),\n        .i_valid(o_valid_operator),\n        .i_ready(o_ready_operator),\n        .i_current(o_current),\n        .i_buffer(o_buffer),\n        .o_valid(i_valid_result),\n        .o_ready(i_ready_result),\n        .o_result(i_result),\n        .o_buffer(i_buffer)\n    );",
+        "    sample_delay_buffer #(.sample_width(audio_width), .buffer_depth(4)) delay_buffer_(\n        .reset(reset),\n        .clk(clk),\n        .i_valid(i_valid),\n        .i_ready(i_ready),\n        .i_audio(i_audio),\n        .o_valid_operator(o_valid_operator),\n        .o_ready_operator(o_ready_operator),\n        .o_current(o_current),\n        .o_buffer(o_buffer),\n        .i_valid_result(i_valid_result),\n        .i_ready_result(i_ready_result),\n        .i_result(i_result),\n        .i_buffer(i_buffer),\n        .o_valid(o_valid),\n        .o_ready(o_ready),\n        .o_audio(o_audio)\n    );",
+        "    initial begin\n        clk = 1'b0;\n        forever begin\n            #(CLK_TIME / 2) clk = ~clk;\n        end\n    end",
+        "    initial begin\n        $dumpfile(\"sample_delay_buffer_tb.vcd\");\n        $dumpvars;\n    end"
+    ]
+}

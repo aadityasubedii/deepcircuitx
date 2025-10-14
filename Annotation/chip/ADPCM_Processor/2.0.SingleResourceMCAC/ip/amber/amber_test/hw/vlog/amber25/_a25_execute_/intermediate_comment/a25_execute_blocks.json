@@ -1,0 +1,121 @@
+{
+    "line_num": [
+        [
+            706,
+            730
+        ],
+        [
+            659,
+            697
+        ],
+        [
+            639,
+            653
+        ],
+        [
+            624,
+            632
+        ],
+        [
+            620,
+            622
+        ],
+        [
+            600,
+            614
+        ],
+        [
+            598,
+            598
+        ],
+        [
+            592,
+            592
+        ],
+        [
+            548,
+            590
+        ],
+        [
+            545,
+            545
+        ],
+        [
+            543,
+            543
+        ],
+        [
+            541,
+            541
+        ],
+        [
+            539,
+            539
+        ],
+        [
+            537,
+            537
+        ],
+        [
+            535,
+            535
+        ],
+        [
+            533,
+            533
+        ],
+        [
+            531,
+            531
+        ],
+        [
+            529,
+            529
+        ],
+        [
+            527,
+            527
+        ],
+        [
+            519,
+            521
+        ],
+        [
+            512,
+            512
+        ],
+        [
+            509,
+            509
+        ],
+        [
+            499,
+            507
+        ]
+    ],
+    "blocks": [
+        "wire    [(2*8)-1:0]    xCONDITION;\nwire    [(4*8)-1:0]    xMODE;\n\nassign  xCONDITION           = i_condition == EQ ? \"EQ\"  :\n                               i_condition == NE ? \"NE\"  :\n                               i_condition == CS ? \"CS\"  :\n                               i_condition == CC ? \"CC\"  :\n                               i_condition == MI ? \"MI\"  :\n                               i_condition == PL ? \"PL\"  :\n                               i_condition == VS ? \"VS\"  :\n                               i_condition == VC ? \"VC\"  :\n                               i_condition == HI ? \"HI\"  :\n                               i_condition == LS ? \"LS\"  :\n                               i_condition == GE ? \"GE\"  :\n                               i_condition == LT ? \"LT\"  :\n                               i_condition == GT ? \"GT\"  :\n                               i_condition == LE ? \"LE\"  :\n                               i_condition == AL ? \"AL\"  :\n                                                   \"NV \" ;\n\nassign  xMODE  =  status_bits_mode == SVC  ? \"SVC\"  :\n                  status_bits_mode == IRQ  ? \"IRQ\"  :\n                  status_bits_mode == FIRQ ? \"FIRQ\" :\n                  status_bits_mode == USR  ? \"USR\"  :\n                                             \"XXX\"  ;",
+        "a25_register_bank u_register_bank(\n    .clk            ( clk                     ),\n    .reset          ( reset                   ),\n    .scan_enable    ( scan_enable             ),\n    .test_mode      ( test_mode               ),\n\n    .i_core_stall            ( i_core_stall              ),\n    .i_mem_stall             ( i_mem_stall               ),\n    .i_rm_sel                ( i_rm_sel                  ),\n    .i_rs_sel                ( i_rs_sel                  ),\n    .i_rn_sel                ( i_rn_sel                  ),\n    .i_pc_wen                ( pc_wen                    ),\n    .i_reg_bank_wen          ( reg_bank_wen              ),\n    .i_pc                    ( pc_nxt[25:2]              ),\n    .i_reg                   ( reg_write_nxt             ),\n    .i_mode_idec             ( i_status_bits_mode        ),\n    .i_mode_exec             ( status_bits_mode          ),\n\n    .i_wb_read_data          ( read_data_filtered        ),\n    .i_wb_read_data_valid    ( i_wb_read_data_valid      ),\n    .i_wb_read_data_rd       ( i_wb_load_rd[3:0]         ),\n    .i_wb_mode               ( i_wb_load_rd[6:5]         ),\n\n    .i_status_bits_flags     ( status_bits_flags         ),\n    .i_status_bits_irq_mask  ( status_bits_irq_mask      ),\n    .i_status_bits_firq_mask ( status_bits_firq_mask     ),\n\n    \n    .i_firq_not_user_mode    ( i_firq_not_user_mode      ),\n\n    \n    .i_mode_rds_exec         ( status_bits_mode_rds_oh   ),\n\n    .o_rm                    ( reg_bank_rm               ),\n    .o_rs                    ( reg_bank_rs               ),\n    .o_rd                    ( reg_bank_rd               ),\n    .o_rn                    ( reg_bank_rn               ),\n    .o_pc                    ( pc                        )\n);",
+        "a25_multiply u_multiply (\n    .clk            ( clk                     ),\n    .reset          ( reset                   ),\n    .scan_enable    ( scan_enable             ),\n    .test_mode      ( test_mode               ),\n\n    .i_core_stall   ( i_core_stall          ),\n    .i_a_in         ( rs                    ),\n    .i_b_in         ( rm                    ),\n    .i_function     ( i_multiply_function   ),\n    .i_execute      ( execute               ),\n    .o_out          ( multiply_out          ),\n    .o_flags        ( multiply_flags        ),  \n    .o_done         ( o_multiply_done       )\n);",
+        "a25_alu u_alu (\n    .i_a_in                 ( rn                      ),\n    .i_b_in                 ( barrel_shift_out        ),\n    .i_barrel_shift_carry   ( barrel_shift_carry_alu  ),\n    .i_status_bits_carry    ( status_bits_flags[1]    ),\n    .i_function             ( i_alu_function          ),\n\n    .o_out                  ( alu_out                 ),\n    .o_flags                ( alu_flags               ));",
+        "assign barrel_shift_carry_alu =  i_barrel_shift_data_sel == 2'd0 ?\n                                  (i_imm_shift_amount[4:1] == 0 ? status_bits_flags[1] : i_imm32[31]) :\n                                   barrel_shift_carry;",
+        "a25_barrel_shift u_barrel_shift  (\n    .clk            ( clk                     ),\n    .reset          ( reset                   ),\n    .scan_enable    ( scan_enable             ),\n    .test_mode      ( test_mode               ),\n\n    .i_in             ( barrel_shift_in           ),\n    .i_carry_in       ( carry_in                  ),\n    .i_shift_amount   ( shift_amount              ),\n    .i_shift_imm_zero ( i_shift_imm_zero          ),\n    .i_function       ( i_barrel_shift_function   ),\n\n    .o_out            ( barrel_shift_out          ),\n    .o_carry_out      ( barrel_shift_carry        ),\n    .o_stall          ( barrel_shift_stall        ));",
+        "assign carry_in = i_use_carry_in ? status_bits_flags[1] : 1'd0;",
+        "assign o_iaddress = iaddress_r;",
+        "always @( posedge reset, posedge clk ) begin\n\tif (reset) begin\n\t\to_daddress              <= 'd0;\n\t\to_daddress_valid        <= 'd0;\n\t\to_exec_load_rd          <= 'd0;\n\t\to_priviledged           <= 'd0;\n\t\to_exclusive             <= 'd0;\n\t\to_write_enable          <= 'd0;\n\t\to_write_data            <= 'd0;\n\t\to_byte_enable           <= 'd0;\n\t\tiaddress_r              <= 32'hdead_dead;\n\t\to_iaddress_valid        <= 'd0;\n\t\to_adex                  <= 'd0;\n\t\to_copro_write_data      <= 'd0;\n\t\tbase_address            <= 'd0;\n\t\tstatus_bits_flags       <= 'd0;\n\t\tstatus_bits_mode        <= SVC;\n\t\tstatus_bits_mode_rds_oh <= 1'd1 << OH_SVC;\n\t\tstatus_bits_irq_mask    <= 1'd1;\n\t\tstatus_bits_firq_mask   <= 1'd1;\n\tend else begin\n\t\to_daddress              <= daddress_update                ? o_daddress_nxt               : o_daddress;\n\t\to_daddress_valid        <= daddress_update                ? daddress_valid_nxt           : o_daddress_valid;\n\t\to_exec_load_rd          <= exec_load_rd_update            ? exec_load_rd_nxt             : o_exec_load_rd;\n\t\to_priviledged           <= priviledged_update             ? priviledged_nxt              : o_priviledged;\n\t\to_exclusive             <= exclusive_update               ? i_decode_exclusive           : o_exclusive;\n\t\to_write_enable          <= write_enable_update            ? write_enable_nxt             : o_write_enable;\n\t\to_write_data            <= write_data_update              ? write_data_nxt               : o_write_data;\n\t\to_byte_enable           <= byte_enable_update             ? byte_enable_nxt              : o_byte_enable;\n\t\tiaddress_r              <= iaddress_update                ? o_iaddress_nxt               : iaddress_r;\n\t\to_iaddress_valid        <= iaddress_update                ? iaddress_valid_nxt           : o_iaddress_valid;\n\t\to_adex                  <= iaddress_update                ? adex_nxt                     : o_adex;\n\t\to_copro_write_data      <= copro_write_data_update        ? write_data_nxt               : o_copro_write_data;\n\n\t\tbase_address            <= base_address_update            ? rn                           : base_address;\n\n\t\tstatus_bits_flags       <= status_bits_flags_update       ? status_bits_flags_nxt        : status_bits_flags;\n\t\tstatus_bits_mode        <= status_bits_mode_update        ? status_bits_mode_nxt         : status_bits_mode;\n\t\tstatus_bits_mode_rds_oh <= status_bits_mode_rds_oh_update ? status_bits_mode_rds_oh_nxt  : status_bits_mode_rds_oh;\n\t\tstatus_bits_irq_mask    <= status_bits_irq_mask_update    ? status_bits_irq_mask_nxt     : status_bits_irq_mask;\n\t\tstatus_bits_firq_mask   <= status_bits_firq_mask_update   ? status_bits_firq_mask_nxt    : status_bits_firq_mask;\n\tend\nend",
+        "assign status_bits_firq_mask_update    = ldm_status_bits || (!i_core_stall && execute && i_status_bits_firq_mask_wen);",
+        "assign status_bits_mode_rds_oh_update  = !i_core_stall;",
+        "assign status_bits_flags_update        = ldm_flags       || (!i_core_stall && execute && i_status_bits_flags_wen);",
+        "",
+        "assign iaddress_update                 = pc_dmem_wen || (!i_core_stall && !i_conflict);",
+        "assign byte_enable_update              = !i_core_stall && execute && i_write_data_wen;",
+        "assign write_enable_update             = !i_core_stall;",
+        "assign priviledged_update              = !i_core_stall;",
+        "assign daddress_update                 = !i_core_stall;",
+        "assign o_exec_stall                    = barrel_shift_stall;",
+        "assign  exec_load_rd_nxt   = { i_decode_load_rd[7:6],\n                               i_decode_load_rd[5] ? USR : status_bits_mode,  \n                               i_decode_load_rd[4:0] };",
+        "assign load_rd_c            = i_wb_read_data_valid ? {i_wb_load_rd[6:5], i_wb_load_rd[3:0]}  : load_rd_r;",
+        "assign read_data_filtered_c = i_wb_read_data_valid ? read_data_filtered : read_data_filtered_r;",
+        "always@( posedge reset, posedge clk ) begin\n\tif (reset) begin\n\t\t  read_data_filtered_r <= 'd0;\n\t\t  load_rd_r            <= 'd0;\n\tend else if ( i_wb_read_data_valid ) begin\n\t\t  read_data_filtered_r <= read_data_filtered;\n\t\t  load_rd_r            <= {i_wb_load_rd[6:5], i_wb_load_rd[3:0]};\n\tend\nend"
+    ]
+}

@@ -1,0 +1,66 @@
+{
+    "line_num": [
+        [
+            253,
+            253
+        ],
+        [
+            252,
+            252
+        ],
+        [
+            251,
+            251
+        ],
+        [
+            250,
+            250
+        ],
+        [
+            249,
+            249
+        ],
+        [
+            149,
+            248
+        ],
+        [
+            139,
+            139
+        ],
+        [
+            137,
+            137
+        ],
+        [
+            136,
+            136
+        ],
+        [
+            118,
+            133
+        ],
+        [
+            115,
+            116
+        ],
+        [
+            75,
+            111
+        ]
+    ],
+    "blocks": [
+        "    assign xfer_re = block_en & dma_ack;",
+        "    assign dma_dat = dma_ack ? data_out : 0;",
+        "",
+        "    assign data_out = addr[1] ? { xfer_dat, 16'h0 } : { 16'h0, xfer_dat } ; ",
+        "    wire [31:0] data_out;",
+        "    always @(posedge wb_clk) begin\n\n        if (wb_rst) begin\n\n            block <= 0;\n            addr <= 0;\n            running <= 0;\n            run_addr <= 0;\n            run_cycles <= 0;\n\n            dma_cyc <= 0;\n            dma_we <= 0;\n            dma_sel <= 0;\n            dma_adr <= 0;\n\n            block_done <= 0;\n            xfer_done <= 0;\n            xfer_match <= 0;\n            xfer_adr <= 0;\n\n        end\n\n        if (!reg_start_req) begin\n            \n            block_done <= 0;\n            xfer_done <= 0;\n            xfer_match <= 0;\n            running <= 0;\n        end\n\n        if (reg_start_req & !running) begin\n            \n            run_addr <= reg_addr;\n            run_cycles <= reg_cycles;\n            running <= 1;\n            block_done <= 0;\n            block <= reg_blocks;\n            xfer_done <= 0;\n            xfer_match <= 0;\n            running <= 1;\n        end\n\n        if (reg_start_req & xfer_block & !xfer_done) begin\n            \n            block_en <= 1;\n            addr <= run_addr;\n            block <= reg_blocks;\n            block_done <= 0;\n            xfer_adr <= 0;\n        end\n\n        if (block_en & !dma_cyc) begin\n            \n            dma_cyc <= 1;\n            dma_we <= 1;\n            case (addr[1])\n                0 : dma_sel <= 4'b0011;\n                1 : dma_sel <= 4'b1100;\n            endcase\n            dma_adr <= { 8'h0, addr[23:2], 2'b0 };\n \n        end\n\n        if (dma_ack) begin\n            \n            dma_cyc <= 0;\n            dma_we <= 0;\n            dma_sel <= 4'b0000;\n            dma_adr <= 0;\n\n            \n            addr <= addr + { 8'h0, reg_step };\n            xfer_adr <= xfer_adr + 1;\n            block <= block - 1;\n\n        end\n\n        if (block_en & (block == 1) & dma_ack) begin\n            \n            block_en <= 0;\n            run_cycles <= run_cycles - 1;\n            run_addr <= run_addr + 2;\n        end\n\n        if ((addr == reg_match) & (reg_match != 0)) begin\n            xfer_match <= 1;\n        end\n\n        if (running & (block == 0) & !(block_en | xfer_block)) begin\n            \n            block_done <= 1;\n\n            if (run_cycles == 0) begin\n                \n                xfer_done <= 1;\n            end\n        end\n\n    end\n",
+        "    assign dbus_ack = cs_ack;",
+        "    assign dbus_rdt = reading ? rdt(io_addr) : 0;",
+        "    assign reading = cs_ack & !wb_dbus_we;",
+        "    function [31:0] rdt(input [2:0] rd_addr);\n\n        begin\n\n            case (rd_addr)\n                0   :   rdt = { 8'h0, reg_addr };\n                1   :   rdt = { 16'h0, reg_step };\n                2   :   rdt = { 16'h0, reg_cycles };\n                3   :   rdt = { 16'h0, reg_blocks };\n                6   :   rdt = status;\n                7   :   rdt = { 8'h0, reg_match };\n            endcase\n\n        end\n\n    endfunction",
+        "    wire [31:0] status;\n    assign status = { 29'h0, xfer_match, block_done, xfer_done };",
+        "    always @(posedge wb_clk) begin\n\n        if (writing & !wb_rst) begin\n\n            case (io_addr)\n                0   :   reg_addr   <= wb_dbus_dat[23:0];\n                1   :   reg_step   <= wb_dbus_dat[15:0];\n                2   :   reg_cycles <= wb_dbus_dat[15:0];\n                3   :   reg_blocks <= wb_dbus_dat[15:0];\n                4   :   begin   reg_start_req <= 1; reg_repeat <= wb_dbus_dat[0]; end\n                5   :   begin   reg_start_req <= 0; reg_repeat <= 0;              end\n                7   :   reg_match  <= wb_dbus_dat[23:0];\n            endcase\n\n        end\n\n        if (xfer_done & reg_repeat & running) begin\n            if (reg_start_req) begin\n                reg_start_req <= 0;\n            end else begin\n                reg_start_req <= 1;\n            end\n        end\n\n        if (wb_rst) begin\n\n            reg_addr <= 0;\n            reg_match <= 0;\n            reg_step <= 0;\n            reg_cycles <= 0;\n            reg_blocks <= 0;\n            reg_start_req <= 0;\n            reg_repeat <= 0;\n\n        end\n\n    end"
+    ]
+}

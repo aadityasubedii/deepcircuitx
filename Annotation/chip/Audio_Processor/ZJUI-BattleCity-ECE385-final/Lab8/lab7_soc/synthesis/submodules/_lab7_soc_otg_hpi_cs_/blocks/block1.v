@@ -1,0 +1,2 @@
+  assign readdata = {32'b0 | read_mux_out};
+  assign out_port = data_out;

@@ -1,0 +1,1 @@
+      assign out_ready_internal = out_ready;

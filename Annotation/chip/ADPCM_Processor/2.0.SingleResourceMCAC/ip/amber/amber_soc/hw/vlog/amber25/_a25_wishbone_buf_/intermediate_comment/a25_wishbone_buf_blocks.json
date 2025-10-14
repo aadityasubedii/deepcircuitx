@@ -1,0 +1,41 @@
+{
+    "line_num": [
+        [
+            147,
+            152
+        ],
+        [
+            141,
+            146
+        ],
+        [
+            130,
+            138
+        ],
+        [
+            122,
+            125
+        ],
+        [
+            112,
+            120
+        ],
+        [
+            106,
+            111
+        ],
+        [
+            98,
+            105
+        ]
+    ],
+    "blocks": [
+        "always@(posedge i_clk)\n    if (o_valid && !o_write && i_accepted)\n        wait_rdata_valid_r <= 1'd1;\n    else if (i_rdata_valid)  \n        wait_rdata_valid_r <= 1'd0;\nendmodule",
+        "always@(posedge i_clk)\n    if (o_valid && !o_write)\n        busy_reading_r <= 1'd1;\n    else if (i_rdata_valid)\n        busy_reading_r <= 1'd0;\n",
+        "assign o_wdata = wbuf_used_r != 2'd0 ? wbuf_wdata_r[wbuf_rp_r] : i_wdata;\nassign o_write = wbuf_used_r != 2'd0 ? wbuf_write_r[wbuf_rp_r] : i_write;\nassign o_addr  = wbuf_used_r != 2'd0 ? wbuf_addr_r [wbuf_rp_r] : i_addr;\nassign o_be    = wbuf_used_r != 2'd0 ? wbuf_be_r   [wbuf_rp_r] : i_write ? i_be : 16'hffff;\n\nassign o_ack   = (in_wreq ? (wbuf_used_r == 2'd0) : i_rdata_valid) || (ack_owed_r && pop);\nassign o_valid = (wbuf_used_r != 2'd0 || i_req) && !wait_rdata_valid_r;\n\nassign o_rdata = i_rdata;",
+        "always @(posedge i_clk)\n    if (pop)\n        wbuf_rp_r                  <= !wbuf_rp_r;\n            ",
+        "always @(posedge i_clk)\n    if (push)\n        begin\n        wbuf_wdata_r [wbuf_wp_r]   <= i_wdata;\n        wbuf_addr_r  [wbuf_wp_r]   <= i_addr;\n        wbuf_be_r    [wbuf_wp_r]   <= i_write ? i_be : 16'hffff;\n        wbuf_write_r [wbuf_wp_r]   <= i_write;\n        wbuf_wp_r                  <= !wbuf_wp_r;\n        end",
+        "always @(posedge i_clk)\n    if (push && in_wreq && !o_ack)\n        ack_owed_r = 1'd1;\n    else if (!i_req && o_ack)\n        ack_owed_r = 1'd0;\n        ",
+        "always @(posedge i_clk)\n    if (push && pop)\n        wbuf_used_r     <= wbuf_used_r;\n    else if (push)\n        wbuf_used_r     <= wbuf_used_r + 1'd1;\n    else if (pop)\n        wbuf_used_r     <= wbuf_used_r - 1'd1;\n"
+    ]
+}

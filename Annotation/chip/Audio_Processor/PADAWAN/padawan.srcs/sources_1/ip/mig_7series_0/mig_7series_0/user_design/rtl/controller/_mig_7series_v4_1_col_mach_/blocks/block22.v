@@ -1,0 +1,1 @@
+  assign col_a_full[10:0] = {col_a[11], col_a[9:0]};

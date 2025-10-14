@@ -1,0 +1,2 @@
+assign    adata = {DWIDTH/32{acounts[31:0]}};
+end                   

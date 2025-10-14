@@ -1,0 +1,1 @@
+    assign local_sof = local_en & (local_frame_posn == 0);

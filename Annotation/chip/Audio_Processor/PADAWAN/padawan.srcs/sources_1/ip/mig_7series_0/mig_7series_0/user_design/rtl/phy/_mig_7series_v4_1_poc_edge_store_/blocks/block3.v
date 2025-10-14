@@ -1,0 +1,1 @@
+  always @(posedge clk) fall_trail_r <= #TCQ fall_trail_ns;

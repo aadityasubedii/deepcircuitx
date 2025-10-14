@@ -1,0 +1,43 @@
+{
+    "gpt-message": [
+        {
+            "role": "system",
+            "content": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+        },
+        {
+            "role": "user",
+            "content": "Name of the module and its functionality is as follows: \nModule name: PISO. Explanation: The PISO (Parallel-In-Serial-Out) module is a type of shift register where the data is loaded in parallel format and collected in a serial format. Initially when the Clear signal is high, the variables and output are reset. If the parallel to serial enable (p2s_en) is high, the function is ready to shift the data from parallel into register_piso and ready_out is enabled. When the Frame signal is high and data is ready for shifting, it starts to shift and reduce the bit count one by one from the shifting data. The SerialOut gives out the bit-wise serial output. When the bit counter reaches zero, it turns off the frame_flag. If the Frame signal is not high after this or if the data is not ready for shifting, it resets the variables and output."
+        },
+        {
+            "role": "user",
+            "content": "Input and output ports and their explanation is as follows: \nInput ports: [Sclk, Clear, p2s_en, Frame, Shift_done]. \nExplanation: \n- Sclk: This is the system clock input, on the positive edge of which designing is done. \n- Clear: When this input is high, the system is reset to default values.\n- p2s_en: It's the parallel to serial enable signal. When this input is high, shifting from parallel to serial data is enabled. \n- Frame: This signal when high, indicates data is ready to be shifted from parallel to serial.\n- Shift_done: It's a 40-bit wide input where data is loaded in parallel way.\n\nOutput ports: [SerialOut, OutReady]. \nExplanation: \n- SerialOut: This reg type output gives bit by bit output serially from the parallel input data that is loaded.\n- OutReady: It's a reg type output which indicates that the process is ready to shift from parallel to serial when it's high. It's initially low and becomes high only when frames are ready to be processed and converted into serial out. It goes low again when the process is done and all frames have been processed."
+        },
+        {
+            "role": "user",
+            "content": "Internal signals and their explanation is as follows: \nInternal signals: [count_bit, register_piso, ready_out, frame_flag].\nExplanation: \n\n- count_bit: It's a 6-bit wide signal used as a counter for keeping track of the number of bits shifted from the parallel to the serial module. It's reset to 40 (6'd40) initially and decreased by 1 (1'b1) every time a bit is shifted out. It resets again once the value of count_bit reaches zero after all bits have been shifted out.\n  \n- register_piso: This is a 40-bit wide internal register signal where the parallel data from Shift_done is loaded initially when the parallel to serial enable (p2s_en) is high. The serial output is achieved from this register, one bit at a time as specified by the current value of the count_bit.\n\n- ready_out: This signal is used as an indication of readiness for data shift. It's initially set to low and set to high when the p2s_en signal is high indicating data is ready to be shifted from register_piso to SerialOut. It's set to low just after the data starts to shift out.\n\n- frame_flag: This is used as a flag to indicate the status of the frame for shifting. When the shifting process begins, it sets the flag high and stays high until the shifting process ends, i.e., until the count_bit is 0. It is used to conditionally execute the logic inside the module."
+        }
+    ],
+    "claude-message": [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+                },
+                {
+                    "type": "text",
+                    "text": "Name of the module and its functionality is as follows: \nModule name: PISO. Explanation: The PISO (Parallel-In-Serial-Out) module is a type of shift register where the data is loaded in parallel format and collected in a serial format. Initially when the Clear signal is high, the variables and output are reset. If the parallel to serial enable (p2s_en) is high, the function is ready to shift the data from parallel into register_piso and ready_out is enabled. When the Frame signal is high and data is ready for shifting, it starts to shift and reduce the bit count one by one from the shifting data. The SerialOut gives out the bit-wise serial output. When the bit counter reaches zero, it turns off the frame_flag. If the Frame signal is not high after this or if the data is not ready for shifting, it resets the variables and output."
+                },
+                {
+                    "type": "text",
+                    "text": "Input and output ports and their explanation is as follows: \nInput ports: [Sclk, Clear, p2s_en, Frame, Shift_done]. \nExplanation: \n- Sclk: This is the system clock input, on the positive edge of which designing is done. \n- Clear: When this input is high, the system is reset to default values.\n- p2s_en: It's the parallel to serial enable signal. When this input is high, shifting from parallel to serial data is enabled. \n- Frame: This signal when high, indicates data is ready to be shifted from parallel to serial.\n- Shift_done: It's a 40-bit wide input where data is loaded in parallel way.\n\nOutput ports: [SerialOut, OutReady]. \nExplanation: \n- SerialOut: This reg type output gives bit by bit output serially from the parallel input data that is loaded.\n- OutReady: It's a reg type output which indicates that the process is ready to shift from parallel to serial when it's high. It's initially low and becomes high only when frames are ready to be processed and converted into serial out. It goes low again when the process is done and all frames have been processed."
+                },
+                {
+                    "type": "text",
+                    "text": "Internal signals and their explanation is as follows: \nInternal signals: [count_bit, register_piso, ready_out, frame_flag].\nExplanation: \n\n- count_bit: It's a 6-bit wide signal used as a counter for keeping track of the number of bits shifted from the parallel to the serial module. It's reset to 40 (6'd40) initially and decreased by 1 (1'b1) every time a bit is shifted out. It resets again once the value of count_bit reaches zero after all bits have been shifted out.\n  \n- register_piso: This is a 40-bit wide internal register signal where the parallel data from Shift_done is loaded initially when the parallel to serial enable (p2s_en) is high. The serial output is achieved from this register, one bit at a time as specified by the current value of the count_bit.\n\n- ready_out: This signal is used as an indication of readiness for data shift. It's initially set to low and set to high when the p2s_en signal is high indicating data is ready to be shifted from register_piso to SerialOut. It's set to low just after the data starts to shift out.\n\n- frame_flag: This is used as a flag to indicate the status of the frame for shifting. When the shifting process begins, it sets the flag high and stays high until the shifting process ends, i.e., until the count_bit is 0. It is used to conditionally execute the logic inside the module."
+                }
+            ]
+        }
+    ]
+}

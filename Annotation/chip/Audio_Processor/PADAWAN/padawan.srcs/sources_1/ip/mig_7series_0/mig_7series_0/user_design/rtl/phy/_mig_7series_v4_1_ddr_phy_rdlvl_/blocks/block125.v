@@ -1,0 +1,1 @@
+  assign mpr_rdlvl_err         = rdlvl_stg1_err & (!mpr_rdlvl_done);

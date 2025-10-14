@@ -1,0 +1,1 @@
+  assign trigger_state_0 = ~trigger_state;

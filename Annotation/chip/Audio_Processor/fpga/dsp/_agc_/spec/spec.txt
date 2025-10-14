@@ -1,0 +1,30 @@
+Module name: agc. 
+
+Module specification: 
+
+The agc (Automatic Gain Control) module is designed to control the gain levels of an input signal in four distinct stages: finding the maximum value, normalization, determining the level, and application of gain. 
+
+The module takes the following as input ports: 
+
+1. `ck` (clock signal), 
+2. `en` (enable signal), and 
+3. `in_data` (input signal data). 
+
+The output ports of the module are:
+
+1. `src_addr` (source addressing selector), 
+2. `level` (maximum level of normalized data), 
+3. `out` (output signal data), 
+4. `out_we` (write-enable signal for the output data), and 
+5. `done` (completion signal).
+
+The internal signals within the module include `normal`, `level_ready`, `level_en`, `find_level`, `find_max`, `max_in`, `find_normal`, `address`, `gain_ready`, `gain_addr`, `gain_en`, `gain_wait`, `find_gain`, `busy`, `gain`, and `out_addr`, each of which plays a crucial part in the sequential processing flow of the module.
+
+The agc module is essentially divided into four blocks: 
+
+1. `twos_complement` right-shifts the `in_data` based on its sign, 
+2. `level_mod` identifies the maximum level of the normalized data, 
+3. the always block facilitates sequential gating of the different processing steps and updating of internal signals, and 
+4. `gain_mod`, which withdraws output data and applies gain to it based on the identified `level`.
+
+Overall, the agc module is a robust mechanism for dynamic gain adjustment in multi-channel signal processing applications.

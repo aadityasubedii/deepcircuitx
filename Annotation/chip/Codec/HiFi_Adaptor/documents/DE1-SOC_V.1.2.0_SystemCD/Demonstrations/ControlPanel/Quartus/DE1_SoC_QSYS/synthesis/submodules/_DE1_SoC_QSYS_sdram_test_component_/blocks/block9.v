@@ -1,0 +1,1 @@
+  assign read_temp[7 : 0] = mask[0] ? 8'bz : read_data[7 : 0];

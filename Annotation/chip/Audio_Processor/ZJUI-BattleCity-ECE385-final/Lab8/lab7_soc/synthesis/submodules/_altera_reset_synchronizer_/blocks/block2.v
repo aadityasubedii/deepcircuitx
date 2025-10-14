@@ -1,0 +1,1 @@
+        assign reset_out = altera_reset_synchronizer_int_chain_out;

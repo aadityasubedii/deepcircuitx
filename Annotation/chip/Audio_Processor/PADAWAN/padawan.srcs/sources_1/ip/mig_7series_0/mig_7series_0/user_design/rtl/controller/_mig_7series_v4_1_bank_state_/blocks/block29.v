@@ -1,0 +1,1 @@
+  assign demand_act_priority = demand_act_priority_r && ~sending_row;

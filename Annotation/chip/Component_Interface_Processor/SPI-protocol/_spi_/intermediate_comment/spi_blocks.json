@@ -1,0 +1,26 @@
+{
+    "line_num": [
+        [
+            109,
+            171
+        ],
+        [
+            56,
+            106
+        ],
+        [
+            50,
+            52
+        ],
+        [
+            41,
+            48
+        ]
+    ],
+    "blocks": [
+        "always @(posedge sclk_ref_i) begin\nif (prst_i != 1) begin\ncase (state)\n\tS_IDLE: begin\n\t\tsclk_running = 0;\n\t\tif (ctrl_reg[0]) begin\n\t\t\tctrl_reg[0] = 0;\n\t\t\tcur_tfr_idx = ctrl_reg[6:4]; \n\t\t\ttotal_txs = ctrl_reg[3:1] + 1;  \n\t\t\taddr_to_drive = addr_regA[cur_tfr_idx];\n\t\t\tdata_to_drive = data_regA[cur_tfr_idx];\n\t\t\tcount = 0;\n\t\t\tnext_state = S_ADDR;\n\t\tend\n\tend\n\tS_ADDR: begin\n\t\tsclk_running = 1;\n\t\tmosi = addr_to_drive[count];\t\n\t\tcount = count+1;         \n\t\tif (count == 8) begin     \n\t\t\tnext_state = S_IDLE_BW_ADDR_DATA;\n\t\t\tcount = 0;\n\t\tend\n\tend\n\tS_IDLE_BW_ADDR_DATA: begin\n\t\tsclk_running = 0;\n\t\tcount = count+1;     \n\t\tif (count == 4) begin  \n\t\t\tnext_state = S_DATA;\n\t\t\tcount = 0;\n\t\tend\n\tend\n\tS_DATA: begin\n\t\tsclk_running = 1;\n\t\tif (addr_to_drive[7] == 1) mosi = data_to_drive[count];\t\n\t\telse data_collected[count] = miso;\t\n\t\tcount = count+1;\n\t\tif (count == 8) begin\n\t\t\ttotal_txs = total_txs - 1;  \n\t\t\tcur_tfr_idx = cur_tfr_idx + 1; \n\t\t\tctrl_reg[6:4] = cur_tfr_idx;  \n\t\t\taddr_to_drive = 0;\n\t\t\tdata_to_drive = 0;\n\t\t\tif (total_txs == 0) begin      \n\t\t\t\tnext_state = S_IDLE; \n\t\t\tend\n\t\t\telse begin\n\t\t\t\tnext_state = S_IDLE_BW_TXS;  \n\t\t\tend\n\t\t\tcount = 0;\n\t\tend\n\tend\n\tS_IDLE_BW_TXS: begin\n\t\tsclk_running = 0;\n\t\tcount = count+1;\n\t\tif (count == 8) begin                               \n\t\t\taddr_to_drive = addr_regA[cur_tfr_idx];\n\t\t\tdata_to_drive = data_regA[cur_tfr_idx];\n\t\t\tnext_state = S_ADDR;\n\t\t\tcount = 0;\n\t\tend\n\tend\nendcase",
+        "always @(posedge pclk_i) begin\n\tif (prst_i == 1) begin\n\t\t\n\t\tprdata_o = 0;\n\t\tpready_o = 0; \n\t\tpslverr_o = 0;\n\t\taddr_to_drive = 0;\n\t\tdata_to_drive = 0;\n\t\ttotal_txs = 0;\n\t\tcur_tfr_idx = 0;\n\t\tfor (i = 0; i < MAX_TXS; i=i+1) begin\n\t\t\taddr_regA[i] = 0;\n\t\t\tdata_regA[i] = 0;\n\t\tend\n\t\tctrl_reg = 0;\n\t\tmosi = 1;\n\t\tsclk = 1;\n\t\tsclk_running = 0;\n\t\tcs = 0;\n\t\tstate = S_IDLE;\n\t\tnext_state = S_IDLE;\n\tend\n\telse begin\n\t\tif (penable_i == 1) begin \n\t\t\tpready_o = 1;  \n\t\t\tif (pwrite_i == 1) begin\n\t\t\t\tif (paddr_i >= 8'h0 && paddr_i <= 8'h07) begin      \n\t\t\t\t\taddr_regA[paddr_i] = pwdata_i;\n\t\t\t\tend\n\t\t\t\tif (paddr_i >= 8'h10 && paddr_i <= 8'h17) begin   \n\t\t\t\t\tdata_regA[paddr_i-8'h10] = pwdata_i;   \n\t\t\t\tend\n\t\t\t\tif (paddr_i == 8'h20) begin\n\t\t\t\t\tctrl_reg[3:0] = pwdata_i[3:0];       \n\t\t\t\t\t\n\t\t\t\tend\n\t\t\tend\n\t\t\telse begin\n\t\t\t\tif (paddr_i >= 8'h0 && paddr_i <= 8'h07) begin   \n\t\t\t\t\tprdata_o = addr_regA[paddr_i];\n\t\t\t\tend\n\t\t\t\tif (paddr_i >= 8'h10 && paddr_i <= 8'h17) begin  \n\t\t\t\t\tprdata_o = data_regA[paddr_i-8'h10];\n\t\t\t\tend\n\t\t\t\tif (paddr_i == 8'h20) begin\n\t\t\t\t\tprdata_o = ctrl_reg;      \n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend\nend",
+        "always @(next_state) begin\n\tstate = next_state; \nend",
+        "always @(sclk_ref_i) begin    \n\tif (sclk_running) begin\n\t\tsclk = sclk_ref_i; \n\tend\n\telse begin\n\t\tsclk = 1;      \n\tend\nend"
+    ]
+}

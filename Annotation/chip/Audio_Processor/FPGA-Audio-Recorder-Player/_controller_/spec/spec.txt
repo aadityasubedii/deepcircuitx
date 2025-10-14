@@ -1,0 +1,16 @@
+Module name: Controller 
+
+Module specification: 
+
+The 'controller' module is designed to manage an audio recording, playing, and deletion system on a digital platform, likely in a Field Programmable Gate Array (FPGA). It has various sub-modules such as clock wizard, RAM interface, RS232 communication, debounce for input signal stability, audio processing unit and picoblaze micro-controller. The code implies a state-machine framework to control different operations like recording, playback, deletion, pausing and 'delete all' operation.
+
+Input Ports: The input ports include the primary clock signal (clk), a reset signal, a button input (BTN), volume control inputs (volup and voldown), a 4-bit switch input (switches), digital audio data (AUD_ADCDAT), and data received from an RS232 interface (rs232_rx). 
+
+Output Ports: The output ports include various signals used for interfacing with the hardware RAM (like hw_rzn_pin, hw_zio_pin, hw_ram_ba etc.), signals related to audio interface (like AUD_ADCLRCK, AUD_I2C_SCLK, AUD_MUTE etc.), transmission data for RS232 interface (rs232_tx), status LEDs (like STATLED0, LEDRAM etc.) and a status signal. 
+
+Bi-directional Ports: Significantly, this module also comprises multiple bi-directional (input/output) ports like hw_ram_dq, hw_ram_udqs_p, which are not explicitly categorized here, but they are part of read or write data operations with RAM.
+
+Internal Signals: Various internal signals help to manage module operation, including clock signals like clk37 and clk100mhz, data held in RAM (RAMin and RAMout), current state representation (state), volume control, and several others. They participate in controlling the current state of the controller, memory operations, audio control signals and operations like record, play, delete, delete_all, and pause.
+
+Code Blocks/functions: The main functions of the code revolve around different blocks such as:
+A clock wizard block (myclock) which generates different clock signals; block for debounce to ensure stability of input signals; a picoblaze block to manage operations using a micro-controller; a memory interface block (RAMRapper) for memory read and write operations; an RS232 unit (urt) for UART communication management and the audio block (sockit_top) for audio processing. The state-machine, facilitated by always blocks, is the main logic controlling the sequence of operations, informed by the input signals, internal counters, and state variables.

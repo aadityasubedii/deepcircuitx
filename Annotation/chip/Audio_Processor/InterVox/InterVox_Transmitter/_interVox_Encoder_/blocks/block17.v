@@ -1,0 +1,1 @@
+  assign io_DATA_OUT = outReg; 

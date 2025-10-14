@@ -1,0 +1,11 @@
+Module Name: a25_mem.
+
+Module Specification: The 'a25_mem' module is a key component interfacing CPU memory requests with cache and external memory. The module handles read and write requests from the CPU, determining whether these requests can be serviced from cache or if they necessitate external memory access. It is also equipped to manage memory stalls, cache flushing, and define the cacheability of addressed data. 
+
+The module has a variety of input ports that deal with the system clock, reset, data addressing, write data and cache management. The 'i_clk' and 'i_reset' ports serve as system clock and reset regulators respectively. Ports 'i_daddress', 'i_daddress_valid', and 'i_daddress_nxt' handle data addressing. 'i_write_data' is for the data to be written into memory, and 'i_write_enable' is the enabling signal for the write operation. Cache management is handled by ports 'i_cache_enable', 'i_cache_flush', and 'i_cacheable_area'.
+
+Output ports of the module include 'o_mem_stall', which signals a memory stall, 'o_mem_read_data', 'o_mem_read_data_valid' and 'o_mem_load_rd' which pertain to read memory data, their validity and the register to be loaded with this data. Requests to the Wishbone interface for data and write operation indications are handled by 'o_wb_cached_req', 'o_wb_uncached_req', 'o_wb_write', respectively.
+
+The module utilizes numerous internal signals for its operations such as 'cache_read_data', 'address_cachable', 'sel_cache', etc which manage cache read data and its accessibility. 'use_mem_reg', 'fetch_only_stall_r', 'void_output', and 'wb_stop' are signals which handle memory data register use, stall detection, output void checks and data request stop to the Wishbone interface respectively.
+
+The module is divided into various sections which handle address caching, data reading and writing from/to cache and the Wishbone interface, data validity checks, byte enabling and memory stalling. The end component 'a25_dcache' interfaces with 'a25_mem' for servicing cache requests. In sum, 'a25_mem' effectively processes memory requests by interfacing with cache and external memory, whilst managing potential memory stalls and the mode of data prefetching.

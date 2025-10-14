@@ -1,0 +1,21 @@
+{
+    "line_num": [
+        [
+            79,
+            79
+        ],
+        [
+            22,
+            78
+        ],
+        [
+            11,
+            11
+        ]
+    ],
+    "blocks": [
+        "\tassign done = (mst == ms_done);",
+        "\talways @(posedge fsm_c, posedge start) \n\t\tif(start) begin\n\t\t\tmst <= ms_init;\n\t\t\ti2c_d <= 1'bz;\n\t\tend else\n\t\t\tcase (mst)\n\t\t\t\tms_init: begin\n\t\t\t\t\tmst <= ms_start;\n\t\t\t\t\tdata[0] <= 16'h1e00; \n\t\t\t\t\tdata[1] <= 16'h0c00; \n\t\t\t\t\tdata[2] <= 16'h0a00; \n\t\t\t\t\tdata[3] <= 16'h0e53; \n\t\t\t\t\tdata[4] <= 16'h0814; \n\t\t\t\t\tdata[5] <= 16'h0579; \n\t\t\t\t\tdata[6] <= 16'h0117; \n\t\t\t\t\tdata[7] <= 16'h1000; \n\t\t\t\t\tdata[8] <= 16'h1201; \n\t\t\t\t\tmout <= 0;\n\t\t\t\tend\n\t\t\t\tms_start: \n\t\t\t\t\tif(i2c_c) begin \n\t\t\t\t\t\ti2c_d <= 0;\n\t\t\t\t\t\tmst <= ms_send;\n\t\t\t\t\t\tbout <= 0;\n\t\t\t\t\t\twout <= 0;\n\t\t\t\t\t\terror <= 0;\n\t\t\t\t\t\tsout <= {addr, data[mout]};\n\t\t\t\t\tend\n\t\t\t\tms_send:\n\t\t\t\t\tif(!i2c_c) \n\t\t\t\t\t\tif(bout == 8) begin\n\t\t\t\t\t\t\tmst <= ms_ack;\n\t\t\t\t\t\t\ti2c_d <= 1'bz;\n\t\t\t\t\t\tend else begin\n\t\t\t\t\t\t\ti2c_d <= sout[0]?1'bz:0;\n\t\t\t\t\t\t\tsout <= sout << 1;\n\t\t\t\t\t\t\tbout <= bout + 1;\n\t\t\t\t\t\tend\n\t\t\t\tms_ack: \n\t\t\t\t\tif(i2c_d == 0) begin  \n\t\t\t\t\t\tmst <= (wout == 2)?ms_stop:ms_send;\n\t\t\t\t\t\twout <= wout + 1;\n\t\t\t\t\t\tbout <= 0;\n\t\t\t\t\tend else begin \n\t\t\t\t\t\terror <= 1;\n\t\t\t\t\t\tmst <= ms_stop;\n\t\t\t\t\tend\n\t\t\t\tms_stop:\n\t\t\t\t\tif(i2c_c == 0) i2c_d <= 0;\n\t\t\t\t\telse begin\n\t\t\t\t\t\ti2c_d <= 1'bz;\n\t\t\t\t\t\tmst <= (error || (mout < mcount-1))?ms_start:ms_done;\n\t\t\t\t\t\tif(!error) mout <= mout + 1;\n\t\t\t\t\tend\n\t\t\t\tms_done: i2c_d <= 1'bz;\n\t\t\tendcase\n",
+        "\talways @ (posedge clock50, posedge start) counter <= start?0:counter+1;"
+    ]
+}

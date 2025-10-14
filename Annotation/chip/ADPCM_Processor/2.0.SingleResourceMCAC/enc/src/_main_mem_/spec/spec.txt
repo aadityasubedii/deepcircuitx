@@ -1,0 +1,11 @@
+Module name: main_mem. 
+
+Module specification: The 'main_mem' module is a key component in a Wishbone bus hardware system which is used for memory handling. It runs memory operations like reading and writing to memory based on the given control signals and dynamically adjusts memory width between 128-bit and 32-bit, based on the Wishbone data width (WB_DWIDTH). The module includes error handling logic. 
+
+The input ports incorporate system clock (clk), reset signal (reset), scan control signal (scan_enable), test mode control (test_mode), memory control signal (i_mem_ctrl), address input for Wishbone interface (i_wb_adr), selection input for data word in memory (i_wb_sel), Write Enable signal (i_wb_we), data to be written (i_wb_dat), Cycle signal indicating access cycle (i_wb_cyc), and Strobe input signal specifying the cycle type (i_wb_stb). 
+
+The output ports include the data read from memory (o_wb_dat), acknowledgement of readiness for data transfer (o_wb_ack), and error signal indicating any bus errors during operation (o_wb_err). 
+
+Internally, the module uses signals like 'ram' as the main memory, 'start_write' & 'start_read' for indicating start of write/read operations, integral signals 'start_read_d1', 'start_read_d2' for delayed read flagging, 'rd_data' & 'masked_wdata' for read/write data, 'wr_en', 'wr_mask' and 'wr_data' for controlling write processes, 'addr_d1' as intermediate address, 'busy' to flag if memory is handling operations, and 'wb_rdata128' and 'wb_rdata32' to hold read data with respect to memory width. 
+
+The code has two main blocks managed by a generate statement, differing based on the bus width being 128-bit or 32-bit, denoted as 'wb128' & 'wb32'. Each block details the system's activity during write and read cycles, with specific cases managing memory addressing and data selection. Through these blocks, the module ensures accurate memory reading and writing, effectively acting as a central memory manager in the hardware system.

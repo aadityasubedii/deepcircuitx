@@ -1,0 +1,9 @@
+Module name: AES_Encrypt.
+
+Module specification:
+
+The AES_Encrypt module is designed to encrypt 128-bit plaintext data using the Advanced Encryption Standard (AES) algorithm with a 128-bit encryption key. The encryption is achieved through a series of linked operations distributed over 10 rounds, out of which nine rounds are identical and the last round is distinct. The input to the module includes a `clock` signal that paces the encryption procedure, a `din` port accepting 128-bit plaintext data, and a `k` port accepting a 128-bit encryption key. The output of the module is a 128-bit wide `dout` port that outputs the ciphertext.
+
+Internally, the AES_Encrypt module employs a set of signals, namely `r0_out` to `r9_out`, which hold the intermediate encrypted data as it passes through each round of encryption. Additional internal signals include `kout1` to `kout9`, each representing the round-specific keys generated for and used in the corresponding round, excluding the final one.
+
+The structure of the code is primarily composed of instances of `Round_Call` modules that implement the first nine rounds of AES encryption, connected in sequence to form a pipeline of encryption operations. Each instance is parameterized with a `roundcount` which differentiates the steps in encryption. The final round is managed by a specialized instance of the `Round_Call_Last` module, which does not output a subsequent round key but produces the final encrypted data (`dout`). Each `Round_Call` receives the output of the previous round or the initial XOR of the data with the key (`r0_out`) and outputs the result to be used by the next stage, ensuring continuity of data flow through the encryption process. The round keys are similarly chained, with each `Round_Call` producing a key used by the next. The module is succinct and modular, with a clear flow of data and control that is easy to follow and comprehend.

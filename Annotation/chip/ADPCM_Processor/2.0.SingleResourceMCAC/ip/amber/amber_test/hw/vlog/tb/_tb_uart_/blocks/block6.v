@@ -1,0 +1,1 @@
+assign txfifo_full  = txfifo_wp == {~txfifo_rp[4], txfifo_rp[3:0]};

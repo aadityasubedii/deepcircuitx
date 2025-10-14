@@ -1,0 +1,1 @@
+wire clr_lrck = (lrck_divider == 8'h7f);

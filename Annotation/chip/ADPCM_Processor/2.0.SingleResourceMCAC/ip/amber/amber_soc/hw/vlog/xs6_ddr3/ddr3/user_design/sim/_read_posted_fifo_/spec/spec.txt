@@ -1,0 +1,9 @@
+Module name: read_posted_fifo. 
+
+Module specification: The 'read_posted_fifo' module is a hardware component designed for FPGA and ASIC designs, which manages the interface and operations to a FIFO data storage. It operates based on system clock (clk_i), utilizing various controls like ready and valid flags (cmd_valid_i, data_valid_i, gen_rdy_i) and different parameters like time units (TCQ), memory burst length (MEM_BURST_LEN), address width (ADDR_WIDTH), and block width (BL_WIDTH). On the output side, it generates addresses (gen_addr_o), block lengths (gen_bl_o), valid flags (gen_valid_o), and controls for read data (rd_mdata_en) and readiness for new command status (cmd_rdy_o) as well as information on available buffer space (rd_buff_avail_o).  
+
+Internally, the module uses a range of signals for controlling and tracking states, including empty_r and rd_first_data status registers, indications for full or empty FIFO, command waiting count (wait_cnt), and status indicators (wait_done, dfifo_has_enough_room). It also uses rd_en and wr_en to control read and write operations to the FIFO. 
+
+The code is structured in various logical blocks including parameter declaration, control input handling, output assignments, incorporating delay-based sequential logic (#TCQ) to maintain timing requirements, as well as maintaining a status of buffer availability (buf_avail_r) and the number of read data counts (rd_data_received_counts, rd_data_counts_asked). Specific conditions like FIFO full or memory block length etc., from different families ("SPARTAN6") are also handled. 
+
+Towards the end, the module integrates another module called 'afifo' which actually handles the storage and retrieval of data, integrating all parameters, inputs and outputs accordingly. Through this complex yet coherent structure, it facilitates efficient, reliable and controlled management of data traffic to the FIFO storage.

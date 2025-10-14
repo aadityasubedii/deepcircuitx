@@ -1,0 +1,1 @@
+  always @(posedge clk) sent_col_lcl_r <= #TCQ sent_col_lcl;

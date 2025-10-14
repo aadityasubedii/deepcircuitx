@@ -1,0 +1,101 @@
+{
+    "line_num": [
+        [
+            733,
+            766
+        ],
+        [
+            641,
+            709
+        ],
+        [
+            638,
+            640
+        ],
+        [
+            635,
+            637
+        ],
+        [
+            632,
+            634
+        ],
+        [
+            627,
+            631
+        ],
+        [
+            623,
+            626
+        ],
+        [
+            621,
+            622
+        ],
+        [
+            613,
+            620
+        ],
+        [
+            385,
+            410
+        ],
+        [
+            315,
+            361
+        ],
+        [
+            312,
+            314
+        ],
+        [
+            292,
+            297
+        ],
+        [
+            283,
+            298
+        ],
+        [
+            246,
+            277
+        ],
+        [
+            149,
+            222
+        ],
+        [
+            148,
+            148
+        ],
+        [
+            64,
+            88
+        ],
+        [
+            32,
+            40
+        ]
+    ],
+    "blocks": [
+        "initial begin\n  `ifdef RANDOMIZE\n    `ifdef INIT_RANDOM\n      `INIT_RANDOM\n    `endif\n    `ifndef VERILATOR\n      `ifdef RANDOMIZE_DELAY\n        #`RANDOMIZE_DELAY begin end\n      `else\n        #0.002 begin end\n      `endif\n    `endif\n`ifdef RANDOMIZE_REG_INIT\n  _RAND_0 = {1{`RANDOM}};\n  currentState = _RAND_0[1:0];\n  _RAND_1 = {1{`RANDOM}};\n  syncing = _RAND_1[0:0];\n  _RAND_2 = {1{`RANDOM}};\n  synced = _RAND_2[0:0];\n  _RAND_3 = {1{`RANDOM}};\n  biPhaseEna = _RAND_3[0:0];\n  _RAND_4 = {1{`RANDOM}};\n  leds = _RAND_4[15:0];\n  _RAND_5 = {1{`RANDOM}};\n  left = _RAND_5[15:0];\n  _RAND_6 = {1{`RANDOM}};\n  right = _RAND_6[15:0];\n  _RAND_7 = {1{`RANDOM}};\n  dspData = _RAND_7[15:0];\n  _RAND_8 = {1{`RANDOM}};\n  bitCntr = _RAND_8[7:0];\n`endif \n  `endif \nend ",
+        "  always @(posedge clock) begin\n    if (reset) begin \n      currentState <= 2'h0; \n    end else if (2'h0 == currentState) begin \n      currentState <= 2'h2; \n    end else if (2'h1 == currentState) begin \n      currentState <= 2'h2; \n    end\n    if (reset) begin \n      syncing <= 1'h0; \n    end else if (~synced) begin \n      syncing <= _GEN_0;\n    end\n    if (reset) begin \n      synced <= 1'h0; \n    end else if (~synced) begin \n      if (syncing) begin \n        synced <= _GEN_1;\n      end\n    end\n    if (reset) begin \n      biPhaseEna <= 1'h0; \n    end else if (!(2'h0 == currentState)) begin \n      if (!(2'h1 == currentState)) begin \n        if (2'h2 == currentState) begin \n          biPhaseEna <= _GEN_44;\n        end\n      end\n    end\n    leds <= _GEN_97[15:0]; \n    if (reset) begin \n      left <= 16'h0; \n    end else if (!(2'h0 == currentState)) begin \n      if (!(2'h1 == currentState)) begin \n        if (2'h2 == currentState) begin \n          left <= _GEN_48;\n        end\n      end\n    end\n    if (reset) begin \n      right <= 16'h0; \n    end else if (!(2'h0 == currentState)) begin \n      if (!(2'h1 == currentState)) begin \n        if (2'h2 == currentState) begin \n          right <= _GEN_50;\n        end\n      end\n    end\n    if (reset) begin \n      dspData <= 16'h0; \n    end else if (!(2'h0 == currentState)) begin \n      if (!(2'h1 == currentState)) begin \n        if (2'h2 == currentState) begin \n          dspData <= _GEN_51;\n        end\n      end\n    end\n    if (reset) begin \n      bitCntr <= 8'h0; \n    end else if (2'h0 == currentState) begin \n      bitCntr <= _GEN_6;\n    end else if (2'h1 == currentState) begin \n      bitCntr <= _GEN_6;\n    end else if (2'h2 == currentState) begin \n      bitCntr <= _GEN_45;\n    end else begin\n      bitCntr <= _GEN_6;\n    end\n  end",
+        "  assign DATAEDGE_clock = clock;\n  assign DATAEDGE_reset = reset;\n  assign DATAEDGE_io_INPUT = io_SDATA_IN; ",
+        "  assign BCLKEDGE_clock = clock;\n  assign BCLKEDGE_reset = reset;\n  assign BCLKEDGE_io_INPUT = io_BCLK_IN; ",
+        "  assign LREDGE_clock = clock;\n  assign LREDGE_reset = reset;\n  assign LREDGE_io_INPUT = io_LRCLK_IN; ",
+        "  assign biPhaseEncoder_reset = reset;\n  assign biPhaseEncoder_io_AUDIOINPUT = BFR1_io_dataOut; \n  assign biPhaseEncoder_io_DSPINPUT = {{48'd0}, dspData}; \n  assign biPhaseEncoder_io_ENA = biPhaseEna; \n  assign biPhaseEncoder_io_CLK = BCLKEDGE_io_CHANGE; ",
+        "  assign BFR1_clock = clock;\n  assign BFR1_io_write = 2'h0 == currentState ? 1'h0 : _GEN_75; \n  assign BFR1_io_dataIn = 2'h0 == currentState ? BFR_io_dataOut : _GEN_76; \n  assign biPhaseEncoder_clock = clock;",
+        "  assign BFR_io_write = 2'h0 == currentState ? 1'h0 : _GEN_69; \n  assign BFR_io_dataIn = _GEN_82[63:0];",
+        "  assign io_MCLK_O = clock; \n  assign io_DATA_O = biPhaseEncoder_io_DATA_OUT; \n  assign io_LRCLK_O = io_LRCLK_IN; \n  assign io_BCLK_O = io_BCLK_IN; \n  assign io_SDATA_O = io_SDATA_IN; \n  assign io_NXT_FRAME = BCLKEDGE_io_CHANGE; \n  assign io_LED = leds; \n  assign BFR_clock = clock;",
+        "initial begin\n  `ifdef RANDOMIZE\n    `ifdef INIT_RANDOM\n      `INIT_RANDOM\n    `endif\n    `ifndef VERILATOR\n      `ifdef RANDOMIZE_DELAY\n        #`RANDOMIZE_DELAY begin end\n      `else\n        #0.002 begin end\n      `endif\n    `endif\n`ifdef RANDOMIZE_REG_INIT\n  _RAND_0 = {1{`RANDOM}};\n  inBufr = _RAND_0[1:0];\n  _RAND_1 = {1{`RANDOM}};\n  inBufrPrev = _RAND_1[1:0];\n  _RAND_2 = {1{`RANDOM}};\n  trailing = _RAND_2[0:0];\n  _RAND_3 = {1{`RANDOM}};\n  rising = _RAND_3[0:0];\n  _RAND_4 = {1{`RANDOM}};\n  change = _RAND_4[0:0];\n`endif \n  `endif \nend ",
+        "  always @(posedge clock) begin\n    if (reset) begin \n      inBufr <= 2'h0; \n    end else if (io_INPUT) begin \n      if (inBufr < 2'h2) begin \n        inBufr <= _inBufr_T_1; \n      end\n    end else if (~io_INPUT) begin \n      if (inBufr > 2'h0) begin \n        inBufr <= _inBufr_T_3; \n      end\n    end\n    if (reset) begin \n      inBufrPrev <= 2'h0; \n    end else if (io_INPUT) begin \n      if (inBufr < 2'h2) begin \n        inBufrPrev <= inBufr; \n      end\n    end else if (~io_INPUT) begin \n      if (inBufr > 2'h0) begin \n        inBufrPrev <= inBufr; \n      end\n    end\n    if (reset) begin \n      trailing <= 1'h0; \n    end else if (trailing) begin \n      trailing <= 1'h0; \n    end else begin\n      trailing <= _GEN_12;\n    end\n    if (reset) begin \n      rising <= 1'h0; \n    end else if (rising) begin \n      rising <= 1'h0; \n    end else if (inBufrPrev == 2'h2 & _T_8) begin \n      rising <= 1'h0; \n    end else begin\n      rising <= _GEN_10;\n    end\n    if (reset) begin \n      change <= 1'h0; \n    end else if (change) begin \n      change <= 1'h0; \n    end else begin\n      change <= _GEN_14;\n    end\n  end",
+        "  assign io_TRAIL = trailing; \n  assign io_RISE = rising; \n  assign io_CHANGE = change; ",
+        "  reg [31:0] _RAND_0;\n  reg [31:0] _RAND_1;\n  reg [31:0] _RAND_2;\n  reg [31:0] _RAND_3;\n  reg [31:0] _RAND_4;\n`endif ",
+        "module edgeDetector(\n  input   clock,\n  input   reset,\n  input   io_INPUT,\n  output  io_TRAIL,\n  output  io_RISE,\n  output  io_CHANGE\n);\n`ifdef RANDOMIZE_REG_INIT\n  reg [31:0] _RAND_0;\n  reg [31:0] _RAND_1;\n  reg [31:0] _RAND_2;\n  reg [31:0] _RAND_3;\n  reg [31:0] _RAND_4;\n`endif \n  reg [1:0] inBufr; ",
+        "initial begin\n  `ifdef RANDOMIZE\n    `ifdef INIT_RANDOM\n      `INIT_RANDOM\n    `endif\n    `ifndef VERILATOR\n      `ifdef RANDOMIZE_DELAY\n        #`RANDOMIZE_DELAY begin end\n      `else\n        #0.002 begin end\n      `endif\n    `endif\n`ifdef RANDOMIZE_REG_INIT\n  _RAND_0 = {1{`RANDOM}};\n  outReg = _RAND_0[0:0];\n  _RAND_1 = {2{`RANDOM}};\n  stereoData = _RAND_1[63:0];\n  _RAND_2 = {1{`RANDOM}};\n  dspData = _RAND_2[15:0];\n  _RAND_3 = {1{`RANDOM}};\n  bitCntr_enc = _RAND_3[7:0];\n  _RAND_4 = {1{`RANDOM}};\n  hasNone = _RAND_4[0:0];\n  _RAND_5 = {1{`RANDOM}};\n  dataIndex = _RAND_5[5:0];\n  _RAND_6 = {1{`RANDOM}};\n  ndexR = _RAND_6[0:0];\n  _RAND_7 = {1{`RANDOM}};\n  enabled = _RAND_7[0:0];\n`endif \n  `endif \nend ",
+        "  always @(posedge clock) begin\n    if (reset) begin \n      outReg <= 1'h0; \n    end else if (io_CLK) begin \n      if (enabled) begin \n        if (bitCntr_enc > 8'h5) begin \n          outReg <= _GEN_13;\n        end else begin\n          outReg <= _GEN_2;\n        end\n      end\n    end\n    if (reset) begin \n      stereoData <= 64'h0; \n    end else begin\n      stereoData <= io_AUDIOINPUT; \n    end\n    dspData <= _GEN_34[15:0]; \n    if (reset) begin \n      bitCntr_enc <= 8'h0; \n    end else if (io_CLK) begin \n      if (enabled) begin \n        if (bitCntr_enc == 8'h7f) begin \n          bitCntr_enc <= 8'h0; \n        end else begin\n          bitCntr_enc <= _bitCntr_enc_T_1; \n        end\n      end\n    end\n    if (reset) begin \n      hasNone <= 1'h0; \n    end else if (io_CLK) begin \n      if (enabled) begin \n        if (bitCntr_enc > 8'h5) begin \n          hasNone <= _GEN_14;\n        end\n      end\n    end\n    if (reset) begin \n      dataIndex <= 6'h0; \n    end else if (io_CLK) begin \n      if (enabled) begin \n        if (bitCntr_enc == 8'h7f) begin \n          dataIndex <= 6'h0; \n        end else begin\n          dataIndex <= _GEN_16;\n        end\n      end\n    end\n    if (reset) begin \n      ndexR <= 1'h0; \n    end else if (io_CLK) begin \n      if (enabled) begin \n        if (bitCntr_enc > 8'h5) begin \n          ndexR <= ~ndexR; \n        end\n      end\n    end\n    if (reset) begin \n      enabled <= 1'h0; \n    end else if (io_CLK) begin \n      if (enabled) begin \n        if (bitCntr_enc == 8'h7f) begin \n          enabled <= 1'h0; \n        end else begin\n          enabled <= io_ENA; \n        end\n      end else begin\n        enabled <= io_ENA; \n      end\n    end else begin\n      enabled <= io_ENA; \n    end\n  end",
+        "  assign io_DATA_OUT = outReg; ",
+        "initial begin\n  `ifdef RANDOMIZE\n    `ifdef INIT_RANDOM\n      `INIT_RANDOM\n    `endif\n    `ifndef VERILATOR\n      `ifdef RANDOMIZE_DELAY\n        #`RANDOMIZE_DELAY begin end\n      `else\n        #0.002 begin end\n      `endif\n    `endif\n`ifdef RANDOMIZE_MEM_INIT\n  _RAND_0 = {2{`RANDOM}};\n  for (initvar = 0; initvar < 1; initvar = initvar+1)\n    mem[initvar] = _RAND_0[63:0];\n`endif \n`ifdef RANDOMIZE_REG_INIT\n  _RAND_1 = {1{`RANDOM}};\n  mem_rdwrPort_r_en_pipe_0 = _RAND_1[0:0];\n  _RAND_2 = {1{`RANDOM}};\n  mem_rdwrPort_r_addr_pipe_0 = _RAND_2[0:0];\n`endif \n  `endif \nend ",
+        "  always @(posedge clock) begin\n    if (mem_rdwrPort_w_en & mem_rdwrPort_w_mask) begin\n      mem[mem_rdwrPort_w_addr] <= mem_rdwrPort_w_data; \n    end\n    mem_rdwrPort_r_en_pipe_0 <= 1'h1 & ~io_write;\n    if (1'h1 & ~io_write) begin\n      mem_rdwrPort_r_addr_pipe_0 <= 1'h0;\n    end\n  end"
+    ]
+}

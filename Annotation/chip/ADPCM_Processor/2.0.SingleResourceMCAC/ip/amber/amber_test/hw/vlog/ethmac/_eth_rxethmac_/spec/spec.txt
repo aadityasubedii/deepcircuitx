@@ -1,0 +1,37 @@
+Module name: eth_rxethmac. 
+
+Module specification: The eth_rxethmac module is an Ethernet Receiver MAC (Media Access Control) specifically designed in Verilog language. It is primarily responsible for receiving raw Ethernet data, providing validation, and then decrypting it into useful form. The ethernet receiver does this by handling essential functionalities such as frame length control, CRC (Cyclic Redundancy Check) error detection, marking start and end frame signals, managing interframe gap and processing MAC address features. 
+
+Input Ports:
+1. `MRxClk`: Main clock input for the receiver.
+2. `MRxDV`: Raw Ethernet data validation signal.
+3. `MRxD[3:0]`: Incoming raw Ethernet data.
+4. `Transmitting`: System transmission signal.
+5. `HugEn`: Jumbo frame enabling signal.
+6. `DlyCrcEn`: Delay CRC process signal.
+7. `MaxFL[15:0]`: Maximum frame length signal.
+8. `r_IFG`: Interframe Gap signal.
+9. `Reset`: System reset signal.
+10. `MAC[47:0]`: Receiver's MAC address.
+11. `r_Bro`: Control signal for accepting broadcast frames.
+12. `r_Pro`: Control signal for acceptance of frames that pass the hash filter.
+13. `r_HASH[0-1]`: Hash filter signals.
+14. `PassAll`: Forces the MAC to receive all packets.
+15. `ControlFrmAddressOK`: Control frame acceptance signal.
+
+Output Ports:
+1. `RxData[7:0]`: Resulting segmented Ethernet data.
+2. `RxValid`: RxData validation signal.
+3. `RxStartFrm`: Packet data start signal.
+4. `RxEndFrm`: Packet data end signal.
+5. `ByteCnt[15:0]`: Byte count signaling.
+6. `ByteCntEq0`: Signal to indicate no remaining bytes in the packet.
+7. `ByteCntGreat2, ByteCntMaxFrame`: Byte count signaling greater than two & maximum.
+8. `CrcError`: CRC error signal.
+9. `StateIdle, StatePreamble, StateSFD, StateData[1:0]`: Receiver state signals.
+10. `RxAbort`: Packet abort signal.
+11. `AddressMiss`: Mismatching MAC address signal and the destination address.
+
+Internal signals such as `RxData`, `RxValid`, `RxStartFrm`, `RxEndFrm`, `Broadcast`, `Multicast`, `CrcHash`, `CrcHashGood`, `DelayData`, `LatchedByte`, `RxData_d`, `RxValid_d`, `RxStartFrm_d` and `RxEndFrm_d` among others are used for data storage, synchronization, comparators, control signals, and error detection.
+
+The module handles sections such as state machine, counters, address checking, data latching, and CRC generations for their respective functionalities, making it an essential component to manage Ethernet transmission effectively.

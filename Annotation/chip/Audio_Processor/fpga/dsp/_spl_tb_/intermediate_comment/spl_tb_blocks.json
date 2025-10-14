@@ -1,0 +1,31 @@
+{
+    "line_num": [
+        [
+            154,
+            255
+        ],
+        [
+            52,
+            150
+        ],
+        [
+            38,
+            49
+        ],
+        [
+            19,
+            19
+        ],
+        [
+            11,
+            15
+        ]
+    ],
+    "blocks": [
+        "    initial begin\n        $display(\"test spl()\");\n        @(posedge ck);\n\n        peak_en = 0;\n        decay_en = 0;\n        in <= 16'h4000;\n        @(posedge ck);\n\n        tb_assert(out == 0);\n\n        peak_en <= 1;\n        @(posedge ck);\n        peak_en <= 0;\n        @(posedge ck);\n        tb_assert(out == 16'h4000);\n\n        \n        decay_en = 1;\n        @(posedge ck);\n        @(posedge ck);\n        tb_assert(out == 16'h3fff);\n        @(posedge ck);\n        tb_assert(out == 16'h3ffe);\n        @(posedge ck);\n        tb_assert(out == 16'h3ffd);\n        @(posedge ck);\n        tb_assert(out == 16'h3ffc);\n\n        wait(out == 16'h0002);\n        decay_en = 0;\n        @(posedge ck);\n        @(posedge ck);\n        @(posedge ck);\n        @(posedge ck);\n        tb_assert(out == 16'h0002);\n        @(posedge ck);\n        decay_en = 1;\n        @(posedge ck);\n        tb_assert(out == 16'h0001);\n        @(posedge ck);\n        tb_assert(out == 16'h0000);\n        @(posedge ck);\n        tb_assert(out == 16'h0000);\n        @(posedge ck);\n        tb_assert(out == 16'h0000);\n\n        decay_en = 0;\n        in <= 0;\n        @(posedge ck);\n        @(posedge ck);\n        peak_en <= 1;\n\n        \n        for (i = 0; i < 16'h8000; i = i + 10) begin\n            in <= i;\n            @(posedge ck);\n            @(posedge ck);\n            @(posedge ck);\n            tb_assert(out == i);\n        end\n\n        in <= 0;\n        peak_en <= 0;\n\n        \n        rst <= 1;\n        @(posedge ck);\n        @(posedge ck);\n        tb_assert(out == 0);\n        rst <= 0;\n        @(posedge ck);\n        @(posedge ck);\n\n        \n        in <= 0;\n        @(posedge ck);\n        @(posedge ck);\n        peak_en <= 1;\n\n        for (i = 0; i < 16'h8000; i = i + 10) begin\n            \n            in <= 1 + ~i;\n            @(posedge ck);\n            @(posedge ck);\n            @(posedge ck);\n            tb_assert(out == i);\n\n            in <= i;\n            @(posedge ck);\n            @(posedge ck);\n            @(posedge ck);\n            tb_assert(out == i);\n\n        end\n\n        @(posedge ck);\n        @(posedge ck);\n        @(posedge ck);\n        $finish;\n    end\n",
+        "    initial begin\n\n        set_level(16'b10zz_zzzz_zzzz_zzzz);\n        tb_assert(level_code == 0);\n\n        set_level(16'b110z_zzzz_zzzz_zzzz);\n        tb_assert(level_code == 1);\n\n        set_level(16'b1110_zzzz_zzzz_zzzz);\n        tb_assert(level_code == 2);\n\n        set_level(16'b1111_0zzz_zzzz_zzzz);\n        tb_assert(level_code == 3);\n\n        set_level(16'b1111_10zz_zzzz_zzzz);\n        tb_assert(level_code == 4);\n\n        set_level(16'b1111_110z_zzzz_zzzz);\n        tb_assert(level_code == 5);\n\n        set_level(16'b1111_1110_zzzz_zzzz);\n        tb_assert(level_code == 6);\n\n        set_level(16'b1111_1111_0zzz_zzzz);\n        tb_assert(level_code == 7);\n\n        set_level(16'b1111_1111_10zz_zzzz);\n        tb_assert(level_code == 8);\n\n        set_level(16'b1111_1111_110z_zzzz);\n        tb_assert(level_code == 9);\n\n        set_level(16'b1111_1111_1110_zzzz);\n        tb_assert(level_code == 10);\n\n        set_level(16'b1111_1111_1111_0zzz);\n        tb_assert(level_code == 11);\n\n        set_level(16'b1111_1111_1111_10zz);\n        tb_assert(level_code == 12);\n\n        set_level(16'b1111_1111_1111_110z);\n        tb_assert(level_code == 13);\n\n        set_level(16'b1111_1111_1111_1110);\n        tb_assert(level_code == 14);\n\n        set_level(16'b1111_1111_1111_1111);\n        tb_assert(level_code == 15);\n\n        set_level(16'b01zz_zzzz_zzzz_zzzz);\n        tb_assert(level_code == 0);\n\n        set_level(16'b001z_zzzz_zzzz_zzzz);\n        tb_assert(level_code == 1);\n\n        set_level(16'b0001_0zzz_zzzz_zzzz);\n        tb_assert(level_code == 2);\n\n        set_level(16'b0000_10zz_zzzz_zzzz);\n        tb_assert(level_code == 3);\n\n        set_level(16'b0000_01zz_zzzz_zzzz);\n        tb_assert(level_code == 4);\n\n        set_level(16'b0000_001z_zzzz_zzzz);\n        tb_assert(level_code == 5);\n\n        set_level(16'b0000_0001_zzzz_zzzz);\n        tb_assert(level_code == 6);\n\n        set_level(16'b0000_0000_1zzz_zzzz);\n        tb_assert(level_code == 7);\n\n        set_level(16'b0000_0000_01zz_zzzz);\n        tb_assert(level_code == 8);\n\n        set_level(16'b0000_0000_001z_zzzz);\n        tb_assert(level_code == 9);\n\n        set_level(16'b0000_0000_0001_zzzz);\n        tb_assert(level_code == 10);\n\n        set_level(16'b0000_0000_0000_1zzz);\n        tb_assert(level_code == 11);\n\n        set_level(16'b0000_0000_0000_01zz);\n        tb_assert(level_code == 12);\n\n        set_level(16'b0000_0000_0000_001z);\n        tb_assert(level_code == 13);\n\n        set_level(16'b0000_0000_0000_0001);\n        tb_assert(level_code == 14);\n\n        set_level(16'b0000_0000_0000_0000);\n        tb_assert(level_code == 15);\n\n    end",
+        "    task set_level(input [15:0] value);\n        begin\n            @(posedge ck);\n            level_en <= 1;\n            level_in <= value;\n            @(posedge ck);\n            level_en <= 0;\n            level_in <= 16'hZ;\n            @(posedge ck);\n            wait(ready);\n        end\n    endtask",
+        "    always #42 ck <= !ck;",
+        "    initial begin\n        $dumpfile(\"dsp.vcd\");\n        $dumpvars(0, tb);\n        #5000000 $finish;\n    end"
+    ]
+}

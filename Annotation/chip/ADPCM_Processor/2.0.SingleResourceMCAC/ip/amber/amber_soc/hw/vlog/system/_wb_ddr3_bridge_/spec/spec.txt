@@ -1,0 +1,13 @@
+Module name: wb_ddr3_bridge.
+
+Module specification: The 'wb_ddr3_bridge' module is designed as an interface connecting a Wishbone bus and a DDR3 memory interface, facilitating data transfer between them. It receives the addresses, data, and control signals from the Wishbone bus (inputs prefixed with 'i_wb_') and generates the corresponding DDR3 operations (outputs prefixed with 'o_cmd_' and 'o_wr_'). The module maintains the status of DDR3 memory via signals like 'i_cmd_full', 'i_rd_empy' and 'i_wr_full'. It also supports conditional compilation to accommodate a XILINX_VIRTEX6_FPGA environment.
+
+Input ports include a system Clock signal 'i_clk', a 32-bit address bus 'i_wb_adr', byte-selection signals 'i_wb_sel', a write-enable signal 'i_wb_we', a data bus 'i_wb_dat' for input data, a cycle signal 'i_wb_cyc', and a strobe signal 'i_wb_stb'. Input also includes several DDR3 buffer statues such as 'i_cmd_full', 'i_wr_full', 'i_rd_data', and 'i_rd_empty'.
+
+Output ports consist of an output data bus 'o_wb_dat', an acknowledgement signal 'o_wb_ack' and an error flag 'o_wb_err' for the Wishbone interface along with DDR3 operation signals such as 'o_cmd_en', 'o_cmd_instr', 'o_cmd_byte_addr', 'o_wr_en', 'o_wr_mask', and 'o_wr_data'.
+
+Internal signals, such as 'start_write', 'start_read' and their various derivatives regulate the start of read and write operations. Buffer status signals like 'ddr3_busy', 'read_ack' and 'read_ready' keep track of ongoing operations and system readiness.
+
+The module’s code can be sectioned into various blocks. Initialization block declares and initializes outputs and internal signals. The "always blocks" handle DDR3 command generation, writing to the DRAM, and read operations. The last portion accommodates debug information display in case the `LP_MEMIF_DEBUG` flag is on.
+
+This comprehensive specification gives a detailed overview of module’s design and operation.

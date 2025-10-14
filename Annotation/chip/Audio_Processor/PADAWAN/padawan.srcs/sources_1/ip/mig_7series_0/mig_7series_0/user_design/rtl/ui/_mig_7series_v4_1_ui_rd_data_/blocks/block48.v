@@ -1,0 +1,1 @@
+  assign app_ecc_single_err = app_ecc_single_err_r;

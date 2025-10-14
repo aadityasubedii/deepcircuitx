@@ -1,0 +1,1 @@
+  always @(posedge clk) second_half_r <= #TCQ second_half_ns;

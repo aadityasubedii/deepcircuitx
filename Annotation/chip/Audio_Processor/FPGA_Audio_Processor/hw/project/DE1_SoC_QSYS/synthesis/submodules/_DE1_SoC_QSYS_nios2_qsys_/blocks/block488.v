@@ -1,0 +1,1 @@
+  assign ociram_byteenable = jtag_ram_access ? 4'b1111 : byteenable;

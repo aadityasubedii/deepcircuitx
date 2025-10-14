@@ -1,0 +1,1 @@
+      assign device_temp_lcl = temperature;

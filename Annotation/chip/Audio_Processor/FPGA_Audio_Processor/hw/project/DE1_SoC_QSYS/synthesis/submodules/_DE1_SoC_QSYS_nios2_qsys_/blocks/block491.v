@@ -1,0 +1,1 @@
+  assign avalon_ram_wr = write & ~address[8] & debugaccess;

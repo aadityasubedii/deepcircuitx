@@ -1,0 +1,1 @@
+assign SlotFinished = &SlotTimer[5:0] & IncrementSlotTimer;  

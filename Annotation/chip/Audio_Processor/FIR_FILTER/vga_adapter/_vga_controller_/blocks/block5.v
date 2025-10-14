@@ -1,0 +1,1 @@
+	assign yCounter_clear = (yCounter == (C_VERT_TOTAL_COUNT-1)); 

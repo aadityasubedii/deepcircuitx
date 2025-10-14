@@ -1,0 +1,1 @@
+        assign clear_interrupts = (av_write && av_address == 4'd2);

@@ -1,0 +1,1 @@
+assign exec_load_rd_update             = !i_core_stall && execute;

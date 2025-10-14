@@ -1,0 +1,1 @@
+        assign vid_std_sync1 = {STD_WIDTH{1'b0}};

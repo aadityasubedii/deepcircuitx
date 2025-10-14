@@ -1,0 +1,1 @@
+assign prbs_ignore_last_bytes = prbs_ignore_last_bytes_r;

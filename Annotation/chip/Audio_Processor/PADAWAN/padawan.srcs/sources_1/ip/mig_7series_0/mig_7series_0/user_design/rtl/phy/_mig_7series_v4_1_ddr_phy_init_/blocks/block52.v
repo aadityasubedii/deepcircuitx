@@ -1,0 +1,1 @@
+  assign phy_rddata_valid = init_complete_r1_timing ? phy_rddata_en : 1'b0;

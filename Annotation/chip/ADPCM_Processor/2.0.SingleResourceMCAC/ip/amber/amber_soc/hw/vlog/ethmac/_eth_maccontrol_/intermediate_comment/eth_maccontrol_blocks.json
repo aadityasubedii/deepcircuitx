@@ -1,0 +1,76 @@
+{
+    "line_num": [
+        [
+            260,
+            267
+        ],
+        [
+            248,
+            257
+        ],
+        [
+            243,
+            244
+        ],
+        [
+            239,
+            240
+        ],
+        [
+            235,
+            236
+        ],
+        [
+            231,
+            232
+        ],
+        [
+            227,
+            228
+        ],
+        [
+            224,
+            225
+        ],
+        [
+            220,
+            221
+        ],
+        [
+            216,
+            217
+        ],
+        [
+            202,
+            212
+        ],
+        [
+            188,
+            198
+        ],
+        [
+            171,
+            183
+        ],
+        [
+            157,
+            167
+        ]
+    ],
+    "blocks": [
+        "eth_transmitcontrol transmitcontrol1\n(\n .MTxClk(MTxClk), .TxReset(TxReset), .TxUsedDataIn(TxUsedDataIn), .TxUsedDataOut(TxUsedDataOut), \n .TxDoneIn(TxDoneIn), .TxAbortIn(TxAbortIn), .TxStartFrmIn(TxStartFrmIn), .TPauseRq(TPauseRq), \n .TxUsedDataOutDetected(TxUsedDataOutDetected), .TxFlow(TxFlow), .DlyCrcEn(DlyCrcEn), .TxPauseTV(TxPauseTV), \n .MAC(MAC), .TxCtrlStartFrm(TxCtrlStartFrm), .TxCtrlEndFrm(TxCtrlEndFrm), .SendingCtrlFrm(SendingCtrlFrm), \n .CtrlMux(CtrlMux), .ControlData(ControlData), .WillSendControlFrame(WillSendControlFrame), .BlockTxDone(BlockTxDone)\n);",
+        "eth_receivecontrol receivecontrol1 \n(\n .MTxClk(MTxClk), .MRxClk(MRxClk), .TxReset(TxReset), .RxReset(RxReset), .RxData(RxData), \n .RxValid(RxValid), .RxStartFrm(RxStartFrm), .RxEndFrm(RxEndFrm), .RxFlow(RxFlow), \n .ReceiveEnd(ReceiveEnd), .MAC(MAC), .DlyCrcEn(DlyCrcEn), .TxDoneIn(TxDoneIn), \n .TxAbortIn(TxAbortIn), .TxStartFrmOut(TxStartFrmOut), .ReceivedLengthOK(ReceivedLengthOK), \n .ReceivedPacketGood(ReceivedPacketGood), .TxUsedDataOutDetected(TxUsedDataOutDetected), \n .Pause(Pause), .ReceivedPauseFrm(ReceivedPauseFrm), .AddressOK(ControlFrmAddressOK), \n .r_PassAll(r_PassAll), .RxStatusWriteLatched_sync2(RxStatusWriteLatched_sync2), .SetPauseTimer(SetPauseTimer)\n);",
+        "assign CrcEnOut = CrcEnIn | SendingCtrlFrm;\n",
+        "assign PadOut = PadIn | SendingCtrlFrm;\n",
+        "assign TxDataOut[7:0] = CtrlMux? ControlData[7:0] : TxDataIn[7:0];\n",
+        "assign TxEndFrmOut = CtrlMux? TxCtrlEndFrm : TxEndFrmIn;\n",
+        "assign TxStartFrmOut = CtrlMux? TxCtrlStartFrm : (TxStartFrmIn & ~Pause);\n",
+        "assign TxUsedDataOut  = ~CtrlMux & TxUsedDataIn;\n",
+        "assign TxAbortOut  = CtrlMux? ((~TxStartFrmIn) & (~BlockTxDone) & MuxedAbort) :\n                              ((~TxStartFrmIn) & (~BlockTxDone) & TxAbortIn);",
+        "assign TxDoneOut  = CtrlMux? ((~TxStartFrmIn) & (~BlockTxDone) & MuxedDone) : \n                             ((~TxStartFrmIn) & (~BlockTxDone) & TxDoneIn);",
+        "always @ (posedge MTxClk or posedge TxReset)\nbegin\n  if(TxReset)\n    MuxedDone <= #Tp 1'b0;\n  else\n  if(TxStartFrmIn)\n    MuxedDone <= #Tp 1'b0;\n  else\n  if(TxDoneIn & (~TxDoneInLatched) & TxUsedDataOutDetected)\n    MuxedDone <= #Tp 1'b1;\nend",
+        "always @ (posedge MTxClk or posedge TxReset)\nbegin\n  if(TxReset)\n    MuxedAbort <= #Tp 1'b0;\n  else\n  if(TxStartFrmIn)\n    MuxedAbort <= #Tp 1'b0;\n  else\n  if(TxAbortIn & ~TxAbortInLatched & TxUsedDataOutDetected)\n    MuxedAbort <= #Tp 1'b1;\nend",
+        "always @ (posedge MTxClk or posedge TxReset)\nbegin\n  if(TxReset)\n    begin\n      TxAbortInLatched <= #Tp 1'b0;\n      TxDoneInLatched  <= #Tp 1'b0;\n    end\n  else\n    begin\n      TxAbortInLatched <= #Tp TxAbortIn;\n      TxDoneInLatched  <= #Tp TxDoneIn;\n    end\nend",
+        "always @ (posedge MTxClk or posedge TxReset)\nbegin\n  if(TxReset)\n    TxUsedDataOutDetected <= #Tp 1'b0;\n  else\n  if(TxDoneIn | TxAbortIn)\n    TxUsedDataOutDetected <= #Tp 1'b0;\n  else\n  if(TxUsedDataOut)\n    TxUsedDataOutDetected <= #Tp 1'b1;\nend    "
+    ]
+}

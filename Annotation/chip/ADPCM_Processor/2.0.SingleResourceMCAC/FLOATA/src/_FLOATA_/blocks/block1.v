@@ -1,0 +1,1 @@
+assign	DQ0 = ({DQS,EXP,MANT});

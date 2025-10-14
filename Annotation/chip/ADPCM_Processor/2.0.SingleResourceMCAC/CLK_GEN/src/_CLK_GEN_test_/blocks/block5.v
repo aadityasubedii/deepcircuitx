@@ -1,0 +1,1 @@
+assign i_serial_clk = ser_clk;

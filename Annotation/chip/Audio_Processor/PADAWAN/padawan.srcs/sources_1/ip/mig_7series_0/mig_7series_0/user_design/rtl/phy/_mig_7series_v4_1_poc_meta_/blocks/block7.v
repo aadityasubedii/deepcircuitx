@@ -1,0 +1,1 @@
+  always @(posedge clk) prev_valid_r <= #TCQ prev_valid_ns;

@@ -1,0 +1,1 @@
+  always @(req) dbl_req = {req, req};

@@ -1,0 +1,1 @@
+assign rot_prod = netgen[0].out;

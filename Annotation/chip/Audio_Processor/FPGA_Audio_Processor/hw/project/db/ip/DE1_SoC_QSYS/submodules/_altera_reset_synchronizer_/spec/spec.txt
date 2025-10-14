@@ -1,0 +1,7 @@
+Module name: `altera_reset_synchronizer`. 
+
+Module specification: The `altera_reset_synchronizer` module serves as a reset synchronizer within the context of digital systems. It functions by aligning an incoming reset signal (`reset_in`) with a given clock signal (`clk`) and outputs a sequence of the synchronized reset signal (`reset_out`). Depending on the value of the `ASYNC_RESET` parameter, the synchronization can either be performed asynchronously, triggering an immediate reset, or synchronously, triggering a reset at the subsequent clock edge.
+
+The synchronization is executed through a sequential chain of flip-flops, the depth of which is determined by the `DEPTH` parameter. The core of this module pivots around two internal signals: `altera_reset_synchronizer_int_chain` and `altera_reset_synchronizer_int_chain_out`. The former is a register array storing the instantaneous state of the synchronization chain, and the latter holds the finalized value of the synchronization chain, which is then propagated as `reset_out`. 
+
+The module is structured into two main blocks: The first block, active when `ASYNC_RESET` is true, synchronizes the reset signal to the positive edge of the clock or to the positive edge of the reset signal, whereas the second block, active when `ASYNC_RESET` is false, synchronizes the reset signal solely to the positive edge of the clock. Thus, depending on the chosen configuration, this module allows for mitigation of potential metastability issues in digital systems through controlled reset synchronization.

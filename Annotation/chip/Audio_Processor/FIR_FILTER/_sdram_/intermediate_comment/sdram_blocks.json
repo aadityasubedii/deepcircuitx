@@ -1,0 +1,111 @@
+{
+    "line_num": [
+        [
+            697,
+            697
+        ],
+        [
+            687,
+            695
+        ],
+        [
+            682,
+            682
+        ],
+        [
+            673,
+            679
+        ],
+        [
+            663,
+            669
+        ],
+        [
+            653,
+            659
+        ],
+        [
+            651,
+            651
+        ],
+        [
+            419,
+            648
+        ],
+        [
+            417,
+            417
+        ],
+        [
+            411,
+            416
+        ],
+        [
+            339,
+            408
+        ],
+        [
+            329,
+            335
+        ],
+        [
+            319,
+            325
+        ],
+        [
+            309,
+            315
+        ],
+        [
+            297,
+            305
+        ],
+        [
+            281,
+            293
+        ],
+        [
+            268,
+            280
+        ],
+        [
+            268,
+            279
+        ],
+        [
+            125,
+            143
+        ],
+        [
+            84,
+            122
+        ],
+        [
+            65,
+            81
+        ]
+    ],
+    "blocks": [
+        "  assign CODE = &(cmd_all|4'h7) ? 24'h494e48 : txt_code;",
+        "  assign txt_code = (cmd_code == 3'h0)? 24'h4c4d52 :\n    (cmd_code == 3'h1)? 24'h415246 :\n    (cmd_code == 3'h2)? 24'h505245 :\n    (cmd_code == 3'h3)? 24'h414354 :\n    (cmd_code == 3'h4)? 24'h205752 :\n    (cmd_code == 3'h5)? 24'h205244 :\n    (cmd_code == 3'h6)? 24'h425354 :\n    (cmd_code == 3'h7)? 24'h4e4f50 :\n    24'h424144;",
+        "  assign cmd_code = m_cmd[2 : 0];",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n          za_valid <= 0;\n      else if (1)\n          za_valid <= rd_valid[2];\n    end",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n          za_data <= 0;\n      else if (1)\n          za_data <= zs_dq;\n    end",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n          rd_valid <= {3{1'b0}};\n      else \n        rd_valid <= (rd_valid << 1) | { {2{1'b0}}, rd_strobe };\n    end",
+        "  assign rd_strobe = m_cmd[2 : 0] == 3'h5;",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n        begin\n          m_state <= 9'b000000001;\n          m_next <= 9'b000000001;\n          m_cmd <= 4'b1111;\n          m_bank <= 2'b00;\n          m_addr <= 12'b000000000000;\n          m_data <= 16'b0000000000000000;\n          m_dqm <= 2'b00;\n          m_count <= 3'b000;\n          ack_refresh_request <= 1'b0;\n          f_pop <= 1'b0;\n          oe <= 1'b0;\n        end\n      else \n        begin\n          f_pop <= 1'b0;\n          oe <= 1'b0;\n          case (m_state) \n          \n              9'b000000001: begin\n                  \n                  if (init_done)\n                    begin\n                      \n                      if (refresh_request)\n                          m_cmd <= {{1{1'b0}},3'h7};\n                      else \n                        m_cmd <= 4'b1111;\n                      ack_refresh_request <= 1'b0;\n                      \n                      if (refresh_request)\n                        begin\n                          m_state <= 9'b001000000;\n                          m_next <= 9'b010000000;\n                          m_count <= 0;\n                          active_cs_n <= 1'b1;\n                        end\n                      else if (!f_empty)\n                        begin\n                          f_pop <= 1'b1;\n                          active_cs_n <= f_cs_n;\n                          active_rnw <= f_rnw;\n                          active_addr <= f_addr;\n                          active_data <= f_data;\n                          active_dqm <= f_dqm;\n                          m_state <= 9'b000000010;\n                        end\n                    end\n                  else \n                    begin\n                      m_addr <= i_addr;\n                      m_state <= 9'b000000001;\n                      m_next <= 9'b000000001;\n                      m_cmd <= i_cmd;\n                    end\n              end \n          \n              9'b000000010: begin\n                  m_state <= 9'b000000100;\n                  m_cmd <= {csn_decode,3'h3};\n                  m_bank <= active_bank;\n                  m_addr <= active_addr[20 : 9];\n                  m_data <= active_data;\n                  m_dqm <= active_dqm;\n                  m_count <= 1;\n                  m_next <= active_rnw ? 9'b000001000 : 9'b000010000;\n              end \n          \n              9'b000000100: begin\n                  \n                  if (m_next == 9'b010000000)\n                      m_cmd <= {{1{1'b0}},3'h7};\n                  else \n                    m_cmd <= {csn_decode,3'h7};\n                  \n                  if (m_count > 1)\n                      m_count <= m_count - 1'b1;\n                  else \n                    m_state <= m_next;\n              end \n          \n              9'b000001000: begin\n                  m_cmd <= {csn_decode,3'h5};\n                  m_bank <= f_select ? f_bank : active_bank;\n                  m_dqm <= f_select ? f_dqm  : active_dqm;\n                  m_addr <= cas_addr;\n                  \n                  if (pending)\n                    begin\n                      \n                      if (refresh_request)\n                        begin\n                          m_state <= 9'b000000100;\n                          m_next <= 9'b000000001;\n                          m_count <= 2;\n                        end\n                      else \n                        begin\n                          f_pop <= 1'b1;\n                          active_cs_n <= f_cs_n;\n                          active_rnw <= f_rnw;\n                          active_addr <= f_addr;\n                          active_data <= f_data;\n                          active_dqm <= f_dqm;\n                        end\n                    end\n                  else \n                    begin\n                      \n                      if (~pending & f_pop)\n                          m_cmd <= {csn_decode,3'h7};\n                      m_state <= 9'b100000000;\n                    end\n              end \n          \n              9'b000010000: begin\n                  m_cmd <= {csn_decode,3'h4};\n                  oe <= 1'b1;\n                  m_data <= f_select ? f_data : active_data;\n                  m_dqm <= f_select ? f_dqm  : active_dqm;\n                  m_bank <= f_select ? f_bank : active_bank;\n                  m_addr <= cas_addr;\n                  \n                  if (pending)\n                    begin\n                      \n                      if (refresh_request)\n                        begin\n                          m_state <= 9'b000000100;\n                          m_next <= 9'b000000001;\n                          m_count <= 1;\n                        end\n                      else \n                        begin\n                          f_pop <= 1'b1;\n                          active_cs_n <= f_cs_n;\n                          active_rnw <= f_rnw;\n                          active_addr <= f_addr;\n                          active_data <= f_data;\n                          active_dqm <= f_dqm;\n                        end\n                    end\n                  else \n                    begin\n                      \n                      if (~pending & f_pop)\n                        begin\n                          m_cmd <= {csn_decode,3'h7};\n                          oe <= 1'b0;\n                        end\n                      m_state <= 9'b100000000;\n                    end\n              end \n          \n              9'b000100000: begin\n                  m_cmd <= {csn_decode,3'h7};\n                  \n                  if (m_count > 1)\n                      m_count <= m_count - 1'b1;\n                  else \n                    begin\n                      m_state <= 9'b001000000;\n                      m_count <= 0;\n                    end\n              end \n          \n              9'b001000000: begin\n                  m_state <= 9'b000000100;\n                  m_addr <= {12{1'b1}};\n                  \n                  if (refresh_request)\n                      m_cmd <= {{1{1'b0}},3'h2};\n                  else \n                    m_cmd <= {csn_decode,3'h2};\n              end \n          \n              9'b010000000: begin\n                  ack_refresh_request <= 1'b1;\n                  m_state <= 9'b000000100;\n                  m_cmd <= {{1{1'b0}},3'h1};\n                  m_count <= 3;\n                  m_next <= 9'b000000001;\n              end \n          \n              9'b100000000: begin\n                  m_cmd <= {csn_decode,3'h7};\n                  \n                  if (refresh_request)\n                    begin\n                      m_state <= 9'b000000100;\n                      m_next <= 9'b000000001;\n                      m_count <= 1;\n                    end\n                  else \n                  if (!f_empty)\n                      \n                      if (csn_match && rnw_match && bank_match && row_match)\n                        begin\n                          m_state <= f_rnw ? 9'b000001000 : 9'b000010000;\n                          f_pop <= 1'b1;\n                          active_cs_n <= f_cs_n;\n                          active_rnw <= f_rnw;\n                          active_addr <= f_addr;\n                          active_data <= f_data;\n                          active_dqm <= f_dqm;\n                        end\n                      else \n                        begin\n                          m_state <= 9'b000100000;\n                          m_next <= 9'b000000001;\n                          m_count <= 1;\n                        end\n              end \n          \n              \n          \n              default: begin\n                  m_state <= m_state;\n                  m_cmd <= 4'b1111;\n                  f_pop <= 1'b0;\n                  oe <= 1'b0;\n              end \n          \n              \n          endcase \n        end\n    end",
+        "  assign cas_addr = f_select ? { {4{1'b0}},f_addr[7 : 0] } : { {4{1'b0}},active_addr[7 : 0] };",
+        "  assign active_bank = {active_addr[21],active_addr[8]};\n  assign csn_match = active_cs_n == f_cs_n;\n  assign rnw_match = active_rnw == f_rnw;\n  assign bank_match = active_bank == f_bank;\n  assign row_match = {active_addr[20 : 9]} == {f_addr[20 : 9]};\n  assign pending = csn_match && rnw_match && bank_match && row_match && !f_empty;",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n        begin\n          i_state <= 3'b000;\n          i_next <= 3'b000;\n          i_cmd <= 4'b1111;\n          i_addr <= {12{1'b1}};\n          i_count <= {3{1'b0}};\n        end\n      else \n        begin\n          i_addr <= {12{1'b1}};\n          case (i_state) \n          \n              3'b000: begin\n                  i_cmd <= 4'b1111;\n                  i_refs <= 3'b0;\n                  \n                  if (refresh_counter == 0)\n                      i_state <= 3'b001;\n              end \n          \n              3'b001: begin\n                  i_state <= 3'b011;\n                  i_cmd <= {{1{1'b0}},3'h2};\n                  i_count <= 0;\n                  i_next <= 3'b010;\n              end \n          \n              3'b010: begin\n                  i_cmd <= {{1{1'b0}},3'h1};\n                  i_refs <= i_refs + 1'b1;\n                  i_state <= 3'b011;\n                  i_count <= 3;\n                  \n                  if (i_refs == 3'h1)\n                      i_next <= 3'b111;\n                  else \n                    i_next <= 3'b010;\n              end \n          \n              3'b011: begin\n                  i_cmd <= {{1{1'b0}},3'h7};\n                  \n                  if (i_count > 1)\n                      i_count <= i_count - 1'b1;\n                  else \n                    i_state <= i_next;\n              end \n          \n              3'b101: begin\n                  i_state <= 3'b101;\n              end \n          \n              3'b111: begin\n                  i_state <= 3'b011;\n                  i_cmd <= {{1{1'b0}},3'h0};\n                  i_addr <= {{2{1'b0}},1'b0,2'b00,3'h3,4'h0};\n                  i_count <= 4;\n                  i_next <= 3'b101;\n              end \n          \n              default: begin\n                  i_state <= 3'b000;\n              end \n          \n          endcase \n        end\n    end",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n          init_done <= 0;\n      else if (1)\n          init_done <= init_done | (i_state == 3'b101);\n    end",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n          za_cannotrefresh <= 0;\n      else if (1)\n          za_cannotrefresh <= (refresh_counter == 0) & refresh_request;\n    end",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n          refresh_request <= 0;\n      else if (1)\n          refresh_request <= ((refresh_counter == 0) | refresh_request) & ~ack_refresh_request & init_done;\n    end",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n          refresh_counter <= 5000;\n      else if (refresh_counter == 0)\n          refresh_counter <= 781;\n      else \n        refresh_counter <= refresh_counter - 1'b1;\n    end",
+        "  sdram_0_input_efifo_module the_sdram_0_input_efifo_module\n    (\n      .almost_empty (almost_empty),\n      .almost_full  (almost_full),\n      .clk          (clk),\n      .empty        (f_empty),\n      .full         (za_waitrequest),\n      .rd           (f_select),\n      .rd_data      (fifo_read_data),\n      .reset_n      (reset_n),\n      .wr           ((~az_wr_n | ~az_rd_n) & !za_waitrequest),\n      .wr_data      ({az_wr_n, az_addr, az_wr_n ? 2'b0 : az_be_n, az_data})\n    );",
+        "  assign clk_en = 1;\n  \n  assign {zs_cs_n, zs_ras_n, zs_cas_n, zs_we_n} = m_cmd;\n  assign zs_addr = m_addr;\n  assign zs_cke = clk_en;\n  assign zs_dq = oe?m_data:{16{1'bz}};\n  assign zs_dqm = m_dqm;\n  assign zs_ba = m_bank;\n  assign f_select = f_pop & pending;\n  assign f_cs_n = 1'b0;\n  assign cs_n = f_select ? f_cs_n : active_cs_n;\n  assign csn_decode = cs_n;\n  assign {f_rnw, f_addr, f_dqm, f_data} = fifo_read_data;",
+        "  assign clk_en = 1;\n  \n  assign {zs_cs_n, zs_ras_n, zs_cas_n, zs_we_n} = m_cmd;\n  assign zs_addr = m_addr;\n  assign zs_cke = clk_en;\n  assign zs_dq = oe?m_data:{16{1'bz}};\n  assign zs_dqm = m_dqm;\n  assign zs_ba = m_bank;\n  assign f_select = f_pop & pending;\n  assign f_cs_n = 1'b0;\n  assign cs_n = f_select ? f_cs_n : active_cs_n;\n  assign csn_decode = cs_n;",
+        "  always @(posedge clk)\n    begin\n      \n      if (wr & !full)\n          case (wr_address) \n          \n              1'd0: begin\n                  entry_0 <= wr_data;\n              end \n          \n              1'd1: begin\n                  entry_1 <= wr_data;\n              end \n          \n              default: begin\n              end \n          \n          endcase \n    end",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n        begin\n          wr_address <= 0;\n          rd_address <= 0;\n          entries <= 0;\n        end\n      else \n        case (rdwr) \n        \n            2'd1: begin\n                \n                if (!full)\n                  begin\n                    entries <= entries + 1;\n                    wr_address <= (wr_address == 1) ? 0 : (wr_address + 1);\n                  end\n            end \n        \n            2'd2: begin\n                \n                if (!empty)\n                  begin\n                    entries <= entries - 1;\n                    rd_address <= (rd_address == 1) ? 0 : (rd_address + 1);\n                  end\n            end \n        \n            2'd3: begin\n                wr_address <= (wr_address == 1) ? 0 : (wr_address + 1);\n                rd_address <= (rd_address == 1) ? 0 : (rd_address + 1);\n            end \n        \n            default: begin\n            end \n        \n        endcase \n    end",
+        "  always @(entry_0 or entry_1 or rd_address)\n    begin\n      case (rd_address) \n      \n          1'd0: begin\n              rd_data <= entry_0;\n          end \n      \n          1'd1: begin\n              rd_data <= entry_1;\n          end \n      \n          default: begin\n          end \n      \n      endcase \n    end"
+    ]
+}

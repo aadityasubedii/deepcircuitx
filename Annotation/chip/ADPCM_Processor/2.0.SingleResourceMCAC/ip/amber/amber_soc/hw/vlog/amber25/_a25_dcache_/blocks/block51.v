@@ -1,0 +1,1 @@
+assign ex_read_hit_clear = c_state == CS_EX_DELETE;

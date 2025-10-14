@@ -1,0 +1,1 @@
+assign send_stop_bit = auto_init_stop_bit;

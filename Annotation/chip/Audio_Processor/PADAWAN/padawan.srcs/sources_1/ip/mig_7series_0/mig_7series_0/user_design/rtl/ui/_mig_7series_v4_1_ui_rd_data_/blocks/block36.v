@@ -1,0 +1,1 @@
+        always @(posedge clk) app_ecc_multiple_err_r <= #TCQ ecc_multiple;

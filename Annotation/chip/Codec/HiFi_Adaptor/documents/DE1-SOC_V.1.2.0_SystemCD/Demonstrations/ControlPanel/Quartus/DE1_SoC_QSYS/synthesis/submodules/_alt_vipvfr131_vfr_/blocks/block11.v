@@ -1,0 +1,1 @@
+assign vid_packet_words_bank0_bits_FROM_slave_TO_controller =        registers[(SLAVE_DATA_REQUIREDWIDTH*2)+SLAVE_DATA_REQUIREDWIDTH-1:SLAVE_DATA_REQUIREDWIDTH*2];

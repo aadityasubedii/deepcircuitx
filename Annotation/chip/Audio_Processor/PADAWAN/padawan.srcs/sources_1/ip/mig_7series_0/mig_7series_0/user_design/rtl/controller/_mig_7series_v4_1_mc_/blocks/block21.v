@@ -1,0 +1,1 @@
+  assign mc_read_idle_ns = col_read_fifo_empty & init_calib_complete;

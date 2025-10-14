@@ -1,0 +1,1 @@
+assign RxError = (|RxStatusInLatched[6:3]) | (|RxStatusInLatched[1:0]);

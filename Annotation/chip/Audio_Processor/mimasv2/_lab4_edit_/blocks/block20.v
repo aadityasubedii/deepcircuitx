@@ -1,0 +1,1 @@
+  always @ (posedge CLK_100MHz) ready_sync <= {ready_sync[1:0], ac97_ready};

@@ -1,0 +1,1 @@
+  assign jrst_n = reset_n;

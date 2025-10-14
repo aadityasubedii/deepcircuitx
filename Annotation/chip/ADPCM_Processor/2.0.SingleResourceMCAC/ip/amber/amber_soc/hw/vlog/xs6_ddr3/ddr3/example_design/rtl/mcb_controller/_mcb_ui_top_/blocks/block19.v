@@ -1,0 +1,99 @@
+    else begin : P2_UI_AXI
+      assign  p2_arb_en_i        =  p2_arb_en;
+      assign  s2_axi_araddr_i    = s2_axi_araddr & P_S2_AXI_ADDRMASK;
+      assign  s2_axi_awaddr_i    = s2_axi_awaddr & P_S2_AXI_ADDRMASK;
+      wire                     calib_done_synch;
+
+      mcb_ui_top_synch #(
+        .C_SYNCH_WIDTH          ( 1 )
+      )
+      axi_mcb_synch
+      (
+        .clk                    ( s2_axi_aclk      ),
+        .synch_in               ( uo_done_cal      ),
+        .synch_out              ( calib_done_synch )
+      );
+      axi_mcb #
+        (
+        .C_FAMILY                ( "spartan6"               ) ,
+        .C_S_AXI_ID_WIDTH        ( C_S2_AXI_ID_WIDTH        ) ,
+        .C_S_AXI_ADDR_WIDTH      ( C_S2_AXI_ADDR_WIDTH      ) ,
+        .C_S_AXI_DATA_WIDTH      ( 32                       ) ,
+        .C_S_AXI_SUPPORTS_READ   ( C_S2_AXI_SUPPORTS_READ   ) ,
+        .C_S_AXI_SUPPORTS_WRITE  ( C_S2_AXI_SUPPORTS_WRITE  ) ,
+        .C_S_AXI_REG_EN0         ( C_S2_AXI_REG_EN0         ) ,
+        .C_S_AXI_REG_EN1         ( C_S2_AXI_REG_EN1         ) ,
+        .C_S_AXI_SUPPORTS_NARROW_BURST ( C_S2_AXI_SUPPORTS_NARROW_BURST ) ,
+        .C_MCB_ADDR_WIDTH        ( 30                       ) ,
+        .C_MCB_DATA_WIDTH        ( 32                       ) ,
+        .C_STRICT_COHERENCY      ( C_S2_AXI_STRICT_COHERENCY    ) ,
+        .C_ENABLE_AP             ( C_S2_AXI_ENABLE_AP           )
+        )
+        p2_axi_mcb
+        (
+        .aclk              ( s2_axi_aclk        ),
+        .aresetn           ( s2_axi_aresetn     ),
+        .s_axi_awid        ( s2_axi_awid        ),
+        .s_axi_awaddr      ( s2_axi_awaddr_i    ),
+        .s_axi_awlen       ( s2_axi_awlen       ),
+        .s_axi_awsize      ( s2_axi_awsize      ),
+        .s_axi_awburst     ( s2_axi_awburst     ),
+        .s_axi_awlock      ( s2_axi_awlock      ),
+        .s_axi_awcache     ( s2_axi_awcache     ),
+        .s_axi_awprot      ( s2_axi_awprot      ),
+        .s_axi_awqos       ( s2_axi_awqos       ),
+        .s_axi_awvalid     ( s2_axi_awvalid     ),
+        .s_axi_awready     ( s2_axi_awready     ),
+        .s_axi_wdata       ( s2_axi_wdata       ),
+        .s_axi_wstrb       ( s2_axi_wstrb       ),
+        .s_axi_wlast       ( s2_axi_wlast       ),
+        .s_axi_wvalid      ( s2_axi_wvalid      ),
+        .s_axi_wready      ( s2_axi_wready      ),
+        .s_axi_bid         ( s2_axi_bid         ),
+        .s_axi_bresp       ( s2_axi_bresp       ),
+        .s_axi_bvalid      ( s2_axi_bvalid      ),
+        .s_axi_bready      ( s2_axi_bready      ),
+        .s_axi_arid        ( s2_axi_arid        ),
+        .s_axi_araddr      ( s2_axi_araddr_i    ),
+        .s_axi_arlen       ( s2_axi_arlen       ),
+        .s_axi_arsize      ( s2_axi_arsize      ),
+        .s_axi_arburst     ( s2_axi_arburst     ),
+        .s_axi_arlock      ( s2_axi_arlock      ),
+        .s_axi_arcache     ( s2_axi_arcache     ),
+        .s_axi_arprot      ( s2_axi_arprot      ),
+        .s_axi_arqos       ( s2_axi_arqos       ),
+        .s_axi_arvalid     ( s2_axi_arvalid     ),
+        .s_axi_arready     ( s2_axi_arready     ),
+        .s_axi_rid         ( s2_axi_rid         ),
+        .s_axi_rdata       ( s2_axi_rdata       ),
+        .s_axi_rresp       ( s2_axi_rresp       ),
+        .s_axi_rlast       ( s2_axi_rlast       ),
+        .s_axi_rvalid      ( s2_axi_rvalid      ),
+        .s_axi_rready      ( s2_axi_rready      ),
+        .mcb_cmd_clk       ( p2_cmd_clk_i       ),
+        .mcb_cmd_en        ( p2_cmd_en_i        ),
+        .mcb_cmd_instr     ( p2_cmd_instr_i     ),
+        .mcb_cmd_bl        ( p2_cmd_bl_i        ),
+        .mcb_cmd_byte_addr ( p2_cmd_byte_addr_i ),
+        .mcb_cmd_empty     ( p2_cmd_empty_i     ),
+        .mcb_cmd_full      ( p2_cmd_full_i      ),
+        .mcb_wr_clk        ( p2_wr_clk_i        ),
+        .mcb_wr_en         ( p2_wr_en_i         ),
+        .mcb_wr_mask       ( p2_wr_mask_i       ),
+        .mcb_wr_data       ( p2_wr_data_i       ),
+        .mcb_wr_full       ( p2_wr_full_i       ),
+        .mcb_wr_empty      ( p2_wr_empty_i      ),
+        .mcb_wr_count      ( p2_wr_count_i      ),
+        .mcb_wr_underrun   ( p2_wr_underrun_i   ),
+        .mcb_wr_error      ( p2_wr_error_i      ),
+        .mcb_rd_clk        ( p2_rd_clk_i        ),
+        .mcb_rd_en         ( p2_rd_en_i         ),
+        .mcb_rd_data       ( p2_rd_data_i       ),
+        .mcb_rd_full       ( p2_rd_full_i       ),
+        .mcb_rd_empty      ( p2_rd_empty_i      ),
+        .mcb_rd_count      ( p2_rd_count_i      ),
+        .mcb_rd_overflow   ( p2_rd_overflow_i   ),
+        .mcb_rd_error      ( p2_rd_error_i      ),
+        .mcb_calib_done    ( calib_done_synch   )
+        );
+    end

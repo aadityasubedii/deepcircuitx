@@ -1,0 +1,1 @@
+  always @ (posedge clk) stg2_target_r <= #TCQ stg2_target_ns;

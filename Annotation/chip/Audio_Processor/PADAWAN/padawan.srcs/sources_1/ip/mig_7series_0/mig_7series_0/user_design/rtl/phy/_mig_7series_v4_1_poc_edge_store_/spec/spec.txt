@@ -1,0 +1,11 @@
+Module name: mig_7series_v4_1_poc_edge_store. 
+
+Module specification: The mig_7series_v4_1_poc_edge_store is a module designed for handling edge triggering behavior in synchronous digital systems. Part of a memory interface generator (MIG) feature-set, it works towards generating refined outputs needed for precise operational timings in potentially 7-series FPGA units. The primary functionality of the module circulates generating four outputs viz. fall_lead, fall_trail, rise_lead, rise_trail based on provided inputs after performing internal calculations with a delay of TCQ.
+
+The module calls for several input ports; clk, run_polarity, run_end, select0, select1, tap, and run. The clk is the clock signal dictating the timings of all operations inside the module. run_polarity determines if the module needs to work on rising edge or falling edge while run_end indicates the end of the "run" phase. select0 and select1 are select inputs for an internal mux/demux operation and tap, run are signals related to Delay or Phase-Locked Loops (DLL/PLL) operation and enabling the operational functions respectively.
+
+The output ports include fall_lead, fall_trail, rise_lead, rise_trail intimating the exact triggering times for other subsequent modules or processes to ensure the proper working of memory interface generators.
+
+The internal signals include trailing_edge, run_end_this, fall_lead_r, fall_trail_r, rise_lead_r, rise_trail_r, fall_lead_ns, rise_trail_ns, rise_lead_ns, and fall_trail_ns. trailing_edge is employed for calculating the difference between the run and tap input signals and run_end_this, a boolean signal is used as a condition for the logic. The signals xxx_r hold the previous state values of the signals and the signals xxx_ns hold the next state signals computed based on the present state signals.
+
+The code is appropriately divided into: Initial setup of the parameters and defining inputs/outputs, Calculation portion for trailing_edge and run_end_this signals, Register storage sequence of the xxx_r signals, Next state computation of xxx_ns signals, and Lastly, a section which delegates the clocks edge actions ensuring a delay of TCQ. Each block contributes to the overall operation by refining the inputs and through internal processing to generate the required outputs.

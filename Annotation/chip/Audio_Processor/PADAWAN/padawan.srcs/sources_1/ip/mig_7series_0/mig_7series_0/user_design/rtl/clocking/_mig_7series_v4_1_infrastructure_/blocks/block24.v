@@ -1,0 +1,1 @@
+  always @(posedge clk) qcntr_r <= #TCQ qcntr_ns;

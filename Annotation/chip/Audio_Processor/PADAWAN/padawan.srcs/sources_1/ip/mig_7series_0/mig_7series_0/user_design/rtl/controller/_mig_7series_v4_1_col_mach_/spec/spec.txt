@@ -1,0 +1,7 @@
+Module name: mig_7series_v4_1_col_mach.
+
+Module specification: This module manages the column access of a DDR2/DDR3 memory grid. It handles data flow, storage, and timing of reading/writing operations. It supports ECC (Error Correction Codes) for handling memory errors. 
+
+Input ports include the system clock (clk) for synchronization, a reset signal (rst), column size (col_size) for size of the column, column read/write and row/bank/rank and address signals specifying where to operate. Key output ports include busy data signal (dq_busy_data), providing state of data queue, and various control signals to enable data writing (wr_data_offset, mc_wrdata_en, wr_data_offset). The module uses several internal signals such as "granted_col_d_r" and "granted_col_d_ns" for synchronization and busy state decision based on the sent column command, "offset_r" and "offset_ns" for tracking and updating the offset in data.
+
+The Verilog code mainly consists of various blocks to manage the different aspects of memory operations, some of which are parameter-dependent. For instance, there is a generate block to control the data validation process, which varies based on clock parameters. There are also specialized sections for handling Error-Correction Codes (ECC). This module also builds a custom width FIFO for read operations to leverage parallel access, and a function called clogb2 calculates the base-2 logarithm of the input number.

@@ -1,0 +1,15 @@
+Module name: `controller`.
+
+Module specification: 
+
+The `controller` module is a core part of the CPU described in Verilog RTL. It is responsible for managing and controlling the progression of operations in a CPU through the generation of control signals established on the opcode and function of the current instruction and the CPU state.
+
+The module utilizes multiple input ports, identified as `clk`, `reset`, `code_met`, `op`, `ext`, `cellram`, `cr_ready`, `initialized`, and `state_time`. These control signals guide timing, reset operations, branching conditions, instruction properties, memory cell statuses, cell readiness, and system initialization respectively.
+
+The output ports of the module regulate the operation of other CPU segments and include signals for the ALU (`alusrcb`, `alu_shift_slct`), memory operations (`mem_en`, `memwrite`, `mem_select_ctrl`), branching (`jump`, `branch`, `jump_reg`), registers (`memtoreg`, `regwrite`, `reg_dst`, `data_update`, `flag_update`), instruction writing (`inst_write`), PC updating (`pc_enable`), decoding state (`decode_state`), I/O reading (`io_rd`), and counter resetting (`cnt_rst`).
+
+Internally, the controller module makes use of certain signals `state`, `nextstate`, `pcwrite`, `pcwritecond` to manage the state of the module, the next state to transition to, and conditions for PC write operations. These internal signals work together with a multitude of mnemonics that denote different operation modes within the CPU; they correspond to specific opcodes and functions.
+
+The `controller` module is essentially composed of two always blocks, synchronously operating with the rising edge of the clock and combinatorically for control logic alongside a massive state machine structure distinguishing various CPU states and steering the module state transitions, instruction decoding, I/O operations, memory operations, and so forth based on opcode values, system conditions, and controller states. Additional pieces of the code handle other specific operational conditions based on different state logic flows.
+
+The provided overview of the `controller` module should provide a deeper understanding of the controlling features of CPU structure and operation in the context of Verilog RTL. Detailed descriptions of the module inputs, outputs, and internal operations present a comprehensive picture of this critical CPU component.

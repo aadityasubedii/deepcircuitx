@@ -1,0 +1,1 @@
+always @(posedge AUD_BCLK) sync <= AUD_DACLRCK;

@@ -1,0 +1,1 @@
+localparam MM_ADDR_REQUIREDWIDTH = 32; 

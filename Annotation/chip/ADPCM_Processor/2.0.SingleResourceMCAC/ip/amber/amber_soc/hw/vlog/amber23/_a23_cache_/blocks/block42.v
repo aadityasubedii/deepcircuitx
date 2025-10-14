@@ -1,0 +1,1 @@
+assign enable           = i_select && i_cache_enable;

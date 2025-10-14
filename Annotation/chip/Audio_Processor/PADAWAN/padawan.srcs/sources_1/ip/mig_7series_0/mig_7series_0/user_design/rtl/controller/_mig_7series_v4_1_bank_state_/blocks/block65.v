@@ -1,0 +1,1 @@
+  always @(posedge clk) ras_timer_zero_r <= #TCQ ras_timer_zero_ns;

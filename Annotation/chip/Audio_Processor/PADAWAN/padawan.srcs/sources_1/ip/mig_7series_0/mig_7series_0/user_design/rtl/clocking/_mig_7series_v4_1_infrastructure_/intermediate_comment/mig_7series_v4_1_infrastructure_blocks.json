@@ -1,0 +1,166 @@
+{
+    "line_num": [
+        [
+            765,
+            765
+        ],
+        [
+            759,
+            763
+        ],
+        [
+            751,
+            757
+        ],
+        [
+            749,
+            749
+        ],
+        [
+            739,
+            747
+        ],
+        [
+            736,
+            736
+        ],
+        [
+            726,
+            734
+        ],
+        [
+            723,
+            723
+        ],
+        [
+            713,
+            721
+        ],
+        [
+            703,
+            711
+        ],
+        [
+            672,
+            672
+        ],
+        [
+            670,
+            671
+        ],
+        [
+            667,
+            667
+        ],
+        [
+            661,
+            666
+        ],
+        [
+            653,
+            653
+        ],
+        [
+            652,
+            652
+        ],
+        [
+            651,
+            651
+        ],
+        [
+            648,
+            648
+        ],
+        [
+            647,
+            647
+        ],
+        [
+            644,
+            644
+        ],
+        [
+            643,
+            643
+        ],
+        [
+            624,
+            638
+        ],
+        [
+            622,
+            622
+        ],
+        [
+            619,
+            619
+        ],
+        [
+            610,
+            616
+        ],
+        [
+            364,
+            571
+        ],
+        [
+            354,
+            361
+        ],
+        [
+            345,
+            349
+        ],
+        [
+            339,
+            343
+        ],
+        [
+            275,
+            330
+        ],
+        [
+            252,
+            262
+        ],
+        [
+            194,
+            212
+        ]
+    ],
+    "blocks": [
+        "  assign rst_phaser_ref = rst_phaser_ref_sync_r[RST_DIV_SYNC_NUM-1];",
+        "  always @(posedge clk_bufg or posedge rst_tmp_phaser_ref)\n    if (rst_tmp_phaser_ref)\n      rst_phaser_ref_sync_r <= #TCQ {RST_DIV_SYNC_NUM{1'b1}};\n    else\n      rst_phaser_ref_sync_r <= #TCQ rst_phaser_ref_sync_r << 1;",
+        "  generate\n    if (MEM_TYPE == \"DDR3\" && tCK <= 1500) begin: rst_tmp_phaser_ref_300_400\n      assign rst_tmp_phaser_ref = sys_rst_act_hi | ~MMCM_Locked_i | ~iodelay_ctrl_rdy[1];\n    end else begin: rst_tmp_phaser_ref_200\n      assign rst_tmp_phaser_ref = sys_rst_act_hi | ~MMCM_Locked_i | ~iodelay_ctrl_rdy[0];\n    end\n  endgenerate",
+        "  assign rst_div2 = rstdiv2_sync_r1 ;",
+        "  always @(posedge clk_div2  or posedge rst_tmp) begin\n    if (rst_tmp) begin\n      rstdiv2_sync_r  <= #TCQ {RST_DIV_SYNC_NUM-1{1'b1}};\n      rstdiv2_sync_r1 <= #TCQ 1'b1 ;\n    end else begin\n      rstdiv2_sync_r  <= #TCQ rstdiv2_sync_r << 1;\n      rstdiv2_sync_r1 <= #TCQ rstdiv2_sync_r[RST_DIV_SYNC_NUM-2];\n    end\n  end",
+        "  assign iddr_rst = rst_sync_r1 ;",
+        "  always @(posedge mmcm_ps_clk  or posedge rst_tmp) begin\n    if (rst_tmp) begin\n      rst_sync_r  <= #TCQ {RST_DIV_SYNC_NUM-1{1'b1}};\n      rst_sync_r1 <= #TCQ 1'b1 ;\n    end else begin\n      rst_sync_r  <= #TCQ rst_sync_r << 1;\n      rst_sync_r1 <= #TCQ rst_sync_r[RST_DIV_SYNC_NUM-2];\n    end\n  end",
+        "  assign rstdiv0 = rstdiv0_sync_r1 ;",
+        "  always @(posedge clk_bufg or posedge rst_tmp) begin\n    if (rst_tmp) begin\n      rstdiv0_sync_r  <= #TCQ {RST_DIV_SYNC_NUM-1{1'b1}};\n      rstdiv0_sync_r1 <= #TCQ 1'b1 ;\n    end else begin\n      rstdiv0_sync_r  <= #TCQ rstdiv0_sync_r << 1;\n      rstdiv0_sync_r1 <= #TCQ rstdiv0_sync_r[RST_DIV_SYNC_NUM-2];\n    end\n  end",
+        "  generate\n    if (MEM_TYPE == \"DDR3\" && tCK <= 1500) begin: rst_tmp_300_400\n      assign rst_tmp = sys_rst_act_hi | ~iodelay_ctrl_rdy[1] |\n                       ~ref_dll_lock | ~MMCM_Locked_i;\n    end else begin: rst_tmp_200\n      assign rst_tmp = sys_rst_act_hi | ~iodelay_ctrl_rdy[0] |\n                       ~ref_dll_lock | ~MMCM_Locked_i;\n    end\n  endgenerate",
+        "  endgenerate",
+        "      always @(posedge clk) pdiff = $time() - rising_mmcm_ps_clk;\n    end",
+        "      always @(posedge mmcm_ps_clk) rising_mmcm_ps_clk = $time();",
+        "  generate \n    if ( tCK <= 2500 ) begin : check_ocal_timing\n      localparam CLK_PERIOD_PS = MMCM_VCO_PERIOD * MMCM_MULT_F;\n      localparam integer CLK_PERIOD_PS_DIV4 = CLK_PERIOD_PS/4;\n\n      time rising_mmcm_ps_clk;",
+        "  assign poc_sample_pd = poc_sample_pd_r;",
+        "  always @(posedge clk) poc_sample_pd_r <= #TCQ poc_sample_pd_ns;",
+        "  always @(*) poc_sample_pd_ns = inv_poc_sample_ns ^ mmcm_hi0_r;",
+        "  always @(*) mmcm_hi0_ns = ~first_rising_ps_clk_r || ~mmcm_hi0_r;",
+        "  always @(posedge clk) mmcm_hi0_r <= #TCQ mmcm_hi0_ns;",
+        "  always @(*) first_rising_ps_clk_ns = ~rstdiv0;",
+        "  always @(posedge mmcm_ps_clk) first_rising_ps_clk_r <= #TCQ first_rising_ps_clk_ns;",
+        "  always @(*) begin\n    qcntr_ns = qcntr_r;\n    inv_poc_sample_ns = inv_poc_sample_r;\n    if (rstdiv0) begin\n      qcntr_ns = 'b0;\n      inv_poc_sample_ns = 'b0;\n    end else if (psen) begin\n      if (qcntr_r < TAPSPERFCLK_MINUS_ONE[QCNTR_WIDTH-1:0])\n        qcntr_ns = (qcntr_r + ONE[QCNTR_WIDTH-1:0]);\n      else begin\n        qcntr_ns = {QCNTR_WIDTH{1'b0}};\n\tinv_poc_sample_ns = ~inv_poc_sample_r;\n      end\n    end\n  end ",
+        "  always @(posedge clk) inv_poc_sample_r <= #TCQ inv_poc_sample_ns;",
+        "  always @(posedge clk) qcntr_r <= #TCQ qcntr_ns;",
+        "  function integer clogb2 (input integer size); \n    begin\n      size = size - 1;\n      for (clogb2=1; size>1; clogb2=clogb2+1)\n            size = size >> 1;\n    end\n  endfunction ",
+        "  generate\n    if (UI_EXTRA_CLOCKS == \"TRUE\") begin: gen_ui_extra_clocks\n\n      localparam MMCM_CLKOUT0_DIVIDE_CAL = (MMCM_CLKOUT0_EN == \"TRUE\") ? MMCM_CLKOUT0_DIVIDE : MMCM_MULT_F;\n      localparam MMCM_CLKOUT1_DIVIDE_CAL = (MMCM_CLKOUT1_EN == \"TRUE\") ? MMCM_CLKOUT1_DIVIDE : MMCM_MULT_F;\n      localparam MMCM_CLKOUT2_DIVIDE_CAL = (MMCM_CLKOUT2_EN == \"TRUE\") ? MMCM_CLKOUT2_DIVIDE : MMCM_MULT_F;\n      localparam MMCM_CLKOUT3_DIVIDE_CAL = (MMCM_CLKOUT3_EN == \"TRUE\") ? MMCM_CLKOUT3_DIVIDE : MMCM_MULT_F;\n      localparam MMCM_CLKOUT4_DIVIDE_CAL = (MMCM_CLKOUT4_EN == \"TRUE\") ? MMCM_CLKOUT4_DIVIDE : MMCM_MULT_F;\n\n      MMCME2_ADV\n      #(.BANDWIDTH            (\"HIGH\"),\n        .CLKOUT4_CASCADE      (\"FALSE\"),\n        .COMPENSATION         (\"BUF_IN\"),\n        .STARTUP_WAIT         (\"FALSE\"),\n\n        .DIVCLK_DIVIDE        (MMCM_DIVCLK_DIVIDE),\n        .CLKFBOUT_MULT_F      (MMCM_MULT_F),\n        .CLKFBOUT_PHASE       (0.000),\n        .CLKFBOUT_USE_FINE_PS (\"FALSE\"),\n        .CLKOUT0_DIVIDE_F     (MMCM_CLKOUT0_DIVIDE_CAL),\n        .CLKOUT0_PHASE        (0.000),\n        .CLKOUT0_DUTY_CYCLE   (0.500),\n        .CLKOUT0_USE_FINE_PS  (\"FALSE\"),\n        .CLKOUT1_DIVIDE       (MMCM_CLKOUT1_DIVIDE_CAL),\n        .CLKOUT1_PHASE        (0.000),\n        .CLKOUT1_DUTY_CYCLE   (0.500),\n        .CLKOUT1_USE_FINE_PS  (\"FALSE\"),\n        .CLKOUT2_DIVIDE       (MMCM_CLKOUT2_DIVIDE_CAL),\n        .CLKOUT2_PHASE        (0.000),\n        .CLKOUT2_DUTY_CYCLE   (0.500),\n        .CLKOUT2_USE_FINE_PS  (\"FALSE\"),\n        .CLKOUT3_DIVIDE       (MMCM_CLKOUT3_DIVIDE_CAL),\n        .CLKOUT3_PHASE        (0.000),\n        .CLKOUT3_DUTY_CYCLE   (0.500),\n        .CLKOUT3_USE_FINE_PS  (\"FALSE\"),\n        .CLKOUT4_DIVIDE       (MMCM_CLKOUT4_DIVIDE_CAL),\n        .CLKOUT4_PHASE        (0.000),\n        .CLKOUT4_DUTY_CYCLE   (0.500),\n        .CLKOUT4_USE_FINE_PS  (\"FALSE\"),\n        .CLKOUT5_DIVIDE       (((MMCM_MULT_F*2)/MMCM_DIVCLK_DIVIDE)),\n        .CLKOUT5_PHASE        (0.000),\n        .CLKOUT5_DUTY_CYCLE   (0.500),\n        .CLKOUT5_USE_FINE_PS  (\"TRUE\"),\n        .CLKOUT6_DIVIDE       (MMCM_MULT_F/2),\n        .CLKOUT6_PHASE        (0.000),\n        .CLKOUT6_DUTY_CYCLE   (0.500),\n        .CLKOUT6_USE_FINE_PS  (\"FALSE\"),\n        .CLKIN1_PERIOD        (CLKOUT3_PERIOD_NS),\n        .REF_JITTER1          (0.000))\n      mmcm_i\n        \n       (.CLKFBOUT            (clk_pll_i),\n        .CLKFBOUTB           (),\n        .CLKOUT0             (mmcm_clkout0),\n        .CLKOUT0B            (),\n        .CLKOUT1             (mmcm_clkout1),\n        .CLKOUT1B            (),\n        .CLKOUT2             (mmcm_clkout2),\n        .CLKOUT2B            (),\n        .CLKOUT3             (mmcm_clkout3),\n        .CLKOUT3B            (),\n        .CLKOUT4             (mmcm_clkout4),\n        .CLKOUT5             (mmcm_ps_clk_bufg_in),\n        .CLKOUT6             (clk_div2_bufg_in),\n         \n        .CLKFBIN             (clk_bufg),      \n        .CLKIN1              (pll_clk3),      \n        .CLKIN2              (1'b0),\n         \n        .CLKINSEL            (1'b1),\n        \n        .DADDR               (7'h0),\n        .DCLK                (1'b0),\n        .DEN                 (1'b0),\n        .DI                  (16'h0),\n        .DO                  (),\n        .DRDY                (),\n        .DWE                 (1'b0),\n        \n        .PSCLK               (clk),\n        .PSEN                (psen),\n        .PSINCDEC            (psincdec),\n        .PSDONE              (psdone),\n        \n        .LOCKED              (MMCM_Locked_i),\n        .CLKINSTOPPED        (),\n        .CLKFBSTOPPED        (),\n        .PWRDWN              (1'b0),\n        .RST                 (~pll_locked_i));\n\n      BUFG u_bufg_ui_addn_clk_0\n        (\n         .O (ui_addn_clk_0),\n         .I (mmcm_clkout0)\n         );\n\n      BUFG u_bufg_ui_addn_clk_1\n        (\n         .O (ui_addn_clk_1),\n         .I (mmcm_clkout1)\n         );\n\n      BUFG u_bufg_ui_addn_clk_2\n        (\n         .O (ui_addn_clk_2),\n         .I (mmcm_clkout2)\n         );\n\n      BUFG u_bufg_ui_addn_clk_3\n        (\n         .O (ui_addn_clk_3),\n         .I (mmcm_clkout3)\n         );\n\n      BUFG u_bufg_ui_addn_clk_4\n        (\n         .O (ui_addn_clk_4),\n         .I (mmcm_clkout4)\n         );\n\n      BUFG u_bufg_mmcm_ps_clk\n        (\n         .O (mmcm_ps_clk),\n         .I (mmcm_ps_clk_bufg_in)\n         );\n       \n      BUFG u_bufg_clk_div2\n        (\n         .O (clk_div2),\n         .I (clk_div2_bufg_in)\n         );\n    end else begin: gen_mmcm\n\n      MMCME2_ADV\n      #(.BANDWIDTH            (\"HIGH\"),\n        .CLKOUT4_CASCADE      (\"FALSE\"),\n        .COMPENSATION         (\"BUF_IN\"),\n        .STARTUP_WAIT         (\"FALSE\"),\n\n        .DIVCLK_DIVIDE        (MMCM_DIVCLK_DIVIDE),\n        .CLKFBOUT_MULT_F      (MMCM_MULT_F),\n        .CLKFBOUT_PHASE       (0.000),\n        .CLKFBOUT_USE_FINE_PS (\"FALSE\"),\n        .CLKOUT0_DIVIDE_F     (((MMCM_MULT_F*2)/MMCM_DIVCLK_DIVIDE)),\n        .CLKOUT0_PHASE        (0.000),\n        .CLKOUT0_DUTY_CYCLE   (0.500),\n        .CLKOUT0_USE_FINE_PS  (\"TRUE\"),\n        .CLKOUT1_DIVIDE       (MMCM_MULT_F/2),\n        .CLKOUT1_PHASE        (0.000),\n        .CLKOUT1_DUTY_CYCLE   (0.500),\n        .CLKOUT1_USE_FINE_PS  (\"FALSE\"),\n        .CLKIN1_PERIOD        (CLKOUT3_PERIOD_NS),\n        .REF_JITTER1          (0.000))\n      mmcm_i\n        \n       (.CLKFBOUT            (clk_pll_i),\n        .CLKFBOUTB           (),\n        .CLKOUT0             (mmcm_ps_clk_bufg_in),\n        .CLKOUT0B            (),\n        .CLKOUT1             (clk_div2_bufg_in),\n        .CLKOUT1B            (),\n        .CLKOUT2             (),\n        .CLKOUT2B            (),\n        .CLKOUT3             (),\n        .CLKOUT3B            (),\n        .CLKOUT4             (),\n        .CLKOUT5             (),\n        .CLKOUT6             (),\n         \n        .CLKFBIN             (clk_bufg),      \n        .CLKIN1              (pll_clk3),      \n        .CLKIN2              (1'b0),\n         \n        .CLKINSEL            (1'b1),\n        \n        .DADDR               (7'h0),\n        .DCLK                (1'b0),\n        .DEN                 (1'b0),\n        .DI                  (16'h0),\n        .DO                  (),\n        .DRDY                (),\n        .DWE                 (1'b0),\n        \n        .PSCLK               (clk),\n        .PSEN                (psen),\n        .PSINCDEC            (psincdec),\n        .PSDONE              (psdone),\n        \n        .LOCKED              (MMCM_Locked_i),\n        .CLKINSTOPPED        (),\n        .CLKFBSTOPPED        (),\n        .PWRDWN              (1'b0),\n        .RST                 (~pll_locked_i));\n\n    BUFG u_bufg_mmcm_ps_clk\n    (\n     .O (mmcm_ps_clk),\n     .I (mmcm_ps_clk_bufg_in)\n     );\n\t \n    BUFG u_bufg_clk_div2\n    (\n     .O (clk_div2),\n     .I (clk_div2_bufg_in)\n     );\n\t \n    end \n  endgenerate",
+        "  initial begin\n    $display(\"############# MMCME2_ADV Parameters #############\\n\");\n    $display(\"MMCM_MULT_F           = %d\", MMCM_MULT_F);\n\n    $display(\"MMCM_VCO_FREQ (MHz)   = %7.3f\", MMCM_VCO*1.000);\n    $display(\"MMCM_VCO_PERIOD       = %7.3f\", MMCM_VCO_PERIOD);\n    $display(\"#################################################\\n\");\n  end",
+        "  BUFH u_bufh_pll_clk3\n    (\n     .O (pll_clk3),\n     .I (pll_clk3_out)\n     );",
+        "  BUFG u_bufg_clkdiv0\n    (\n     .O (clk_bufg),\n     .I (clk_pll_i)\n     );",
+        "  PLLE2_ADV #\n    (\n     .BANDWIDTH          (\"OPTIMIZED\"),\n     .COMPENSATION       (\"INTERNAL\"),\n     .STARTUP_WAIT       (\"FALSE\"),\n     .CLKOUT0_DIVIDE     (CLKOUT0_DIVIDE),  \n     .CLKOUT1_DIVIDE     (CLKOUT1_DIVIDE),  \n     .CLKOUT2_DIVIDE     (CLKOUT2_DIVIDE),  \n     .CLKOUT3_DIVIDE     (CLKOUT3_DIVIDE),  \n     .CLKOUT4_DIVIDE     (CLKOUT4_DIVIDE),\n     .CLKOUT5_DIVIDE     (),\n     .DIVCLK_DIVIDE      (DIVCLK_DIVIDE),\n     .CLKFBOUT_MULT      (CLKFBOUT_MULT),\n     .CLKFBOUT_PHASE     (0.000),\n     .CLKIN1_PERIOD      (CLKIN1_PERIOD_NS),\n     .CLKIN2_PERIOD      (),\n     .CLKOUT0_DUTY_CYCLE (0.500),\n     .CLKOUT0_PHASE      (CLKOUT0_PHASE),\n     .CLKOUT1_DUTY_CYCLE (0.500),\n     .CLKOUT1_PHASE      (0.000),\n     .CLKOUT2_DUTY_CYCLE (1.0/16.0),\n     .CLKOUT2_PHASE      (9.84375),     \n     .CLKOUT3_DUTY_CYCLE (0.500),\n     .CLKOUT3_PHASE      (0.000),\n     .CLKOUT4_DUTY_CYCLE (0.500),\n     .CLKOUT4_PHASE      (CLKOUT4_PHASE),\n     .CLKOUT5_DUTY_CYCLE (0.500),\n     .CLKOUT5_PHASE      (0.000),\n     .REF_JITTER1        (0.010),\n     .REF_JITTER2        (0.010)\n     )\n    plle2_i\n      (\n       .CLKFBOUT (pll_clkfbout),\n       .CLKOUT0  (freq_refclk),\n       .CLKOUT1  (mem_refclk),\n       .CLKOUT2  (sync_pulse),  \n       .CLKOUT3  (pll_clk3_out),\n\n       .CLKOUT4  (),\n       .CLKOUT5  (),\n       .DO       (),\n       .DRDY     (),\n       .LOCKED   (pll_locked_i),\n       .CLKFBIN  (pll_clkfbout),\n       .CLKIN1   (mmcm_clk),\n       .CLKIN2   (),\n       .CLKINSEL (1'b1),\n       .DADDR    (7'b0),\n       .DCLK     (1'b0),\n       .DEN      (1'b0),\n       .DI       (16'b0),\n       .DWE      (1'b0),\n       .PWRDWN   (1'b0),\n       .RST      ( sys_rst_act_hi)\n       );",
+        "  assign sys_rst_act_hi = RST_ACT_LOW ? ~sys_rst: sys_rst;\n\n  \n  \n  \n  \n\n  assign clk        = clk_bufg;\n  assign pll_locked = pll_locked_i & MMCM_Locked_i;\n  assign mmcm_locked = MMCM_Locked_i;\n",
+        "  initial begin\n    $display(\"############# Write Clocks PLLE2_ADV Parameters #############\\n\");\n    $display(\"nCK_PER_CLK      = %7d\",   nCK_PER_CLK     );\n    $display(\"CLK_PERIOD       = %7d\",   CLKIN_PERIOD    );\n    $display(\"CLKIN1_PERIOD    = %7.3f\", CLKIN1_PERIOD_NS);\n    $display(\"DIVCLK_DIVIDE    = %7d\",   DIVCLK_DIVIDE   );\n    $display(\"CLKFBOUT_MULT    = %7d\",   CLKFBOUT_MULT );\n    $display(\"VCO_PERIOD       = %7.1f\", VCO_PERIOD      );\n    $display(\"CLKOUT0_DIVIDE_F = %7d\",   CLKOUT0_DIVIDE  );\n    $display(\"CLKOUT1_DIVIDE   = %7d\",   CLKOUT1_DIVIDE  );\n    $display(\"CLKOUT2_DIVIDE   = %7d\",   CLKOUT2_DIVIDE  );\n    $display(\"CLKOUT3_DIVIDE   = %7d\",   CLKOUT3_DIVIDE  );\n    $display(\"CLKOUT0_PERIOD   = %7d\",   CLKOUT0_PERIOD  );\n    $display(\"CLKOUT1_PERIOD   = %7d\",   CLKOUT1_PERIOD  );\n    $display(\"CLKOUT2_PERIOD   = %7d\",   CLKOUT2_PERIOD  );\n    $display(\"CLKOUT3_PERIOD   = %7d\",   CLKOUT3_PERIOD  );\n    $display(\"CLKOUT4_PERIOD   = %7d\",   CLKOUT4_PERIOD  );\n    $display(\"############################################################\\n\");\n  end"
+    ]
+}

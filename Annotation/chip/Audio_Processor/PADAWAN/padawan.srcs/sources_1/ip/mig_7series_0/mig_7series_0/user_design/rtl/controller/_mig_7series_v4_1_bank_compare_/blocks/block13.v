@@ -1,0 +1,1 @@
+  assign req_wr_r = req_wr_r_lcl;

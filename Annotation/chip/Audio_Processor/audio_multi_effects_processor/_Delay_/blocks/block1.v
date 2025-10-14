@@ -1,0 +1,29 @@
+always@(posedge clk)
+begin
+		DELAY[0] <= DATA_IN;
+		DELAY[1] <= DELAY[0];
+		DELAY[2] <= DELAY[1];
+		DELAY[3] <= DELAY[2];
+		DELAY[4] <= DELAY[3];
+		DELAY[5] <= DELAY[4];
+		DELAY[6] <= DELAY[5];
+		DELAY[7] <= DELAY[6];
+		DELAY[8] <= DELAY[7];
+		DELAY[9] <= DELAY[8];
+		DELAY[10] <= DELAY[9];
+		DELAY[11] <= DELAY[10];
+		DELAY[12] <= DELAY[11];
+		DELAY[13] <= DELAY[12];
+		DELAY[14] <= DELAY[13];
+		DELAY[15] <= DELAY[14];
+		DELAY[16] <= DELAY[15];
+		DELAY[17] <= DELAY[16];
+		DELAY[18] <= DELAY[17];
+		DELAY[19] <= DELAY[18];
+		DELAY[20] <= DELAY[19];
+		DELAY[21] <= DELAY[20];
+		DELAY[22] <= DELAY[21];
+		DELAY[23] <= DELAY[22];
+		DELAY[24] <= DELAY[23];
+		DELAY[25] <= DELAY[24];
+end

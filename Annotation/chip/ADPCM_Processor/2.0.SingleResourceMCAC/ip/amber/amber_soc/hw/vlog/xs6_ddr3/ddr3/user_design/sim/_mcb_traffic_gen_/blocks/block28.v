@@ -1,0 +1,1 @@
+   assign bram_addr_i = {bram_cmd_i[29:0],2'b00};

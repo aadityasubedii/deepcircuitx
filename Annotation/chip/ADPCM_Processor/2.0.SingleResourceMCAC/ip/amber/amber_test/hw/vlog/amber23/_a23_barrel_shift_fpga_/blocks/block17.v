@@ -1,0 +1,1 @@
+	assign netgen[4].in = i_in;

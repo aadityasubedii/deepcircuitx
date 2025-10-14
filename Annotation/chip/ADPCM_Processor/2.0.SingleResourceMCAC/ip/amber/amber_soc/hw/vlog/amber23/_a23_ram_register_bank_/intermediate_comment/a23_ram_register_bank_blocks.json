@@ -1,0 +1,21 @@
+{
+    "line_num": [
+        [
+            279,
+            319
+        ],
+        [
+            215,
+            233
+        ],
+        [
+            184,
+            205
+        ]
+    ],
+    "blocks": [
+        "assign r0  = reg_ram_m[ 0];\nassign r1  = reg_ram_m[ 1];\nassign r2  = reg_ram_m[ 2];\nassign r3  = reg_ram_m[ 3];\nassign r4  = reg_ram_m[ 4];\nassign r5  = reg_ram_m[ 5];\nassign r6  = reg_ram_m[ 6];\nassign r7  = reg_ram_m[ 7];\nassign r8  = reg_ram_m[ 8];\nassign r9  = reg_ram_m[ 9];\nassign r10 = reg_ram_m[10];\nassign r11 = reg_ram_m[11];\nassign r12 = reg_ram_m[12];\nassign r13 = reg_ram_m[13];\nassign r14 = reg_ram_m[14];\nassign r13_svc  = reg_ram_m[29];\nassign r14_svc  = reg_ram_m[30];\nassign r13_irq  = reg_ram_m[25];\nassign r14_irq  = reg_ram_m[26];\nassign r8_firq  = reg_ram_m[16];\nassign r9_firq  = reg_ram_m[17];\nassign r10_firq = reg_ram_m[18];\nassign r11_firq = reg_ram_m[19];\nassign r12_firq = reg_ram_m[20];\nassign r13_firq = reg_ram_m[21];\nassign r14_firq = reg_ram_m[22];\nassign r0_out  = reg_ram_m[reg_addr(mode_exec,  0)];\nassign r1_out  = reg_ram_m[reg_addr(mode_exec,  1)];\nassign r2_out  = reg_ram_m[reg_addr(mode_exec,  2)];\nassign r3_out  = reg_ram_m[reg_addr(mode_exec,  3)];\nassign r4_out  = reg_ram_m[reg_addr(mode_exec,  4)];\nassign r5_out  = reg_ram_m[reg_addr(mode_exec,  5)];\nassign r6_out  = reg_ram_m[reg_addr(mode_exec,  6)];\nassign r7_out  = reg_ram_m[reg_addr(mode_exec,  7)];\nassign r8_out  = reg_ram_m[reg_addr(mode_exec,  8)];\nassign r9_out  = reg_ram_m[reg_addr(mode_exec,  9)];\nassign r10_out = reg_ram_m[reg_addr(mode_exec, 10)];\nassign r11_out = reg_ram_m[reg_addr(mode_exec, 11)];\nassign r12_out = reg_ram_m[reg_addr(mode_exec, 12)];\nassign r13_out = reg_ram_m[reg_addr(mode_exec, 13)];\nassign r14_out = reg_ram_m[reg_addr(mode_exec, 14)];",
+        "function [4:0] reg_addr;\ninput [1:0] mode;\ninput [3:0] sel;\nbegin\n\tcasez ({mode, sel}) \n\t\t6'b??0???:\treg_addr = {1'b0, sel};\t\t\n\t\t6'b1?1100:\treg_addr = {1'b0, sel};\t\t\n\t\t6'b001???:\treg_addr = {1'b0, sel};\t\t\n\t\t6'b011???:\treg_addr = {2'b10, sel[2:0]};\t\n\t\t6'b1?10??:\treg_addr = {1'b0, sel};\t\t\n\t\t6'b101101:\treg_addr = {3'b110, sel[1:0]};\t\n\t\t6'b101110:\treg_addr = {3'b110, sel[1:0]};\t\n\t\t6'b101111:\treg_addr = {3'b110, sel[1:0]};\t\n\t\t6'b111101:\treg_addr = {3'b111, sel[1:0]};\t\n\t\t6'b111110:\treg_addr = {3'b111, sel[1:0]};\t\n\t\t6'b111111:\treg_addr = {3'b111, sel[1:0]};\t\n\tendcase\nend\nendfunction",
+        "always @ ( posedge i_clk )\n    if (!i_fetch_stall)\n        begin\n\n        \n        \n        \n        \n        reg_ram_n[wr_addr]      <= i_reg;\n        reg_ram_m[wr_addr]      <= i_reg;\n        reg_ram_ds[wr_addr]     <= i_reg;\n        r15                     <= i_pc_wen ? i_pc : r15;\n\n        \n        rn_addr_reg             <= rn_addr;\n        rm_addr_reg             <= rm_addr;\n        rds_addr_reg            <= rds_addr;\n\n        rn_15                   <= i_rn_sel == 4'hF;\n        rm_15                   <= i_rm_sel == 4'hF;\n        rds_15                  <= i_rds_sel == 4'hF;\n        end"
+    ]
+}

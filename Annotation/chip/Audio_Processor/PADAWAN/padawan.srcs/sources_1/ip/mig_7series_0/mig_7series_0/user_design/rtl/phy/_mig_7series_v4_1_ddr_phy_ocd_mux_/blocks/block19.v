@@ -1,0 +1,1 @@
+  assign ktap_at_right_edge = lim2poc_ktap_right || ocd_ktap_right;

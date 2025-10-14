@@ -1,0 +1,15 @@
+Module name: boot_mem128. 
+
+Module specification: 
+
+The boot_mem128 is a Verilog module designed to handle bootstrap memory of size 128. It facilitates both memory read and write operations, interfacing with devices operating using the Wishbone protocol, a prevalent standard bus protocol widely used in embedded systems. 
+
+This module has several inputs that include the clock signal ('i_wb_clk'), the address for the Wishbone interface ('i_wb_adr'), the byte selector ('i_wb_sel'), the write enable input signal ('i_wb_we'), the input data for memory write operations ('i_wb_dat'), and two other control signals ensuring data integrity - 'i_wb_cyc' and 'i_wb_stb'. 
+
+The module outputs data read from memory operation through 'o_wb_dat', provides acknowledgment about successful read or write operation via 'o_wb_ack', and indicates any potential interfacing error with the 'o_wb_err' signal. 
+
+Internally, the module uses signals like 'start_write', 'start_read', 'read_data', 'write_data', 'byte_enable', and 'address' to assist in memory operations. In debug mode, the optional 'jitter_r' and customized 'start_read_r' signals are used to introduce jitter effects and hold the status of read operations, respectively. 
+
+Within the code, separate blocks are defined based on the presence of 'AMBER_WISHBONE_DEBUG' and 'XILINX_FPGA' flags. These blocks help in creating a more dynamic module that can behave differently based on the defined directives. 'AMBER_WISHBONE_DEBUG' introduces a jitter effect to the operations, and 'XILINX_FPGA' calls a different module for memory access operations. The inclusion of different boot file parameters based on the presence of 'XILINX_FPGA' and 'XILINX_SPARTAN6_FPGA' directives adds another level of customization. 
+
+In conclusion, the boot_mem128 module is a flexible and customizable Verilog module designed for managing bootstrap memory operations in systems primarily using the Wishbone protocol.

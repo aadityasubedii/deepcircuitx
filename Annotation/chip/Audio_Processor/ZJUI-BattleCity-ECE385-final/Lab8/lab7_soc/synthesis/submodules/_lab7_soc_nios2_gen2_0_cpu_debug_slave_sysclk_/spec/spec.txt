@@ -1,0 +1,18 @@
+Module Name: lab7_soc_nios2_gen2_0_cpu_debug_slave_sysclk
+
+Module Specification: This module is a designed as a debug interface for the Nios II Gen2 processor system. It operates on system clock 'clk' and is tasked with taking actions based on the instructions received via various inputs. 
+
+The module has several input ports:
+1. 'clk': This is the primary clock input.
+2. 'ir_in': A 2-bit register that determines which actions need to be performed.
+3. 'sr': A 38-bit register which provides data to be sampled into 'jdo'.
+4. 'vs_udr', 'vs_uir': Debug control signals from a higher-level system debug controller, they initiate synchronization. 
+
+The module also has several output ports that include:
+1. 'jdo': A 38-bit output register that holds the sampled values of 'sr'.
+2. 'take_action_*': These signals trigger various actions related to break conditions, memory operations or trace control based on the states of internal registers 'ir' and 'jdo'.
+3. 'take_no_action_*': These signals indicate no action when certain conditions involving the 'ir' and 'jdo' registers are met.
+
+Internally, the module contains several registers and wires. The 'ir' and 'jdo' are updated based on certain clock signals 'jxuir' and 'update_jdo_strobe', respectively. Sync signals are derived from 'vs_uir' and 'vs_udr' indicating debug control. Actions are regulated by 'enable_action_strobe' and 'update_jdo_strobe', while 'unxunused_resetxx' ensure resets. 
+
+The module is divided into various blocks each having its own role. The synchronizer block checks the transitions of the control signals. Combinational blocks decide when to take actions. Registers are updated in sequential always blocks. These different subcomponents work together to execute debug instructions based on the information provided through 'ir_in', 'vs_udr', 'vs_uir' and 'sr'.

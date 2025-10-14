@@ -1,0 +1,1 @@
+  assign cpu_d_address_0_padded = cpu_d_address | 32'b0;

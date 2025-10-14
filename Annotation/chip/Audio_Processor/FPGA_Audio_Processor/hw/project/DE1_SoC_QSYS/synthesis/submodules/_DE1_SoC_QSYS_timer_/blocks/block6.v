@@ -1,0 +1,1 @@
+  assign snap_strobe = snap_l_wr_strobe || snap_h_wr_strobe;

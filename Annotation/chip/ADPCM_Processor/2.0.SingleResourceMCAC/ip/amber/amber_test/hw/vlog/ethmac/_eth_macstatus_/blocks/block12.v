@@ -1,0 +1,1 @@
+assign SetInvalidSymbol = MRxDV & MRxErr & MRxD[3:0] == 4'he;

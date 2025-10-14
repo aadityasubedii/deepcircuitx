@@ -1,0 +1,12 @@
+  output  [ 31: 0] break_readreg;
+  output           dbrk_hit0_latch;
+  output           dbrk_hit1_latch;
+  output           dbrk_hit2_latch;
+  output           dbrk_hit3_latch;
+  output           trigbrktype;
+  output           trigger_state_0;
+  output           trigger_state_1;
+  output  [  7: 0] xbrk_ctrl0;
+  output  [  7: 0] xbrk_ctrl1;
+  output  [  7: 0] xbrk_ctrl2;
+  output  [  7: 0] xbrk_ctrl3;

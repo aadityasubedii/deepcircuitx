@@ -1,0 +1,1 @@
+  assign cpu_d_readdata_0_padded = cpu_d_readdata | 32'b0;

@@ -1,0 +1,1 @@
+  always @(posedge clk) bm_end_r1 <= #TCQ bm_end;

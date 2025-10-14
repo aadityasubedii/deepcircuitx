@@ -1,0 +1,1 @@
+      assign wdf_rdy_ns = !(rst || ~ram_init_done_r || (occ_cnt[14] && wr_data_end && ~rd_data_upd_indx_r) || (occ_cnt[15] && ~rd_data_upd_indx_r));

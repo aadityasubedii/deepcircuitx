@@ -1,0 +1,1 @@
+  always @(posedge clk) run_r <= #TCQ run_ns;

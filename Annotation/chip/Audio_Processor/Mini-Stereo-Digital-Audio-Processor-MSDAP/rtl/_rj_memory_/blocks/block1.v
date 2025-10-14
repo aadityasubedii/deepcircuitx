@@ -1,0 +1,1 @@
+assign data_rj = (read_enable) ? rjmem[rjread] : 16'd0;

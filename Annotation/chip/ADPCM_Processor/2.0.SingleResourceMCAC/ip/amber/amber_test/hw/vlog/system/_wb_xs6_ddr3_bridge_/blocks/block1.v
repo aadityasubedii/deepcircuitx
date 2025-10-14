@@ -1,0 +1,1 @@
+assign write_ack = write_request && !write_buf_r;         

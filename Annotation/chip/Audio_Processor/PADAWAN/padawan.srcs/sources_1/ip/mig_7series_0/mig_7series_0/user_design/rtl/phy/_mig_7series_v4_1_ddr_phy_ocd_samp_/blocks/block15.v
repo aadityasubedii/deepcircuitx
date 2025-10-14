@@ -1,0 +1,1 @@
+  always @(posedge clk) rd_victim_sel_r <= #TCQ rd_victim_sel_ns;

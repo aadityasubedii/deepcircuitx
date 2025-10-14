@@ -1,0 +1,1 @@
+always #(`CO_PROC_PERIOD/2) CoPrclk = ~CoPrclk;

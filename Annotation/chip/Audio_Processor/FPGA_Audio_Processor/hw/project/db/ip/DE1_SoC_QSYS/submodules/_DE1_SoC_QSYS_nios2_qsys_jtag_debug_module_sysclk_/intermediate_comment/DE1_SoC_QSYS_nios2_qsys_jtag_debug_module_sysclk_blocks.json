@@ -1,0 +1,81 @@
+{
+    "line_num": [
+        [
+            171,
+            177
+        ],
+        [
+            168,
+            170
+        ],
+        [
+            164,
+            166
+        ],
+        [
+            160,
+            162
+        ],
+        [
+            156,
+            158
+        ],
+        [
+            152,
+            154
+        ],
+        [
+            148,
+            150
+        ],
+        [
+            144,
+            146
+        ],
+        [
+            141,
+            142
+        ],
+        [
+            137,
+            139
+        ],
+        [
+            133,
+            135
+        ],
+        [
+            130,
+            131
+        ],
+        [
+            127,
+            128
+        ],
+        [
+            124,
+            125
+        ],
+        [
+            114,
+            121
+        ]
+    ],
+    "blocks": [
+        "  always @(posedge clk)\n    begin\n      if (jxuir)\n          ir <= ir_in;\n      if (update_jdo_strobe)\n          jdo <= sr;\n    end",
+        "  assign take_action_tracectrl = enable_action_strobe && (ir == 2'b11) &&  \n    jdo[15];\n",
+        "  assign take_no_action_break_c = enable_action_strobe && (ir == 2'b10) && \n    jdo[36] &&  jdo[35] &&\n    ~jdo[37];",
+        "  assign take_action_break_c = enable_action_strobe && (ir == 2'b10) && \n    jdo[36] &&  jdo[35] &&\n    jdo[37];",
+        "  assign take_no_action_break_b = enable_action_strobe && (ir == 2'b10) && \n    jdo[36] && ~jdo[35] &&\n    ~jdo[37];",
+        "  assign take_action_break_b = enable_action_strobe && (ir == 2'b10) && \n    jdo[36] && ~jdo[35] &&\n    jdo[37];",
+        "  assign take_no_action_break_a = enable_action_strobe && (ir == 2'b10) && \n    ~jdo[36] && \n    ~jdo[37];",
+        "  assign take_action_break_a = enable_action_strobe && (ir == 2'b10) && \n    ~jdo[36] && \n    jdo[37];",
+        "  assign take_action_tracemem_b = enable_action_strobe && (ir == 2'b01) &&\n    jdo[37];",
+        "  assign take_no_action_tracemem_a = enable_action_strobe && (ir == 2'b01) &&\n    ~jdo[37] && \n    ~jdo[36];",
+        "  assign take_action_tracemem_a = enable_action_strobe && (ir == 2'b01) &&\n    ~jdo[37] && \n    jdo[36];",
+        "  assign take_action_ocimem_b = enable_action_strobe && (ir == 2'b00) && \n    jdo[35];",
+        "  assign take_no_action_ocimem_a = enable_action_strobe && (ir == 2'b00) && \n    ~jdo[35] && ~jdo[34];",
+        "  assign take_action_ocimem_a = enable_action_strobe && (ir == 2'b00) && \n    ~jdo[35] && jdo[34];",
+        "  always @(posedge clk)\n    begin\n      sync2_udr <= sync_udr;\n      update_jdo_strobe <= sync_udr & ~sync2_udr;\n      enable_action_strobe <= update_jdo_strobe;\n      sync2_uir <= sync_uir;\n      jxuir <= sync_uir & ~sync2_uir;\n    end"
+    ]
+}

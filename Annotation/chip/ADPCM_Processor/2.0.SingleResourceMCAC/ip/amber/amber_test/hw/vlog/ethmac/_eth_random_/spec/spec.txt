@@ -1,0 +1,11 @@
+Module Name: eth_random
+
+Module Specification: 
+
+The `eth_random` module is an integral component of a larger system, serving as a pseudo-random number generator. It generates these numbers based on various conditions and count inputs and further provides flags to validate specific bit conditions for the generated number. The module operates synchronously with the `MTxClk` clock input.
+
+The module accepts several input ports. Inputs `MTxClk` and `Reset` serve as clock and reset signals, respectively. The `StateJam` and `StateJam_q` inputs are state signals that help conditionally latch the generated random number. Count signals, `RetryCnt`, `NibCnt` and `ByteCnt` influence the bits of the generated random number along with the generation of output flags. The `eth_random` module outputs: `RandomEq0`, a flag indicating whether the latched random number is zero, and `RandomEqByteCnt`, indicating the result of a comparison operation involving `RandomLatched`, `NibCnt`, and `ByteCnt`.
+
+Internally, the module uses several signals like `Feedback`, `x`, `Random` and `RandomLatched`. `Feedback` is a wire that facilitates a shift operation within `x` register. `x` is essentially the building block for the pseudo-random number generation. The `Random` wire holds the generated pseudo-random number, the value of which is selectively derived from `x` using `RetryCnt`. The `RandomLatched` register stores the pseudo-random number based on specific conditions set by `StateJam` and `StateJam_q`.
+
+In the module structure, one block handles the shifting operation on `x` using `Feedback`. This part is responsible for the generation of pseudo-random numbers. Another block handles the conditional latching of `Random` into `RandomLatched`. Lastly, output assignments create flag indicators based on the latched random number, offering an overview of specific conditions related to the generated number.

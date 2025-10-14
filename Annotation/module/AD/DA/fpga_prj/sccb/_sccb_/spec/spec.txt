@@ -1,0 +1,34 @@
+Module name: SerialInterfaceController.
+
+Module specification:
+The SerialInterfaceController is a Verilog-based module designed to handle serial data communication, with functionality that adapts to read or write modes. Its primary functions include counting logical operations for managing serial data bits, serialization of data for output transmission, and deserialization of input data.
+
+Input Ports:
+- `clk`: Clock input signal for synchronizing the module's operations.
+- `rst_n`: Asynchronous active-low reset signal for initializing the module.
+- `en`: Enable signal to start counting operations.
+- `wr_en`: Write enable signal to manage write operations.
+- `rd_en`: Read enable signal to manage read operations.
+- `sio_din`: Serial data input that is deserialized and stored in the module.
+- `data0`, `data1`, `data2`: Parallel data inputs meant for serialization and output.
+
+Output Ports:
+- `sio_c`: Serial control or clock signal used to interface with external devices.
+- `sio_d`: Serialized data output from the module.
+- `dout`: Deserialized data output captured from `sio_din`.
+- `dout_vld`: Indicates when `dout` holds valid deserialized data.
+
+Internal Signals:
+- `cnt0`, `cnt1`, `cnt2`: Counters for different stages of operation, each with an associated end condition and add logic.
+- `flag`, `flag_wr`: Flags to indicate the current operation mode of the controller.
+- `tx_data`, `tx_data0`, `tx_data1`, `tx_wdata`, `tx_rdata0`, `tx_rdata1`: Data buses holding temporary data patterns for serialization or during mode selection.
+- `x`, `y`: Placeholder variables to adjust counting limits dynamically based on read or write mode.
+
+Code Blocks/Sections:
+- Counter Logic: Contains logic for three counters (`cnt0`, `cnt1`, `cnt2`) that drive the state of the module's operation and serialization/deserialization processes.
+- Serial Control Signal Generation: Logic that toggles `sio_c` based on the counters' values, framing the serial data communication timing.
+- Data Serialization: Logic that serializes `data0`, `data1`, `data2` onto `sio_d` for output transmission based on the counter states.
+- Mode Control Logic: Determines whether the module is in read or write mode by setting the `flag` and `flag_wr` signals and adjusting the operations via counters and data pattern selection.
+- Data Deserialization: Captures serial input data `sio_din` and assembles it into `dout`, asserting `dout_vld` upon completion of data reception.
+
+This design supports various serial data communication protocols by adjusting its internal timing and data handling operations. The module's adaptability allows it to switch between read and write modes dynamically, guided by its control inputs (`en`, `wr_en`, `rd_en`) and internal flag logic.

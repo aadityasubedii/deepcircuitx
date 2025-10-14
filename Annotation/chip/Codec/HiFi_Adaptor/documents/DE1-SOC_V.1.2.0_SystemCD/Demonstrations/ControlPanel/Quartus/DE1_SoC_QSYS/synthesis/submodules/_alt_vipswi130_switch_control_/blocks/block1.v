@@ -1,0 +1,1 @@
+assign enable = master_enable & ~output_switch;

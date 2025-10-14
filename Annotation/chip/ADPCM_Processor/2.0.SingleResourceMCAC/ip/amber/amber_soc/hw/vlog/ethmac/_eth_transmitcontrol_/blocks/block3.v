@@ -1,0 +1,1 @@
+assign ControlEnd = ByteCnt[5:0] == 6'h22;

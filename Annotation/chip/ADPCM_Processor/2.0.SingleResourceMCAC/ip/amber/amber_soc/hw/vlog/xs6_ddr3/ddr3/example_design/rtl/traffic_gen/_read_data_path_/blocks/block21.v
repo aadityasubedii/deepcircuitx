@@ -1,0 +1,1 @@
+assign        cmp_addr_o  = gen_addr;

@@ -1,0 +1,1 @@
+      always @(posedge clk) wtr_cnt_r <= #TCQ wtr_cnt_ns;

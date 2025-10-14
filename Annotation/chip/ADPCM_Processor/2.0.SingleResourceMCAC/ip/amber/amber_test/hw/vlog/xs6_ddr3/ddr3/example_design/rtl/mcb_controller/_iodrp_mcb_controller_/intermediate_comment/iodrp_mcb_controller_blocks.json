@@ -1,0 +1,81 @@
+{
+    "line_num": [
+        [
+            420,
+            425
+        ],
+        [
+            351,
+            418
+        ],
+        [
+            345,
+            345
+        ],
+        [
+            344,
+            344
+        ],
+        [
+            335,
+            342
+        ],
+        [
+            316,
+            330
+        ],
+        [
+            306,
+            314
+        ],
+        [
+            299,
+            304
+        ],
+        [
+            288,
+            297
+        ],
+        [
+            286,
+            286
+        ],
+        [
+            231,
+            280
+        ],
+        [
+            182,
+            228
+        ],
+        [
+            175,
+            175
+        ],
+        [
+            167,
+            173
+        ],
+        [
+            148,
+            161
+        ]
+    ],
+    "blocks": [
+        "  always @ (posedge DRP_CLK) begin\n    if(sync_rst)\n      state <= READY;\n    else\n      state <= nextstate;\n   end",
+        "  always @ (*) begin\n    addr_data_sel_n = 1'b0;\n    load_shift_n = 1'b0;\n    case (state)\n      READY:  begin\n         load_shift_n = 0;\n         if(cmd_valid)\n          nextstate = DECIDE;\n         else\n          nextstate = READY;\n        end\n      DECIDE: begin\n          load_shift_n = 1;\n          addr_data_sel_n = 1;\n          nextstate = ADDR_PHASE;\n        end\n      ADDR_PHASE: begin\n         load_shift_n = 0;\n         if(&bit_cnt[2:0])\n           if (`ALTERNATE_READ && rd_not_write_reg)\n             if (AddressPhase)\n               \n               nextstate = ALMOST_READY;\n             else\n               \n               nextstate = DECIDE;\n           else\n            nextstate = ADDR_TO_DATA_GAP;\n         else\n          nextstate = ADDR_PHASE;\n        end\n      ADDR_TO_DATA_GAP: begin\n          load_shift_n = 1;\n          nextstate = ADDR_TO_DATA_GAP2;\n        end\n      ADDR_TO_DATA_GAP2: begin\n         load_shift_n = 1;\n         nextstate = ADDR_TO_DATA_GAP3;\n        end\n      ADDR_TO_DATA_GAP3: begin\n         load_shift_n = 1;\n         nextstate = DATA_PHASE;\n        end\n      DATA_PHASE: begin\n         load_shift_n = 0;\n         if(&bit_cnt)\n            nextstate = ALMOST_READY;\n         else\n          nextstate = DATA_PHASE;\n        end\n      ALMOST_READY: begin\n         load_shift_n = 0;\n         nextstate = ALMOST_READY2;\n         end\n      ALMOST_READY2: begin\n         load_shift_n = 0;\n         nextstate = ALMOST_READY3;\n         end\n      ALMOST_READY3: begin\n         load_shift_n = 0;\n         nextstate = READY;\n         end\n      default: begin\n         load_shift_n = 0;\n         nextstate = READY;\n       end\n    endcase\n  end",
+        "   assign DRP_SDI = (rd_not_write_reg & DRP_CS & !DRP_ADD)? DRP_SDO : DRP_SDI_pre; ",
+        "   assign DRP_SDI_pre = (DRP_CS)? shift_through_reg[0] : 1'b0;  ",
+        "   always @ (posedge DRP_CLK) begin\n      DRP_ADD     <= (nextstate == ADDR_PHASE);\n      DRP_CS      <= (nextstate == ADDR_PHASE) | (nextstate == DATA_PHASE);\n\n      MCB_UIREAD  <= (nextstate == DATA_PHASE) && rd_not_write_reg;\n      if (state == READY)\n        DRP_BKST  <= use_broadcast;\n   end",
+        "  always @ (posedge DRP_CLK) begin\n    if(sync_rst) begin\n      AddressPhase  <= 1'b0;\n    end\n    else begin\n      if (AddressPhase) begin\n        \n        AddressPhase <= AddressPhase && ~(state == ALMOST_READY2);\n      end\n      else begin\n        \n        AddressPhase <= (state == ADDR_PHASE) && (bit_cnt == 3'b111);\n      end\n    end\n  end",
+        "  always @ (posedge DRP_CLK) begin\n    if(sync_rst) begin\n      read_data <= 8'h00;\n    end\n    else begin\n      if(state == ALMOST_READY3)\n        read_data <= shift_through_reg;\n    end\n  end",
+        "   always @ (posedge DRP_CLK) begin\n      if (((state == ADDR_PHASE) | (state == DATA_PHASE)) & !sync_rst)\n        bit_cnt <= bit_cnt + 1;\n      else\n        bit_cnt <= 3'b0;\n   end",
+        "   always @ (posedge DRP_CLK) begin\n      if(sync_rst)\n        shift_through_reg <= 9'b0;\n      else begin\n        if (load_shift_n)     \n          shift_through_reg <= data_out_mux;\n        else\n          shift_through_reg <= {1'b0, DRP_SDO, shift_through_reg[7:1]};\n      end\n   end",
+        "   assign     data_out = (addr_data_sel_n)? {1'b0, memcell_addr_reg} : {1'b0, data_reg};",
+        "   always @(*) begin\n    case(drp_ioi_addr)\n`ifdef DRP_v1_0_FIX\n      IOI_DQ0       : data_out_mux  = data_out<<1;\n      IOI_DQ1       : data_out_mux  = data_out;\n      IOI_DQ2       : data_out_mux  = data_out<<1;\n\n      IOI_DQ3       : data_out_mux  = data_out;\n      IOI_DQ4       : data_out_mux  = data_out;\n      IOI_DQ5       : data_out_mux  = data_out;\n      IOI_DQ6       : shift_n_expand (data_out, data_out_mux);\n\n      IOI_DQ7       : data_out_mux  = data_out;\n      IOI_DQ8       : data_out_mux  = data_out<<1;\n      IOI_DQ9       : data_out_mux  = data_out;\n      IOI_DQ10      : data_out_mux  = data_out<<1;\n      IOI_DQ11      : data_out_mux  = data_out;\n      IOI_DQ12      : data_out_mux  = data_out<<1;\n      IOI_DQ13      : data_out_mux  = data_out;\n      IOI_DQ14      : data_out_mux  = data_out<<1;\n      IOI_DQ15      : data_out_mux  = data_out;\n      IOI_UDQS_CLK  : data_out_mux  = data_out<<1;\n      IOI_UDQS_PIN  : data_out_mux  = data_out<<1;\n      IOI_LDQS_CLK  : data_out_mux  = data_out;\n      IOI_LDQS_PIN  : data_out_mux  = data_out;\n`else\n`endif\n      IOI_DQ0       : data_out_mux  = data_out;\n      IOI_DQ1       : data_out_mux  = data_out;\n      IOI_DQ2       : data_out_mux  = data_out;\n      IOI_DQ3       : data_out_mux  = data_out;\n      IOI_DQ4       : data_out_mux  = data_out;\n      IOI_DQ5       : data_out_mux  = data_out;\n      IOI_DQ6       : data_out_mux  = data_out;\n      IOI_DQ7       : data_out_mux  = data_out;\n      IOI_DQ8       : data_out_mux  = data_out;\n      IOI_DQ9       : data_out_mux  = data_out;\n      IOI_DQ10      : data_out_mux  = data_out;\n      IOI_DQ11      : data_out_mux  = data_out;\n      IOI_DQ12      : data_out_mux  = data_out;\n      IOI_DQ13      : data_out_mux  = data_out;\n      IOI_DQ14      : data_out_mux  = data_out;\n      IOI_DQ15      : data_out_mux  = data_out;\n      IOI_UDQS_CLK  : data_out_mux  = data_out;\n      IOI_UDQS_PIN  : data_out_mux  = data_out;\n      IOI_LDQS_CLK  : data_out_mux  = data_out;\n      IOI_LDQS_PIN  : data_out_mux  = data_out;\n      default       : data_out_mux  = data_out;\n    endcase\n   end",
+        "task shift_n_expand (\n  input   [7:0] data_in,\n  output  [8:0] data_out\n  );\n\n  begin\n    if (data_in[0])\n      data_out[1:0]  = 2'b11;\n    else\n      data_out[1:0]  = 2'b00;\n\n    if (data_in[1:0] == 2'b10)\n      data_out[2:1]  = 2'b11;\n    else\n      data_out[2:1]  = {data_in[1], data_out[1]};\n\n    if (data_in[2:1] == 2'b10)\n      data_out[3:2]  = 2'b11;\n    else\n      data_out[3:2]  = {data_in[2], data_out[2]};\n\n    if (data_in[3:2] == 2'b10)\n      data_out[4:3]  = 2'b11;\n    else\n      data_out[4:3]  = {data_in[3], data_out[3]};\n\n    if (data_in[4:3] == 2'b10)\n      data_out[5:4]  = 2'b11;\n    else\n      data_out[5:4]  = {data_in[4], data_out[4]};\n\n    if (data_in[5:4] == 2'b10)\n      data_out[6:5]  = 2'b11;\n    else\n      data_out[6:5]  = {data_in[5], data_out[5]};\n\n    if (data_in[6:5] == 2'b10)\n      data_out[7:6]  = 2'b11;\n    else\n      data_out[7:6]  = {data_in[6], data_out[6]};\n\n    if (data_in[7:6] == 2'b10)\n      data_out[8:7]  = 2'b11;\n    else\n      data_out[8:7]  = {data_in[7], data_out[7]};\n  end\nendtask",
+        "   assign rdy_busy_n = (state == READY);",
+        "   always @ (posedge DRP_CLK) begin\n      if(state == READY) begin\n        memcell_addr_reg <= memcell_address;\n        data_reg <= write_data;\n        rd_not_write_reg <= rd_not_write;\n      end\n   end",
+        "   always @ (state) begin\n      case (state)\n  READY     :state_ascii<=\"READY\";\n  DECIDE      :state_ascii<=\"DECIDE\";\n  ADDR_PHASE    :state_ascii<=\"ADDR_PHASE\";\n  ADDR_TO_DATA_GAP  :state_ascii<=\"ADDR_TO_DATA_GAP\";\n  ADDR_TO_DATA_GAP2 :state_ascii<=\"ADDR_TO_DATA_GAP2\";\n  ADDR_TO_DATA_GAP3 :state_ascii<=\"ADDR_TO_DATA_GAP3\";\n  DATA_PHASE    :state_ascii<=\"DATA_PHASE\";\n  ALMOST_READY    :state_ascii<=\"ALMOST_READY\";\n  ALMOST_READY2   :state_ascii<=\"ALMOST_READY2\";\n  ALMOST_READY3   :state_ascii<=\"ALMOST_READY3\";\n      endcase \n   end"
+    ]
+}

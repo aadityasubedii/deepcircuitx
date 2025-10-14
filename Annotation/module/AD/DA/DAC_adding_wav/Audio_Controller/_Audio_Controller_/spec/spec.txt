@@ -1,0 +1,21 @@
+Module name: Audio_Controller.
+
+Module specification: The Audio_Controller is a Verilog module crafted to manipulate audio data exchanges with external audio hardware. It primarily operates under a 50 MHz clock and smoothly handles input and output audio signal synchronization, availability flag updates according to buffer statuses, and data transfer with the use of internal FIFO buffers. This complex module incorporates sub-modules for edge detection and data serialization/deserialization.
+
+For its inputs, it acknowledges:
+- `CLOCK_50`, a synchronization clock,
+- `reset`, to initialize systems,
+- `clear_audio_in_memory` and `clear_audio_out_memory`, to clear audio buffer content,
+- `read_audio_in` and `write_audio_out`, to manage buffer read/write operations,
+- audio data inputs from ADC, and
+- left and right channel audio outputs.
+
+Outputs include:
+- Indicators for audio input and output data availability,
+- left and right audio channel data inputs for processing,
+- an audio external clock signal, and
+- serialized audio data for the DAC.
+
+Internal signals like `bclk_rising_edge`, `bclk_falling_edge`, and their ADC/DAC counterparts inform on clock edge transitions. `left_channel_read_available` and `right_channel_read_available`, alongside `left_channel_write_space` and `right_channel_write_space`, report on buffer space. Completion signals `done_adc_channel_sync` and `done_dac_channel_sync` establish synchronization states.
+
+Code blocks define regulatory logic for availability flags and completion statuses based on buffer space and synchronize events, respectively. Sub-module instances handle edge detection for various clocks (Bit_Clock_Edges, ADC_Left_Right_Clock_Edges, DAC_Left_Right_Clock_Edges), serialization, and deserialization of audio data (Altera_UP_Audio_In_Deserializer, Altera_UP_Audio_Out_Serializer), as well as audio clock generation (Audio_Clock). Parameters are set to tailor sub-module functionality for audio data width and bit count initialization. The module is intricately designed to maintain the integrity and synchronization of the audio signal flow, thus enabling high-quality audio data processing suitable for hardware audio applications.

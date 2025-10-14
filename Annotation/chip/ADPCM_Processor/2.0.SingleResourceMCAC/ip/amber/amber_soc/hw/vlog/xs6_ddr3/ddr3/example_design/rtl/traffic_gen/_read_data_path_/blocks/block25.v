@@ -1,0 +1,1 @@
+assign rd_mdata_o = rd_mdata;

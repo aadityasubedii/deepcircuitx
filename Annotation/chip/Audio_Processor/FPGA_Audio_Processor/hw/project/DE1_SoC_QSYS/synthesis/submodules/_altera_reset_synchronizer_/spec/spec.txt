@@ -1,0 +1,17 @@
+Module name: altera_reset_synchronizer. 
+
+Module specification: This module is designed to synchronize an asynchronous reset signal "reset_in" to a system clock signal "clk". It employs a chain of registers called "altera_reset_synchronizer_int_chain" of size determined by the "DEPTH" parameter to achieve synchronization, shifting the reset signal through the chain. The length of the shift chain directly determines the time taken for the reset signal to propagate from the input to the output. The module supports two operational modes, controlled by the "ASYNC_RESET" parameter. If "ASYNC_RESET" is '1', then the reset occurs at the positive edge of system clock or reset input signal - the reset signal being set to '1' is propagated down the chain to reset output "reset_out". If "ASYNC_RESET" is '0', the reset occurs only at the positive edge of system clock, where the reset input signal is passed down to "reset_out" in a chain manner. 
+
+Input Ports include: 
+1. "reset_in" is the asynchronous reset signal intended to be synchronized.
+2. "clk" is the system clock providing the rate at which the module operates.
+
+Output Port includes:
+1. "reset_out" which outputs the synchronized reset signal intended for resetting downstream logic.
+
+Internal Signals include: 
+1. "altera_reset_synchronizer_int_chain" - a register chain of size 'DEPTH' used to achieve reset signal synchronization by shifting it down this chain.
+2. "altera_reset_synchronizer_int_chain_out" - a single bit signal assigned as the synchronized "reset_out" once the shift process through the chain is complete.
+
+Code blocks: 
+The Module contains two main code blocks in an 'if'-'else' construct governed by the ASYNC_RESET parameter. Both blocks advance the shift process on the positive edge of the system clock, but the former also triggers on the positive edge of the reset signal when ASYNC_RESET is '1'. The synchronized reset signal is then assigned to "reset_out". Consequently, this module affords synchronization of the reset signal to the system clock signal, effectively avoiding potential metastability issues in the larger system architecture.

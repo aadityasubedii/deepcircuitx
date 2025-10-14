@@ -1,0 +1,1 @@
+  assign oclk_center_write_resume = oclk_center_write_resume_r;

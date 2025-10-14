@@ -1,0 +1,1 @@
+OBUFT iob_cas (.O(mcbx_dram_cas_n),.I(ioi_cas),.T(t_cas));

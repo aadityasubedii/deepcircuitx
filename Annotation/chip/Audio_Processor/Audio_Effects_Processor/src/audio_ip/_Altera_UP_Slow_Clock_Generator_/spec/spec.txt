@@ -1,0 +1,9 @@
+Module name: Altera_UP_Slow_Clock_Generator. 
+
+Module specification: The Altera_UP_Slow_Clock_Generator is a Verilog module used for generating a slower clock signal from an input clock. It takes three inputs: `clk`, which is the original clock signal; `reset`, which resets all outputs and internal counter to their initial state; and `enable_clk`, a control signal that initiates the increment of the internal counter on receiving each positive edge of the `clk` signal. 
+
+It generates five outputs: `new_clk`, the manipulated slower clock signal; `rising_edge`, a single cycle signal that goes high during the positive edge detection of the new clock signal; `falling_edge`, a similar single cycle signal for detection of negative edge of the new clock; `middle_of_high_level`, a signal that goes high in the middle of high level of the new clock signal; `middle_of_low_level`, a signal that goes high in the middle of the low level of the new clock signal. 
+
+All these signals are manipulated using a single internal signal, `clk_counter`, a register array which increments according to the `enable_clk` control signal and `COUNTER_INC` parameter, and resets on `reset` signal. The increment of this `clk_counter` define the frequency of the new clock signal and its value is used to determine the state of other output signals. 
+
+The code is divided into six `always` blocks, each triggered by the positive edge of the `clk` signal, responsible for the operation and generation of different output signals. Improper operation of the module, when the reset signal is high, is prevented by these `always` blocks.

@@ -1,0 +1,1 @@
+    assign AUD_DACDAT = dataOut;

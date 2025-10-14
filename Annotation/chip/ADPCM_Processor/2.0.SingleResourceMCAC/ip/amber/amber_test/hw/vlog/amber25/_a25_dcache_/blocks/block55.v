@@ -1,0 +1,1 @@
+assign request_hold = request_pulse || request_r;

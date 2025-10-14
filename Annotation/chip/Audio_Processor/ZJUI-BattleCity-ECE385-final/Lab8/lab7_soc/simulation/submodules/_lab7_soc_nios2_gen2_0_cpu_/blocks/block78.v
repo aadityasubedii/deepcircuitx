@@ -1,0 +1,1 @@
+  assign D_ctrl_src_imm5_shift_rot = D_op_roli|D_op_slli|D_op_srli|D_op_srai;

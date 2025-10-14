@@ -1,0 +1,1 @@
+  assign oclk_calib_resume = oclk_calib_resume_r;

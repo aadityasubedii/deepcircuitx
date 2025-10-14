@@ -1,0 +1,1 @@
+        assign binary[binary_pos] = |binary_values_by_bit[(binary_pos*NO_OF_MODES)+NO_OF_MODES-1:binary_pos*NO_OF_MODES];

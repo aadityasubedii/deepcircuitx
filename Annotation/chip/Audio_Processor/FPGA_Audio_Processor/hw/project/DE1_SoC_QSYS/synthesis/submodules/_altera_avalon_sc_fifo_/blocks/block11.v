@@ -1,0 +1,1 @@
+    assign max_fifo_size = FIFO_DEPTH - 1;

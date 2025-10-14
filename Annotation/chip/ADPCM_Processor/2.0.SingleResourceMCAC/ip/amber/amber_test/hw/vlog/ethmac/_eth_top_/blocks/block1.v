@@ -1,0 +1,1 @@
+assign m_wb_adr_o = {m_wb_adr_tmp, 2'h0};

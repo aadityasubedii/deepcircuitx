@@ -1,0 +1,1 @@
+else if ( WAYS == 4 ) begin : pick_way_4ways

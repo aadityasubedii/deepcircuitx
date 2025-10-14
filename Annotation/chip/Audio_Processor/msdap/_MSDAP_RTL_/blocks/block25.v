@@ -1,0 +1,1 @@
+	assign blk_out = shift_acc_reg;

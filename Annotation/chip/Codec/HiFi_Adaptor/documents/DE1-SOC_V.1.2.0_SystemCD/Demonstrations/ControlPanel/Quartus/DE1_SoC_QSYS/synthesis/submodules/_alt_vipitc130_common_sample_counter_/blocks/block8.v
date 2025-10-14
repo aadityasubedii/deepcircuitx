@@ -1,0 +1,1 @@
+        assign count_sample = count_cycle;

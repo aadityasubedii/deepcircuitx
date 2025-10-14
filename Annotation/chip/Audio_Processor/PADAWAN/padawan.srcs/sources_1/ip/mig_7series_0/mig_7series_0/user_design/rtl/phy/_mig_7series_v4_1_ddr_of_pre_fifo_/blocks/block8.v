@@ -1,0 +1,1 @@
+  assign nxt_rd_ptr = (rd_ptr + 1'b1)%DEPTH;

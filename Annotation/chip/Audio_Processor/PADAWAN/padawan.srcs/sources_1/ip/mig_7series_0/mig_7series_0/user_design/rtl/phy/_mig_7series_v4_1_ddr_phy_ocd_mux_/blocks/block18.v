@@ -1,0 +1,1 @@
+  assign mmcm_edge_detect_rdy = lim2poc_rdy || ocd_edge_detect_rdy;

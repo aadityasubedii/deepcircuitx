@@ -1,0 +1,12 @@
+    always @ ( posedge i_clk )
+        if ( c_state == CS_IDLE )
+            valid_bits_r <= {tag_rdata_way[7][TAG_WIDTH-1], 
+                             tag_rdata_way[6][TAG_WIDTH-1], 
+                             tag_rdata_way[5][TAG_WIDTH-1], 
+                             tag_rdata_way[4][TAG_WIDTH-1], 
+                             tag_rdata_way[3][TAG_WIDTH-1], 
+                             tag_rdata_way[2][TAG_WIDTH-1], 
+                             tag_rdata_way[1][TAG_WIDTH-1], 
+                             tag_rdata_way[0][TAG_WIDTH-1]};
+                           
+end

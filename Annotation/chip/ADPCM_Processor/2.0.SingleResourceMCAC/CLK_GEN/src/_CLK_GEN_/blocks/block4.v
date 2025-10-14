@@ -1,0 +1,1 @@
+assign mux_serial_clk = test_mode ? clk : ser_clk;

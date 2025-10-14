@@ -1,0 +1,1 @@
+   end else if (RANKS == 1) begin: DDR3_1rank

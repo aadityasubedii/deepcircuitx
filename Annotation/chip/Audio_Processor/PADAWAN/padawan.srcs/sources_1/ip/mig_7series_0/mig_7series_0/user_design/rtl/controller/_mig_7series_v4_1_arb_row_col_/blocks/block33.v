@@ -1,0 +1,1 @@
+      assign grant_col_wr = grant_col_wr_ns;

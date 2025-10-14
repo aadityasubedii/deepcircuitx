@@ -1,0 +1,1 @@
+       assign binary_values[(one_hot_pos*LOG2_NO_OF_MODES)+(LOG2_NO_OF_MODES-1):(one_hot_pos*LOG2_NO_OF_MODES)] = (one_hot[one_hot_pos]) ? one_hot_pos + 1 : 0;

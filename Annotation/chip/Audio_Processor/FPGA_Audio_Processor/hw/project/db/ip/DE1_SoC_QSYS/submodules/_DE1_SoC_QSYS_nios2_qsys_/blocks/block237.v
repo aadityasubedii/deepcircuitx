@@ -1,0 +1,1 @@
+  assign i_read_nxt = W_valid | (i_read & i_waitrequest);

@@ -1,0 +1,1 @@
+  assign F_jmp_direct_pc_hi = F_pc[26];

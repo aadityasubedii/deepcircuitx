@@ -1,0 +1,26 @@
+{
+    "line_num": [
+        [
+            56,
+            59
+        ],
+        [
+            52,
+            54
+        ],
+        [
+            39,
+            50
+        ],
+        [
+            34,
+            37
+        ]
+    ],
+    "blocks": [
+        "  always @(posedge clk or negedge rst_n) begin\n    if (!rst_n) readdata_with_waitstate <= 32'b0;\n    else        readdata_with_waitstate <= act_readdata;\n    end",
+        "  assign access_lower_32 = read & (addr == 0);\n  assign act_readdata = readdata_lower_intr | readdata_higher_intr;\n  assign rddata = readdata_with_waitstate;",
+        "  generate\n  if (NUM_INTR>32) begin : two_intr_reg_needed\n    assign access_higher_32     = read & (addr == 1);\n    \n    assign readdata_lower_intr  = interrupt_reg[31:0] & {(32){access_lower_32}};\n    assign readdata_higher_intr = interrupt_reg[NUM_INTR-1:32] & {(NUM_INTR-32){access_higher_32}};\n    end\n  else begin : only_1_reg\n    assign readdata_lower_intr  = interrupt_reg & {(NUM_INTR){access_lower_32}};\n    assign readdata_higher_intr = {32{1'b0}};\n    end\n  endgenerate",
+        "  always @(posedge clk or negedge rst_n) begin\n    if (!rst_n) interrupt_reg <= 'b0;\n    else        interrupt_reg <= interrupt_in;\n    end"
+    ]
+}

@@ -1,0 +1,1 @@
+assign synced = ~enable_synced;

@@ -1,0 +1,19 @@
+Module name: i2s_decode. 
+
+Module specification: This module is designed to decode I2S (Inter-IC Sound) audio data. It operates based on the supplied Serial Clock (SCLK), Left/Right Clock (LRCK) and audio data input (data_in). Through its operations, it produces two streams of data in the form of left channel (data_out_L) and right channel (data_out_R) audio outputs. The resolution of audio sample is determined by the parameter RESOLUTION which can be set externally. 
+
+Inputs to the module include:
+- SCLK: the Serial Clock that serves as a sampling clock for the input data.
+- LRCK: the Left/Right Clock that differentiates between left and right channel audio data.
+- data_in: the audio data input line that transmits the audio data bit-by-bit.
+
+Outputs from the module include: 
+- data_out_L: this output reflects the decoded audio data for the Left channel.
+- data_out_R: this output reflects the decoded audio data for the Right channel.
+
+Internally, the module uses several signals and registers to manage the operations:
+- count: a register tracking incoming bits.
+- LR: a register that holds the last received state of LRCK to determine channel switch.
+- data_L and data_R: registers that accumulate the incoming bits associated with the Left and Right channels, respectively.
+
+The module's code can be divided into different sections. The principal section is an 'always' block triggered at the positive edge of SCLK, handling the accumulation of input bits, the detection of channel switch and the output of the accumulated data. Within this block, there are conditional statements that manage the details of these operations. The module encapsulates the complexity of decoding I2S audio data, and provides a simple interface for audio data input and output.

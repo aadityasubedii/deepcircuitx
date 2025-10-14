@@ -1,0 +1,13 @@
+Module name: a23_multiply. 
+
+Module specification: 
+
+The 'a23_multiply' module is a Verilog hardware design responsible for performing multiplication operations between two 32-bit operands. This module is clock synchronous and can perform standard multiplication or accumulate multiplication based on an input setting. 
+
+The input ports include 'i_clk', which is the clock signal; 'i_fetch_stall' to stall the execution within the module; 'i_a_in' and 'i_b_in', which are 32-bit operands for the multiplication; 'i_function', a 2-bit operational mode selector; and 'i_execute' to control the start of an operation. 
+
+The output ports are 'o_out', the 32-bit multiplication result; 'o_flags', a 2-bit status signal; and 'o_done', a flag signaling operation completion.
+
+The internal signals include 'enable' and 'accumulate' derived from 'i_function', controlling overall process execution and the operation mode; 'multiplier' and 'multiplier_bar', extended version and two's complement of operand 'i_a_in'; 'sum', the result of an operation micro step; 'sum34_b', a control input for sum; 'count' and 'count_nxt', counters controlling operation progress; 'product' and 'product_nxt', containing multiplication results; 'flags_nxt', a status update signal; 'sum_acc1', an intermediate signal in accumulate multiplication. 
+
+The key blocks of the code use Xilinx Spartan 6 and Virtex 6 FPGA resources for arithmetic operations, booth encoding logic for calculating partial products, and operations management controlled via a state machine. Conditionally assigning the values to 'product_nxt' and 'count_nxt' based on 'count' value and 'accumulate', and updating registers and certain outputs at every clock cycle when stall signal is not asserted, are the major sequence of operations.

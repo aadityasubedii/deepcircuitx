@@ -1,0 +1,1 @@
+assign reset_line_count_nxt = start_new_line & (start_new_field | start_new_field_sticky);

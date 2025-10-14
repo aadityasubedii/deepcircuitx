@@ -1,0 +1,1 @@
+assign buf_avail = (rd_capture_ptr + FIFO_DEPTH) - wr_ptr;

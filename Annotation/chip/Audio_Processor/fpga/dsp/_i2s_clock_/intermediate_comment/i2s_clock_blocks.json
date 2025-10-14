@@ -1,0 +1,16 @@
+{
+    "line_num": [
+        [
+            24,
+            50
+        ],
+        [
+            17,
+            22
+        ]
+    ],
+    "blocks": [
+        "    always @(posedge ck) begin\n\n        if (rst) begin\n\n            prescale <= 0;\n            frame_posn <= 0;\n            en <= 0;\n            ws <= 0;\n            sck <= 0;\n\n        end else begin\n\n            if (prescale == (DIVIDER-1)) begin\n                prescale <= 0;\n                frame_posn <= frame_posn + 1;\n                en <= 1;\n            end else begin\n                prescale <= prescale + 1;\n                en <= 0;\n            end\n\n        end\n\n        sck <= (prescale >= (DIVIDER/2)) ? 1 : 0;\n        ws <= (frame_posn >= 32) ? 1 : 0;\n\n    end",
+        "    initial begin\n        frame_posn = 0;\n        en = 0;\n        ws = 0;\n        sck = 0;\n    end"
+    ]
+}

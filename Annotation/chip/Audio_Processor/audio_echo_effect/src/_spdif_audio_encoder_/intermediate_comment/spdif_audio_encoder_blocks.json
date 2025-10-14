@@ -1,0 +1,21 @@
+{
+    "line_num": [
+        [
+            34,
+            44
+        ],
+        [
+            22,
+            32
+        ],
+        [
+            14,
+            16
+        ]
+    ],
+    "blocks": [
+        "    spdif_frame_encoder #(.audio_width(audio_width)) encoder_ (\n        .clk128(clk128),\n        .reset(reset),\n        .next_sub_frame_number(),\n        .i_valid(o_valid),\n        .i_ready(o_ready),\n        .i_is_left(o_is_left),\n        .i_audio(o_audio),\n        .i_user(1'b0),\n        .i_control(1'b0),\n        .spdif(spdif));",
+        "    dual_clock_buffer #(.width(audio_width+1)) dbuffer_ (\n        .reset(reset),\n        .i_clk(clk),\n        .i_valid(i_valid),\n        .i_ready(i_ready),\n        .i_data({ i_is_left, i_audio }),\n        .o_clk(clk128),\n        .o_valid(o_valid),\n        .o_ready(o_ready),\n        .o_data({ o_is_left, o_audio })\n    );",
+        "    always @(posedge clk256 or posedge reset)\n        clk128 <= (reset) ? 1'b0 : ~clk128;\n"
+    ]
+}

@@ -1,0 +1,86 @@
+{
+    "line_num": [
+        [
+            374,
+            374
+        ],
+        [
+            181,
+            371
+        ],
+        [
+            168,
+            168
+        ],
+        [
+            160,
+            166
+        ],
+        [
+            152,
+            156
+        ],
+        [
+            145,
+            149
+        ],
+        [
+            133,
+            140
+        ],
+        [
+            123,
+            130
+        ],
+        [
+            110,
+            121
+        ],
+        [
+            100,
+            108
+        ],
+        [
+            87,
+            98
+        ],
+        [
+            78,
+            85
+        ],
+        [
+            67,
+            76
+        ],
+        [
+            42,
+            65
+        ],
+        [
+            17,
+            17
+        ],
+        [
+            7,
+            11
+        ]
+    ],
+    "blocks": [
+        "endmodule",
+        "    initial begin\n\n        @(posedge wb_clk);\n        @(posedge wb_clk);\n        wb_rst <= 0;\n        @(posedge wb_clk);\n        @(posedge wb_clk);\n\n        write(REG_ADDR,   32'h00010000);\n        write_wait();\n\n        write(REG_MATCH,  32'h00010010);\n        write_wait();\n\n        write(REG_STEPS,  32'h00001000);\n        write_wait();\n\n        write(REG_CYCLES, 32'h00000010);\n        write_wait();\n\n        write(REG_BLOCKS, 32'h8);\n        write_wait();\n\n        write(REG_START,  32'h0);\n        write_wait();\n\n        @(posedge wb_clk);\n\n        while (!xfer_done) begin\n            xfer_pulse();\n            wait(block_done);\n        end\n\n        write(REG_STOP,  32'h1);\n        write_wait();\n\n        @(posedge wb_clk);\n        @(posedge wb_clk);\n        @(posedge wb_clk);\n\n        write(REG_START,  32'h0);\n        write_wait();\n\n        while (!xfer_done) begin\n            xfer_pulse();\n            wait(block_done);\n        end\n\n        \n\n        read(REG_ADDR);\n        read_wait();\n        tb_assert(rd_data == 32'h10000);\n        @(posedge wb_clk);\n\n        read(REG_STEPS);\n        read_wait();\n        tb_assert(rd_data == 32'h1000);\n        @(posedge wb_clk);\n\n        read(REG_CYCLES);\n        read_wait();\n        tb_assert(rd_data == 32'h10);\n        @(posedge wb_clk);\n\n        read(REG_BLOCKS);\n        read_wait();\n        tb_assert(rd_data == 32'h8);\n        @(posedge wb_clk);\n\n        read(REG_STATUS);\n        read_wait();\n        tb_assert(rd_data == 32'h7); \n        @(posedge wb_clk);\n\n        \n        tb_assert(xfer_done);\n        tb_assert(block_done);\n\n        xfer_pulse();\n\n        @(posedge wb_clk);\n        @(posedge wb_clk);\n        @(posedge wb_clk);\n        tb_assert(xfer_done);\n        tb_assert(block_done);\n        \n        \n        write(REG_STOP,  32'h1);\n        write_wait();\n\n        \n        read(REG_STATUS);\n        read_wait();\n        tb_assert(rd_data == 32'h0); \n        @(posedge wb_clk);\n\n        write(REG_START,  32'h0);\n        write_wait();\n        @(posedge wb_clk);\n\n        while (!xfer_done) begin\n            xfer_pulse();\n            wait(block_done);\n        end\n\n        \n\n        read(REG_STATUS);\n        read_wait();\n        \n        @(posedge wb_clk);\n\n        \n        wb_rst <= 1;\n        @(posedge wb_clk);\n        @(posedge wb_clk);\n        wb_rst <= 0;\n        @(posedge wb_clk);\n        @(posedge wb_clk);\n\n        read(REG_ADDR);\n        read_wait();\n        tb_assert(rd_data == 32'h0);\n        @(posedge wb_clk);\n\n        read(REG_STEPS);\n        read_wait();\n        tb_assert(rd_data == 32'h0);\n        @(posedge wb_clk);\n\n        read(REG_CYCLES);\n        read_wait();\n        tb_assert(rd_data == 32'h0);\n        @(posedge wb_clk);\n\n        read(REG_BLOCKS);\n        read_wait();\n        tb_assert(rd_data == 32'h0);\n        @(posedge wb_clk);\n\n        read(REG_STATUS);\n        read_wait();\n        tb_assert(rd_data == 32'h0);\n        @(posedge wb_clk);\n\n        \n\n        write(REG_ADDR,   32'h00010000);\n        write_wait();\n\n        write(REG_MATCH,  32'h00010004);\n        write_wait();\n\n        write(REG_STEPS,  32'h00001000);\n        write_wait();\n\n        write(REG_CYCLES, 32'h00000004);\n        write_wait();\n\n        write(REG_BLOCKS, 32'h4);\n        write_wait();\n\n        \n        write(REG_START,  32'h1);\n        write_wait();\n\n        while (!xfer_done) begin\n            xfer_pulse();\n            wait(block_done);\n        end\n\n        \n        wait(!xfer_done);\n\n        \n        write(REG_START,  32'h0);\n\n        \n        while (!xfer_done) begin\n            xfer_pulse();\n            wait(block_done);\n        end\n\n\n        \n        \n\n        $display(\"done\");\n\n    end",
+        "    assign xfer_dat = xfer_re ? (16'h1111 << xfer_adr) : 0;",
+        "    always @(posedge wb_clk) begin\n        if (auto_poll) begin\n            if (block_done) begin\n                xfer_pulse();\n            end\n        end\n    end",
+        "    always @(posedge wb_clk) begin\n        if (!dbus_ack) begin\n            tb_assert(dbus_rdt == 0);\n        end\n    end",
+        "    always @(posedge wb_clk) begin\n        if (dbus_ack) begin\n            rd_data <= dbus_rdt; \n        end\n    end",
+        "    always @(posedge wb_clk) begin\n        if (dma_cyc) begin\n            dma_ack <= 1;\n        end\n        if (dma_ack) begin\n            dma_ack <= 0;\n        end\n    end",
+        "    always @(posedge wb_clk) begin\n        if (dbus_ack) begin\n            wb_dbus_cyc <= 0;\n            wb_dbus_we <= 0;\n            wb_dbus_adr <= 32'hZ;\n            wb_dbus_dat <= 32'hZ;\n        end\n    end",
+        "    task xfer_pulse;\n\n        begin\n\n            xfer_block <= 1;\n            @(posedge wb_clk);\n            xfer_block <= 0;\n            @(posedge wb_clk);\n\n        end\n\n    endtask",
+        "    task write_wait;\n\n        begin\n            wait(dbus_ack);\n            wait(!dbus_ack);\n            @(posedge wb_clk);\n        end\n\n    endtask",
+        "    task write(input [31:0] addr, input [31:0] data);\n\n        begin\n\n            wb_dbus_cyc <= 1;\n            wb_dbus_adr <= addr;\n            wb_dbus_we <= 1;\n            wb_dbus_dat <= data;\n\n        end\n\n    endtask",
+        "    task read_wait;\n\n        begin\n            wait(dbus_ack);\n            wait(!dbus_ack);\n        end\n\n    endtask",
+        "    task read(input [31:0] addr);\n\n        begin\n\n            wb_dbus_cyc <= 1;\n            wb_dbus_adr <= addr;\n\n        end\n\n    endtask",
+        "    dma #(.ADDR(8'h65), .WIDTH(8), .XFER_ADDR_W(16)) \n    dma(\n        .wb_clk(wb_clk),\n        .wb_rst(wb_rst),\n        .wb_dbus_cyc(wb_dbus_cyc),\n        .wb_dbus_we(wb_dbus_we),\n        .wb_dbus_adr(wb_dbus_adr),\n        .wb_dbus_dat(wb_dbus_dat),\n        .dbus_rdt(dbus_rdt),\n        .dbus_ack(dbus_ack),\n        .xfer_block(xfer_block),\n        .xfer_adr(xfer_adr),\n        .xfer_dat(xfer_dat),\n        .xfer_re(xfer_re),\n        .block_done(block_done),\n        .xfer_done(xfer_done),\n        .dma_cyc(dma_cyc),\n        .dma_we(dma_we),\n        .dma_sel(dma_sel),\n        .dma_adr(dma_adr),\n        .dma_dat(dma_dat),\n        .dma_ack(dma_ack),\n        .dma_rdt(dma_rdt)\n    );",
+        "    always #42 wb_clk <= !wb_clk;",
+        "    initial begin\n        $dumpfile(\"dsp.vcd\");\n        $dumpvars(0, tb);\n        #500000 $finish;\n    end"
+    ]
+}

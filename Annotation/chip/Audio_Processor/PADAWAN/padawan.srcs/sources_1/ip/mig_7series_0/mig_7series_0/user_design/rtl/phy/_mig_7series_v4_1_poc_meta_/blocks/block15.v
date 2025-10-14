@@ -1,0 +1,1 @@
+  always @(posedge clk) window_center_r <= #TCQ window_center_ns;

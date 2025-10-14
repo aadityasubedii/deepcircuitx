@@ -1,0 +1,51 @@
+{
+    "line_num": [
+        [
+            46,
+            51
+        ],
+        [
+            42,
+            42
+        ],
+        [
+            41,
+            41
+        ],
+        [
+            40,
+            40
+        ],
+        [
+            33,
+            38
+        ],
+        [
+            29,
+            29
+        ],
+        [
+            28,
+            28
+        ],
+        [
+            27,
+            27
+        ],
+        [
+            25,
+            32
+        ]
+    ],
+    "blocks": [
+        "\talways @(posedge clk or negedge reset_n)\n\t\tif (!reset_n)\n\t\t\tcount <= RESET_VALUE[WORD_LENGTH-1:0];\n\t\telse\n\t\t   count <= (restart_count) ? reset_value :\n                    (enable_count) ? (count < max_count) ? count + 1'b1 : {(WORD_LENGTH){1'b0}} : count;\t\t\t\t\t",
+        "            assign cp_ticks = ticks & {TICKS_WORD_LENGTH{enable_ticks}};",
+        "            assign enable_count = enable && ((ticks >= TICKS_PER_COUNT - 1) || !enable_ticks);",
+        "            assign start_count = ticks == {TICKS_WORD_LENGTH{1'b0}} || !enable_ticks;",
+        "            always @(posedge clk or negedge reset_n)\n                if (!reset_n)\n                    ticks <= {TICKS_WORD_LENGTH{1'b0}};\n                else\n                    ticks <= (restart_count) ? {TICKS_WORD_LENGTH{1'b0}} :\n                             (enable) ? (ticks >= TICKS_PER_COUNT - 1) ? {TICKS_WORD_LENGTH{1'b0}} : ticks + 1'b1 : ticks;",
+        "            assign cp_ticks = 1'b0;",
+        "            assign enable_count = enable;",
+        "            assign start_count = 1'b1;",
+        "    generate\n        if(TICKS_PER_COUNT == 1) begin\n            assign start_count = 1'b1;\n            assign enable_count = enable;\n            assign cp_ticks = 1'b0;\n        end else begin\n            reg [TICKS_WORD_LENGTH-1:0] ticks;\n            "
+    ]
+}

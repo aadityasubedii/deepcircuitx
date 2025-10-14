@@ -1,0 +1,15 @@
+Module name: read_data_path.
+
+Module specification: The read_data_path module centers its functionality around memory management and control operations, particularly reading operations. It is dedicated to configuring read operations from a data memory, conformized to specific parameters and includes error checks as well as asynchronous FIFOs. The module's operation is synchronous, with triggered actions on clock edges. Moreover, the module can adapt to different hardware or operational requirements.
+
+Input ports:
+The module has the following input ports: clk_i (clock input), rst_i (system reset input), manual_clear_error (manual error clearing), cmd_valid_i (validity of command received), prbs_fseed_i (seed value for the pseudo-random bit sequence generator), data_mode_i (data mode selection), cmd_sent (signal indicating command is sent), bl_sent (signal indicating burst length sequence is sent), cmd_en_i (command enable signal), fixed_data_i (fixed data value input), addr_i (address input for memory operations), bl_i (Burst length signal), data_valid_i (validity of data present), data_i (input data to be processed).
+
+Output ports: 
+The module includes the following output ports: cmd_rdy_o (module readiness for command), data_rdy_o (readiness indicator for valid data output), last_word_rd_o (last word read signal), data_error_o (data related error indicator), cmp_data_o (compared data output), rd_mdata_o (data read output from memory), cmp_data_valid (validity indicator for compared data), cmp_addr_o (address output for comparison operation), cmp_bl_o (burst length output after comparison), force_wrcmd_gen_o (forced write command generation signal), rd_buff_avail_o (indicator for available space in read buffer), dq_error_bytelane_cmp (error indication for each dq lane), cumlative_dq_lane_error_r (cumulative of all dq lane errors). 
+
+Internal signals: 
+The module employs several internal signals like gen_rdy (Ready flag for data generation), gen_valid (Validation flag for data generation), gen_addr (Address signal for data generation), cmp_rdy (Ready flag for comparison operation) among others to manage operations such as error detection and handling, data comparison for error checks and synchronization purposes.
+
+Code overview: 
+The code includes various blocks dedicated to functions like data generation, comparison operations, error detection and handling. This includes the generation of pseudo-random bit sequences for memory management operations, FIFO management for data read operations, and even conditional error checks based on compatible device families like "SPARTAN6" and "VIRTEX6". The operation of this module is synchronous and timed on the edges of the clock cycle. The structure of the code reflects modularity and flexibility, allowing for efficient memory read operations.

@@ -1,0 +1,1 @@
+    end if (nCK_PER_CLK == 2) begin: gen_sr_match_div2

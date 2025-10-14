@@ -1,0 +1,1 @@
+  always @(posedge clk) oclkdelay_center_calib_done_r <= #TCQ oclkdelay_center_calib_done_ns;

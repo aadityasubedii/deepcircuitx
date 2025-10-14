@@ -1,0 +1,1 @@
+        assign is_side_registers = av_address <= 8'd4;

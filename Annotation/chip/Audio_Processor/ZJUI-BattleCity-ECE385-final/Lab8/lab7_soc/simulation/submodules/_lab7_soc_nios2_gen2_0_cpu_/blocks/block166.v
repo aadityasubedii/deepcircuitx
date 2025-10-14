@@ -1,0 +1,1 @@
+  assign W_cpuid_reg = 0;

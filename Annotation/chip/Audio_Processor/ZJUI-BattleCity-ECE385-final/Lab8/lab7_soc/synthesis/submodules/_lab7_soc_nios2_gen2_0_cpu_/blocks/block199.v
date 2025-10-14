@@ -1,0 +1,1 @@
+  assign D_wr_dst_reg = (D_dst_regnum != 0) & ~D_ctrl_ignore_dst;

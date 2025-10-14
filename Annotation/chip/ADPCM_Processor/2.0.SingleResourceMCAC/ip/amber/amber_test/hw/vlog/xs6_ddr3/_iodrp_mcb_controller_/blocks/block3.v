@@ -1,0 +1,1 @@
+   assign DRP_SDI = (rd_not_write_reg & DRP_CS & !DRP_ADD)? DRP_SDO : DRP_SDI_pre; 

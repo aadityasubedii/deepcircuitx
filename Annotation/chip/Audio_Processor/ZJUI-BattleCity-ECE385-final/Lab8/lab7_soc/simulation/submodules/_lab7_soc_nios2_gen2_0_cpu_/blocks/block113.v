@@ -1,0 +1,1 @@
+  assign R_ctrl_uncond_cti_non_br_nxt = D_ctrl_uncond_cti_non_br;

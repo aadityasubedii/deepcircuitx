@@ -1,0 +1,1 @@
+  assign atm_valid = |atm[35 : 32] & trc_this;

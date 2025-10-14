@@ -1,0 +1,21 @@
+{
+    "line_num": [
+        [
+            38,
+            38
+        ],
+        [
+            18,
+            36
+        ],
+        [
+            10,
+            16
+        ]
+    ],
+    "blocks": [
+        "\tassign xin_data = (rd_en) ? data_mem[data_rd_addr] : 16'd0;",
+        "\talways @(posedge input_rdy_flag)\n\tbegin\n\t\tif (data_in == 16'd0)\n\t\tbegin\n\t\t\tzero_cnt = zero_cnt + 1'b1;\n\t\t\tif (zero_cnt == 12'd800)\n\t\t\t\tzero_flag = 1'b1;\n\t\t\telse if (zero_cnt > 12'd800)\n\t\t\tbegin\n\t\t\t\tzero_cnt = 12'd800;\n\t\t\t\tzero_flag = 1'b1;\n\t\t\tend\n\t\tend\t\t\n\t\telse if (data_in != 16'd0)\n\t\tbegin\n\t\t\tzero_cnt = 12'd0;\n\t\t\tzero_flag = 1'b0;\n\t\tend\n\tend",
+        "\talways @(negedge Sclk)\n\tbegin\n\t\tif(wr_en == 1'b1)\n\t\t\tdata_mem[data_wr_addr] = data_in;\n\t\telse\n\t\t\tdata_mem[data_wr_addr] = data_mem[data_wr_addr];\n\tend"
+    ]
+}

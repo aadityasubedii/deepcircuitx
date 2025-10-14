@@ -1,0 +1,1 @@
+assign update_total_line_f1 = field_1 && (next_total_line_count != total_line_count_f1[13:1] || !total_line_count_f1[0]) && first_start_new_field;

@@ -1,0 +1,1 @@
+  assign record_itrace = trc_on & trc_ctrl[4];

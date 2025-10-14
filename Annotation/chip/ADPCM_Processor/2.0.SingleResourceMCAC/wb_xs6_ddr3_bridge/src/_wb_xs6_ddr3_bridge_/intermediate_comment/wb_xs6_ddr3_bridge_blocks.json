@@ -1,0 +1,81 @@
+{
+    "line_num": [
+        [
+            232,
+            232
+        ],
+        [
+            231,
+            231
+        ],
+        [
+            224,
+            228
+        ],
+        [
+            214,
+            221
+        ],
+        [
+            211,
+            213
+        ],
+        [
+            185,
+            208
+        ],
+        [
+            179,
+            179
+        ],
+        [
+            168,
+            176
+        ],
+        [
+            152,
+            165
+        ],
+        [
+            149,
+            151
+        ],
+        [
+            144,
+            146
+        ],
+        [
+            128,
+            135
+        ],
+        [
+            122,
+            122
+        ],
+        [
+            114,
+            120
+        ],
+        [
+            110,
+            112
+        ]
+    ],
+    "blocks": [
+        "assign o_wb_ack  = ( i_wb_stb && read_ack_r ) || write_ack;",
+        "assign write_ack = write_request && !write_buf_r;         ",
+        "    always @( posedge i_clk )\n        if ( !i_rd_empty && read_active_r )\n            o_wb_dat  <= i_rd_data;\n\nend",
+        "    always @( posedge i_clk )\n        if ( !i_rd_empty && read_active_r )\n            o_wb_dat  <= i_wb_adr[3:2] == 2'd0 ? i_rd_data[ 31: 0] :\n                         i_wb_adr[3:2] == 2'd1 ? i_rd_data[ 63:32] :\n                         i_wb_adr[3:2] == 2'd2 ? i_rd_data[ 95:64] :\n                                                 i_rd_data[127:96] ;\n\nend",
+        "generate\nif (WB_DWIDTH == 32) begin :wb32r\n",
+        "always @( posedge i_clk )\n    begin\n    if ( read_ack_r )\n        read_ready <= 1'd1;\n    else if ( read_request )\n        read_ready <= 1'd0;\n    \n    if ( !i_cmd_full )\n        begin\n        write_request_r  <= write_request;\n        read_request_r   <= read_request;\n        wb_adr_r         <= i_mem_ctrl ? {5'd0, i_wb_adr[24:0]} : i_wb_adr[29:0];\n        end\n        \n    if ( read_request  )\n        read_active_r <= 1'd1;\n    else if ( read_ack_r )\n        read_active_r <= 1'd0;\n    \n    if ( i_rd_empty == 1'd0 && read_active_r )\n        read_ack_r  <= 1'd1;\n    else\n        read_ack_r  <= 1'd0;\n    end",
+        "assign o_wr_en = wr_en_r && !i_cmd_full;",
+        "    always @( posedge i_clk )\n        if ( !i_cmd_full )\n            begin\n            wr_en_r    <= write_request;\n            o_wr_mask  <= ~wb_sel; \n            o_wr_data  <= wb_dat;\n            end\n\nend",
+        "    always @( posedge i_clk )\n        if ( !i_cmd_full )\n            begin\n            wr_en_r    <= write_request || write_buf_r;\n            \n            o_wr_mask  <= wb_adr[3:2] == 2'd0 ? { 12'hfff, ~wb_sel          } : \n                          wb_adr[3:2] == 2'd1 ? { 8'hff,   ~wb_sel, 4'hf    } : \n                          wb_adr[3:2] == 2'd2 ? { 4'hf,    ~wb_sel, 8'hff   } : \n                                                {          ~wb_sel, 12'hfff } ; \n            \n            o_wr_data  <= {4{wb_dat}};\n            end\n\nend",
+        "generate\nif (WB_DWIDTH == 32) begin :wb32w\n",
+        "assign wb_sel = write_buf_r ? wb_sel_buf_r : i_wb_sel;\nassign wb_dat = write_buf_r ? wb_dat_buf_r : i_wb_dat;\nassign wb_adr = write_buf_r ? wb_adr_buf_r : i_wb_adr;",
+        "always @( posedge i_clk )\n    if ( i_cmd_full && write_request )\n        begin\n        write_buf_r     <= 1'd1;\n        wb_sel_buf_r    <= i_wb_sel;\n        wb_dat_buf_r    <= i_wb_dat;\n        wb_adr_buf_r    <= i_wb_adr;\n        end",
+        "assign o_cmd_en = cmd_en_r && !i_cmd_full;",
+        "always @( posedge i_clk )\n    if ( !i_cmd_full )\n        begin\n        o_cmd_byte_addr  <= {wb_adr_r[29:4], 4'd0};\n        cmd_en_r         <= ( write_request_r || read_request_r );\n        o_cmd_instr      <= write_request_r ? 3'd0 : 3'd1;\n        end",
+        "always @( posedge i_clk )\n    cmd_full_r       <= i_cmd_full;\n"
+    ]
+}

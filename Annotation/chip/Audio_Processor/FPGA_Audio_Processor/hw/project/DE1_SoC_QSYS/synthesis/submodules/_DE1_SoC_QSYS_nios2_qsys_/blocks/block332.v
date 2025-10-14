@@ -1,0 +1,1 @@
+  assign itm_valid = |itm[35 : 32];

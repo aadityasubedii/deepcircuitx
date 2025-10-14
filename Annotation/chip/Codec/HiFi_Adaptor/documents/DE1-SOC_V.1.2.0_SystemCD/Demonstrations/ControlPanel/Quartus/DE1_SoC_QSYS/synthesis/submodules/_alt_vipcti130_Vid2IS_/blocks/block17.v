@@ -1,0 +1,1 @@
+assign sync_count_next = (start_of_hsync) ? sync_count - 2'b01 : sync_count;

@@ -1,0 +1,1 @@
+  assign E_shift_rot_shfcnt = E_src2[4 : 0];

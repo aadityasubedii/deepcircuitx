@@ -1,0 +1,1 @@
+assign read_stall       = enable && !idle_hit && !wb_hit && !read_buf_hit;

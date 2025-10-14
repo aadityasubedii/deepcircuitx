@@ -1,0 +1,46 @@
+{
+    "line_num": [
+        [
+            200,
+            215
+        ],
+        [
+            197,
+            197
+        ],
+        [
+            181,
+            193
+        ],
+        [
+            177,
+            179
+        ],
+        [
+            163,
+            173
+        ],
+        [
+            161,
+            161
+        ],
+        [
+            160,
+            160
+        ],
+        [
+            146,
+            158
+        ]
+    ],
+    "blocks": [
+        "always @ (posedge MRxClk or posedge Reset)\nbegin\n  if(Reset)\n    DlyCrcCnt[3:0] <= #Tp 4'h0;\n  else\n    begin\n      if(DlyCrcCnt[3:0] == 4'h9)\n        DlyCrcCnt[3:0] <= #Tp 4'h0;\n      else\n      if(DlyCrcEn & StateSFD)\n        DlyCrcCnt[3:0] <= #Tp 4'h1;\n      else\n      if(DlyCrcEn & (|DlyCrcCnt[3:0]))\n        DlyCrcCnt[3:0] <= #Tp DlyCrcCnt[3:0] + 1'b1;\n    end\nend",
+        "assign IFGCounterEq24 = (IFGCounter[4:0] == 5'h18) | r_IFG; ",
+        "always @ (posedge MRxClk or posedge Reset)\nbegin\n  if(Reset)\n    IFGCounter[4:0] <= #Tp 5'h0;\n  else\n    begin\n      if(ResetIFGCounter)\n        IFGCounter[4:0] <= #Tp 5'h0;\n      else\n      if(IncrementIFGCounter)\n        IFGCounter[4:0] <= #Tp IFGCounter[4:0] + 1'b1; \n    end\nend",
+        "assign ResetIFGCounter = StateSFD  &  MRxDV & MRxDEqD | StateDrop;\n\nassign IncrementIFGCounter = ~ResetIFGCounter & (StateDrop | StateIdle | StatePreamble | StateSFD) & ~IFGCounterEq24;",
+        "assign ByteCntEq0       = ByteCnt == 16'h0;\nassign ByteCntEq1       = ByteCnt == 16'h1;\nassign ByteCntEq2       = ByteCnt == 16'h2; \nassign ByteCntEq3       = ByteCnt == 16'h3; \nassign ByteCntEq4       = ByteCnt == 16'h4; \nassign ByteCntEq5       = ByteCnt == 16'h5; \nassign ByteCntEq6       = ByteCnt == 16'h6;\nassign ByteCntEq7       = ByteCnt == 16'h7;\nassign ByteCntGreat2    = ByteCnt >  16'h2;\nassign ByteCntSmall7    = ByteCnt <  16'h7;\nassign ByteCntMax       = ByteCnt == 16'hffff;",
+        "assign ByteCntOut = DlyCrcEn? ByteCntDelayed : ByteCnt;",
+        "assign ByteCntDelayed = ByteCnt + 3'h4;",
+        "always @ (posedge MRxClk or posedge Reset)\nbegin\n  if(Reset)\n    ByteCnt[15:0] <= #Tp 16'h0;\n  else\n    begin\n      if(ResetByteCounter)\n        ByteCnt[15:0] <= #Tp 16'h0;\n      else\n      if(IncrementByteCounter)\n        ByteCnt[15:0] <= #Tp ByteCnt[15:0] + 1'b1;\n     end\nend"
+    ]
+}

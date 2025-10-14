@@ -1,0 +1,26 @@
+Module name: ddr3_afifo. 
+
+Module specification: The ddr3_afifo module is designed to manage asynchronous FIFO buffers facilitating the interface between systems operating in different clock domains, specifically for handling memory access operations to DDR3 memory. It encapsulates three primary sub-modules for handling commands, write, and read operations across the system clock (`i_sys_clk`) and the DDR clock (`i_ddr_clk`). Each sub-module employs a FIFO strategy to bridge the clock domains through three fiscal input-output elements: command (`cmd`), write (`wr`), and read (`rd`). 
+
+1. **Input Ports:**
+   - `i_sys_clk`, `i_ddr_clk`: Clock inputs for system and DDR operations.
+   - `i_cmd_en`, `i_cmd_instr`, `i_cmd_byte_addr`: Control and address for command operations.
+   - `i_wr_en`, `i_wr_mask`, `i_wr_data`, `i_wr_addr_32`: Control, masking, data, and address input for write operations.
+   - `i_ddr_rd_data`, `i_ddr_rd_valid`: Data input and validation from DDR memory read.
+   - `i_ddr_cmd_full`, `i_ddr_wr_full`: Status indicators for full conditions on DDR command and write queues.
+
+2. **Output Ports:**
+   - `o_cmd_full`, `o_wr_full`: Indicators if command or write FIFOs are full.
+   - `o_ddr_cmd_en`, `o_ddr_cmd_instr`, `o_ddr_cmd_byte_addr`: Command output controls to DDR memory.
+   - `o_ddr_wr_en`, `o_ddr_wr_mask`, `o_ddr_wr_data`, `o_ddr_wr_addr_32`: Controls for enabling and directing write operations to DDR.
+   - `o_rd_data`, `o_rd_valid`: Data and validation outputs for read operations from DDR.
+
+3. **Internal Signals:**
+   - `cmd_empty`, `wr_empty`, `rd_empty`: Indicators for empty status in respective FIFOs used for controlling data flow.
+
+4. **Functional Blocks:**
+   - `u_afifo_cmd`: Asynchronous FIFO for command operations bridging the command information between `i_sys_clk` and `i_ddr_clk`.
+   - `u_afifo_wr`: Asynchronous FIFO for write operations handling data, masks, and addresses.
+   - `u_afifo_rd`: Asynchronous FIFO for read operations, moving read data from the DDR clock domain to the system clock domain.
+
+These FIFOs effectively manage the synchronization, buffering, and transfer of data and commands between the system clock and DDR clock domains, ensuring reliable and orderly memory operations while preventing data corruption and ensuring smooth data flow despite the clock differences. Each FIFO control and data line is carefully managed to handle full and empty states, ensuring that each operation occurs at the appropriate time without data loss.

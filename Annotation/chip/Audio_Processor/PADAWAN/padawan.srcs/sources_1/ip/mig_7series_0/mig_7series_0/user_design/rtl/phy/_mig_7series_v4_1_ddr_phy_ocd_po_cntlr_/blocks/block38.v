@@ -1,0 +1,1 @@
+  always @(posedge clk) cmplx_stg3_final_r <= #TCQ cmplx_stg3_final_ns;

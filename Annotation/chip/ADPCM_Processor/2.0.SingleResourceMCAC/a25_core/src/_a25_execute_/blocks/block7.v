@@ -1,0 +1,1 @@
+assign carry_in = i_use_carry_in ? status_bits_flags[1] : 1'd0;

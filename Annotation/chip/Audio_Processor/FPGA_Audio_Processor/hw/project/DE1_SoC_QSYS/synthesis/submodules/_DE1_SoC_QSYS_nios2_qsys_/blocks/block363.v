@@ -1,0 +1,1 @@
+  assign advanced_exc_occured = 1'b0;

@@ -1,0 +1,9 @@
+Module name: altera_reset_synchronizer.
+
+Module specification: The altera_reset_synchronizer is a Verilog module designed for synchronizing resets in digital systems. This module processes an input reset signal and outputs a reset signal that is synchronized to a provided clock signal. The functionality is controlled by two parameters: ASYNC_RESET and DEPTH. When ASYNC_RESET is active, the reset signal is applied immediately on the rising edge of either clock or reset signal, and if it's not active, the reset is synchronized to the clock. DEPTH parameter controls the number of intermediate stages used for reset signal synchronization.
+
+The module has two input ports - "reset_in", the incoming reset signal to be synchronized, and "clk", the clock signal to which the reset signal needs to be synchronized. There is a single output port, "reset_out", which is the reset signal synchronized to the clock.
+
+Internally, the module uses two signals, namely "altera_reset_synchronizer_int_chain" and "altera_reset_synchronizer_int_chain_out". The "altera_reset_synchronizer_int_chain" is an array of registers, size controlled by the DEPTH parameter, used as an intermediary to hold resets at different synchronization stages, shifting the reset signal across stages on each clock edge. The "altera_reset_synchronizer_int_chain_out" is a register holding the synchronized output reset signal henceforth.
+
+The code is structured in two main blocks determined by the ASYNC_RESET parameter. If this is set, a block is activated where the reset chain and output register are instantly set to high upon a rising reset or clock signal. If not set, another block activates where the reset chain and output register are controlled only by rising clock edges, and reset_in feed into the chain's input. At last, in both blocks, the synchronized output is assigned to reset_out.

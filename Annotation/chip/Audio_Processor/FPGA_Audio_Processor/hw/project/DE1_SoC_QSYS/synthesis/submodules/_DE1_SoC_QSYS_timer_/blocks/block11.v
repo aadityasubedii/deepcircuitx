@@ -1,0 +1,1 @@
+  assign period_h_wr_strobe = chipselect && ~write_n && (address == 3);

@@ -1,0 +1,1 @@
+assign overflowed = (~full & overflow_reg);

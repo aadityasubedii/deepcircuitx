@@ -1,0 +1,191 @@
+{
+    "line_num": [
+        [
+            732,
+            753
+        ],
+        [
+            728,
+            728
+        ],
+        [
+            685,
+            726
+        ],
+        [
+            680,
+            680
+        ],
+        [
+            677,
+            677
+        ],
+        [
+            675,
+            678
+        ],
+        [
+            618,
+            679
+        ],
+        [
+            616,
+            616
+        ],
+        [
+            615,
+            615
+        ],
+        [
+            612,
+            612
+        ],
+        [
+            605,
+            611
+        ],
+        [
+            603,
+            603
+        ],
+        [
+            576,
+            600
+        ],
+        [
+            532,
+            573
+        ],
+        [
+            531,
+            531
+        ],
+        [
+            527,
+            527
+        ],
+        [
+            464,
+            466
+        ],
+        [
+            460,
+            461
+        ],
+        [
+            436,
+            457
+        ],
+        [
+            433,
+            434
+        ],
+        [
+            423,
+            431
+        ],
+        [
+            415,
+            422
+        ],
+        [
+            401,
+            408
+        ],
+        [
+            392,
+            399
+        ],
+        [
+            391,
+            391
+        ],
+        [
+            386,
+            386
+        ],
+        [
+            385,
+            385
+        ],
+        [
+            384,
+            384
+        ],
+        [
+            379,
+            382
+        ],
+        [
+            372,
+            377
+        ],
+        [
+            354,
+            363
+        ],
+        [
+            339,
+            351
+        ],
+        [
+            333,
+            338
+        ],
+        [
+            330,
+            330
+        ],
+        [
+            324,
+            324
+        ],
+        [
+            312,
+            319
+        ],
+        [
+            304,
+            310
+        ]
+    ],
+    "blocks": [
+        "   tg_status\n     #(\n     \n       .TCQ           (TCQ),\n       .DWIDTH            (DWIDTH)\n       )\n   tg_status\n     (\n      .clk_i              (clk_i),\n      .rst_i              (rst_ra[2]),\n      .manual_clear_error (manual_clear_error),\n      .data_error_i       (cmp_error),\n      .cmp_data_i         (cmp_data),\n      .rd_data_i          (mem_rd_data ),\n      .cmp_addr_i         (cmp_addr),\n      .cmp_bl_i           (cmp_bl),\n      .mcb_cmd_full_i     (mcb_cmd_full_i),\n      .mcb_wr_full_i      (mcb_wr_full),           \n      .mcb_rd_empty_i     (mcb_rd_empty),\n      .error_status       (error_status),\n      .error              (error)\n      );",
+        "assign  mcb_wr_en_o = mcb_wr_en;",
+        "generate\nif (PORT_MODE == \"WR_MODE\" || PORT_MODE == \"BI_MODE\") begin : WR_PATH\n\n   write_data_path\n     #(\n     \n       .TCQ           (TCQ),\n       .FAMILY  (FAMILY),\n       .MEM_BURST_LEN     (MEM_BLEN),\n       .ADDR_WIDTH        (ADDR_WIDTH),\n       .DATA_PATTERN      (DATA_PATTERN),\n       .DWIDTH            (DWIDTH),\n       .NUM_DQ_PINS       (NUM_DQ_PINS),\n       .SEL_VICTIM_LINE   (SEL_VICTIM_LINE),\n       .MEM_COL_WIDTH     (MEM_COL_WIDTH),\n       .EYE_TEST          (EYE_TEST)\n\n       )\n   write_data_path\n     (\n      .clk_i(clk_i),\n      .rst_i            (rst_rb),\n      .cmd_rdy_o            (wr_rdy),\n      .cmd_valid_i          (wr_valid),\n      .cmd_validB_i          (wr_validB),\n      .cmd_validC_i          (wr_validC),\n      .prbs_fseed_i         (data_seed_i),\n      .data_mode_i          (data_mode_r_c),\n      .last_word_wr_o       (last_word_wr),\n\n      .fixed_data_i         (fixed_data_i),\n      .addr_i               (wr_addr),\n      .bl_i                 (wr_bl),\n      .data_rdy_i           (!mcb_wr_full),\n      .data_valid_o         (mcb_wr_en),\n      .data_o               (mcb_wr_data_o),\n      .data_mask_o          (mcb_wr_mask_o),\n      .data_wr_end_o           (mcb_wr_data_end_o)\n      );\n   \nend\nendgenerate",
+        "",
+        "   assign cmp_error = 1'b0;",
+        "else begin: WR_ONLY_PATH\n\n   assign cmp_error = 1'b0;\nend   ",
+        "generate\nif (PORT_MODE == \"RD_MODE\" || PORT_MODE == \"BI_MODE\")  begin : RD_PATH\n   read_data_path\n     #(\n       .TCQ           (TCQ),\n       .FAMILY            (FAMILY)  ,\n       .MEM_BURST_LEN     (MEM_BLEN),\n\n       .CMP_DATA_PIPE_STAGES (CMP_DATA_PIPE_STAGES),\n       .ADDR_WIDTH        (ADDR_WIDTH),\n       .SEL_VICTIM_LINE   (SEL_VICTIM_LINE),\n       .DATA_PATTERN      (DATA_PATTERN),\n       .DWIDTH            (DWIDTH),\n       .NUM_DQ_PINS       (NUM_DQ_PINS),\n       .DQ_ERROR_WIDTH    (DQ_ERROR_WIDTH),\n       .MEM_COL_WIDTH     (MEM_COL_WIDTH)\n\n       )\n   read_data_path\n     (\n      .clk_i              (clk_i),\n      .rst_i              (rst_rb),\n      .manual_clear_error (manual_clear_error),\n      .cmd_rdy_o          (rd_rdy),\n      .cmd_valid_i        (rd_valid),\n      .prbs_fseed_i         (data_seed_i),\n      .cmd_sent                 (mcb_cmd_instr_o),\n      .bl_sent                  (mcb_cmd_bl_o),\n      .cmd_en_i              (cmd_rd_en),\n\n      .data_mode_i        (data_mode_r_b),\n      .last_word_rd_o         (last_word_rd),\n\n      .fixed_data_i         (fixed_data_i),\n\n      .addr_i                 (rd_addr),\n      .bl_i                   (rd_bl),\n      .data_rdy_o             (mcb_rd_en_o),\n      \n      .data_valid_i           (rdpath_data_valid_i),\n      .data_i                 (rdpath_rd_data_i), \n      \n      \n      .data_error_o           (cmp_error),\n      .cmp_data_valid         (cmp_data_valid),\n      .cmp_data_o             (cmp_data),\n      .rd_mdata_o             (mem_rd_data ),\n      .cmp_addr_o             (cmp_addr),\n      .cmp_bl_o               (cmp_bl),\n      .force_wrcmd_gen_o      (force_wrcmd_gen),\n      .rd_buff_avail_o        (rd_buff_avail),\n      .dq_error_bytelane_cmp     (dq_error_bytelane_cmp),\n      .cumlative_dq_lane_error_r   (cumlative_dq_lane_error)\n\n      );\n\nend\nelse begin: WR_ONLY_PATH\n\n   assign cmp_error = 1'b0;\nend   \nendgenerate",
+        "assign rdpath_rd_data_i =(FAMILY == \"VIRTEX6\" && MEM_BLEN == 4) ? rd_v6_mdata : mcb_rd_data_i ;",
+        "assign rdpath_data_valid_i =(FAMILY == \"VIRTEX6\" && MEM_BLEN == 4) ? (!rd_mdata_fifo_empty & rd_mdata_afull_set) :!mcb_rd_empty ;",
+        "assign cmd_rd_en = ~mcb_cmd_full_i & mcb_cmd_en_o;",
+        "always @ (posedge clk_i)\nbegin\nif (rst_rb[0])\n   rd_mdata_afull_set <= #TCQ 1'b0;\nelse if (rd_mdata_fifo_afull)\n   rd_mdata_afull_set <= #TCQ 1'b1;\nend",
+        "wire cmd_rd_en;",
+        "   afifo #\n   (\n   \n    .TCQ           (TCQ),\n    .DSIZE         (DWIDTH),\n    .FIFO_DEPTH    (32),\n    .ASIZE         (5),\n    .SYNC          (1)  \n   \n   \n   )\n   rd_mdata_fifo\n   (\n    .wr_clk        (clk_i),\n    .rst           (rst_rb[0]),\n    .wr_en         (!mcb_rd_empty),\n    .wr_data       (mcb_rd_data_i),\n    .rd_en         (mcb_rd_en_o),\n    .rd_clk        (clk_i),\n    .rd_data       (rd_v6_mdata),\n    .full          (),\n    .almost_full   (rd_mdata_fifo_afull),\n    .empty         (rd_mdata_fifo_empty)\n   \n   );",
+        "   mcb_flow_control #\n     (\n       .TCQ           (TCQ),\n       .FAMILY  (FAMILY)\n       \n     )\n   mcb_control\n     (\n      .clk_i            (clk_i),\n      .rst_i            (rst_ra),\n\n      .cmd_rdy_o        (flow2cmd_rdy),\n      .cmd_valid_i      (cmd2flow_valid),\n      .cmd_i            (cmd2flow_cmd),\n      .addr_i           (cmd2flow_addr),\n      .bl_i             (cmd2flow_bl),\n      \n      .mcb_cmd_full        (cmd_full),\n\n      .cmd_o                 (mcb_cmd_instr_o),\n      .addr_o                (addr_o),\n      .bl_o                  (mcb_cmd_bl_o),\n      .cmd_en_o              (mcb_cmd_en_o),\n   \n\n      .last_word_wr_i         (last_word_wr),\n      .wdp_rdy_i            (wr_rdy),\n      .wdp_valid_o          (wr_valid),\n      .wdp_validB_o         (wr_validB),\n      .wdp_validC_o         (wr_validC),\n\n      .wr_addr_o            (wr_addr),\n      .wr_bl_o              (wr_bl),\n   \n\n      .last_word_rd_i         (last_word_rd),\n      .rdp_rdy_i            (rd_rdy),\n      .rdp_valid_o           (rd_valid),\n      .rd_addr_o            (rd_addr),\n      .rd_bl_o              (rd_bl)\n\n      );",
+        "assign cmd_full = mcb_cmd_full_i;",
+        "assign mcb_cmd_addr_o = addr_o[ADDR_WIDTH-1:0];",
+        " always @ (posedge clk_i)\n    end_addr_r <= end_addr_i;\n",
+        "end\nendgenerate",
+        "  afifo #\n   (.TCQ           (TCQ),\n    .DSIZE         (38),\n    .FIFO_DEPTH    (16),\n    .ASIZE         (4),\n    .SYNC          (1)  \n\n\n   )\n   cmd_fifo\n   (\n    .wr_clk        (clk_i),\n    .rst           (rst_ra[0]),\n    .wr_en         (cmd_fifo_wr),\n    .wr_data       ({cmd2flow_bl,cmd2flow_addr}),\n    .rd_en         (cmd_fifo_rd),\n    .rd_clk        (clk_i),\n    .rd_data       ({xfer_cmd_bl,xfer_addr}),\n    .full          (cmd_fifo_full),\n    .empty         (cmd_fifo_empty)\n\n   );",
+        "wire cmd_fifo_empty;\nassign cmd_fifo_rd = mcb_cmd_en_o & ~mcb_cmd_full_i & ~cmd_fifo_empty;",
+        "always @ (posedge clk_i)\nbegin\nif ( mcb_cmd_en_o)\n   if ( xfer_addr != mcb_cmd_addr_o)\n      fifo_error <= #TCQ 1'b1;\n   else\n      fifo_error <= #TCQ 1'b0;\n\nend",
+        "generate\nif (SIMULATION == \"TRUE\") begin: cmd_check\nreg fifo_error;\nwire [31:0] xfer_addr;\nwire cmd_fifo_rd;\n\nassign cmd_fifo_wr =  flow2cmd_rdy & cmd2flow_valid;\n",
+        "always @ (posedge clk_i)\nbegin\n  if (dcount_rst)\n      rd_data_counts <= #TCQ 'b0;\n  else if (mcb_rd_en_o)\n      rd_data_counts <= #TCQ rd_data_counts + DWIDTH/8;\n\nend",
+        "always @ (posedge clk_i)\nbegin\n  if (dcount_rst)\n      wr_data_counts <= #TCQ 'b0;\n  else if (mcb_wr_en)\n      wr_data_counts <= #TCQ wr_data_counts + DWIDTH/8;\n\nend",
+        "assign dcount_rst = counts_rst | rst_ra[0];",
+        "   assign bram_bl_i[5:0] = bram_cmd_i[38:33];",
+        "   assign bram_instr_i = bram_cmd_i[32:30];",
+        "   assign bram_addr_i = {bram_cmd_i[29:0],2'b00};",
+        "   always @(posedge clk_i)\n   begin\n       run_traffic_reg <= #TCQ run_traffic_i;\n   end",
+        "   always @(posedge clk_i)\n   begin\n         rst_ra <= #TCQ {rst_i,rst_i,rst_i,rst_i,rst_i,rst_i,rst_i,rst_i,rst_i,rst_i};\n         rst_rb <= #TCQ {rst_i,rst_i,rst_i,rst_i,rst_i,rst_i,rst_i,rst_i,rst_i,rst_i};\n\n   end",
+        "always @ (posedge clk_i)\nbegin\nif (rst_ra[0])\n    mcb_rd_empty_r <= #TCQ 1'b1;\n\nelse if (mcb_rd_fifo_counts <= 1)\n    mcb_rd_empty_r <= #TCQ 1'b1;\nelse\n    mcb_rd_empty_r <= #TCQ 1'b0;\nend",
+        "always @ (posedge clk_i)\nbegin\nif (rst_ra[0])\n    mcb_wr_full_r1 <= #TCQ 1'b0;\nelse if (mcb_wr_fifo_counts >= 63) begin\n    mcb_wr_full_r1 <= #TCQ 1'b1;\n    mcb_wr_full_r2 <= #TCQ 1'b1;\n    end\nelse begin\n    mcb_wr_full_r1 <= #TCQ 1'b0;\n    mcb_wr_full_r2 <= #TCQ 1'b0;\n    end\nend",
+        "always @ (posedge clk_i)\nbegin\n    data_mode_r_a <= #TCQ data_mode_i;\n    data_mode_r_b <= #TCQ data_mode_i;\n    data_mode_r_c <= #TCQ data_mode_i;\nend",
+        "assign     mcb_wr_full = mcb_wr_full_i;",
+        "assign     mcb_rd_empty = mcb_rd_empty_i;",
+        "always @ (mcb_cmd_en_o,mcb_cmd_addr_o,mcb_cmd_bl_o,end_addr_i)\n\nif (mcb_cmd_en_o && (mcb_cmd_addr_o + mcb_cmd_bl_o * (DWIDTH/8)) > end_addr_i[ADDR_WIDTH-1:0])\n   begin\n   $display(\"Error ! Data access beyond address range\");\n   error_access_range = 1'b1;\n   $stop;\n   end",
+        "  initial begin\n    if((MEM_BURST_LEN !== 4) && (MEM_BURST_LEN !== 8)) begin\n      $display(\"Current Traffic Generator logic does not support OTF (On The Fly) Burst Mode!\");\n      $display(\"If memory is set to OTF (On The Fly) , Traffic Generator only generates BL8 traffic\");\n      \n    end\n  end"
+    ]
+}

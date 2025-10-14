@@ -1,0 +1,1 @@
+  assign R_ctrl_signed_imm12_nxt = D_ctrl_signed_imm12;

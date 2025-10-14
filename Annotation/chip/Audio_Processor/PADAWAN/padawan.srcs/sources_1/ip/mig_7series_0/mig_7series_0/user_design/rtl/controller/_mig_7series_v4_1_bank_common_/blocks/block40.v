@@ -1,0 +1,1 @@
+  always @(posedge clk) periodic_rd_ack_r_lcl <= #TCQ periodic_rd_ack_ns;

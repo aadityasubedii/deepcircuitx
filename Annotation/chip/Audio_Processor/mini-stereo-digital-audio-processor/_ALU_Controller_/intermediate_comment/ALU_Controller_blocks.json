@@ -1,0 +1,36 @@
+{
+    "line_num": [
+        [
+            280,
+            408
+        ],
+        [
+            262,
+            278
+        ],
+        [
+            130,
+            258
+        ],
+        [
+            112,
+            128
+        ],
+        [
+            72,
+            108
+        ],
+        [
+            48,
+            70
+        ]
+    ],
+    "blocks": [
+        "always @(posedge Sclk)\nbegin\n\t\n\tif(alu_status == 1)\n\tbegin\n\t\tcase (flagR)\t\n\t\t\n\t\t1:\n\t\tbegin\n\t\t\tif(ir<16)\n\t\t\tbegin\n\t\t\t\tR = read_rjr;\n\t\t\t\tkR = read_coeffr[7:0];\n\t\t\t\tsignbitR = read_coeffr[8];\n\t\t\t\tif(jR<(pR+R))\n\t\t\t\tbegin\n\n\t\t\t\t\tadd_statusR=0;\n\t\t\t\t\tflagR=2;\n\t\t\t\t\tif(cont_address >= kR)\n\t\t\t\t\tbegin\n\t\t\t\t\t\tsign_statusR=1;\n\t\t\t\t\t\tindex_inR=cont_address-kR;\n\t\t\t\t\t\tif(index_inR > 511)\n\t\t\t\t\t\tbegin\n\t\t\t\t\t\t\tindex_inR = index_inR  - set;\n\t\t\t\t\t\t\tif(index_inR < 0)\n\t\t\t\t\t\t\tbegin\n\t\t\t\t\t\t\t\tindex_inR = index_inR + 512;\n\t\t\t\t\t\t\tend\n\t\t\t\t\t\tend\n\t\t\t\t\tend\n\t\t\t\tend\t\t\t\t\n\t\t\tend\n\t\tend\n\t\t\n\t\t2:\n\t\tbegin\n\t\t\tif(cont_address >= kR)\n\t\t\tbegin\n\t\t\t\tif(signbitR == 1'b1)\n\t\t\t\tbegin\n\t\t\t\t\taddorsubR=1;\n\t\t\t\t\taddip1R=ur;\n\t\t\t\t\tflagR = 3;\n\t\t\t\tend\n\t\t\t\telse\n\t\t\t\tbegin\n\t\t\t\t\taddorsubR=0;\n\t\t\t\t\taddip1R=ur;\n\t\t\t\t\tflagR = 3;\n\t\t\t\tend\n\t\t\tend\n\t\t\telse \n\t\t\tbegin\n\t\t\tjR=jR+1;\n\t\t\tif(jR==(pR+R))\n\t\t\tbegin\n\t\t\t\taddorsubR=0;\n\t\t\t\taddip1R=yr;\n\t\t\t\taddip2R=ur;\n\t\t\t\tflagR=5;\n\t\t\tend\n\t\t\telse \n\t\t\t\tflagR=1;\n\t\t\t\tindex_coeffR=jR;\n\t\t\tend\n\t\tend\n\t\t\n\t\t3:\n\t\tbegin\n\t\taddip2R=signoutR;\n\t\tflagR=4;\n\t\tend\n\t\t\t\t\n\t\t4:\n\t\tbegin\n\t\t\tur=addopR;\n\t\t\taddorsubR=0;\n\t\t\tjR=jR+1;\n\t\t\tif(jR==(pR+R))\n\t\t\tbegin\n\t\t\t\taddorsubR=0;\n\t\t\t\taddip1R=yr;\n\t\t\t\taddip2R=ur;\n\t\t\t\tflagR=5;\n\t\t\tend\n\t\t\telse \n\t\t\t\tflagR=1;\n\t\t\t\tindex_coeffR=jR;\n\t\tend\n\t\t\n\t\t5:\n\t\tbegin\n\t\t\tshift_statusR=1;\n\t\t\tshiftipR=addopR;\n\t\t\tflagR=6;\n\t\tend\n\t\n\t\t6:\n\t\tbegin\n\t\t\tyr=shiftopR;\n\t\t\tif(jR==(pR+R))\n\t\t\tbegin\n\t\t\t\tflagR=1;\n\t\t\t\tpR = pR+R;\n\t\t\t\tir=ir+1;\n\t\t\t\tindex_rjR=ir;\n\t\t\t\tjR = pR;\n\t\t\t\tindex_coeffR=jR;\n\t\t\t\t\n\t\t\t\tur = 40'b0;\n\t\t\t\tR = read_rjr;\t\t\t\t\n\t\t\t\tsign_statusR=0;\n\t\t\tend\n\t\t\tif(ir==16)\n\t\t\t\tflagR=7;\n\t\tend\n\t\t\n\t\t7:\n\t\tbegin\n\t\t\tOutputdataR = yr;\n\t\t\tP2S_status=1;\n\t\tend\n\t\t\n\t\tendcase\n\tend\n\t\nend",
+        "always @(negedge Frame)\nbegin\n\tif(ir==16)\n\tbegin\n\t\tshift_statusR= 0;\n\t\tir=0;\n\t\tP2S_status=0;\n\t\tindex_rjR=ir;\n\t\tpR = 0;\n\t\tjR = pR;\n\t\tindex_coeffR=jR;\n\t\tyr=40'b0;\n\t\tur = 40'b0;\n\t\tsign_statusR=0;\n\t\tflagR=1;\n\tend\nend",
+        "always @(posedge Sclk)\nbegin\n\t\n\tif(alu_status == 1)\n\tbegin\n\t\tcase (flagL)\t\n\t\t\n\t\t1:\n\t\tbegin\n\t\t\tif(il<16)\n\t\t\tbegin\n\t\t\t\tL = read_rjl;\n\t\t\t\tkL = read_coeffl[7:0];\n\t\t\t\tsignbitL = read_coeffl[8];\n\t\t\t\tif(jL<(pL+L))\n\t\t\t\tbegin\n\n\t\t\t\t\tadd_statusL=0;\n\t\t\t\t\tflagL=2;\n\t\t\t\t\tif(cont_address >= kL)\n\t\t\t\t\tbegin\n\t\t\t\t\t\tsign_statusL=1;\n\t\t\t\t\t\tindex_inL=cont_address-kL;\n\t\t\t\t\t\tif(index_inL > 511)\n\t\t\t\t\t\tbegin\n\t\t\t\t\t\t\tindex_inL = index_inL  - set;\n\t\t\t\t\t\t\tif(index_inL < 0)\n\t\t\t\t\t\t\tbegin\n\t\t\t\t\t\t\t\tindex_inL = index_inL + 512;\n\t\t\t\t\t\t\tend\n\t\t\t\t\t\tend\n\t\t\t\t\tend\n\t\t\t\tend\t\t\t\t\n\t\t\tend\n\t\tend\n\t\t\n\t\t2:\n\t\tbegin\n\t\t\tif(cont_address >= kL)\n\t\t\tbegin\n\t\t\t\tif(signbitL == 1'b1)\n\t\t\t\tbegin\n\t\t\t\t\taddorsubL=1;\n\t\t\t\t\taddip1L=ul;\n\t\t\t\t\tflagL = 3;\n\t\t\t\tend\n\t\t\t\telse\n\t\t\t\tbegin\n\t\t\t\t\taddorsubL=0;\n\t\t\t\t\taddip1L=ul;\n\t\t\t\t\tflagL = 3;\n\t\t\t\tend\n\t\t\tend\n\t\t\telse \n\t\t\tbegin\n\t\t\tjL=jL+1;\n\t\t\tif(jL==(pL+L))\n\t\t\tbegin\n\t\t\t\taddorsubL=0;\n\t\t\t\taddip1L=yl;\n\t\t\t\taddip2L=ul;\n\t\t\t\tflagL=5;\n\t\t\tend\n\t\t\telse \n\t\t\t\tflagL=1;\n\t\t\t\tindex_coeffL=jL;\n\t\t\tend\n\t\tend\n\t\t\n\t\t3:\n\t\tbegin\n\t\taddip2L=signoutL;\n\t\tflagL=4;\n\t\tend\n\t\t\t\t\n\t\t4:\n\t\tbegin\n\t\t\tul=addopL;\n\t\t\taddorsubL=0;\n\t\t\tjL=jL+1;\n\t\t\tif(jL==(pL+L))\n\t\t\tbegin\n\t\t\t\taddorsubL=0;\n\t\t\t\taddip1L=yl;\n\t\t\t\taddip2L=ul;\n\t\t\t\tflagL=5;\n\t\t\tend\n\t\t\telse \n\t\t\t\tflagL=1;\n\t\t\t\tindex_coeffL=jL;\n\t\tend\n\t\t\n\t\t5:\n\t\tbegin\n\t\t\tshift_statusL=1;\n\t\t\tshiftipL=addopL;\n\t\t\tflagL=6;\n\t\tend\n\t\n\t\t6:\n\t\tbegin\n\t\t\tyl=shiftopL;\n\t\t\tif(jL==(pL+L))\n\t\t\tbegin\n\t\t\t\tflagL=1;\n\t\t\t\tpL = pL+L;\n\t\t\t\til=il+1;\n\t\t\t\tindex_rjL=il;\n\t\t\t\tjL = pL;\n\t\t\t\tindex_coeffL=jL;\n\t\t\t\tul = 40'b0;\n\t\t\t\t\n\t\t\t\tL = read_rjl;\t\t\t\t\n\t\t\t\tsign_statusL=0;\n\t\t\tend\n\t\t\tif(il==16)\n\t\t\t\tflagL=7;\n\t\tend\n\t\t\n\t\t7:\n\t\tbegin\n\t\t\tOutputdataL = yl;\n\t\t\tP2S_status=1;\n\t\tend\n\t\t\n\t\tendcase\n\tend\n\t\nend",
+        "always @(negedge Frame)\nbegin\n\tif(il==16)\n\tbegin\n\t\tshift_statusL= 0;\n\t\til=0;\n\t\tP2S_status=0;\n\t\tindex_rjL=il;\n\t\tpL = 0;\n\t\tjL = pL;\n\t\tindex_coeffL=jL;\n\t\tyl=40'b0;\n\t\tul = 40'b0;\n\t\tsign_statusL=0;\n\t\tflagL=1;\n\tend\nend",
+        "always @(posedge Sclk)\nbegin\n\tif(Reset_n==1'b0)\n\tbegin\n\t\t\n\t\t\n\t\tyl=40'b0;\n\t\tyr=40'b0;\n\t\tur=40'b0;\n\t\tul=40'b0;\n\t\t\n\t\tflagL=1;\n\t\tshift_statusL= 0;\n\t\til=0;\n\t\tP2S_status=0;\n\t\tindex_rjL=il;\n\t\tpL = 0;\n\t\tjL = pL;\n\t\tindex_coeffL=jL;\n\t\tyl=40'b0;\n\t\tul = 40'b0;\n\t\tsign_statusL=0;\n\t\t\n\t\tflagR=1;\n\t\tshift_statusR= 0;\n\t\tir=0;\n\t\tP2S_status=0;\n\t\tindex_rjR=ir;\n\t\tpR = 0;\n\t\tjR = pR;\n\t\tindex_coeffR=jR;\n\t\tyr=40'b0;\n\t\tur = 40'b0;\n\t\tsign_statusR=0;\n\t\t\n\tend\nend",
+        "initial begin\n\tflagL=1;\n\tyl=40'h0;\n\tshift_statusL=0;\n\til=0;\n\tindex_rjL=il;\n\tpL = 0;\n\tjL = pL;\n\tindex_coeffL=jL;\n\tul = 40'b0;\n\tsign_statusL=0;\n\t\n\tflagR=1;\n\tyr=40'h0;\n\tshift_statusR=0;\n\tir=0;\n\tindex_rjR=ir;\n\tpR = 0;\n\tjR = pR;\n\tindex_coeffR=jR;\n\tur = 40'b0;\n\tsign_statusR=0;\nend"
+    ]
+}

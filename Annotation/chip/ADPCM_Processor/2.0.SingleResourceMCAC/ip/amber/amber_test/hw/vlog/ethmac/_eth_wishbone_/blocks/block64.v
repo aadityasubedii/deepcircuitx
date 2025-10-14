@@ -1,0 +1,1 @@
+assign StartRxBDRead = RxStatusWrite | RxAbortSync3 & ~RxAbortSync4 | r_RxEn & ~r_RxEn_q;

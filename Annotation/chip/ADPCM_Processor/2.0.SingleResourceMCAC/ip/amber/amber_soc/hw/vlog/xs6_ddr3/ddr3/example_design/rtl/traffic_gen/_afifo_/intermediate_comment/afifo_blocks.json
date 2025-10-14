@@ -1,0 +1,106 @@
+{
+    "line_num": [
+        [
+            254,
+            262
+        ],
+        [
+            243,
+            251
+        ],
+        [
+            241,
+            241
+        ],
+        [
+            234,
+            239
+        ],
+        [
+            215,
+            228
+        ],
+        [
+            197,
+            205
+        ],
+        [
+            195,
+            196
+        ],
+        [
+            175,
+            192
+        ],
+        [
+            160,
+            172
+        ],
+        [
+            155,
+            155
+        ],
+        [
+            154,
+            154
+        ],
+        [
+            143,
+            148
+        ],
+        [
+            142,
+            142
+        ],
+        [
+            141,
+            141
+        ],
+        [
+            135,
+            135
+        ],
+        [
+            132,
+            134
+        ],
+        [
+            130,
+            132
+        ],
+        [
+            120,
+            120
+        ],
+        [
+            117,
+            119
+        ],
+        [
+            115,
+            116
+        ]
+    ],
+    "blocks": [
+        "always @ (posedge wr_clk )\nbegin\n   if (rst) \n        almost_full <= #TCQ 1'b0;\n   else if ((buf_avail == FIFO_DEPTH - 2 ) || ((buf_avail == FIFO_DEPTH -3) && wr_en))\n        almost_full <= #TCQ 1'b1;\n   else\n        almost_full <= #TCQ 1'b0;\nend        ",
+        "always @ (posedge wr_clk )\nbegin\n   if (rst) \n        full <= #TCQ 1'b0;\n   else if ((buf_avail == 0) || (buf_avail == 1 && wr_en))\n        full <= #TCQ 1'b1;\n   else\n        full <= #TCQ 1'b0;\nend        ",
+        "assign buf_avail = (rd_capture_ptr + FIFO_DEPTH) - wr_ptr;",
+        "always @ (wr_ptr)\nbegin\n    wr_gray_nxt[ASIZE] = wr_ptr[ASIZE];\n    for (n=0; n < ASIZE; n=n+1)\n       wr_gray_nxt[n] = wr_ptr[n] ^ wr_ptr[n+1];\nend       ",
+        "always @(posedge rd_clk)\nbegin\nif (rst)\n   begin\n        wr_ptr <= #TCQ 'b0;\n        wr_gray <= #TCQ 'b0;\n   end\nelse begin\n    if (wr_en)\n        wr_ptr <= #TCQ wr_ptr + 1;\n        \n    \n    wr_gray <= #TCQ wr_gray_nxt;\nend",
+        "always @ (posedge rd_clk )\nbegin\n   if (rst)\n        empty <= #TCQ 1'b1;\n   else if ((buf_filled == 0) || (buf_filled == 1 && rd_strobe))\n        empty <= #TCQ 1'b1;\n   else\n        empty <= #TCQ 1'b0;\nend        ",
+        "assign buf_filled = wr_capture_ptr - rd_ptr;\n               ",
+        "always @(posedge rd_clk)\nbegin\nif (rst)\n   begin\n        rd_ptr <= #TCQ 'b0;\n        rd_gray <= #TCQ 'b0;\n   end\nelse begin\n    if (rd_strobe)\n        rd_ptr <= #TCQ rd_ptr + 1;\n        \n    rd_ptr_tmp <= #TCQ rd_ptr;\n        \n    \n    rd_gray <= #TCQ rd_gray_nxt;\nend\n\nend",
+        "always @ (rd_ptr)\nbegin\n\n\n\n\n  rd_gray_nxt[ASIZE] = rd_ptr[ASIZE];\n  for (n=0; n < ASIZE; n=n+1) \n       rd_gray_nxt[n] = rd_ptr[n] ^ rd_ptr[n+1];\n\n    \n    \nend       ",
+        "assign rd_strobe = rd_en && !empty;",
+        "assign rd_addr = rd_ptr[ASIZE-1:0];",
+        "always @(posedge wr_clk)\nbegin\nif (wr_en && !full)\n  mem[wr_addr] <= #TCQ wr_data;\n\nend",
+        "assign rd_data = mem[rd_addr];",
+        "assign wr_addr = wr_ptr;",
+        "endgenerate",
+        "always @ (wr_ptr)\n    wr_capture_ptr = wr_ptr;\nend",
+        "generate\nif (SYNC == 1) begin: WRSYNC\nalways @ (wr_ptr)",
+        "endgenerate",
+        "   always @ (rd_ptr)\n     rd_capture_ptr = rd_ptr;\nend",
+        "generate\nif (SYNC == 1) begin: RDSYNC"
+    ]
+}

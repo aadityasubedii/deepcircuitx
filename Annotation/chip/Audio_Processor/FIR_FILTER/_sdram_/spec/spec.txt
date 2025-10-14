@@ -1,0 +1,13 @@
+Module Name: sdram_0_input_efifo_module and sdram
+
+Module Specification: The code contains two modules: `sdram_0_input_efifo_module` and `sdram`.
+
+1. `sdram_0_input_efifo_module` acts as a First In, First Out (FIFO) buffer for the SDRAM inputs. It ensures synchronization of data incoming from different clock domains. It uses flags for various conditions including empty, full, almost empty, and almost full, and updates these flags as per the state of read or write operations. This module has both input and output ports, with the input ports being clk, rd, reset_n, wr, and wr_data. These ports represent clock signal, read request, active-low reset signal, write request, and the data to be written into the FIFO respectively. The output ports are almost_empty, almost_full, empty, full, and rd_data, which depict the states of the FIFO and the data read from FIFO.
+
+2. The `sdram` module interfaces with the SDRAM memory and takes care of the signals and states such as active state, data read/write state, and refresh state. Additionally, it manages the refresh counter to enable refresh requests and ensures data integrity and synchronization during read and write operations. This module uses `sdram_0_input_efifo_module` for managing its input buffers. 
+
+The input ports for `sdram` module includes az_addr, az_be_n, az_cs, az_data, az_rd_n, az_wr_n, clk, and reset_n. These ports are responsible for handling the Avalon memory-mapped (Avalon-MM) slave's interface. The output ports such as za_data, za_valid, za_waitrequest, zs_addr, zs_ba, zs_cas_n, zs_cke, zs_cs_n, zs_dq, zs_dqm, zs_ras_n, zs_we_n, manage the interface for the Avalon memory-mapped (Avalon-MM) slave and the SDRAM device. 
+
+Internally, both modules utilize a variety of signals to maintain status and coordinate operations. In `sdram_0_input_efifo_module`, signals like entries, entry_0, entry_1, rd_address, wr_address, rd_data, rdwr capture status of the FIFO buffer. For `sdram`, a complex set of internal signals tracks various operational parameters, such as active state, refresh state, command codes, state of the input FIFO, addresses, data value for operation and more.
+
+The operation of these modules can be divided into specific blocks: initialization of memory, regular operation, refresh operation, and data read/write operation. There is a specific set of command codes provided for each operation.

@@ -1,0 +1,11 @@
+{
+    "line_num": [
+        [
+            9,
+            54
+        ]
+    ],
+    "blocks": [
+        "\talways @(negedge Dclk or posedge Clear)\n\tbegin\n\t\tif (Clear == 1'b1)\n\t\tbegin\n\t\t\tcount_bit = 4'd15;\n\t\t\tdataL = 16'd0;\n\t\t\tdataR = 16'd0;\t\t\t\n\t\t\tin_flag = 1'b0;\n\t\t\tframe_stat = 1'b0;\n\t\tend\n\t\telse \n\t\tbegin\n\t\t\tif (Frame == 1'b1)\n\t\t\tbegin\n\t\t\t\tcount_bit = 4'd15;\n\t\t\t\tin_flag = 1'b0;\n\t\t\t\tdataL [count_bit] = InputL;\n\t\t\t\tdataR [count_bit] = InputR;\n\t\t\t\tframe_stat = 1'b1;\n\t\t\tend\n\t\t\telse if (frame_stat == 1'b1)\n\t\t\tbegin\n\t\t\t\tcount_bit = count_bit - 1'b1;\n\t\t\t\tdataL [count_bit] = InputL;\n\t\t\t\tdataR [count_bit] = InputR;\n\t\t\t\tif (count_bit == 4'd0)\n\t\t\t\tbegin\t\t\t\t\t\n\t\t\t\t\tin_flag = 1'b1;\n\t\t\t\t\tframe_stat = 1'b0;\n\t\t\t\tend\n\t\t\t\telse\n\t\t\t\tbegin\n\t\t\t\t\tin_flag = 1'b0;\n\t\t\t\t\tframe_stat = 1'b1;\n\t\t\t\tend\n\t\t\tend\n\t\t\telse\n\t\t\tbegin\n\t\t\t\tcount_bit = 4'd15;\n\t\t\t\tdataL = 16'd0;\n\t\t\t\tdataR = 16'd0;\t\t\t\n\t\t\t\tin_flag = 1'b0;\n\t\t\t\tframe_stat = 1'b0;\n\t\t\tend\n\t\tend\n\tend"
+    ]
+}

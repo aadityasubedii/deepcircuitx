@@ -1,0 +1,1 @@
+  always @(posedge clk) rnk_config_r <= #TCQ rnk_config_ns;

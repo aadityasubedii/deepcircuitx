@@ -1,0 +1,11 @@
+Module name: single_port_ram. 
+
+Module specification: The single_port_ram module is designed to provide the functionality of a single port Random Access Memory (RAM). It operates on a clock signal (clk), and can read from or write to a memory address given by the address (addr). The operation (read/write) is determined by the write enable signal (write_en). When the write_en signal is high, the data provided by the write_data input port is written to the memory address. When the write_en signal is low, the data from the memory address is read and sent to the read_data output port. This data transmission occurs at the rising edge of the clock signal.
+
+The input ports include clk, addr, write_en, and write_data. The clk signal is the clock for the module, and the operations occur at the rising edge of this signal. The addr is the address of the memory cell where the reading or writing operation takes place. The write_en signal determines whether the operation is a read (when low) or a write (when high). The write_data is the data that needs to be written to the memory cell when the write_en signal is high.
+
+The output port is read_data, which holds the data read from the memory cell when the write_en signal is low.
+
+The internal signal, mem, represents the RAM memory. It is a one-dimensional array of registers of a size determined by the 'size' parameter and width defined by 'width' parameter. It stores the data written during write operations and provides the data read during read operations.
+
+The module primarily contains an always block which executes at the positive edge of the clock. Inside this block, an if statement checks the condition of the write_en signal. If write_en is high, it performs a write operation by writing write_data to the mem at the address specified by addr. If write_en is low, the module performs a read operation by writing the data at addr in mem to the read_data output port.

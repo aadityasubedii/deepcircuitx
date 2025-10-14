@@ -1,0 +1,1 @@
+assign rjdataL = rjl[index_rjL];

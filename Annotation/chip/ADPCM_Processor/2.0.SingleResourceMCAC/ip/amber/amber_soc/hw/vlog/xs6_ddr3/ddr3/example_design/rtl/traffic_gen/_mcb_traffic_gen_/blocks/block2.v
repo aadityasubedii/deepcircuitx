@@ -1,0 +1,1 @@
+assign  mcb_wr_en_o = mcb_wr_en;

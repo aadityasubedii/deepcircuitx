@@ -1,0 +1,16 @@
+{
+    "line_num": [
+        [
+            117,
+            186
+        ],
+        [
+            90,
+            114
+        ]
+    ],
+    "blocks": [
+        "always@ (posedge sys_clk, posedge reset) begin\n\n\tif (reset) begin\n\t\tdata_buf_1\t<= 8'h00;\n\t\tdata_buf_2\t<= 8'h00;\n\t\tch_buf_1\t<= 5'b00000;\n\t\tch_buf_2\t<= 5'b00000;\n\t\to_wb_dat\t<= 32'h00000000;\n\t\tint_buf_1   <= 1'b0;\n\t\tint_set\t<= 1'b0;\n\t\tnew_data_int <= 1'b0;\n\t\tstart_read <= 1'b0;\n\t\tbit_count_buf <= 3'b000;\n\t\ttdmi_begin\t<= 1'b0;\n\tend else begin\n\t\tif (tdmi_begin) begin\n\t\t\tbit_count_buf <= bit_count;\n\t\t\tif ((~prev_frame_sync) & frame_sync) begin\n\t\t\t\tint_buf_1 <= 1'b0;\n\t\t\t\tint_set <= int_set;\n\t\t\tend else if ((bit_count_buf != 3'b111) || (bit_count != 3'b111)) begin\n\t\t\t\tint_set <= 1'b0;\n\t\t\t\tint_buf_1 <= int_buf_1;\n\t\t\tend else if (~int_set & fs_start) begin\n\t\t\t\tint_buf_1 <= 1'b1;\t\n\t\t\t\tint_set <= 1'b1;\n\t\t\tend\n\t\t\tnew_data_int <= int_buf_1;\n\t\t\tif (bit_count == 3'b111) begin\n\t\t\t\tch_buf_1 <= ch_count;\t\n\t\t\t\tdata_buf_1 <= data_out_buf; \n\t\t\tend\n\t\t\tdata_buf_2 <= data_buf_1;\t\n\t\t\tch_buf_2 <= ch_buf_1;\n\t\tend\n\t\tif (i_wb_stb & i_wb_cyc & (~i_wb_we)) begin\t\n\t\t\tcase (i_wb_adr[15:0])\t\t\t\t\n\t\t\t\tTDMI_ALL:\n\t\t\t\t\tbegin\n\t\t\t\t\t\to_wb_dat <= {19'h00000, ch_buf_2, data_buf_2};\t\n\t\t\t\t\tend\n\t\t\t\tTDMI_CHANNEL:\n\t\t\t\t\tbegin\n\t\t\t\t\t\to_wb_dat <= {27'h0000000, ch_buf_2[4:0]};\t\t\n\t\t\t\t\tend\n\t\t\t\tTDMI_DATA:\n\t\t\t\t\tbegin\n\t\t\t\t\t\to_wb_dat <= {24'h00000, data_buf_2};\t\t\n\t\t\t\t\tend\n\t\t\t\tdefault:\n\t\t\t\t\tbegin\n\t\t\t\t\t\to_wb_dat <= {19'h00000, ch_buf_2, data_buf_2};\t\n\t\t\t\t\tend\n\t\t\tendcase\n\t\t\tstart_read <= 1'b1;\n\t\t\tint_buf_1 <= 1'b0;\t\n\t\tend else if (i_wb_stb & i_wb_cyc & i_wb_we) begin\n\t\t\tcase (i_wb_adr[15:0])\n\t\t\t\tTDMI_START:\n\t\t\t\t\tbegin\n\t\t\t\t\t\ttdmi_begin <= i_wb_dat[0];\n\t\t\t\t\tend\n\t\t\t\tdefault:\ttdmi_begin <= 1'b0;\n\t\t\tendcase\n\t\t\tstart_read <= 1'b0;\n\t\tend else begin\n\t\t\tstart_read <= 1'b0;\n\t\tend\n\tend\nend",
+        "always@ (posedge serial_clk, posedge reset) begin\n\tif (reset) begin\t\t\t\t\t\t\n\t\tch_count\t\t<= 5'b00000;\n\t\tbit_count\t\t<= 3'b111;\t\t\t\n\t\tprev_frame_sync \t<= 1'b0;\n\t\tdata_out_buf \t<= 8'h00;\n\t\tfs_start\t\t<= 1'b0;\n\tend else begin\n\t\tif (tdmi_begin) begin\n\t\t\tif ((~prev_frame_sync) & frame_sync) begin\t\n\t\t\t\tch_count <= 5'b00000;\t\t\t\n\t\t\t\tdata_out_buf[7] <= data_in;\t\t\n\t\t\t\tbit_count <= 3'b110;\t\t\t\n\t\t\t\tfs_start <= 1'b1;\n\t\t\tend else begin\n\t\t\t\tdata_out_buf[bit_count] <= data_in;\t\n\t\t\t\tbit_count <= bit_count - 3'b001;\t\n\t\t\t\tif (bit_count == 3'b111) begin\t\n\t\t\t\t\tch_count <= ch_count + 5'b00001;\t\n\t\t\t\tend\n\t\t\tend\n\t\t\tprev_frame_sync <= frame_sync;\t\t\n\t\tend\n\tend\nend"
+    ]
+}

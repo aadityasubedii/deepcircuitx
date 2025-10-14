@@ -1,0 +1,1 @@
+assign wb_ack1_e = (i_wb_we_e) ? (i_wb_stb_e & i_wb_cyc_e) : (i_wb_stb_e & i_wb_cyc_e & start_read_e);

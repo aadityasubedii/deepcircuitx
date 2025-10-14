@@ -1,0 +1,71 @@
+{
+    "line_num": [
+        [
+            149,
+            149
+        ],
+        [
+            145,
+            145
+        ],
+        [
+            133,
+            143
+        ],
+        [
+            131,
+            132
+        ],
+        [
+            126,
+            126
+        ],
+        [
+            123,
+            125
+        ],
+        [
+            116,
+            117
+        ],
+        [
+            110,
+            113
+        ],
+        [
+            107,
+            120
+        ],
+        [
+            105,
+            106
+        ],
+        [
+            101,
+            101
+        ],
+        [
+            100,
+            100
+        ],
+        [
+            99,
+            99
+        ]
+    ],
+    "blocks": [
+        "  assign mc_wrdata_mask = {2*nCK_PER_CLK*DQ_WIDTH/8{1'b0}};",
+        "always @(posedge clk) mc_wrdata <= mc_wrdata_c;",
+        "      always @(h_rows or merged_data or raw_not_ecc_r) begin\n        mc_wrdata_c[j*DQ_WIDTH+:DQ_WIDTH] =\n          {{DQ_WIDTH-PAYLOAD_WIDTH{1'b0}},\n           merged_data[j*PAYLOAD_WIDTH+:PAYLOAD_WIDTH]};\n        for (k=0; k<ECC_WIDTH; k=k+1)\n          if (~raw_not_ecc_r[j])\n            mc_wrdata_c[j*DQ_WIDTH+CODE_WIDTH-k-1] =\n              ^(merged_data[j*PAYLOAD_WIDTH+:DATA_WIDTH] & \n                h_rows[k*CODE_WIDTH+:DATA_WIDTH]);\n      end\n    end",
+        "  generate\n    for (j=0; j<2*nCK_PER_CLK; j=j+1) begin : ecc_word",
+        "  always @(posedge clk) raw_not_ecc_r <= #TCQ raw_not_ecc;",
+        "  input [CODE_WIDTH*ECC_WIDTH-1:0] h_rows;\n  input [2*nCK_PER_CLK-1:0] raw_not_ecc;\n  reg [2*nCK_PER_CLK-1:0] raw_not_ecc_r;",
+        "        assign merged_data[(h+1)*PAYLOAD_WIDTH-1-:PAYLOAD_WIDTH-DATA_WIDTH]=\n                      wr_data[(h+1)*PAYLOAD_WIDTH-1-:PAYLOAD_WIDTH-DATA_WIDTH];",
+        "        assign merged_data[h*PAYLOAD_WIDTH+i*8+:8] =  \n                wr_data_mask[h*DATA_WIDTH/8+i]\n                  ? rd_merge_data[h*DATA_WIDTH+i*8+:8]               \n                  : wr_data[h*PAYLOAD_WIDTH+i*8+:8];",
+        "  generate\n    for (h=0; h<2*nCK_PER_CLK; h=h+1) begin : merge_data_outer\n      for (i=0; i<DATA_WIDTH/8; i=i+1) begin : merge_data_inner\n        assign merged_data[h*PAYLOAD_WIDTH+i*8+:8] =  \n                wr_data_mask[h*DATA_WIDTH/8+i]\n                  ? rd_merge_data[h*DATA_WIDTH+i*8+:8]               \n                  : wr_data[h*PAYLOAD_WIDTH+i*8+:8];\n      end\n      if (PAYLOAD_WIDTH > DATA_WIDTH)\n        assign merged_data[(h+1)*PAYLOAD_WIDTH-1-:PAYLOAD_WIDTH-DATA_WIDTH]=\n                      wr_data[(h+1)*PAYLOAD_WIDTH-1-:PAYLOAD_WIDTH-DATA_WIDTH];\n                                                                   \n    end\n  endgenerate",
+        "  genvar h;\n  genvar i;",
+        "  always @(posedge clk) rd_merge_data_r <= #TCQ rd_merge_data;",
+        "  always @(posedge clk) wr_data_mask_r <= #TCQ wr_data_mask;",
+        "  always @(posedge clk) wr_data_r <= #TCQ wr_data;"
+    ]
+}

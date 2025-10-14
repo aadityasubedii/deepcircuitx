@@ -1,0 +1,1 @@
+  assign ociram_reset_req = reset_req & ~jtag_ram_access;

@@ -1,0 +1,1 @@
+  assign req_row_r = req_row_r_lcl;

@@ -1,0 +1,15 @@
+Module name: lcd24x3.
+
+Module specification: The `lcd24x3` module is designed for controlling a 24x3 LCD display by receiving character data and displaying it appropriately. It synchronizes operations using an input clock signal (`clk`) and accepts eight 5-bit character inputs (`iChar7` to `iChar0`) to represent characters on the display. Additionally, an 8-bit input (`iPoint`) manages special indicators like decimal points. It outputs a 3-bit control signal (`oCom`) for common line selection and a 24-bit segment signal (`oSeg`) to drive the individual segments of the LCD. 
+
+Internal signals include the 72-bit `segin`, which stores decoded segment information, `fcom` (a 4-bit register) for controlling the common lines' multiplexing, `fseg` (a 24-bit register) for the segment signals, `shift` (a register) that toggles to manage the contrast, `fbcnt` (a 5-bit counter) for regulating frame periods with reference to contrast settings, `fbclk` (a clock signal) derived from the main clock for timing multiplexing, and `cnt` (a 15-bit counter) used as a clock divider. 
+
+The module features several blocks:
+1. A clock divider that toggles `fbclk` according to the provided frequency.
+2. A contrast management block toggling `shift` based on contrast settings using `fbcnt`.
+3. A multiplex control block setting `fcom` using a frame buffer counter to cycle through the display rows.
+4. A segment control block within a `generate` construct defining the `fseg` based on the `segin` data and multiplex signals.
+5. An output assignment block that conditions the output control signals `oCom` and `oSeg` on the `shift` signal's status.
+6. A sub-module instantiation (`data_decoder`) which decodes the character inputs (`iChar[x]`) into the control signals for segments (`segin`).
+
+The module encapsulates the LCD driving logic clearly and effectively, operating the display through internal timing and decoding mechanisms.

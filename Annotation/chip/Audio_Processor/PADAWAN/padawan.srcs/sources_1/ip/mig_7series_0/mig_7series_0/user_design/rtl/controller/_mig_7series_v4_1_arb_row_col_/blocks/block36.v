@@ -1,0 +1,1 @@
+  assign sent_col_r = sent_col_lcl_r;

@@ -1,0 +1,51 @@
+{
+    "line_num": [
+        [
+            229,
+            229
+        ],
+        [
+            217,
+            223
+        ],
+        [
+            215,
+            215
+        ],
+        [
+            206,
+            212
+        ],
+        [
+            204,
+            204
+        ],
+        [
+            196,
+            202
+        ],
+        [
+            194,
+            194
+        ],
+        [
+            193,
+            193
+        ],
+        [
+            102,
+            190
+        ]
+    ],
+    "blocks": [
+        "  assign jrst_n = reset_n;",
+        "  always @(posedge tck or negedge jrst_n)\n    begin\n      if (jrst_n == 0)\n          ir_out <= 2'b0;\n      else \n        ir_out <= {debugack_sync, monitor_ready_sync};\n    end",
+        "  defparam the_altera_std_synchronizer2.depth = 2;",
+        "  assign unxcomplemented_resetxx2 = jrst_n;\n  altera_std_synchronizer the_altera_std_synchronizer2\n    (\n      .clk (tck),\n      .din (monitor_ready),\n      .dout (monitor_ready_sync),\n      .reset_n (unxcomplemented_resetxx2)",
+        "  defparam the_altera_std_synchronizer1.depth = 2;",
+        "  altera_std_synchronizer the_altera_std_synchronizer1\n    (\n      .clk (tck),\n      .din (debugack),\n      .dout (debugack_sync),\n      .reset_n (unxcomplemented_resetxx1)\n    );",
+        "  assign st_ready_test_idle = jtag_state_rti;",
+        "  assign tdo = sr[0];",
+        "  always @(posedge tck)\n    begin\n      if (vs_cdr)\n          case (ir_in)\n          \n              2'b00: begin\n                  sr[35] <= debugack_sync;\n                  sr[34] <= monitor_error;\n                  sr[33] <= resetlatch;\n                  sr[32 : 1] <= MonDReg;\n                  sr[0] <= monitor_ready_sync;\n              end \n          \n              2'b01: begin\n                  sr[35 : 0] <= tracemem_trcdata;\n                  sr[37] <= tracemem_tw;\n                  sr[36] <= tracemem_on;\n              end \n          \n              2'b10: begin\n                  sr[37] <= trigger_state_1;\n                  sr[36] <= dbrk_hit3_latch;\n                  sr[35] <= dbrk_hit2_latch;\n                  sr[34] <= dbrk_hit1_latch;\n                  sr[33] <= dbrk_hit0_latch;\n                  sr[32 : 1] <= break_readreg;\n                  sr[0] <= trigbrktype;\n              end \n          \n              2'b11: begin\n                  sr[15 : 2] <= trc_im_addr;\n                  sr[1] <= trc_wrap;\n                  sr[0] <= trc_on;\n              end \n          \n          endcase \n      if (vs_sdr)\n          case (DRsize)\n          \n              3'b000: begin\n                  sr <= {tdi, sr[37 : 2], tdi};\n              end \n          \n              3'b001: begin\n                  sr <= {tdi, sr[37 : 9], tdi, sr[7 : 1]};\n              end \n          \n              3'b010: begin\n                  sr <= {tdi, sr[37 : 17], tdi, sr[15 : 1]};\n              end \n          \n              3'b011: begin\n                  sr <= {tdi, sr[37 : 33], tdi, sr[31 : 1]};\n              end \n          \n              3'b100: begin\n                  sr <= {tdi, sr[37],         tdi, sr[35 : 1]};\n              end \n          \n              3'b101: begin\n                  sr <= {tdi, sr[37 : 1]};\n              end \n          \n              default: begin\n                  sr <= {tdi, sr[37 : 2], tdi};\n              end \n          \n          endcase \n      if (vs_uir)\n          case (ir_in)\n          \n              2'b00: begin\n                  DRsize <= 3'b100;\n              end \n          \n              2'b01: begin\n                  DRsize <= 3'b101;\n              end \n          \n              2'b10: begin\n                  DRsize <= 3'b101;\n              end \n          \n              2'b11: begin\n                  DRsize <= 3'b010;\n              end \n          \n          endcase \n    end"
+    ]
+}

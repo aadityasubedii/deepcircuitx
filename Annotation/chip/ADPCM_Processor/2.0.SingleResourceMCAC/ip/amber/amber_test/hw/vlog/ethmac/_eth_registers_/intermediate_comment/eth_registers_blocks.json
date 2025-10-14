@@ -1,0 +1,186 @@
+{
+    "line_num": [
+        [
+            1177,
+            1177
+        ],
+        [
+            1168,
+            1174
+        ],
+        [
+            1155,
+            1165
+        ],
+        [
+            1143,
+            1153
+        ],
+        [
+            1131,
+            1141
+        ],
+        [
+            1119,
+            1129
+        ],
+        [
+            1107,
+            1117
+        ],
+        [
+            1095,
+            1105
+        ],
+        [
+            1083,
+            1093
+        ],
+        [
+            1072,
+            1078
+        ],
+        [
+            1064,
+            1070
+        ],
+        [
+            1056,
+            1062
+        ],
+        [
+            1048,
+            1054
+        ],
+        [
+            1040,
+            1046
+        ],
+        [
+            1032,
+            1038
+        ],
+        [
+            1024,
+            1030
+        ],
+        [
+            1011,
+            1021
+        ],
+        [
+            1001,
+            1007
+        ],
+        [
+            993,
+            999
+        ],
+        [
+            985,
+            991
+        ],
+        [
+            977,
+            983
+        ],
+        [
+            969,
+            975
+        ],
+        [
+            961,
+            967
+        ],
+        [
+            948,
+            958
+        ],
+        [
+            941,
+            944
+        ],
+        [
+            936,
+            939
+        ],
+        [
+            931,
+            934
+        ],
+        [
+            929,
+            929
+        ],
+        [
+            926,
+            927
+        ],
+        [
+            922,
+            924
+        ],
+        [
+            919,
+            920
+        ],
+        [
+            912,
+            917
+        ],
+        [
+            909,
+            911
+        ],
+        [
+            903,
+            907
+        ],
+        [
+            885,
+            901
+        ],
+        [
+            844,
+            882
+        ]
+    ],
+    "blocks": [
+        "assign INT_SOURCEOut = {{(32-`ETH_INT_SOURCE_WIDTH_0){1'b0}}, irq_rxc, irq_txc, irq_busy, irq_rxe, irq_rxb, irq_txe, irq_txb};",
+        "assign int_o = irq_txb  & INT_MASKOut[0] | \n               irq_txe  & INT_MASKOut[1] | \n               irq_rxb  & INT_MASKOut[2] | \n               irq_rxe  & INT_MASKOut[3] | \n               irq_busy & INT_MASKOut[4] | \n               irq_txc  & INT_MASKOut[5] | \n               irq_rxc  & INT_MASKOut[6] ;",
+        "always @ (posedge Clk or posedge Reset)\nbegin\n  if(Reset)\n    irq_rxc <= 1'b0;\n  else\n  if(SetRxCIrq)\n    irq_rxc <= #Tp 1'b1;\n  else\n  if(INT_SOURCE_Wr[0] & DataIn[6])\n    irq_rxc <= #Tp 1'b0;\nend",
+        "always @ (posedge Clk or posedge Reset)\nbegin\n  if(Reset)\n    irq_txc <= 1'b0;\n  else\n  if(SetTxCIrq)\n    irq_txc <= #Tp 1'b1;\n  else\n  if(INT_SOURCE_Wr[0] & DataIn[5])\n    irq_txc <= #Tp 1'b0;\nend",
+        "always @ (posedge Clk or posedge Reset)\nbegin\n  if(Reset)\n    irq_busy <= 1'b0;\n  else\n  if(Busy_IRQ)\n    irq_busy <= #Tp 1'b1;\n  else\n  if(INT_SOURCE_Wr[0] & DataIn[4])\n    irq_busy <= #Tp 1'b0;\nend",
+        "always @ (posedge Clk or posedge Reset)\nbegin\n  if(Reset)\n    irq_rxe <= 1'b0;\n  else\n  if(RxE_IRQ)\n    irq_rxe <= #Tp 1'b1;\n  else\n  if(INT_SOURCE_Wr[0] & DataIn[3])\n    irq_rxe <= #Tp 1'b0;\nend",
+        "always @ (posedge Clk or posedge Reset)\nbegin\n  if(Reset)\n    irq_rxb <= 1'b0;\n  else\n  if(RxB_IRQ)\n    irq_rxb <= #Tp 1'b1;\n  else\n  if(INT_SOURCE_Wr[0] & DataIn[2])\n    irq_rxb <= #Tp 1'b0;\nend",
+        "always @ (posedge Clk or posedge Reset)\nbegin\n  if(Reset)\n    irq_txe <= 1'b0;\n  else\n  if(TxE_IRQ)\n    irq_txe <= #Tp 1'b1;\n  else\n  if(INT_SOURCE_Wr[0] & DataIn[1])\n    irq_txe <= #Tp 1'b0;\nend",
+        "always @ (posedge Clk or posedge Reset)\nbegin\n  if(Reset)\n    irq_txb <= 1'b0;\n  else\n  if(TxB_IRQ)\n    irq_txb <= #Tp 1'b1;\n  else\n  if(INT_SOURCE_Wr[0] & DataIn[0])\n    irq_txb <= #Tp 1'b0;\nend",
+        "always @ (posedge RxClk or posedge Reset)\nbegin\n  if(Reset)\n    ResetRxCIrq_sync3 <=#Tp 1'b0;\n  else\n    ResetRxCIrq_sync3 <=#Tp ResetRxCIrq_sync2;\nend",
+        "always @ (posedge RxClk or posedge Reset)\nbegin\n  if(Reset)\n    ResetRxCIrq_sync2 <=#Tp 1'b0;\n  else\n    ResetRxCIrq_sync2 <=#Tp ResetRxCIrq_sync1;\nend",
+        "always @ (posedge RxClk or posedge Reset)\nbegin\n  if(Reset)\n    ResetRxCIrq_sync1 <=#Tp 1'b0;\n  else\n    ResetRxCIrq_sync1 <=#Tp SetRxCIrq_sync2;\nend",
+        "always @ (posedge Clk or posedge Reset)\nbegin\n  if(Reset)\n    SetRxCIrq <=#Tp 1'b0;\n  else\n    SetRxCIrq <=#Tp SetRxCIrq_sync2 & ~SetRxCIrq_sync3;\nend",
+        "always @ (posedge Clk or posedge Reset)\nbegin\n  if(Reset)\n    SetRxCIrq_sync3 <=#Tp 1'b0;\n  else\n    SetRxCIrq_sync3 <=#Tp SetRxCIrq_sync2;\nend",
+        "always @ (posedge Clk or posedge Reset)\nbegin\n  if(Reset)\n    SetRxCIrq_sync2 <=#Tp 1'b0;\n  else\n    SetRxCIrq_sync2 <=#Tp SetRxCIrq_sync1;\nend",
+        "always @ (posedge Clk or posedge Reset)\nbegin\n  if(Reset)\n    SetRxCIrq_sync1 <=#Tp 1'b0;\n  else\n    SetRxCIrq_sync1 <=#Tp SetRxCIrq_rxclk;\nend",
+        "always @ (posedge RxClk or posedge Reset)\nbegin\n  if(Reset)\n    SetRxCIrq_rxclk <=#Tp 1'b0;\n  else\n  if(SetPauseTimer & r_RxFlow)\n    SetRxCIrq_rxclk <=#Tp 1'b1;\n  else\n  if(ResetRxCIrq_sync2 & (~ResetRxCIrq_sync3))\n    SetRxCIrq_rxclk <=#Tp 1'b0;\nend",
+        "always @ (posedge TxClk or posedge Reset)\nbegin\n  if(Reset)\n    ResetTxCIrq_sync2 <=#Tp 1'b0;\n  else\n    ResetTxCIrq_sync2 <=#Tp SetTxCIrq_sync1;\nend",
+        "always @ (posedge TxClk or posedge Reset)\nbegin\n  if(Reset)\n    ResetTxCIrq_sync1 <=#Tp 1'b0;\n  else\n    ResetTxCIrq_sync1 <=#Tp SetTxCIrq_sync2;\nend",
+        "always @ (posedge Clk or posedge Reset)\nbegin\n  if(Reset)\n    SetTxCIrq <=#Tp 1'b0;\n  else\n    SetTxCIrq <=#Tp SetTxCIrq_sync2 & ~SetTxCIrq_sync3;\nend",
+        "always @ (posedge Clk or posedge Reset)\nbegin\n  if(Reset)\n    SetTxCIrq_sync3 <=#Tp 1'b0;\n  else\n    SetTxCIrq_sync3 <=#Tp SetTxCIrq_sync2;\nend",
+        "always @ (posedge Clk or posedge Reset)\nbegin\n  if(Reset)\n    SetTxCIrq_sync2 <=#Tp 1'b0;\n  else\n    SetTxCIrq_sync2 <=#Tp SetTxCIrq_sync1;\nend",
+        "always @ (posedge Clk or posedge Reset)\nbegin\n  if(Reset)\n    SetTxCIrq_sync1 <=#Tp 1'b0;\n  else\n    SetTxCIrq_sync1 <=#Tp SetTxCIrq_txclk;\nend",
+        "always @ (posedge TxClk or posedge Reset)\nbegin\n  if(Reset)\n    SetTxCIrq_txclk <=#Tp 1'b0;\n  else\n  if(TxCtrlEndFrm & StartTxDone & r_TxFlow)\n    SetTxCIrq_txclk <=#Tp 1'b1;\n  else\n  if(ResetTxCIrq_sync2)\n    SetTxCIrq_txclk <=#Tp 1'b0;\nend",
+        "assign r_TxBDNum[7:0]     = TX_BD_NUMOut[7:0];\n\nassign r_TxPauseTV[15:0]  = TXCTRLOut[15:0];\nassign r_TxPauseRq        = TXCTRLOut[16];",
+        "assign r_MAC[31:0]        = MAC_ADDR0Out[31:0];\nassign r_MAC[47:32]       = MAC_ADDR1Out[15:0];\nassign r_HASH1[31:0]      = HASH1Out;\nassign r_HASH0[31:0]      = HASH0Out;",
+        "assign MIISTATUSOut[31:`ETH_MIISTATUS_WIDTH] = 0; \nassign MIISTATUSOut[2]    = NValid_stat         ; \nassign MIISTATUSOut[1]    = Busy_stat           ; \nassign MIISTATUSOut[0]    = LinkFail            ; ",
+        "assign r_CtrlData[15:0]   = MIITX_DATAOut[15:0];",
+        "assign r_RGAD[4:0]        = MIIADDRESSOut[12:8];\nassign r_FIAD[4:0]        = MIIADDRESSOut[4:0];",
+        "assign r_WCtrlData        = MIICOMMANDOut[2];\nassign r_RStat            = MIICOMMANDOut[1];\nassign r_ScanStat         = MIICOMMANDOut[0];",
+        "assign r_MiiNoPre         = MIIMODEROut[8];\nassign r_ClkDiv[7:0]      = MIIMODEROut[7:0];",
+        "assign r_MaxRet[3:0]      = COLLCONFOut[19:16];\nassign r_CollValid[5:0]   = COLLCONFOut[5:0];\n\nassign r_TxFlow           = CTRLMODEROut[2];\nassign r_RxFlow           = CTRLMODEROut[1];\nassign r_PassAll          = CTRLMODEROut[0];",
+        "assign r_MinFL[15:0]      = PACKETLENOut[31:16];\nassign r_MaxFL[15:0]      = PACKETLENOut[15:0];\n",
+        "assign r_IPGT[6:0]        = IPGTOut[6:0];\n\nassign r_IPGR1[6:0]       = IPGR1Out[6:0];\n\nassign r_IPGR2[6:0]       = IPGR2Out[6:0];",
+        "assign r_RecSmall         = MODEROut[16];\nassign r_Pad              = MODEROut[15];\nassign r_HugEn            = MODEROut[14];\nassign r_CrcEn            = MODEROut[13];\nassign r_DlyCrcEn         = MODEROut[12];\n\nassign r_FullD            = MODEROut[10];\nassign r_ExDfrEn          = MODEROut[9];\nassign r_NoBckof          = MODEROut[8];\nassign r_LoopBck          = MODEROut[7];\nassign r_IFG              = MODEROut[6];\nassign r_Pro              = MODEROut[5];\nassign r_Iam              = MODEROut[4];\nassign r_Bro              = MODEROut[3];\nassign r_NoPre            = MODEROut[2];\nassign r_TxEn             = MODEROut[1] & (TX_BD_NUMOut>0);     \nassign r_RxEn             = MODEROut[0] & (TX_BD_NUMOut<'h80);  ",
+        "always @ (Address       or Read           or MODEROut       or INT_SOURCEOut  or\n          INT_MASKOut   or IPGTOut        or IPGR1Out       or IPGR2Out       or\n          PACKETLENOut  or COLLCONFOut    or CTRLMODEROut   or MIIMODEROut    or\n          MIICOMMANDOut or MIIADDRESSOut  or MIITX_DATAOut  or MIIRX_DATAOut  or \n          MIISTATUSOut  or MAC_ADDR0Out   or MAC_ADDR1Out   or TX_BD_NUMOut   or\n          HASH0Out      or HASH1Out       or TXCTRLOut       \n         )\nbegin\n  if(Read)  \n    begin\n      case(Address)\n        `ETH_MODER_ADR        :  DataOut<=MODEROut;\n        `ETH_INT_SOURCE_ADR   :  DataOut<=INT_SOURCEOut;\n        `ETH_INT_MASK_ADR     :  DataOut<=INT_MASKOut;\n        `ETH_IPGT_ADR         :  DataOut<=IPGTOut;\n        `ETH_IPGR1_ADR        :  DataOut<=IPGR1Out;\n        `ETH_IPGR2_ADR        :  DataOut<=IPGR2Out;\n        `ETH_PACKETLEN_ADR    :  DataOut<=PACKETLENOut;\n        `ETH_COLLCONF_ADR     :  DataOut<=COLLCONFOut;\n        `ETH_CTRLMODER_ADR    :  DataOut<=CTRLMODEROut;\n        `ETH_MIIMODER_ADR     :  DataOut<=MIIMODEROut;\n        `ETH_MIICOMMAND_ADR   :  DataOut<=MIICOMMANDOut;\n        `ETH_MIIADDRESS_ADR   :  DataOut<=MIIADDRESSOut;\n        `ETH_MIITX_DATA_ADR   :  DataOut<=MIITX_DATAOut;\n        `ETH_MIIRX_DATA_ADR   :  DataOut<=MIIRX_DATAOut;\n        `ETH_MIISTATUS_ADR    :  DataOut<=MIISTATUSOut;\n        `ETH_MAC_ADDR0_ADR    :  DataOut<=MAC_ADDR0Out;\n        `ETH_MAC_ADDR1_ADR    :  DataOut<=MAC_ADDR1Out;\n        `ETH_TX_BD_NUM_ADR    :  DataOut<=TX_BD_NUMOut;\n        `ETH_HASH0_ADR        :  DataOut<=HASH0Out;\n        `ETH_HASH1_ADR        :  DataOut<=HASH1Out;\n        `ETH_TX_CTRL_ADR      :  DataOut<=TXCTRLOut;\n\n        default:             DataOut<=32'h0;\n      endcase\n    end\n  else\n    DataOut<=32'h0;\nend"
+    ]
+}

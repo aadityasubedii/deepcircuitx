@@ -1,0 +1,1 @@
+  assign D_ctrl_rot_right = D_op_ror;

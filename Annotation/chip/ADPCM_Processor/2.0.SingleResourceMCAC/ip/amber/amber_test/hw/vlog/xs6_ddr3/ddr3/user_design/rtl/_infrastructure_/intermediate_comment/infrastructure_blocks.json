@@ -1,0 +1,56 @@
+{
+    "line_num": [
+        [
+            290,
+            290
+        ],
+        [
+            282,
+            287
+        ],
+        [
+            280,
+            280
+        ],
+        [
+            278,
+            278
+        ],
+        [
+            253,
+            259
+        ],
+        [
+            245,
+            252
+        ],
+        [
+            238,
+            242
+        ],
+        [
+            232,
+            236
+        ],
+        [
+            168,
+            228
+        ],
+        [
+            132,
+            162
+        ]
+    ],
+    "blocks": [
+        "  assign rst0    = rst0_sync_r[RST_SYNC_NUM-1];",
+        "  always @(posedge clk0_bufg or posedge rst_tmp)\n    if (rst_tmp)\n      rst0_sync_r <= {RST_SYNC_NUM{1'b1}};\n    else\n      \n      rst0_sync_r <= rst0_sync_r << 1;",
+        "  assign rst_tmp = sys_rst | ~syn_clk0_powerup_pll_locked;",
+        "  assign async_rst = sys_rst | ~powerup_pll_locked;",
+        "  always @(posedge clk0_bufg , posedge sys_rst)\n      if(sys_rst)\n         syn_clk0_powerup_pll_locked <= 1'b0;\n       \n      else if (bufpll_mcb_locked)\n         syn_clk0_powerup_pll_locked <= 1'b1;\n         ",
+        "  always @(posedge mcb_drp_clk , posedge sys_rst)\n      if(sys_rst)\n         powerup_pll_locked <= 1'b0;\n       \n      else if (bufpll_mcb_locked)\n         powerup_pll_locked <= 1'b1;\n         \n",
+        "   BUFGCE U_BUFG_CLK1\n    (\n     .O (mcb_drp_clk),\n     .I (mcb_drp_clk_bufg_in),\n     .CE (locked)",
+        "   BUFG U_BUFG_CLK0\n    (\n     .O (clk0_bufg),\n     .I (clk0_bufg_in)\n     );",
+        "    PLL_ADV #\n        (\n         .BANDWIDTH          (\"OPTIMIZED\"),\n         .CLKIN1_PERIOD      (CLK_PERIOD_NS),\n         .CLKIN2_PERIOD      (CLK_PERIOD_NS),\n         .CLKOUT0_DIVIDE     (C_CLKOUT0_DIVIDE),\n         .CLKOUT1_DIVIDE     (C_CLKOUT1_DIVIDE),\n         .CLKOUT2_DIVIDE     (C_CLKOUT2_DIVIDE),\n         .CLKOUT3_DIVIDE     (C_CLKOUT3_DIVIDE),\n         .CLKOUT4_DIVIDE     (1),\n         .CLKOUT5_DIVIDE     (1),\n         .CLKOUT0_PHASE      (0.000),\n         .CLKOUT1_PHASE      (180.000),\n         .CLKOUT2_PHASE      (0.000),\n         .CLKOUT3_PHASE      (0.000),\n         .CLKOUT4_PHASE      (0.000),\n         .CLKOUT5_PHASE      (0.000),\n         .CLKOUT0_DUTY_CYCLE (0.500),\n         .CLKOUT1_DUTY_CYCLE (0.500),\n         .CLKOUT2_DUTY_CYCLE (0.500),\n         .CLKOUT3_DUTY_CYCLE (0.500),\n         .CLKOUT4_DUTY_CYCLE (0.500),\n         .CLKOUT5_DUTY_CYCLE (0.500),\n         .SIM_DEVICE         (\"SPARTAN6\"),\n         .COMPENSATION       (\"INTERNAL\"),\n         .DIVCLK_DIVIDE      (C_DIVCLK_DIVIDE),\n         .CLKFBOUT_MULT      (C_CLKFBOUT_MULT),\n         .CLKFBOUT_PHASE     (0.0),\n         .REF_JITTER         (0.005000)\n         )\n        u_pll_adv\n          (\n           .CLKFBIN     (clkfbout_clkfbin),\n           .CLKINSEL    (1'b1),\n           .CLKIN1      (sys_clk_ibufg),\n           .CLKIN2      (1'b0),\n           .DADDR       (5'b0),\n           .DCLK        (1'b0),\n           .DEN         (1'b0),\n           .DI          (16'b0),\n           .DWE         (1'b0),\n           .REL         (1'b0),\n           .RST         (sys_rst),\n           .CLKFBDCM    (),\n           .CLKFBOUT    (clkfbout_clkfbin),\n           .CLKOUTDCM0  (),\n           .CLKOUTDCM1  (),\n           .CLKOUTDCM2  (),\n           .CLKOUTDCM3  (),\n           .CLKOUTDCM4  (),\n           .CLKOUTDCM5  (),\n           .CLKOUT0     (clk_2x_0),\n           .CLKOUT1     (clk_2x_180),\n           .CLKOUT2     (clk0_bufg_in),\n           .CLKOUT3     (mcb_drp_clk_bufg_in),\n           .CLKOUT4     (),\n           .CLKOUT5     (),\n           .DO          (),\n           .DRDY        (),\n           .LOCKED      (locked)\n           );",
+        "  generate\n    if (C_INPUT_CLK_TYPE == \"DIFFERENTIAL\") begin: diff_input_clk\n\n      \n      \n      \n\n      IBUFGDS #\n        (\n         .DIFF_TERM    (\"TRUE\")\n         )\n        u_ibufg_sys_clk\n          (\n           .I  (sys_clk_p),\n           .IB (sys_clk_n),\n           .O  (sys_clk_ibufg)\n           );\n\n    end else if (C_INPUT_CLK_TYPE == \"SINGLE_ENDED\") begin: se_input_clk\n\n      \n      \n      \n\n      IBUFG  u_ibufg_sys_clk\n          (\n           .I  (sys_clk),\n           .O  (sys_clk_ibufg)\n           );\n   end\n  endgenerate"
+    ]
+}

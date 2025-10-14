@@ -1,0 +1,1 @@
+wire global_ena = !(stall_FROM_read_master_TO_WIRE_global_ena | stall_FROM_prc_core_TO_WIRE_global_ena);

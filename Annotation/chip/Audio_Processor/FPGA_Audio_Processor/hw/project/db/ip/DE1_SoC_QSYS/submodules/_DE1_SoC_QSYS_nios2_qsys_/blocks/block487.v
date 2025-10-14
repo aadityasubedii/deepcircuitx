@@ -1,0 +1,1 @@
+  assign take_action_ocireg = write_strobe & oci_reg_00_addressed;

@@ -1,0 +1,12 @@
+Module name: ganancia
+
+Module specification: 
+The 'ganacia' module primarily pertains to digital amplified gain control. The module interfaces through an SPI protocol, transmitting gain values to an external device or circuit. The functioning of this module is triggered on the clock edges and is enabled or disabled by the 'clockenable' input. 
+
+This module presents four inputs: 'clock', the main control that synchronizes the operations, and 'clockenable', which authorizes the module to work when high. As for the outputs, there are four: 'mosi', which carries the gain value to the SPI bus, 'sck', which is the SPI bus clock, 'ampcs', a chip select for SPI interfaces, and 'ampshdn', a signal for potential control of amplifier power-down mode. 
+
+Internally, 'ganancia' works with the 'bloque', 'gain', and 'estadosck' signals. 'bloque' is a 4-bit register, which dictates the operation state of the module. 'gain' is an 8-bit register carrying a predefined amplification value to be sent out through 'mosi'. 'estadosck' is a register governing the SPI clock flow. 
+
+The code is split into two sections with the first part initializing the values of all the signals. The next part entails an always block triggered on the positive edge of the clock. The 'ganacia' module moves according to the 'bloque' value. When 'bloque' is zero, the process is initiated. When it reaches nine, it resets and continues when 'bloque' is in-between. The last block ensures that only during the 'Bloque's active state does the 'gain' output to 'mosi'. 
+
+Overall, the module functions to encode clocked SPI transmissions with pre-determined gain values.

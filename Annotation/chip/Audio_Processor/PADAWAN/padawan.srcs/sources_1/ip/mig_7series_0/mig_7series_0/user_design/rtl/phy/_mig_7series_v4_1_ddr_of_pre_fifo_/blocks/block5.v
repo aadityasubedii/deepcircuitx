@@ -1,0 +1,1 @@
+  assign nxt_wr_ptr = (wr_ptr + 1'b1)%DEPTH;

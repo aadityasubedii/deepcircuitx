@@ -1,0 +1,1 @@
+  delay4k del(index,delay);

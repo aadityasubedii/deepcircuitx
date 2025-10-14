@@ -1,0 +1,1 @@
+assign write_enable_update             = !i_core_stall;

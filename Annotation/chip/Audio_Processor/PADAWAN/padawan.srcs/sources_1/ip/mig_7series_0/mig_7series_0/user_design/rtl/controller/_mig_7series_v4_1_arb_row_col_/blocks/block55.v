@@ -1,0 +1,1 @@
+    cover property (@(posedge clk) (~rst && &rts_row));

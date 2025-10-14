@@ -1,0 +1,1 @@
+  assign mem_out = mem[rd_ptr];

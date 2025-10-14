@@ -1,0 +1,9 @@
+Module name: mig_7series_v4_1_tempmon.
+
+Module specification: The mig_7series_v4_1_tempmon module is a design for temperature monitoring of a device. It operates based on a clock signal, a reset signal, a user-supplied temperature signal (or the XADC-supplied temperature), and outputs a synchronized temperature value using a staging pipeline. The module follows the principles of synchronizations based on the provided clock signal.
+
+The input ports include clk (the system clock), xadc_clk (XADC operation clock), rst (the reset signal to bring the system back to its initial state) and device_temp_i (the current device temperature either supplied by user or XADC). The output port is device_temp, which gives the synchronized temperature value of the device.
+
+It utilizes internal signals such as device_temp_sync_r1 through r5 (registers used for synchronization), device_temp_r (the final register holding the synced temperature value), device_temp_lcl (wire carrying the temperature to be synced), sync_cntr (a synchronization counter), and device_temp_sync_r4_neq_r3 (register indicating differing temperature values in sync registers).
+
+The various sections of the code include utility functions cdiv and clogb2, the main synchronization process utilizing staging pipeline and counter, provision for external or internal (XADC) temperature signal, and a detailed block for XADC operation including a state machine for the read process in case of XADC-supplied temperature. Another integral part of the code includes the XADC instance with a set of its initializing parameters. This module thus provides robust temperature monitoring and synchronization using Xilinx's FPGA-based Analog to Digital Converter (XADC).

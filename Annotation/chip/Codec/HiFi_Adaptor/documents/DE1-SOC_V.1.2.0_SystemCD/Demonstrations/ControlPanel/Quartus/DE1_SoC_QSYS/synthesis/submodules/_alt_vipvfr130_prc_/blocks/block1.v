@@ -1,0 +1,1 @@
+		assign dout_endofpacket = eop_out;

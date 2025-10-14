@@ -1,0 +1,4 @@
+Line number: 
+[308, 328]
+Comment: 
+The code block serves two main functions. It facilitates arbitration of write requests to different memory banks and provides the option to bypass the arbitration mechanism. With the bypass (EARLY_WR_DATA_ADDR == "OFF"), it simply returns zeros for the 'grant_col_wr' signal, implying no grant on the write request. When arbitration is active, it implements a 'round-robin' arbitration functionality using the 'mig_7series_v4_1_round_robin_arb' module. This arbiter manages requests ('col_rdy_wr') for access to memory banks asynchronously and updates last selected master ('sent_col_lcl') accordingly, with the state holds in 'grant_col_wr_r' for the next clock cycle. The result is output in 'grant_col_wr_ns' signal that tracks the final state of the grant for each column. It decides to hold the previous one or update it based on 'granted_col_ns' condition.

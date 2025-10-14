@@ -1,0 +1,43 @@
+{
+    "gpt-message": [
+        {
+            "role": "system",
+            "content": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+        },
+        {
+            "role": "user",
+            "content": "Name of the module and its functionality is as follows: \nModule name: ADDC.\nExplanation: The ADDC module performs arithmetic and logical operations on input signals `DQ` and `SEZ` to compute outputs `PK0` and `SIGPK`. Specifically, it conducts sign extension adjustments on `DQ` and `SEZ`, then adds the adjusted values. The result of this addition is used to determine the outputs: `PK0` is the MSB (most significant bit) of the addition result indicating a possible overflow or sign, and `SIGPK` indicates if the cumulative result is zero. This could be part of a larger system involving data signal processing where detecting specific conditions (like zero output or overflow) is necessary. Additionally, it incorporates scan inputs (`scan_in`) and outputs (`scan_out`) with test modes and scan enable functionalities that might be utilized for testing purposes in a scan-based testing environment."
+        },
+        {
+            "role": "user",
+            "content": "Input and output ports and their explanation is as follows: \nInput ports: reset, clk, scan_in0, scan_in1, scan_in2, scan_in3, scan_in4, scan_enable, test_mode, DQ, SEZ. \nExplanation: \n- `reset`: Used to initialize the module to a known state.\n- `clk`: Clock input for synchronizing the operations in the module.\n- `scan_in0` to `scan_in4`: These inputs are used for scan testing, to inject test data into the module.\n- `scan_enable`: Enables the scan test mode.\n- `test_mode`: Allows the module to enter a test mode, potentially altering its normal operation for testing purposes.\n- `DQ`: 16-bit input data, used in arithmetic operations.\n- `SEZ`: 15-bit input data, used in arithmetic operations along with `DQ`.\n\nOutput ports: scan_out0, scan_out1, scan_out2, scan_out3, scan_out4, PK0, SIGPK.\nExplanation: \n- `scan_out0` to `scan_out4`: These outputs are used for scan testing, to extract test data from the module.\n- `PK0`: A binary output that represents the Most Significant Bit of the result from the addition of adjusted `DQ` and `SEZ`, generally indicating overflow or the sign of the result.\n- `SIGPK`: A binary output that is true when the result of the addition of adjusted `DQ` and `SEZ` is zero, used to detect specific signal conditions."
+        },
+        {
+            "role": "user",
+            "content": "Internal signals and their explanation is as follows: \nInternal signals: DQS, SEZS, DQI, SEZI, DQSEZ.\n\nExplanation:\n- `DQS`: This is a wire used to hold the most significant bit (MSB) of the input `DQ`. It plays a role in determining the sign of the `DQ` value for further operations.\n- `SEZS`: Similarly to `DQS`, this wire holds the MSB of the input `SEZ` and is used to determine the sign of `SEZ` for processing.\n- `DQI`: This wire represents the 'sign-extended' version of `DQ`. If the MSB of `DQ` (`DQS`) is high (i.e., `DQ` is negative in a signed representation), it subtracts `DQ` from 65536, effectively making a 16-bit two's complement. Otherwise, it simply passes `DQ` unchanged.\n- `SEZI`: This wire holds the 'sign offset' version of `SEZ`. If the MSB of `SEZ` (`SEZS`) is high (indicating a signed negative value), it adds 32768 to `SEZ` to adjust its range.\n- `DQSEZ`: This is a 16-bit wire that holds the result of the addition of `DQI` and `SEZI`. It is used to compute the module's two main output signals, `PK0` and `SIGPK`."
+        }
+    ],
+    "claude-message": [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+                },
+                {
+                    "type": "text",
+                    "text": "Name of the module and its functionality is as follows: \nModule name: ADDC.\nExplanation: The ADDC module performs arithmetic and logical operations on input signals `DQ` and `SEZ` to compute outputs `PK0` and `SIGPK`. Specifically, it conducts sign extension adjustments on `DQ` and `SEZ`, then adds the adjusted values. The result of this addition is used to determine the outputs: `PK0` is the MSB (most significant bit) of the addition result indicating a possible overflow or sign, and `SIGPK` indicates if the cumulative result is zero. This could be part of a larger system involving data signal processing where detecting specific conditions (like zero output or overflow) is necessary. Additionally, it incorporates scan inputs (`scan_in`) and outputs (`scan_out`) with test modes and scan enable functionalities that might be utilized for testing purposes in a scan-based testing environment."
+                },
+                {
+                    "type": "text",
+                    "text": "Input and output ports and their explanation is as follows: \nInput ports: reset, clk, scan_in0, scan_in1, scan_in2, scan_in3, scan_in4, scan_enable, test_mode, DQ, SEZ. \nExplanation: \n- `reset`: Used to initialize the module to a known state.\n- `clk`: Clock input for synchronizing the operations in the module.\n- `scan_in0` to `scan_in4`: These inputs are used for scan testing, to inject test data into the module.\n- `scan_enable`: Enables the scan test mode.\n- `test_mode`: Allows the module to enter a test mode, potentially altering its normal operation for testing purposes.\n- `DQ`: 16-bit input data, used in arithmetic operations.\n- `SEZ`: 15-bit input data, used in arithmetic operations along with `DQ`.\n\nOutput ports: scan_out0, scan_out1, scan_out2, scan_out3, scan_out4, PK0, SIGPK.\nExplanation: \n- `scan_out0` to `scan_out4`: These outputs are used for scan testing, to extract test data from the module.\n- `PK0`: A binary output that represents the Most Significant Bit of the result from the addition of adjusted `DQ` and `SEZ`, generally indicating overflow or the sign of the result.\n- `SIGPK`: A binary output that is true when the result of the addition of adjusted `DQ` and `SEZ` is zero, used to detect specific signal conditions."
+                },
+                {
+                    "type": "text",
+                    "text": "Internal signals and their explanation is as follows: \nInternal signals: DQS, SEZS, DQI, SEZI, DQSEZ.\n\nExplanation:\n- `DQS`: This is a wire used to hold the most significant bit (MSB) of the input `DQ`. It plays a role in determining the sign of the `DQ` value for further operations.\n- `SEZS`: Similarly to `DQS`, this wire holds the MSB of the input `SEZ` and is used to determine the sign of `SEZ` for processing.\n- `DQI`: This wire represents the 'sign-extended' version of `DQ`. If the MSB of `DQ` (`DQS`) is high (i.e., `DQ` is negative in a signed representation), it subtracts `DQ` from 65536, effectively making a 16-bit two's complement. Otherwise, it simply passes `DQ` unchanged.\n- `SEZI`: This wire holds the 'sign offset' version of `SEZ`. If the MSB of `SEZ` (`SEZS`) is high (indicating a signed negative value), it adds 32768 to `SEZ` to adjust its range.\n- `DQSEZ`: This is a 16-bit wire that holds the result of the addition of `DQI` and `SEZI`. It is used to compute the module's two main output signals, `PK0` and `SIGPK`."
+                }
+            ]
+        }
+    ]
+}

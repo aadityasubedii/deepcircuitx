@@ -1,0 +1,1 @@
+  always @(posedge clk) inc_po_r <= #TCQ inc_po_ns;

@@ -1,0 +1,1 @@
+  always @(posedge clk) byte_r <= #TCQ byte_ns;

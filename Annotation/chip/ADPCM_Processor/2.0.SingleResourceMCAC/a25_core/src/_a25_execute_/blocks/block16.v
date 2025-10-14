@@ -1,0 +1,1 @@
+assign copro_write_data_update         = !i_core_stall && execute && i_copro_write_data_wen;

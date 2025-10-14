@@ -1,0 +1,11 @@
+{
+    "line_num": [
+        [
+            29,
+            75
+        ]
+    ],
+    "blocks": [
+        "always @(negedge Dclk or posedge Clear)\n   begin\n     if (Clear == 1'b1)\n       begin\n\t count_bit = 4'd15;\n\t dataL = 16'd0;\n\t dataR = 16'd0;\t\t\t\n\t in_flag = 1'b0;\n\t frame_stat = 1'b0;\n       end\n     else \n       begin\n\t if (Frame == 1'b1)\n\t   begin\n\t     count_bit = 4'd15;\n\t     in_flag = 1'b0;\n\t     dataL [count_bit] = InputL;\n\t     dataR [count_bit] = InputR;\n\t     frame_stat = 1'b1;\n\t   end\n         else if (frame_stat == 1'b1)\n\t   begin\n\t     count_bit = count_bit - 1'b1;\n\t     dataL [count_bit] = InputL;\n\t     dataR [count_bit] = InputR;\n\t   if (count_bit == 4'd0)\n\t     begin\t\t\t\t\t\n\t\tin_flag = 1'b1;\n\t\tframe_stat = 1'b0;\n\t     end\n\t   else\n\t     begin\n\t\tin_flag = 1'b0;\n\t\tframe_stat = 1'b1;\n\t     end\n\tend\n\t  else\n\t  begin\n\t    count_bit = 4'd15;\n\t    dataL = 16'd0;\n\t    dataR = 16'd0;\t\t\t\n\t    in_flag = 1'b0;\n\t    frame_stat = 1'b0;\n\t  end\n\t end\n      end\nendmodule"
+    ]
+}

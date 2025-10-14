@@ -1,0 +1,31 @@
+{
+    "line_num": [
+        [
+            134,
+            138
+        ],
+        [
+            118,
+            132
+        ],
+        [
+            112,
+            116
+        ],
+        [
+            94,
+            110
+        ],
+        [
+            59,
+            92
+        ]
+    ],
+    "blocks": [
+        "defparam divider_counter.NUMBER_OF_COLOUR_PLANES = NUMBER_OF_COLOUR_PLANES,\n         divider_counter.COLOUR_PLANES_ARE_IN_PARALLEL = COLOUR_PLANES_ARE_IN_PARALLEL,\n         divider_counter.LOG2_NUMBER_OF_COLOUR_PLANES = LOG2_NUMBER_OF_COLOUR_PLANES,\n         divider_counter.CONVERT_SEQ_TO_PAR = CONVERT_SEQ_TO_PAR,\n         divider_counter.TOTALS_MINUS_ONE = 1;",
+        "alt_vipcti131_common_frame_counter divider_counter(\n    .rst(rst),\n    .clk(clk),\n    .sclr(sclr),\n    \n    .enable(count_div),\n    .hd_sdn(hd_sdn),\n    \n    .h_total(divider_value),\n    .v_total(13'd0),\n    \n    .h_reset(14'd0),\n    .v_reset(13'd0),\n    \n    .new_line(div_next));",
+        "defparam frame_counter.NUMBER_OF_COLOUR_PLANES = NUMBER_OF_COLOUR_PLANES,\n         frame_counter.COLOUR_PLANES_ARE_IN_PARALLEL = COLOUR_PLANES_ARE_IN_PARALLEL,\n         frame_counter.LOG2_NUMBER_OF_COLOUR_PLANES = LOG2_NUMBER_OF_COLOUR_PLANES,\n         frame_counter.CONVERT_SEQ_TO_PAR = CONVERT_SEQ_TO_PAR,\n         frame_counter.TOTALS_MINUS_ONE = TOTALS_MINUS_ONE;",
+        "alt_vipcti131_common_frame_counter frame_counter(\n    .rst(rst),\n    .clk(clk),\n    .sclr(start_of_vsync_f0),\n    \n    .enable(count),\n    .hd_sdn(hd_sdn),\n    \n    .h_total(total_sample_count),\n    .v_total(total_line_count),\n    \n    .h_reset(14'd0),\n    .v_reset(13'd0),\n    \n    .sample_ticks(sample_ticks),\n    .h_count(h_count),\n    .v_count(v_count));",
+        "always @ (posedge rst or posedge clk) begin\n    if(rst) begin\n        enable_reg <= 1'b0;\n        \n        sof_count <= 4'd0;\n        sof <= 1'b0;\n        sof_locked <= 1'b0;\n        div_reg <= 1'b0;\n        sclr <= 1'b0;\n        first_sof <= 1'b0;\n    end else begin\n        enable_reg <= enable;\n        \n        if(output_enable) begin\n            if(sof_count == 4'd0) begin\n                sof <= sof_next;\n                if(sof_next)\n                    sof_count = 4'b1111;\n            end else begin\n                sof_count = sof_count - 4'd1;\n            end\n            sof_locked <= enable & total_line_count_valid;\n            div_reg <= div_next;\n            sclr <= sof_next;\n            first_sof <= enable & (sof_next | first_sof);\n        end else begin\n            sof <= 1'b0;\n            sof_locked <= 1'b0;\n            div_reg <= 1'b0;\n            sclr <= 1'b0;\n            first_sof <= 1'b0;\n        end\n    end\nend"
+    ]
+}

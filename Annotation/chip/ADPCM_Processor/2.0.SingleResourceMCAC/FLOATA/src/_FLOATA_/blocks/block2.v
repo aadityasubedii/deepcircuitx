@@ -1,0 +1,1 @@
+assign MANT = (MAG == 0)?32:(({MAG,6'b000000})>>EXP);

@@ -1,0 +1,62 @@
+  mig_7series_v4_1_rank_mach #
+    (
+      
+      .BURST_MODE             (BURST_MODE),
+      .CL                     (CL),
+      .CWL                    (CWL),
+      .CS_WIDTH               (CS_WIDTH),
+      .DQRD2DQWR_DLY          (DQRD2DQWR_DLY),
+      .DRAM_TYPE              (DRAM_TYPE),
+      .MAINT_PRESCALER_DIV    (MAINT_PRESCALER_DIV),
+      .nBANK_MACHS            (nBANK_MACHS),
+      .nCKESR                 (nCKESR),
+      .nCK_PER_CLK            (nCK_PER_CLK),
+      .nFAW                   (nFAW),
+      .nREFRESH_BANK          (nREFRESH_BANK),
+      .nRRD                   (nRRD),
+      .nWTR                   (nWTR),
+      .PERIODIC_RD_TIMER_DIV  (PERIODIC_RD_TIMER_DIV),
+      .RANK_BM_BV_WIDTH       (RANK_BM_BV_WIDTH),
+      .RANK_WIDTH             (RANK_WIDTH),
+      .RANKS                  (RANKS),
+      .REFRESH_TIMER_DIV      (REFRESH_TIMER_DIV),
+      .ZQ_TIMER_DIV           (ZQ_TIMER_DIV)
+    )
+    rank_mach0
+      (
+        
+        .inhbt_act_faw_r      (inhbt_act_faw_r[RANKS-1:0]),
+        .inhbt_rd             (inhbt_rd[RANKS-1:0]),
+        .inhbt_wr             (inhbt_wr[RANKS-1:0]),
+        .maint_rank_r         (maint_rank_r[RANK_WIDTH-1:0]),
+        .maint_req_r          (maint_req_r),
+        .maint_zq_r           (maint_zq_r),
+        .maint_sre_r          (maint_sre_r),
+        .maint_srx_r          (maint_srx_r),
+        .maint_ref_zq_wip     (maint_ref_zq_wip),
+        .periodic_rd_r        (periodic_rd_r),
+        .periodic_rd_rank_r   (periodic_rd_rank_r[RANK_WIDTH-1:0]),
+        
+        .act_this_rank_r      (act_this_rank_r[RANK_BM_BV_WIDTH-1:0]),
+        .app_periodic_rd_req  (app_periodic_rd_req),
+        .app_ref_req          (app_ref_req),
+        .app_ref_ack          (app_ref_ack),
+        .app_zq_req           (app_zq_req),
+        .app_zq_ack           (app_zq_ack),
+        .app_sr_req           (app_sr_req),
+        .app_sr_active        (app_sr_active),
+        .col_rd_wr            (col_rd_wr),
+        .clk                  (clk),
+        .init_calib_complete  (init_calib_complete),
+        .insert_maint_r1      (insert_maint_r1),
+        .maint_wip_r          (maint_wip_r),
+        .periodic_rd_ack_r    (periodic_rd_ack_r),
+        .rank_busy_r          (rank_busy_r[(RANKS*nBANK_MACHS)-1:0]),
+        .rd_this_rank_r       (rd_this_rank_r[RANK_BM_BV_WIDTH-1:0]),
+        .rst                  (rst),
+        .sending_col          (sending_col[nBANK_MACHS-1:0]),
+        .sending_row          (sending_row[nBANK_MACHS-1:0]),
+        .slot_0_present       (slot_0_present[7:0]),
+        .slot_1_present       (slot_1_present[7:0]),
+        .wr_this_rank_r       (wr_this_rank_r[RANK_BM_BV_WIDTH-1:0])
+      );

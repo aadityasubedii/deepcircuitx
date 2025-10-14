@@ -1,0 +1,26 @@
+Module name: eth_cop. 
+
+Module specification: The 'eth_cop' module serves as an intermediary controller in systems using the WISHBONE bus interface, managing transactions between two master modules (m1, m2) and two slave modules (s1, s2). The module facilitates data, address, and control signal routing while ensuring proper acknowledgment and error handling. 
+
+Input ports include:
+- wb_clk_i and wb_rst_i (clock and reset signals for synchronization and initialization),
+- m1_wb_adr_i, m1_wb_dat_i, m1_wb_sel_i, m1_wb_cyc_i, m1_wb_stb_i, m1_wb_we_i, and m2 equivalents (address, data, byte select, bus cycle indication, strobe, and write enable signals from masters),
+- s1_wb_ack_i, s1_wb_err_i, s1_wb_dat_i, and s2 equivalents (acknowledge, error, and data signals from slaves).
+
+Output ports include:
+- m1_wb_dat_o, m1_wb_ack_o, m1_wb_err_o, and m2 equivalents (data, acknowledge, and error indications to masters),
+- s1_wb_adr_o, s1_wb_sel_o, s1_wb_we_o, s1_wb_dat_o, s1_wb_cyc_o, s1_wb_stb_o, and s2 equivalents (address, select signal, write enable, data output, bus transaction cycle, and strobe to slaves).
+
+Internal signals used encompass:
+- m1_in_progress, m2_in_progress (indicate ongoing transactions),
+- s1_wb_adr_o, s1_wb_sel_o, etc. (register signals corresponding to slave outputs),
+- m_wb_access_finished (signal indicating the completion of WISHBONE transactions).
+
+The Verilog code is organized into several blocks:
+- Initialization and reset handling,
+- Transaction processing based on master requests and slave acknowledgment/error response,
+- Data routing depending on addressed slaves,
+- Error handling by checking and reporting issues in transactions,
+- Debugging mechanisms to assist in monitoring prolonged transactions or unexpected states.
+
+This clear handle on transaction dynamics and error management underscores the module's critical role in ensuring reliable data exchanges in WISHBONE bus systems.

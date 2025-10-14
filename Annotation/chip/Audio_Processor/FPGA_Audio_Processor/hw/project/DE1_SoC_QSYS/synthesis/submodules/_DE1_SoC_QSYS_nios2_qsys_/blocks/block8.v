@@ -1,0 +1,1 @@
+  assign R_ctrl_force_src2_zero_nxt = D_ctrl_force_src2_zero;

@@ -1,0 +1,26 @@
+{
+    "line_num": [
+        [
+            224,
+            232
+        ],
+        [
+            102,
+            222
+        ],
+        [
+            27,
+            100
+        ],
+        [
+            21,
+            25
+        ]
+    ],
+    "blocks": [
+        "always @(Sclk)\nbegin\n\tif(Reset_n==1'b0)\n\tbegin\n\t\tInReady=1'b0;\n\t\tstate=7;\n\t\talu_status=0;\n\tend\nend",
+        "always @(posedge Sclk)\nbegin\n\tif(Start==1)\n\t\tstate=0;\n\t\n\tcase (state)\n\t\n\t0:\n\tbegin\n\t\tInReady=0;\n\t\trj_status=1;\n\t\tcoeff_status=1;\n\t\tin_status=1;\n\t\tclear=1;\n\t\tstate=1;\n\tend\n\t\n\t1:\n\tbegin\n\t\tInReady=1;\n\t\tif(Frame==1)\n\t\tbegin\n\t\t\taddress_rj=-1;\n\t\t\tstate=2;\n\t\tend\t\t\n\tend\n\t\n\t3:\n\tbegin\n\t\tInReady=1;\n\t\tif(Frame==1)\n\t\tbegin\n\t\t\taddress_coeff=-1;\n\t\t\tstate=4;\n\t\tend\t\t\n\tend\n\t\n\t5:\n\tbegin\n\t\tInReady=1;\n\t\tif(Frame==1)\n\t\tbegin\n\t\t\taddress_in=-1;\n\t\t\tstate=6;\n\t\tend\n\t\tif(Reset_n==0)\n\t\t\tstate=7;\n\tend\n\t\n\t6:\n\tbegin\n\t\t\n\t\tif(Reset_n==1'b0)\n\t\tbegin\n\t\t\tstate=7;\n\t\t\tInReady=0;\n\t\t\talu_status=0;\n\t\tend\t\n\t\t\n\t\tif(sleep_status==1)\n\t\tbegin\t\n\t\t\talu_status=0;\n\t\t\tif(col==-1)\n\t\t\tbegin\t\t\t\n\t\t\t\tstate=8;\n\t\t\tend\n\t\t\t\n\t\tend\n\tend\n\t\n\t7:\n\tbegin\n\t\tInReady = 0;\n\t\tif(Reset_n==1'b0)\n\t\tbegin\n\t\t\tstate=7;\n\t\t\tInReady=0;\n\t\tend\n\t\telse\n\t\tbegin\n\t\t\tstate=5;\n\t\t\tcont_address=set-1;\n\t\t\tInReady = 1;\n\t\tend\n\t\talu_status=0;\n\t\tin_status=1;\n\tend\n\t\n\t8:\n\tbegin\n\t\n\t\tif(Reset_n==1'b0)\n\t\tbegin\n\t\t\tstate=7;\n\t\t\tInReady=0;\n\t\tend\n\t\n\t\tif(S2P_status==0)\n\t\tbegin\n\t\t\tin_status=0;\n\t\tend\n\t\t\n\t\tif(S2P_status==1 && Frame ==1)\n\t\tbegin\n\t\t\tif(sleep_status==1)\n\t\t\tbegin\n\t\t\t\tin_status=1;\t\t\t\n\t\t\tend\n\t\t\telse\n\t\t\tbegin\n\t\t\t\tstate=6;\n\t\t\t\talu_status=1;\n\t\t\tend\n\t\tend\n\t\t\n\tend\n\t\n\t\n\tendcase\n\nend",
+        "always @(Frame)\nbegin\n\tcase (state)\n\t\n\t2:\n\tbegin\n\t\tcoeff_status=0;\n\t\tin_status=0;\n\t\tclear=0;\n\t\trj_status=0;\n\t\t\n\t\tif(S2P_status==0)\n\t\tbegin\n\t\t\trj_status=0;\n\t\tend\n\t\t\n\t\tif(S2P_status==1 && Frame ==1)\n\t\tbegin\n\t\t\trj_status=1;\n\t\t\taddress_rj = address_rj + 1;\n\t\t\tif(address_rj==15)\n\t\t\t\tstate=3;\n\t\tend\n\tend\n\t\n\t4:\n\tbegin\n\t\tif(S2P_status==0)\n\t\tbegin\n\t\t\tcoeff_status=0;\n\t\tend\n\t\t\n\t\tif(S2P_status==1 && Frame ==1)\n\t\tbegin\n\t\t\tcoeff_status=1;\n\t\t\taddress_coeff = address_coeff + 1;\n\t\t\tif(address_coeff==511)\n\t\t\t\tstate=5;\n\t\tend\n\tend\n\t\n\t6:\n\tbegin\n\t\tif(S2P_status==0)\n\t\tbegin\n\t\t\tin_status=0;\n\t\tend\n\t\t\n\t\tif(S2P_status==1 && Frame ==1)\n\t\tbegin\n\t\t\tin_status=1;\n\t\t\talu_status=1;\n\t\t\taddress_in = address_in + 1;\n\t\t\tcont_address=cont_address+1;\n\t\t\t\n\t\t\tif(cont_address<7000)\n\t\t\tbegin\n\t\t\t\tif(address_in==512)\n\t\t\t\tbegin\n\t\t\t\t\tset=set+512;\t\t\t\t\n\t\t\t\t\taddress_in=0;\n\t\t\t\tend\n\t\t\tend\n\t\t\telse\n\t\t\tbegin\n\t\t\t\tif(address_in==512)\n\t\t\t\t\tstate=9;\n\t\t\tend\n\t\t\t\n\t\tend\n\tend\n\t\n\tendcase\nend",
+        "initial begin\n\tstate = 1;\n\tcont_address=-1;\n\tset=0;\nend"
+    ]
+}

@@ -1,0 +1,12 @@
+Module name: PISO.
+Module specification: 
+
+The PISO (Parallel-In-Serial-Out) is a Verilog module designed to perform shifting of data inputted in a parallel format and output it in a serial format. It operates on the positive edge of the system clock (Sclk). The module also includes a reset functionality, triggered when the Clear signal is high.
+
+PISO has five input ports: Sclk, Clear, p2s_en, Frame, and a 40-bit wide Shift_done where parallel data is loaded. The Sclk is the system clock input used for synchronization. The Clear signal is used to reset the system to its default configuration. The p2s_en signal enables the shifting from the parallel to the serial mode. The Frame signal indicates that data is ready for shifting. 
+
+The module provides two outputs: SerialOut and OutReady. SerialOut is a register type output that provides the serial output from the parallel input data that is loaded. The OutReady is an indicator that the process is ready to shift from parallel to serial configuration.
+
+Internally, PISO utilizes a variety of signals, including a 6-bit wide count_bit used to count the shifted bits, a 40-bit wide internal register (register_piso) where parallel data is loaded, a ready_out signal indicating readiness for data shift, and a frame_flag used as a status indicator for the frame shift process.
+
+The code is sectioned into various blocks. The initial segment initializes system variables in case of a system reset. The follow-up block, activated when the p2s_en signal is high, loads the inputted parallel data onto the internal register, and begins preparation for shifting. Another block handles the initial shift under the Frame signal, then continuous shifting is handled by the next block. The last block resets variables if data is not ready for shifting. This design ensures efficient transformation of data from parallel to serial format.

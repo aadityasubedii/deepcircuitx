@@ -1,0 +1,1 @@
+        assign mcb_ui_clk = ui_clk;

@@ -1,0 +1,1 @@
+  assign cpu_i_address = {F_pc, 2'b00};

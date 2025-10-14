@@ -1,0 +1,1 @@
+assign ByteCntMax = &ByteCnt[15:0];

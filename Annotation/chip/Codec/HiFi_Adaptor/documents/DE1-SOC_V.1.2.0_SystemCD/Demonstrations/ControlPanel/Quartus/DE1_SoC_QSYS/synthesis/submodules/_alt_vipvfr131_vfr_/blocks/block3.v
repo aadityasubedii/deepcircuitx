@@ -1,0 +1,1 @@
+assign ctrl_packet_width_bank1_bits_FROM_slave_TO_controller =       registers[(SLAVE_DATA_REQUIREDWIDTH*12)+CONTROL_PACKET_RESOLUTION_REQUIREDWIDTH-1:SLAVE_DATA_REQUIREDWIDTH*12];

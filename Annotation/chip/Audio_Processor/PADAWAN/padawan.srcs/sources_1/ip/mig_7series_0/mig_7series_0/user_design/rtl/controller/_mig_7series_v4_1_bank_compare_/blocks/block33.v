@@ -1,0 +1,1 @@
+  assign req_periodic_rd_r = req_periodic_rd_r_lcl;

@@ -1,0 +1,461 @@
+{
+    "line_num": [
+        [
+            896,
+            896
+        ],
+        [
+            894,
+            894
+        ],
+        [
+            885,
+            892
+        ],
+        [
+            877,
+            878
+        ],
+        [
+            876,
+            877
+        ],
+        [
+            875,
+            875
+        ],
+        [
+            865,
+            869
+        ],
+        [
+            854,
+            861
+        ],
+        [
+            852,
+            852
+        ],
+        [
+            830,
+            842
+        ],
+        [
+            823,
+            823
+        ],
+        [
+            801,
+            801
+        ],
+        [
+            783,
+            787
+        ],
+        [
+            776,
+            778
+        ],
+        [
+            774,
+            774
+        ],
+        [
+            758,
+            758
+        ],
+        [
+            755,
+            757
+        ],
+        [
+            753,
+            754
+        ],
+        [
+            729,
+            729
+        ],
+        [
+            711,
+            711
+        ],
+        [
+            703,
+            710
+        ],
+        [
+            691,
+            691
+        ],
+        [
+            689,
+            689
+        ],
+        [
+            683,
+            683
+        ],
+        [
+            678,
+            682
+        ],
+        [
+            652,
+            661
+        ],
+        [
+            642,
+            644
+        ],
+        [
+            640,
+            641
+        ],
+        [
+            635,
+            635
+        ],
+        [
+            627,
+            627
+        ],
+        [
+            621,
+            622
+        ],
+        [
+            608,
+            617
+        ],
+        [
+            606,
+            607
+        ],
+        [
+            595,
+            604
+        ],
+        [
+            592,
+            594
+        ],
+        [
+            568,
+            568
+        ],
+        [
+            559,
+            565
+        ],
+        [
+            553,
+            557
+        ],
+        [
+            550,
+            554
+        ],
+        [
+            532,
+            533
+        ],
+        [
+            527,
+            528
+        ],
+        [
+            519,
+            526
+        ],
+        [
+            516,
+            519
+        ],
+        [
+            492,
+            512
+        ],
+        [
+            486,
+            487
+        ],
+        [
+            480,
+            482
+        ],
+        [
+            476,
+            476
+        ],
+        [
+            464,
+            464
+        ],
+        [
+            460,
+            461
+        ],
+        [
+            459,
+            462
+        ],
+        [
+            449,
+            458
+        ],
+        [
+            448,
+            448
+        ],
+        [
+            445,
+            446
+        ],
+        [
+            444,
+            444
+        ],
+        [
+            441,
+            441
+        ],
+        [
+            438,
+            440
+        ],
+        [
+            436,
+            442
+        ],
+        [
+            434,
+            434
+        ],
+        [
+            433,
+            433
+        ],
+        [
+            431,
+            432
+        ],
+        [
+            429,
+            435
+        ],
+        [
+            416,
+            416
+        ],
+        [
+            410,
+            410
+        ],
+        [
+            399,
+            409
+        ],
+        [
+            383,
+            383
+        ],
+        [
+            379,
+            379
+        ],
+        [
+            376,
+            378
+        ],
+        [
+            359,
+            374
+        ],
+        [
+            344,
+            349
+        ],
+        [
+            331,
+            331
+        ],
+        [
+            326,
+            326
+        ],
+        [
+            324,
+            325
+        ],
+        [
+            321,
+            321
+        ],
+        [
+            320,
+            320
+        ],
+        [
+            319,
+            319
+        ],
+        [
+            313,
+            316
+        ],
+        [
+            307,
+            311
+        ],
+        [
+            305,
+            305
+        ],
+        [
+            287,
+            287
+        ],
+        [
+            285,
+            286
+        ],
+        [
+            283,
+            283
+        ],
+        [
+            281,
+            281
+        ],
+        [
+            272,
+            280
+        ],
+        [
+            270,
+            271
+        ],
+        [
+            268,
+            269
+        ],
+        [
+            266,
+            267
+        ],
+        [
+            216,
+            216
+        ],
+        [
+            214,
+            214
+        ],
+        [
+            210,
+            210
+        ],
+        [
+            200,
+            200
+        ],
+        [
+            186,
+            192
+        ]
+    ],
+    "blocks": [
+        "  always @(posedge clk) rd_this_rank_r <= #TCQ rd_this_rank_ns;",
+        "  always @(posedge clk) wr_this_rank_r <= #TCQ wr_this_rank_ns;",
+        "  always @(rd_wr_r or req_rank_r) begin\n    wr_this_rank_ns = {RANKS{1'b0}};\n    rd_this_rank_ns = {RANKS{1'b0}};\n    for (i=0; i<RANKS; i=i+1) begin\n      wr_this_rank_ns[i] = ~rd_wr_r && (i[RANK_WIDTH-1:0] == req_rank_r);\n      rd_this_rank_ns[i] = rd_wr_r && (i[RANK_WIDTH-1:0] == req_rank_r);\n    end\n  end",
+        "  assign rts_col = ~sending_col && (demand_ok || override_demand_r) &&\n                   col_cmd_rts && ofs_rdy_r;",
+        "  output wire rts_col;\n  assign rts_col = ~sending_col && (demand_ok || override_demand_r) &&",
+        "  always @(posedge clk) override_demand_r <= override_demand_ns;",
+        "  always @(posedge clk)\n    if(rst)\n      ofs_rdy_r <= #TCQ 1'b0;\n    else\n      ofs_rdy_r <= #TCQ ~phy_mc_cmd_full_r && ~phy_mc_ctl_full_r && ~(phy_mc_data_full && ~rd_wr_r);",
+        "  always @(posedge clk)\n    if(rst) begin\n      phy_mc_ctl_full_r <= #TCQ 1'b0;\n      phy_mc_cmd_full_r <= #TCQ 1'b0;\n    end else begin\n      phy_mc_ctl_full_r <= #TCQ phy_mc_ctl_full;\n      phy_mc_cmd_full_r <= #TCQ phy_mc_cmd_full;\n    end",
+        "  reg phy_mc_ctl_full_r = 1'b0;",
+        "`ifdef MC_SVA\n  col_wait_for_order_q: cover property\n    (@(posedge clk)\n        (~rst && col_wait_r && ~order_q_zero && ~dq_busy_data &&\n         allow_rw));\n  col_wait_for_dq_busy: cover property\n    (@(posedge clk)\n        (~rst && col_wait_r && order_q_zero && dq_busy_data &&\n         allow_rw));\n  col_wait_for_allow_rw: cover property\n    (@(posedge clk)\n        (~rst && col_wait_r && order_q_zero && ~dq_busy_data &&\n         ~allow_rw));",
+        "  assign col_rdy_wr = col_rdy && ~rd_wr_r;",
+        "  assign rtc = ~rnk_config_match && ~rnk_config_kill_rts_col && order_q_zero && col_wait_r && demand_ok;",
+        "  generate\n    if (nBANK_MACHS >1) multiple_demand_priority:\n         cover property (@(posedge clk)\n           ($countones(demand_priority_in[`BM_SHARED_BV]) > 1));\n  endgenerate",
+        "  output wire demand_priority;\n  assign demand_priority = demand_priority_r && ~demanded_prior_r &&\n                           ~sending_col;",
+        "  always @(posedge clk) demanded_prior_r <= #TCQ demanded_prior_ns;",
+        "  endgenerate",
+        "      always @(demand_priority_in[`BM_SHARED_BV]) demanded =\n                                    |demand_priority_in[`BM_SHARED_BV];\n    end",
+        "  generate\n    if (nBANK_MACHS > 1) begin : compute_demanded",
+        "  always @(posedge clk) demand_priority_r <= #TCQ demand_priority_ns;",
+        "  always @(posedge clk) starve_limit_cntr_r <= #TCQ starve_limit_cntr_ns;",
+        "  always @(col_wait_r or rts_col_denied or starve_limit_cntr_r)\n   if (~col_wait_r)\n     starve_limit_cntr_ns = {STARVE_LIMIT_WIDTH{1'b0}};\n   else\n     if (rts_col_denied && (starve_limit_cntr_r != STARVE_LIMIT_CNT-1))\n       starve_limit_cntr_ns = starve_limit_cntr_r +\n                              {{STARVE_LIMIT_WIDTH-1{1'b0}}, 1'b1};\n     else starve_limit_cntr_ns = starve_limit_cntr_r;",
+        "  always @(posedge clk) req_bank_rdy_r <= #TCQ req_bank_rdy_ns;",
+        "  wire req_bank_rdy_ns = order_q_zero && col_wait_r;",
+        "  always @(posedge clk) act_this_rank_r <= #TCQ act_this_rank_ns;",
+        "  always @(act_wait_r or req_rank_r) begin\n    act_this_rank_ns = {RANKS{1'b0}};\n    for (i = 0; i < RANKS; i = i + 1)\n      act_this_rank_ns[i] = act_wait_r && (i[RANK_WIDTH-1:0] == req_rank_r);\n  end",
+        "  generate\n\n    if((nCK_PER_CLK == 4) && (ADDR_CMD_MODE != \"2T\"))\n      assign rts_row = ~sending_row && row_demand_ok &&\n                      (act_req && ~my_inhbt_act_faw && ~inhbt_act_rrd);\n    else\n      assign rts_row = ~sending_row && row_demand_ok &&\n                      ((act_req && ~my_inhbt_act_faw && ~inhbt_act_rrd) ||\n                        pre_request);\n  endgenerate",
+        "      always @(demand_act_priority_in[`BM_SHARED_BV])\n           act_demanded = |demand_act_priority_in[`BM_SHARED_BV];\n    end",
+        "  generate\n    if (nBANK_MACHS > 1) begin : compute_act_demanded",
+        "  assign demand_act_priority = demand_act_priority_r && ~sending_row;",
+        "  always @(posedge clk) demand_act_priority_r <= #TCQ demand_act_priority_ns;",
+        "  always @(posedge clk) act_starve_limit_cntr_r <=\n                        #TCQ act_starve_limit_cntr_ns;",
+        "       always @(act_req or act_starve_limit_cntr_r or rts_act_denied)\n         begin\n           act_starve_limit_cntr_ns = act_starve_limit_cntr_r;\n           if (~act_req)\n             act_starve_limit_cntr_ns = {BM_CNT_WIDTH{1'b0}};\n           else\n             if (rts_act_denied && &act_starve_limit_cntr_r)\n               act_starve_limit_cntr_ns = act_starve_limit_cntr_r +\n                                          {1'b1};\n         end",
+        "    else \n    begin :BM_EQUAL_2 ",
+        "       always @(act_req or act_starve_limit_cntr_r or rts_act_denied)\n         begin\n           act_starve_limit_cntr_ns = act_starve_limit_cntr_r;\n           if (~act_req)\n             act_starve_limit_cntr_ns = {BM_CNT_WIDTH{1'b0}};\n           else\n             if (rts_act_denied && &act_starve_limit_cntr_r)\n               act_starve_limit_cntr_ns = act_starve_limit_cntr_r +\n                                          {{BM_CNT_WIDTH-1{1'b0}}, 1'b1};\n         end",
+        "  generate\n    if (BM_CNT_WIDTH > 1) \n    begin :BM_MORE_THAN_2 ",
+        "  endgenerate",
+        "      always @(req_rank_r or req_rank_r_in or start_rcd_in) begin\n        inhbt_act_rrd = 1'b0;\n        for (j=(ID+1); j<(ID+nBANK_MACHS); j=j+1)\n          inhbt_act_rrd = inhbt_act_rrd ||\n             (start_rcd_in[j] &&\n              (req_rank_r_in[(j*RANK_WIDTH)+:RANK_WIDTH] == req_rank_r));\n      end",
+        "      always @(req_rank_r or req_rank_r_in or start_rcd_in) begin\n        inhbt_act_rrd = 1'b0;\n        for (j=(ID+1); j<(ID+nBANK_MACHS); j=j+1)\n          inhbt_act_rrd = inhbt_act_rrd || start_rcd_in[j];\n      end",
+        "  generate\n    integer j;\n    if (RANKS == 1)\n      always @(req_rank_r or req_rank_r_in or start_rcd_in) begin\n        inhbt_act_rrd = 1'b0;",
+        "  assign precharge_bm_end = (rp_timer_r == ONE[RP_TIMER_WIDTH-1:0]) ||\n                            (start_pre && (nRP_CLKS_M2 == ZERO));",
+        "      always @(posedge clk) rp_timer_r <= #TCQ rp_timer_ns;\n    end ",
+        "      always @(rp_timer_r or rst or start_pre)\n        if (rst) rp_timer_ns = ZERO[RP_TIMER_WIDTH-1:0];\n        else begin\n          rp_timer_ns = rp_timer_r;\n          if (start_pre) rp_timer_ns = nRP_CLKS_M2[RP_TIMER_WIDTH-1:0];\n          else if (|rp_timer_r) rp_timer_ns =\n                                  rp_timer_r - ONE[RP_TIMER_WIDTH-1:0];\n        end",
+        "  generate\n    if (nRP_CLKS_M2 > ZERO) begin : rp_timer\n      reg [RP_TIMER_WIDTH-1:0] rp_timer_ns;\n      always @(rp_timer_r or rst or start_pre)",
+        "  generate\n  \n    if((nCK_PER_CLK == 4) && (ADDR_CMD_MODE != \"2T\")) begin\n    \n      assign start_pre =  pre_wait_r && ras_timer_zero_r &&\n                          (sending_pre || auto_pre_r);\n      \n      assign rts_pre = ~sending_pre && pre_request;\n    \n    end\n    \n    else begin\n    \n      assign start_pre =  pre_wait_r && ras_timer_zero_r &&\n                          (sending_row || auto_pre_r);\n                          \n      assign rts_pre = 1'b0;\n      \n    end\n\n  endgenerate",
+        "  localparam nRP_CLKS_M2 = (nRP_CLKS-2 < 0) ? 0 : nRP_CLKS-2;\n  localparam RP_TIMER_WIDTH = clogb2(nRP_CLKS_M2 + 1);",
+        "  localparam nRP_CLKS = (nCK_PER_CLK == 1) ? nRP : \n                        (nCK_PER_CLK == 2) ? ((nRP/2) + (nRP%2)) : \n                       ((nRP/4) + ((nRP%4) ? 1 : 0));",
+        "  always @(posedge clk) pre_wait_r <= #TCQ pre_wait_ns;",
+        "  endgenerate",
+        "        assign op_exit_req = (low_idle_cnt_r && op_active) ||\n                             (op_wait_r && ~|op_cnt_r);",
+        "        always @(posedge clk) op_cnt_r <= #TCQ op_cnt_ns;\n        assign op_exit_req = (low_idle_cnt_r && op_active) ||\n                             (op_wait_r && ~|op_cnt_r);\n      end",
+        "      else begin : op_cnt\n        reg [OP_WIDTH-1:0] op_cnt_r;\n        wire [OP_WIDTH-1:0] op_cnt_ns =\n                                   (passing_open_bank || op_exit_grant || rst)\n                                       ? ZERO[OP_WIDTH-1:0]\n                                       : end_rtp_lcl\n                                         ? nOP_WAIT[OP_WIDTH-1:0]\n                                         : |op_cnt_r\n                                            ? op_cnt_r - ONE[OP_WIDTH-1:0]\n                                            : op_cnt_r;",
+        "        assign op_exit_req = (low_idle_cnt_r && op_active);",
+        "      assign start_pre_wait = op_exit_grant ||\n                              (end_rtp_lcl && ~tail_r && ~passing_open_bank);",
+        "      always @(posedge clk) op_wait_r <= #TCQ op_wait_ns;",
+        "      wire op_active = ~rst && ~passing_open_bank && ((end_rtp_lcl && tail_r)",
+        "      assign bank_wait_in_progress = sending_col || |rtp_timer_r ||\n                                     (pre_wait_r && ~ras_timer_zero_r) ||\n                                     op_wait_r;",
+        "    else begin : op_mode_enabled\n      reg op_wait_r;\n      assign bank_wait_in_progress = sending_col || |rtp_timer_r ||\n                                     (pre_wait_r && ~ras_timer_zero_r) ||\n                                     op_wait_r;\n      wire op_active = ~rst && ~passing_open_bank && ((end_rtp_lcl && tail_r)\n                                || op_wait_r);",
+        "      assign op_exit_req = 1'b0;",
+        "      assign start_pre_wait = end_rtp_lcl;",
+        "      assign bank_wait_in_progress = sending_col_not_rmw_rd || |rtp_timer_r ||\n                                     (pre_wait_r && ~ras_timer_zero_r);",
+        "  generate\n    if (nOP_WAIT == 0) begin : op_mode_disabled\n      assign bank_wait_in_progress = sending_col_not_rmw_rd || |rtp_timer_r ||\n                                     (pre_wait_r && ~ras_timer_zero_r);\n      assign start_pre_wait = end_rtp_lcl;\n      assign op_exit_req = 1'b0;\n    end",
+        "  assign end_rtp = end_rtp_lcl;",
+        "  always @(posedge clk) rtp_timer_r <= #TCQ rtp_timer_ns;",
+        "  always @(pass_open_bank_r or rst or rtp_timer_r\n           or sending_col_not_rmw_rd) begin\n    rtp_timer_ns = rtp_timer_r;\n    if (rst || pass_open_bank_r)\n      rtp_timer_ns = ZERO[RTP_TIMER_WIDTH-1:0];\n    else begin\n      if (sending_col_not_rmw_rd) \n         rtp_timer_ns = nRTP_CLKS_M1[RTP_TIMER_WIDTH-1:0];\n      if (|rtp_timer_r) rtp_timer_ns = rtp_timer_r - ONE[RTP_TIMER_WIDTH-1:0];\n    end\n  end",
+        "  always @(posedge clk) ras_timer_zero_r <= #TCQ ras_timer_zero_ns;",
+        "  always @(posedge clk) ras_timer_r <= #TCQ ras_timer_passed_ns;",
+        "  wire [RAS_TIMER_WIDTH-1:0] ras_timer_passed_ns = rcv_open_bank\n                                                     ? passed_ras_timer\n                                                     : ras_timer_ns;",
+        "  always @(bm_end_r1 or ras_timer_r or rst or start_rcd_lcl\n           or start_wtp_timer) begin\n    if (bm_end_r1 || rst) ras_timer_ns = ZERO[RAS_TIMER_WIDTH-1:0];\n    else begin\n      ras_timer_ns = ras_timer_r;\n      if (start_rcd_lcl) ras_timer_ns =\n           nRAS_CLKS[RAS_TIMER_WIDTH-1:0] - TWO[RAS_TIMER_WIDTH-1:0];\n      if (start_wtp_timer) ras_timer_ns =\n            \n            \n           (ras_timer_r <= (nWTP_CLKS-2)) ? nWTP_CLKS[RAS_TIMER_WIDTH-1:0] - TWO[RAS_TIMER_WIDTH-1:0]\n                                          : ras_timer_r - ONE[RAS_TIMER_WIDTH-1:0];\n      if (|ras_timer_r && ~start_wtp_timer) ras_timer_ns =\n           ras_timer_r - ONE[RAS_TIMER_WIDTH-1:0];\n    end\n  end ",
+        "  always @(ras_timer_ns_in or rb_hit_busies_r) begin\n    passed_ras_timer = {RAS_TIMER_WIDTH{1'b0}};\n    for (i=ID+1; i<(ID+nBANK_MACHS); i=i+1)\n      if (rb_hit_busies_r[i])\n        passed_ras_timer = ras_timer_ns_in[i*RAS_TIMER_WIDTH+:RAS_TIMER_WIDTH];\n  end",
+        "  always @(posedge clk) col_wait_r <= #TCQ col_wait_ns;",
+        "  endgenerate",
+        "      always @(posedge clk) rmw_wait_r <= #TCQ rmw_wait_ns;\n    end",
+        "      always @(rd_wr_r or req_wr_r) rd_half_rmw_lcl = req_wr_r && rd_wr_r;",
+        "      else always @(posedge clk) rmw_rd_done = #TCQ my_rmw_rd_ns;",
+        "      if (CWL == 8) always @(my_rmw_rd_ns) rmw_rd_done = my_rmw_rd_ns;",
+        "      always @(posedge clk) begin\n        phy_rddata_valid_r <= #TCQ phy_rddata_valid;\n        rd_rmw_r <= #TCQ rd_rmw;\n      end   ",
+        "  generate\n    if (ECC != \"OFF\") begin : rmw_on\n\n\n      reg phy_rddata_valid_r;",
+        "  assign rd_half_rmw = rd_half_rmw_lcl;",
+        "  endgenerate",
+        "      always @(posedge clk) rcd_active_r <= #TCQ rcd_active_ns;\n    end",
+        "      always @(posedge clk) end_rcd = end_rcd_ns;",
+        "      always @(posedge clk) rcd_timer_r <= #TCQ rcd_timer_ns;",
+        "      always @(rcd_timer_r or rst or start_rcd_lcl) begin\n        if (rst) rcd_timer_ns = ZERO[RCD_TIMER_WIDTH-1:0];\n        else begin\n          rcd_timer_ns = rcd_timer_r;\n          if (start_rcd_lcl) rcd_timer_ns = nRCD_CLKS_M2[RCD_TIMER_WIDTH-1:0];\n          else if (|rcd_timer_r) rcd_timer_ns =\n                                   rcd_timer_r - ONE[RCD_TIMER_WIDTH-1:0];\n        end\n      end",
+        "    else if (nRCD_CLKS > 2) begin : rcd_timer_gt_2\n      reg [RCD_TIMER_WIDTH-1:0] rcd_timer_ns;",
+        "      always @(start_rcd_lcl) end_rcd = start_rcd_lcl;\n    end",
+        "  generate\n    if (nRCD_CLKS <= 2) begin : rcd_timer_leq_2",
+        "  assign act_wait_r = act_wait_r_lcl;",
+        "  always @(posedge clk) act_wait_r_lcl <= #TCQ act_wait_ns;",
+        "  assign start_rcd = start_rcd_lcl;",
+        "  always @(posedge clk) bm_end_r1 <= #TCQ bm_end;",
+        "  function integer clogb2 (input integer size); \n    begin\n      size = size - 1;\n      for (clogb2=1; size>1; clogb2=clogb2+1)\n            size = size >> 1;\n    end\n  endfunction "
+    ]
+}

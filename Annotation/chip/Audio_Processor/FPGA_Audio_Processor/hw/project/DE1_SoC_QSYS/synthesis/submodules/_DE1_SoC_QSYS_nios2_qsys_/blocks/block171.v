@@ -1,0 +1,1 @@
+  assign d_write_nxt = (R_ctrl_st & E_new_inst) | (d_write & d_waitrequest);

@@ -1,0 +1,1 @@
+    assign dbus_ack = cs_ack;

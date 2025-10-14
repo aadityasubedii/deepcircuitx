@@ -1,0 +1,56 @@
+{
+    "line_num": [
+        [
+            182,
+            182
+        ],
+        [
+            177,
+            181
+        ],
+        [
+            167,
+            167
+        ],
+        [
+            164,
+            164
+        ],
+        [
+            160,
+            160
+        ],
+        [
+            158,
+            159
+        ],
+        [
+            151,
+            157
+        ],
+        [
+            149,
+            150
+        ],
+        [
+            145,
+            145
+        ],
+        [
+            142,
+            144
+        ]
+    ],
+    "blocks": [
+        "  always @(posedge clk) last_master_r <= #TCQ last_master_ns;",
+        "  assign last_master_ns = rst\n                            ? ONE[0+:WIDTH]\n                            : upd_last_master\n                                ? current_master\n                                : last_master_r;",
+        "  always @(posedge clk) grant_r <= #TCQ grant_ns;",
+        "  assign grant_ns = req & ~inhibit & {WIDTH{~disable_grant}};",
+        "  endgenerate",
+        "      always @(inh_group) inhibit[i] = |inh_group;\n    end",
+        "  generate\n    for (i = 0; i < WIDTH; i = i + 1) begin : channel\n      wire [WIDTH-1:1] inh_group;\n      for (j = 0; j < (WIDTH-1); j = j + 1) begin : last_master\n          assign inh_group[j+1] =\n                  dbl_last_master_ns[i+j] && |dbl_req[i+WIDTH-1:i+j+1];\n      end",
+        "  genvar i;\n  genvar j;",
+        "  always @(req) dbl_req = {req, req};",
+        "  always @(last_master_ns)\n    dbl_last_master_ns = {last_master_ns, last_master_ns};\n  reg [WIDTH*2-1:0] dbl_req;"
+    ]
+}

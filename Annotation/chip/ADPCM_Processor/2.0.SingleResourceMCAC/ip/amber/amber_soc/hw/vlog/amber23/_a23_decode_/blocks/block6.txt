@@ -1,0 +1,4 @@
+Line number: 
+[1662, 1678]
+Comment: 
+This block of code updates various registers based on the system state and interrupts. It's triggered at the rising edge of the clock. When the system isn't stalling (`i_fetch_stall`), it records interrupt status into `irq` and `firq` from `i_irq` and `i_firq`, respectively. It subsequently checks for a specific state (`control_state == INT_WAIT1`) and the processor's mode (`status_bits_mode_r == SVC`). If both conditions are met, it resets the `dabt_reg` register. Otherwise, it updates `dabt_reg` with a logic OR operation on the existing `dabt_reg` value and the `i_dabt` input. Lastly, the `dabt_reg_d1` register is updated with the most recent value of `dabt_reg`.

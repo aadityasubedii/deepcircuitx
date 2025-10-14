@@ -1,0 +1,36 @@
+{
+    "line_num": [
+        [
+            193,
+            220
+        ],
+        [
+            180,
+            191
+        ],
+        [
+            152,
+            169
+        ],
+        [
+            146,
+            146
+        ],
+        [
+            125,
+            143
+        ],
+        [
+            104,
+            120
+        ]
+    ],
+    "blocks": [
+        "always @( posedge reset, posedge clk ) begin\n\tif (reset) begin\n\n\tend else begin\n\t    if ( !i_core_stall )\n\t\t  begin\n\t\t  if ( i_copro_operation == 2'd2 )  \n\t\t      case ( i_copro_crn )\n\t\t          4'd 1: begin `TB_DEBUG_MESSAGE $display (\"Write 0x%08h to   Co-Pro 15 #1, Flush Cache\", i_copro_write_data); end\n\t\t          4'd 2: begin `TB_DEBUG_MESSAGE $display (\"Write 0x%08h to   Co-Pro 15 #2, Cache Control\", i_copro_write_data); end\n\t\t          4'd 3: begin `TB_DEBUG_MESSAGE $display (\"Write 0x%08h to   Co-Pro 15 #3, Cacheable area\", i_copro_write_data); end\n\t\t          4'd 4: begin `TB_DEBUG_MESSAGE $display (\"Write 0x%08h to   Co-Pro 15 #4, Updateable area\", i_copro_write_data); end\n\t\t          4'd 5: begin `TB_DEBUG_MESSAGE $display (\"Write 0x%08h to   Co-Pro 15 #5, Disruptive area\", i_copro_write_data); end\n\t\t      endcase\n\t\t      \n\t\t  if ( copro_operation_d1 == 2'd1 ) \n\t\t      case ( copro_crn_d1 )\n\t\t          4'd 0: begin `TB_DEBUG_MESSAGE $display (\"Read  0x%08h from Co-Pro 15 #0, ID Register\", o_copro_read_data); end\n\t\t          4'd 2: begin `TB_DEBUG_MESSAGE $display (\"Read  0x%08h from Co-Pro 15 #2, Cache control\", o_copro_read_data); end\n\t\t          4'd 3: begin `TB_DEBUG_MESSAGE $display (\"Read  0x%08h from Co-Pro 15 #3, Cacheable area\", o_copro_read_data); end\n\t\t          4'd 4: begin `TB_DEBUG_MESSAGE $display (\"Read  0x%08h from Co-Pro 15 #4, Updateable area\", o_copro_read_data); end\n\t\t          4'd 5: begin `TB_DEBUG_MESSAGE $display (\"Read  0x%08h from Co-Pro 15 #4, Disruptive area\", o_copro_read_data); end\n\t\t          4'd 6: begin `TB_DEBUG_MESSAGE $display (\"Read  0x%08h from Co-Pro 15 #6, Fault Status Register\", o_copro_read_data); end\n\t\t          4'd 7: begin `TB_DEBUG_MESSAGE $display (\"Read  0x%08h from Co-Pro 15 #7, Fault Address Register\", o_copro_read_data); end\n\t\t      endcase\n\t    end\n\tend\nend",
+        "always @( posedge reset, posedge clk ) begin\n\tif (reset) begin\n\t\tcopro_operation_d1  <= 'd0;\n\t\tcopro_crn_d1        <= 'd0;\n\tend else begin\n\t    if ( !i_core_stall )\n\t\t  begin\n\t\t  copro_operation_d1  <= i_copro_operation;\n\t\t  copro_crn_d1        <= i_copro_crn;\n\t\t  end\n\tend\nend",
+        "always @ ( posedge reset, posedge clk ) begin\n\tif (reset) begin\n\t\to_copro_read_data <= 'd0;\n\tend else begin       \n\t    if ( !i_core_stall )\n\t\t  case ( i_copro_crn )\n\t\t      \n\t\t      4'd0:    o_copro_read_data <= 32'h4156_0300;\n\t\t      4'd2:    o_copro_read_data <= {29'd0, cache_control}; \n\t\t      4'd3:    o_copro_read_data <= cacheable_area; \n\t\t      4'd4:    o_copro_read_data <= updateable_area; \n\t\t      4'd5:    o_copro_read_data <= disruptive_area; \n\t\t      4'd6:    o_copro_read_data <= {24'd0, fault_status };\n\t\t      4'd7:    o_copro_read_data <= fault_address;\n\t\t      default: o_copro_read_data <= 32'd0;\n\t\t  endcase\n\tend\nend",
+        "assign copro15_reg1_write = !i_core_stall && i_copro_operation == 2'd2 && i_copro_crn == 4'd1;",
+        "always @ ( posedge reset, posedge clk ) begin\n\tif (reset) begin\n\t\tcache_control <= 3'b000;\n\t\tcacheable_area <= 32'h0;\n\t\tupdateable_area <= 32'h0;\n\t\tdisruptive_area <= 32'h0;\n\tend else begin\n\t    if ( !i_core_stall )         \n\t\t  begin\n\t\t  if ( i_copro_operation == 2'd2 )\n\t\t      case ( i_copro_crn )\n\t\t          4'd2: cache_control   <= i_copro_write_data[2:0];\n\t\t          4'd3: cacheable_area  <= i_copro_write_data[31:0];\n\t\t          4'd4: updateable_area <= i_copro_write_data[31:0];\n\t\t          4'd5: disruptive_area <= i_copro_write_data[31:0];\n\t\t      endcase\n\t\t  end\n\tend\nend",
+        "always @ ( posedge reset, posedge clk ) begin\n\tif (reset) begin\n\t\tfault_status  <= 'd0;\n\t\tfault_address <= 'd0;\n\tend else begin\n\t\tif ( !i_core_stall ) begin\n\t\t\tif ( i_fault ) begin\n\t\t\t\t`ifdef A25_COPRO15_DEBUG    \n\t\t\t\t\t$display (\"Fault status  set to 0x%08x\", i_fault_status);\n\t\t\t\t\t$display (\"Fault address set to 0x%08x\", i_fault_address);\n\t\t\t\t`endif        \n\t\t\t\tfault_status    <= i_fault_status;\n\t\t\t\tfault_address   <= i_fault_address;\n\t\t\tend\n\t\tend\n\tend\nend"
+    ]
+}

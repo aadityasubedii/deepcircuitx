@@ -1,0 +1,1 @@
+assign r_CtrlData[15:0]   = MIITX_DATAOut[15:0];

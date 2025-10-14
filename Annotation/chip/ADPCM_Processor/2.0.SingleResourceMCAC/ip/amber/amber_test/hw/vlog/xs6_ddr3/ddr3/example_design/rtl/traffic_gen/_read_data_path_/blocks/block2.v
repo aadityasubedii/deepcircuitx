@@ -1,0 +1,1 @@
+assign dq_error_bytelane_cmp = dq_lane_error_r1;     

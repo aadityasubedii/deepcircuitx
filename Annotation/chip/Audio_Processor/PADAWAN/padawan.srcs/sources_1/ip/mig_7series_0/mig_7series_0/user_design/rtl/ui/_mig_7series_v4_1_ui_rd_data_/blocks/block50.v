@@ -1,0 +1,1 @@
+  assign ram_init_addr = rd_buf_indx_r[3:0];

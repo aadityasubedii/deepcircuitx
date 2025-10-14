@@ -1,0 +1,1 @@
+  always @(*) prev_valid_ns = (~rst && ~ktap_at_right_edge && ~ktap_at_left_edge && ~edge_aligned_r) && prev_valid_r | done_ns;

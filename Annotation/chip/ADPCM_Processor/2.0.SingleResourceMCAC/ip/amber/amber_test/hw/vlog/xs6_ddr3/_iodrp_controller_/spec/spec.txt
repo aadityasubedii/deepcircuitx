@@ -1,0 +1,11 @@
+Module name: iodrp_controller. 
+
+Module specification: The iodrp_controller module is a finite state machine (FSM) for controlling reading and writing data from/to a memory cell. It regulates the data and address phases to push data in or out of the memory unit, managing write and read requests via DRP_CLK, sync_rst, rd_not_write and cmd_valid signals. Also, it permits broadcasting functionality and has safety measures for resetting to default state during failures.  
+
+Input ports include the 8-bit memory cell address (memcell_address) and data to be written into the memory cell (write_data), logical selection between read or write (rd_not_write), command validation (cmd_valid), system broadcast triggering (use_broadcast), synchronous reset (sync_rst) along with pacing for digital readout processor (DRP_CLK) and its data output signal (DRP_SDO).
+
+Output ports include 8-bit data read from the memory cell (read_data), readiness or busyness of the system (rdy_busy_n), in addition to signaling for digital readout processor like chip select (DRP_CS), serial data input (DRP_SDI), address enable (DRP_ADD) and broadcast control (DRP_BKST). 
+
+Internal signals such as memcell_addr_reg, data_reg, shift_through_reg, load_shift_n, addr_data_sel_n, bit_cnt, rd_not_write_reg, AddressPhase, capture_read_data, state, nextstate, data_out_mux, DRP_SDI_pre and state_ascii are involved for multiple operations including storage, counting, state transitions, data shifting and selection. 
+
+The overall Verilog code encapsulates various blocks including FSM state definition, ASCII state mapping, data address and bit processing, state transitions, and output signal assignments. Through this structuring, the module effectively handles instructions, data processing and offers robust control over memory cell data handling.

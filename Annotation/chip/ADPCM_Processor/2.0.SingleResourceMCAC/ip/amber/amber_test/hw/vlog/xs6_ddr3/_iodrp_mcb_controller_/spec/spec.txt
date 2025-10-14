@@ -1,0 +1,9 @@
+Module name: "iodrp_mcb_controller". 
+
+Module specification: The iodrp_mcb_controller is a Verilog module designed to serve as a controller for the Data Reuse Protocol (DRP), focused on performing memory operations. The operations, either read or write, are dictated by incoming commands and the current state of an internal Finite State Machine (FSM). The FSM manages states including active address and data phases, address to data gap, and various ready conditions. The module uses "shift_n_expand" task to manipulate data based on the current state. Key data such as memory address, write data, and the distinction between read or write operations, are stored and used in each state. Control registers like DRP_CS, DRP_ADD, and MCB_UIREAD are set according to the state for appropriate operation.
+
+The module has quite a few inputs including `memcell_address`, `write_data`, `rd_not_write`, `cmd_valid`, `use_broadcast`, `drp_ioi_addr`, `sync_rst`, `DRP_CLK` and `DRP_SDO`. Outputs include `read_data`, `rdy_busy_n`, `DRP_CS`, `DRP_SDI`, `DRP_ADD`, `DRP_BKST`, `MCB_UIREAD` and `DRP_BKST`.
+
+Inside the module, it has local variables like `memcell_addr_reg`, `data_reg`, `shift_through_reg`, `load_shift_n`, `addr_data_sel_n`, `bit_cnt`, `rd_not_write_reg`, `AddressPhase`, `DRP_CS_pre`, `extra_cs`, `state`, `nextstate`, `data_out`, `data_out_mux` and `DRP_SDI_pre`.
+
+Several local parameters and tasks are used to facilitate the operations. The finite state machine dictates the control flow of the module, driven by the DRP_CLK clock signal. A "shift_n_expand" task is also used to expand and manipulate data for specific conditions. The module is structured to efficiently manage DRP operations in memory, making it an integral component in the memory operation system.

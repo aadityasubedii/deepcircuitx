@@ -1,0 +1,1 @@
+  always @(posedge clk) override_demand_r <= override_demand_ns;

@@ -1,0 +1,1 @@
+  always @(posedge clk) q_has_priority_r <= #TCQ q_has_priority_ns;

@@ -1,0 +1,1 @@
+assign mcb_cmd_addr_o = addr_o[ADDR_WIDTH-1:0];

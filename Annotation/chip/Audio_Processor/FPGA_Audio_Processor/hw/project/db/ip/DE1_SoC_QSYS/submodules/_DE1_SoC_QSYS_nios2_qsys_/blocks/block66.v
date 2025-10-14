@@ -1,0 +1,1 @@
+  assign R_ctrl_logic_nxt = D_ctrl_logic;

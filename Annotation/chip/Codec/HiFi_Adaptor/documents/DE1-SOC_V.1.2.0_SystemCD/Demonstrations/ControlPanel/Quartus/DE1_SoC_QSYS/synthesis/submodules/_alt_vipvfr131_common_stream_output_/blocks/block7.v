@@ -1,0 +1,1 @@
+assign image_packet_nxt = (sop && dout_data == 0) || (image_packet && ~eop);

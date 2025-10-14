@@ -1,0 +1,1 @@
+        assign genlock_enable = genlock_enable_reg;

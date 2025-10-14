@@ -1,0 +1,17 @@
+Module name: interrupt_controller. 
+
+Module specification: 
+
+The interrupt_controller is a hardware module designed to handle and control different interrupt requests within a system, including main interrupts (IRQs), fast interrupt requests (FIRQs), and additionally offering interfaces for communication with a Wishbone bus system. This enables the module to access other peripherals or devices seamlessly. The module differentiates interrupt inputs from two UART modules, an Ethernet MAC module, and three separate timer modules. Software interrupt registers 'softint_0/1_reg' also offer more interrupt sources. Each interrupt request is processed according to their corresponding enable registers to determine the final interrupts.
+
+Input Ports:
+The module takes in signals for clock(i_clk), Wishbone addresses (i_wb_adr), Wishbone select (i_wb_sel), Wishbone write enable (i_wb_we), Wishbone data (i_wb_dat), Wishbone cycle (i_wb_cyc), Wishbone strobe (i_wb_stb), two UART module interrupts (i_uart0_int, i_uart1_int), Ethernet MAC module interrupt (i_ethmac_int), three timer module interrupts (i_tm_timer_int[2:0]), and external test interrupt requests(i_test_reg_irq, i_test_reg_firq).
+
+Output Ports:
+The outputs of the module are signals for Wishbone data (o_wb_dat), Wishbone acknowledge (o_wb_ack), Wishbone error (o_wb_err), interrupt request (o_irq), and fast interrupt request (o_firq).
+
+Internal signals:
+Internally, the module uses several registers and wires for Enabling/disabling states of irqs, firqs, software interrupt on channel 0 and 1, raw interrupt requests from sources, holding data read from Wishbone bus, start of a write/read operation to the Wishbone bus, and data to be written to the Wishbone Bus.
+
+Overview of different blocks of the code:
+The code is divided into multiple segments each serving unique functions. Register declarations are done first, followed by assignments to control wire signals. Instances of signals are also defined here. Then conditions based on data width are defined which decides how the data is to be divided or not. Further, the module processes raw interrupts and handles them according to their types (IRQs or FIRQs) and channel assignments. Lastly, blocks of code handle the read and write operations to and from the Wishbone bus, through which communication with other devices or peripherals is achieved. Debugging information generation block is also included in the code. The module offers comprehensive control over the interrupt management and Wishbone interface operations.

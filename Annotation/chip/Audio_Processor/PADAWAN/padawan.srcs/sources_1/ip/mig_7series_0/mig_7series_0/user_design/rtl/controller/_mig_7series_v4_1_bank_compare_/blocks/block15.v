@@ -1,0 +1,1 @@
+  always @(posedge clk) req_col_r[COL_WIDTH-1:0] <= #TCQ req_col_ns;

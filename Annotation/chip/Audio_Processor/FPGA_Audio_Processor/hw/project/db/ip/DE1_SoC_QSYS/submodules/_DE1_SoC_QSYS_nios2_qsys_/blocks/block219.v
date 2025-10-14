@@ -1,0 +1,1 @@
+  assign D_jmp_direct_target_waddr = D_iw[31 : 6];

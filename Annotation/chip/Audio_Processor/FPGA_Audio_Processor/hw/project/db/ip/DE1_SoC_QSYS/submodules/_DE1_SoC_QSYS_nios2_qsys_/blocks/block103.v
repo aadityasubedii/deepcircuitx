@@ -1,0 +1,1 @@
+  assign D_ctrl_implicit_dst_retaddr = D_op_call|D_op_rsv02;

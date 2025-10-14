@@ -1,0 +1,1 @@
+  always @(posedge clk) data_bytes_r2 <= #TCQ data_bytes_r1;

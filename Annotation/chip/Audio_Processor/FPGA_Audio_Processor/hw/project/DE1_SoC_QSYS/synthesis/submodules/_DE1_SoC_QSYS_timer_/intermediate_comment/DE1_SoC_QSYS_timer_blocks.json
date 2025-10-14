@@ -1,0 +1,126 @@
+{
+    "line_num": [
+        [
+            204,
+            208
+        ],
+        [
+            195,
+            201
+        ],
+        [
+            194,
+            194
+        ],
+        [
+            193,
+            193
+        ],
+        [
+            184,
+            190
+        ],
+        [
+            183,
+            183
+        ],
+        [
+            182,
+            182
+        ],
+        [
+            181,
+            181
+        ],
+        [
+            172,
+            178
+        ],
+        [
+            163,
+            169
+        ],
+        [
+            162,
+            162
+        ],
+        [
+            161,
+            161
+        ],
+        [
+            152,
+            158
+        ],
+        [
+            144,
+            150
+        ],
+        [
+            142,
+            142
+        ],
+        [
+            130,
+            139
+        ],
+        [
+            129,
+            129
+        ],
+        [
+            120,
+            126
+        ],
+        [
+            107,
+            116
+        ],
+        [
+            102,
+            105
+        ],
+        [
+            93,
+            99
+        ],
+        [
+            90,
+            91
+        ],
+        [
+            89,
+            89
+        ],
+        [
+            77,
+            86
+        ]
+    ],
+    "blocks": [
+        "  assign stop_strobe = writedata[3] && control_wr_strobe;\n  assign start_strobe = writedata[2] && control_wr_strobe;\n  assign control_continuous = control_register[1];\n  assign control_interrupt_enable = control_register[0];\n  assign status_wr_strobe = chipselect && ~write_n && (address == 0);",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n          control_register <= 0;\n      else if (control_wr_strobe)\n          control_register <= writedata[3 : 0];\n    end",
+        "  assign control_wr_strobe = chipselect && ~write_n && (address == 1);",
+        "  assign snap_read_value = counter_snapshot;",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n          counter_snapshot <= 0;\n      else if (snap_strobe)\n          counter_snapshot <= internal_counter;\n    end",
+        "  assign snap_strobe = snap_l_wr_strobe || snap_h_wr_strobe;",
+        "  assign snap_h_wr_strobe = chipselect && ~write_n && (address == 5);",
+        "  assign snap_l_wr_strobe = chipselect && ~write_n && (address == 4);",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n          period_h_register <= 2;\n      else if (period_h_wr_strobe)\n          period_h_register <= writedata;\n    end",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n          period_l_register <= 11927;\n      else if (period_l_wr_strobe)\n          period_l_register <= writedata;\n    end",
+        "  assign period_h_wr_strobe = chipselect && ~write_n && (address == 3);",
+        "  assign period_l_wr_strobe = chipselect && ~write_n && (address == 2);",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n          readdata <= 0;\n      else if (clk_en)\n          readdata <= read_mux_out;\n    end",
+        "  assign read_mux_out = ({16 {(address == 2)}} & period_l_register) |\n    ({16 {(address == 3)}} & period_h_register) |\n    ({16 {(address == 4)}} & snap_read_value[15 : 0]) |\n    ({16 {(address == 5)}} & snap_read_value[31 : 16]) |\n    ({16 {(address == 1)}} & control_register) |\n    ({16 {(address == 0)}} & {counter_is_running,\n    timeout_occurred});",
+        "  assign irq = timeout_occurred && control_interrupt_enable;",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n          timeout_occurred <= 0;\n      else if (clk_en)\n          if (status_wr_strobe)\n              timeout_occurred <= 0;\n          else if (timeout_event)\n              timeout_occurred <= -1;\n    end",
+        "  assign timeout_event = (counter_is_zero) & ~(delayed_unxcounter_is_zeroxx0);",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n          delayed_unxcounter_is_zeroxx0 <= 0;\n      else if (clk_en)\n          delayed_unxcounter_is_zeroxx0 <= counter_is_zero;\n    end",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n          counter_is_running <= 1'b0;\n      else if (clk_en)\n          if (do_start_counter)\n              counter_is_running <= -1;\n          else if (do_stop_counter)\n              counter_is_running <= 0;\n    end",
+        "  assign do_start_counter = start_strobe;\n  assign do_stop_counter = (stop_strobe                            ) ||\n    (force_reload                           ) ||\n    (counter_is_zero && ~control_continuous );",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n          force_reload <= 0;\n      else if (clk_en)\n          force_reload <= period_h_wr_strobe || period_l_wr_strobe;\n    end",
+        "  assign counter_load_value = {period_h_register,\n    period_l_register};",
+        "  assign counter_is_zero = internal_counter == 0;",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n          internal_counter <= 32'h22E97;\n      else if (counter_is_running || force_reload)\n          if (counter_is_zero    || force_reload)\n              internal_counter <= counter_load_value;\n          else \n            internal_counter <= internal_counter - 1;\n    end"
+    ]
+}

@@ -1,0 +1,1 @@
+assign field_prediction_nxt = (~interlaced | end_of_vsync) ? f_reg : (start_of_vsync) ? ~f_reg : field_prediction;

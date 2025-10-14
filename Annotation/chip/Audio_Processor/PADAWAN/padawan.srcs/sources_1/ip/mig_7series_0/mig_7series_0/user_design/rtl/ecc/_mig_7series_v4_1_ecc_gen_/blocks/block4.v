@@ -1,0 +1,1 @@
+         assign ht_matrix[n] = {{5{1'b1}}, {ECC_WIDTH-5{1'b0}}};

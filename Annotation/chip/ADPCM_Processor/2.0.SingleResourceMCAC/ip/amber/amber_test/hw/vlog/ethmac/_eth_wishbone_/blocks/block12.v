@@ -1,0 +1,5 @@
+reg RxStatusWriteLatched;
+reg RxStatusWriteLatched_sync1;
+reg RxStatusWriteLatched_sync2;
+reg RxStatusWriteLatched_syncb1;
+reg RxStatusWriteLatched_syncb2;

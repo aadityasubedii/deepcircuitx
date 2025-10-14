@@ -1,0 +1,1 @@
+            assign out_error = 1'b0;

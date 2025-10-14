@@ -1,0 +1,1 @@
+    assign ram_re = 1;

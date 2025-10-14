@@ -1,0 +1,1 @@
+  always @(posedge clk) granted_col_r <= #TCQ granted_col_ns;

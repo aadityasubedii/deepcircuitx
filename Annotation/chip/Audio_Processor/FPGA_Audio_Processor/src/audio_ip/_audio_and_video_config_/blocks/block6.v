@@ -1,0 +1,1 @@
+assign transfer_data = auto_init_transfer_data;

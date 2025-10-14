@@ -1,0 +1,1 @@
+assign TxCarrierSense = ~r_FullD & CarrierSense_Tx2;

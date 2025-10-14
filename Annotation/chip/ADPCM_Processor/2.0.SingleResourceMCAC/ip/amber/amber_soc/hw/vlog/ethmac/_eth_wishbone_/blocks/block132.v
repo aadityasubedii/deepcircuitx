@@ -1,0 +1,1 @@
+assign TxLengthEq0 = TxLength == 0;

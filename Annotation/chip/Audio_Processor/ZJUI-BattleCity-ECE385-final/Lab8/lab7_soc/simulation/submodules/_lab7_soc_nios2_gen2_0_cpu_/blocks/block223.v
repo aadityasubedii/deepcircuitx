@@ -1,0 +1,1 @@
+  assign E_shift_rot_done = (E_shift_rot_cnt == 0) & ~E_new_inst;

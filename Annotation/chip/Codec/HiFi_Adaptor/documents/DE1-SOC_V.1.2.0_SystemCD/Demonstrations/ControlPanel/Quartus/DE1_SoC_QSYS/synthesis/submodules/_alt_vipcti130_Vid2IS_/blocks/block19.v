@@ -1,0 +1,1 @@
+assign eop =  last_sample | early_eop;

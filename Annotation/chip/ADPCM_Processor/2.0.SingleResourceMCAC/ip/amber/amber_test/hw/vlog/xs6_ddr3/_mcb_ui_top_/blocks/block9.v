@@ -1,0 +1,1 @@
+      assign  p3_wr_error        =  p3_wr_error_i    ; 

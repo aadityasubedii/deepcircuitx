@@ -1,0 +1,1 @@
+  assign W_rf_ecc_valid_any = W_rf_ecc_recoverable_valid|W_rf_ecc_unrecoverable_valid;

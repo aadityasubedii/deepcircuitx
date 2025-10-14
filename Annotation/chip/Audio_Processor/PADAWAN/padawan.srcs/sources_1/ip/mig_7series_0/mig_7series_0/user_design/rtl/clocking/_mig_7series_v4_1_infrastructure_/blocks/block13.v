@@ -1,0 +1,1 @@
+      always @(posedge mmcm_ps_clk) rising_mmcm_ps_clk = $time();

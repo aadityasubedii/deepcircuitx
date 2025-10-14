@@ -1,0 +1,1 @@
+        always @(posedge clk) zq_timer_r <= #TCQ zq_timer_ns;

@@ -1,0 +1,46 @@
+{
+    "line_num": [
+        [
+            129,
+            137
+        ],
+        [
+            114,
+            127
+        ],
+        [
+            102,
+            110
+        ],
+        [
+            85,
+            99
+        ],
+        [
+            84,
+            84
+        ],
+        [
+            70,
+            78
+        ],
+        [
+            58,
+            66
+        ],
+        [
+            48,
+            54
+        ]
+    ],
+    "blocks": [
+        "IRDA_RECEIVE_Terasic IRDA_RECEIVE_Terasic_inst(\n\t\t\t\t\t.iCLK(clk),         \n\t\t\t\t\t.iRST_n(reset_n),       \n\t\t\t\t\t\n\t\t\t\t\t.iIRDA(ir),        \n\t\t\t\t\t\n\t\t\t\t   .oDATA_REAY(data_ready),\t  \n\t\t\t\t\t.oDATA(writedata)         \n\t\t\t\t\t);",
+        "ir_fifo ir_fifo_inst(\n\t.aclr(fifo_clear),\n\t\n\t.data(writedata),\n\t.wrclk(clk),\n\t.wrreq(write),\n\n   .rdclk(clk),\n\t.rdreq(read),\n\t.q(readdata),\n\t.rdusedw(use_dw),\n\t.rdempty()\n\t\n);",
+        "always @ (posedge clk or negedge reset_n)\nbegin\n\tif (~reset_n)\n\t\twrite <= 1'b0;\n\telse if (~pre_data_ready & data_ready )\n\t\twrite <= 1'b1;\n\telse if (write)\n\t\twrite <=0; \nend",
+        "always @ (clk)\nbegin\n\tif (~reset_n)\n\t\t s_readdata <=32'b0;\n\telse if (s_read && (s_address == `IR_RX_CS_REG))\n\t\ts_readdata <= use_dw;\n\t\n\telse if (read && (s_address == `IR_RX_DATA_REG ))\n\t   s_readdata <= readdata;\n\t\t\n\telse\n\t\t s_readdata <=32'b0;\n\n\nend",
+        "assign   read= ( s_read && (s_address == `IR_RX_DATA_REG) ) ?1:0;",
+        "always @ (clk)\nbegin\n\tif (~reset_n)\n\t\tfifo_clear <= 1'b0;\n\telse if (s_write && (s_address == `IR_RX_CS_REG))\n\t\tfifo_clear <= s_writedata[0];\n\telse if (fifo_clear)\n\t\tfifo_clear <= 1'b0;\nend",
+        "always @ (posedge clk or negedge reset_n)\nbegin\n\tif (~reset_n)\n\t\tirq <= 1'b0;\n\telse if (~pre_data_ready & data_ready )\n\t\tirq <= 1'b1;\n\telse if (s_write && (s_address == `IR_RX_CS_REG))\n\t\tirq <=~s_writedata[1]; \nend",
+        "always @ (posedge clk or negedge reset_n)\nbegin\n\tif (~reset_n)\n\t\tpre_data_ready <= 1'b0;\n\telse\n\t\tpre_data_ready <= data_ready;\nend"
+    ]
+}

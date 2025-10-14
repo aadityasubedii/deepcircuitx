@@ -1,0 +1,26 @@
+{
+    "line_num": [
+        [
+            81,
+            84
+        ],
+        [
+            78,
+            78
+        ],
+        [
+            62,
+            76
+        ],
+        [
+            51,
+            59
+        ]
+    ],
+    "blocks": [
+        "always@ (UBn, Bn) begin\n\t\n\tBnP <= Bn + UBn;\nend",
+        "assign UBn = UGBn + ULBn;",
+        "always@ (Bn, BnS, rate_in) begin\n\tif (rate_in == 2'b00) begin\n\t\tif (BnS) begin\n\t\t\tULBn <= 17'h10000 - ({9'h1FF, Bn[15:9]});\n\t\tend else begin\n\t\t\tULBn <= 17'h10000 - ({9'h000, Bn[15:9]});\n\t\tend\n\tend else begin\n\t\tif (BnS) begin\n\t\t\tULBn <= 17'h10000 - ({8'hFF, Bn[15:8]});\n\t\tend else begin\n\t\t\tULBn <= 17'h10000 - ({8'h00, Bn[15:8]});\n\t\tend\n\tend\nend",
+        "always@ (DQnMAG, Un) begin\n\tif (DQnMAG == 16'h0000) begin\n\t\tUGBn <= 16'h0000;\t\t\n\tend else if (Un) begin\n\t\tUGBn <= 16'hFF80;\t\t\n\tend else begin\n\t\tUGBn <= 16'h0080;\t\t\n\tend\nend"
+    ]
+}

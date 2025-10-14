@@ -1,0 +1,1 @@
+assign h_sync = vid_h_sync_reg;

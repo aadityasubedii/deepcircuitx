@@ -1,0 +1,7 @@
+Module name: UPB. 
+
+Module specification: The UPB module is an accumulator-like structure forming part of a larger digital logic system. Its primary functionality is to take as input a set of signals (Bn, Un, and DQn), perform specific conditional operations, and generate the output BnP based on these inputs and conditions met. In terms of the input/output ports, the UPB module has several inputs including reset and clk signals for system initialization and synchronized operations respectively. It also takes rate_in as a 2-bit rate input, Un, DQn and Bn as substantive inputs and scan_in0 - scan_in4 and scan_enable for testing purposes. The primary output is BnP, a resultant 16-bit signal, with additional scan_out0 - scan_out4 for testability. 
+
+Internally, this module utilizes several signals in its operation. DQnMAG is created from DQn input and used in initializing UGBn. BnS signal is the most significant bit of Bn and is used in initializing ULBn. UGBn and ULBn, initialized based on conditions, are combined to form UBn which is then used in calculating BnP, the ultimate output of the module. 
+
+The main operation blocks in this module include three always blocks. The first block decides the value of UGBn based on DQnMAG and Un. Second block calculates ULBn using Bn, BnS, and rate_in, while third block calculates BnP using UBn and Bn. This module is also equipped with testability features, allowing integration into larger systems and supporting test functionalities with the help of test_mode signal and scan inputs/outputs.

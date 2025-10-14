@@ -1,0 +1,1 @@
+    always @(addr   ) addr_in    <= #BUS_DELAY addr;

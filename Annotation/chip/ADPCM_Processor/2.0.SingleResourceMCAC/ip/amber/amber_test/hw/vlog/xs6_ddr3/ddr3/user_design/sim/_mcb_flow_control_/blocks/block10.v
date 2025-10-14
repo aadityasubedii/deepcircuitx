@@ -1,0 +1,1 @@
+assign rdp_valid_o = rdp_valid;

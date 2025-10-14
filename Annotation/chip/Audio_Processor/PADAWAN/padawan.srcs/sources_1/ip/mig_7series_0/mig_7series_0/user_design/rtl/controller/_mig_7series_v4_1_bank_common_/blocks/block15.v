@@ -1,0 +1,1 @@
+    always @(posedge clk) maint_rdy_r1 <= #TCQ maint_rdy;

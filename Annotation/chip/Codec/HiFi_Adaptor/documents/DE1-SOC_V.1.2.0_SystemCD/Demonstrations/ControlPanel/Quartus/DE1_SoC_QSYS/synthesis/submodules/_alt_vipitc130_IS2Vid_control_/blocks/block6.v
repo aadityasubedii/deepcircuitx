@@ -1,0 +1,1 @@
+        assign clear_underflow_sticky = 1'b0;

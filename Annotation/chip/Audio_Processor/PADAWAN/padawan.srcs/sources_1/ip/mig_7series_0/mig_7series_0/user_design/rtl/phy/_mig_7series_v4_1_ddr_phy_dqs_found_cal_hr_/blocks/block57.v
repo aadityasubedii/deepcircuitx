@@ -1,0 +1,1 @@
+  assign fine_adjust_lane_cnt    = ctl_lane_cnt;

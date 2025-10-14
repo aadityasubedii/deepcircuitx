@@ -1,0 +1,1 @@
+  always @(*) diffs_eq_ns = centering && ((done_r && done_ns) ? diffs_eq : diffs_eq_r);

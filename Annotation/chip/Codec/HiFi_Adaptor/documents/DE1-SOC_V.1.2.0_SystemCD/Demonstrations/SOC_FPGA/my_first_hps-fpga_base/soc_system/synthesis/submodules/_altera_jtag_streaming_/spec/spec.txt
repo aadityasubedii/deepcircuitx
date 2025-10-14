@@ -1,0 +1,30 @@
+Module name: altera_jtag_streaming. Module specification: The 'altera_jtag_streaming' module serves as a comprehensive JTAG data streaming handler tailored for Altera devices, facilitating data transport during JTAG operations through sophisticated state management. It integrates both reading and writing functionalities, loopback testing, and various data management modes such as DEBUG and CONTROL, adapted through external JTAG commands.
+
+**Input Ports:**
+- **reset_n**: An active-low reset signal to initialize the module's logic.
+- **sink_data**: 8-bit input that receives data from downstream components.
+- **sink_valid**: Indicates the validity of the data arriving on `sink_data`.
+- **clock_to_sample**: Clock signal used for data sampling and synchronization.
+- **reset_to_sample**: Reset signal aligned with `clock_to_sample` for data integrity.
+- **tck**: JTAG clock input vital for timing and communication synchronization.
+
+**Output Ports:**
+- **source_data**: 8-bit output transmitting processed data upstream.
+- **source_valid**: Validates the data sent on `source_data`.
+- **sink_ready**: Indicates readiness to receive more data on `sink_data`.
+- **resetrequest**: Signals a conditioned system reset based on internal logic.
+- **debug_reset**, **mgmt_valid**, **mgmt_channel**, **mgmt_data**: Various outputs for management and debug functionalities adjustable via parameters.
+
+**Internal Signals:**
+- **tdo**, **tdi**: Standard JTAG outputs and inputs for test data.
+- **ir_out**: Outputs an instruction register value setting the module’s mode of operation.
+- **sdr**, **cdr**, **udr**: Control signals indicating different JTAG test states.
+- **write_state**, **read_state**: Registers to hold the current state of the data write or read operations.
+
+**Code Sections:**
+1. **Parameter Definitions** and **Signal Declarations**: Important fixed values and signal sizing are set up in this section.
+2. **Synchronous logic**: This block manages state transitions and data processing in response to the clock and reset signals.
+3. **Instantiated Modules**: Sub-modules like `altera_jtag_sld_node`, `altera_avalon_st_idle_remover`, and `altera_avalon_st_idle_inserter` are configured here, which handle some of the critical timing and data conversion tasks.
+4. **Generate Blocks**: Handle conditional code generation depending if certain features (like management operations) are enabled.
+
+This module essentially acts as a bridge managing the data stream with external control, advocating robust handling of specific JTAG operations, ensuring data integrity and synchronization across various domains.

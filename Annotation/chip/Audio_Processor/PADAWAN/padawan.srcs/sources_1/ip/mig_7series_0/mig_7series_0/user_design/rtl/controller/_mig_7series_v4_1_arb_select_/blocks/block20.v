@@ -1,0 +1,1 @@
+     {(~(cs_one_hot << (nCS_PER_RANK*ra0)) | {CS_WIDTH*nCS_PER_RANK{~cs_en0}})};

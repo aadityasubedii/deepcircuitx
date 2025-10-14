@@ -1,0 +1,106 @@
+{
+    "line_num": [
+        [
+            486,
+            487
+        ],
+        [
+            480,
+            482
+        ],
+        [
+            476,
+            476
+        ],
+        [
+            469,
+            474
+        ],
+        [
+            422,
+            434
+        ],
+        [
+            418,
+            418
+        ],
+        [
+            409,
+            415
+        ],
+        [
+            399,
+            405
+        ],
+        [
+            389,
+            395
+        ],
+        [
+            379,
+            385
+        ],
+        [
+            353,
+            375
+        ],
+        [
+            349,
+            349
+        ],
+        [
+            333,
+            346
+        ],
+        [
+            317,
+            329
+        ],
+        [
+            301,
+            313
+        ],
+        [
+            285,
+            297
+        ],
+        [
+            275,
+            281
+        ],
+        [
+            259,
+            271
+        ],
+        [
+            243,
+            255
+        ],
+        [
+            227,
+            239
+        ]
+    ],
+    "blocks": [
+        "eth_random random1 (.MTxClk(MTxClk), .Reset(Reset), .StateJam(StateJam), .StateJam_q(StateJam_q), .RetryCnt(RetryCnt), \n                    .NibCnt(NibCnt), .ByteCnt(ByteCnt[9:0]), .RandomEq0(RandomEq0), .RandomEqByteCnt(RandomEqByteCnt));",
+        "eth_crc txcrc (.Clk(MTxClk), .Reset(Reset), .Data(Data_Crc), .Enable(Enable_Crc), .Initialize(Initialize_Crc), \n               .Crc(Crc), .CrcError(CrcError)\n              );",
+        "assign Initialize_Crc = StateIdle | StatePreamble | (|DlyCrcCnt);",
+        "assign Enable_Crc = ~StateFCS;\n\nassign Data_Crc[0] = StateData[0]? TxData[3] : StateData[1]? TxData[7] : 1'b0;\nassign Data_Crc[1] = StateData[0]? TxData[2] : StateData[1]? TxData[6] : 1'b0;\nassign Data_Crc[2] = StateData[0]? TxData[1] : StateData[1]? TxData[5] : 1'b0;\nassign Data_Crc[3] = StateData[0]? TxData[0] : StateData[1]? TxData[4] : 1'b0;",
+        "always @ (posedge MTxClk or posedge Reset)\nbegin\n  if(Reset)\n    begin\n      PacketFinished <= #Tp 1'b0;\n      PacketFinished_q  <= #Tp 1'b0;\n    end\n  else\n    begin\n      PacketFinished <= #Tp PacketFinished_d;\n      PacketFinished_q  <= #Tp PacketFinished;\n    end\nend",
+        "assign PacketFinished_d = StartTxDone | TooBig | UnderRun | LateCollision | MaxCollisionOccured | ExcessiveDeferOccured;",
+        "always @ (posedge MTxClk or posedge Reset)\nbegin\n  if(Reset)\n    WillTransmit <= #Tp  1'b0;\n  else\n    WillTransmit <= #Tp StartPreamble | StatePreamble | (|StateData) | StatePAD | StateFCS | StateJam;\nend",
+        "always @ (posedge MTxClk or posedge Reset)\nbegin\n  if(Reset)\n    MTxErr <= #Tp 1'b0;\n  else\n    MTxErr <= #Tp TooBig | UnderRun;\nend",
+        "always @ (posedge MTxClk or posedge Reset)\nbegin\n  if(Reset)\n    MTxD[3:0] <= #Tp 4'h0;\n  else\n    MTxD[3:0] <= #Tp MTxD_d[3:0];\nend",
+        "always @ (posedge MTxClk or posedge Reset)\nbegin\n  if(Reset)\n    MTxEn <= #Tp 1'b0;\n  else\n    MTxEn <= #Tp StatePreamble | (|StateData) | StatePAD | StateFCS | StateJam;\nend",
+        "always @ (StatePreamble or StateData or StateData or StateFCS or StateJam or StateSFD or TxData or \n          Crc or NibCntEq15)\nbegin\n  if(StateData[0])\n    MTxD_d[3:0] = TxData[3:0];                                  \n  else\n  if(StateData[1])\n    MTxD_d[3:0] = TxData[7:4];                                  \n  else\n  if(StateFCS)\n    MTxD_d[3:0] = {~Crc[28], ~Crc[29], ~Crc[30], ~Crc[31]};     \n  else\n  if(StateJam)\n    MTxD_d[3:0] = 4'h9;                                         \n  else\n  if(StatePreamble)\n    if(NibCntEq15)\n      MTxD_d[3:0] = 4'hd;                                       \n    else\n      MTxD_d[3:0] = 4'h5;                                       \n  else\n    MTxD_d[3:0] = 4'h0;\nend",
+        "assign RetryMax = RetryCnt[3:0] == MaxRet[3:0];",
+        "always @ (posedge MTxClk or posedge Reset)\nbegin\n  if(Reset)\n    RetryCnt[3:0] <= #Tp 4'h0;\n  else\n    begin\n      if(ExcessiveDeferOccured | UnderRun | TooBig | StartTxDone | TxUnderRun \n          | StateJam & NibCntEq7 & (~ColWindow | RetryMax))\n        RetryCnt[3:0] <= #Tp 4'h0;\n      else\n      if(StateJam & NibCntEq7 & ColWindow & (RandomEq0 | NoBckof) | StateBackOff & RandomEqByteCnt)\n        RetryCnt[3:0] <= #Tp RetryCnt[3:0] + 1'b1;\n    end\nend",
+        "always @ (posedge MTxClk or posedge Reset)\nbegin\n  if(Reset)\n    TxAbort <= #Tp 1'b0;\n  else\n    begin\n      if(TxStartFrm & ~StatusLatch & ~ExcessiveDeferOccured)\n        TxAbort <= #Tp 1'b0;\n      else\n      if(StartTxAbort)\n        TxAbort <= #Tp 1'b1;\n    end\nend",
+        "always @ (posedge MTxClk or posedge Reset)\nbegin\n  if(Reset)\n    TxRetry <= #Tp 1'b0;\n  else\n    begin\n      if(TxStartFrm & ~StatusLatch)\n        TxRetry <= #Tp 1'b0;\n      else\n      if(StartTxRetry)\n        TxRetry <= #Tp 1'b1;\n     end\nend                                    ",
+        "always @ (posedge MTxClk or posedge Reset)\nbegin\n  if(Reset)\n    TxDone <= #Tp 1'b0;\n  else\n    begin\n      if(TxStartFrm & ~StatusLatch)\n        TxDone <= #Tp 1'b0;\n      else\n      if(StartTxDone)\n        TxDone <= #Tp 1'b1;\n    end\nend",
+        "always @ (posedge MTxClk or posedge Reset)\nbegin\n  if(Reset)\n    TxUsedData <= #Tp 1'b0;\n  else\n    TxUsedData <= #Tp |StartData;\nend",
+        "always @ (posedge MTxClk or posedge Reset)\nbegin\n  if(Reset)\n    StatusLatch <= #Tp 1'b0;\n  else\n    begin\n      if(~TxStartFrm)\n        StatusLatch <= #Tp 1'b0;\n      else\n      if(ExcessiveDeferOccured | StateIdle)\n        StatusLatch <= #Tp 1'b1;\n     end\nend",
+        "always @ (posedge MTxClk or posedge Reset)\nbegin\n  if(Reset)\n    ColWindow <= #Tp 1'b1;\n  else\n    begin  \n      if(~Collision & ByteCnt[5:0] == CollValid[5:0] & (StateData[1] | StatePAD & NibCnt[0] | StateFCS & NibCnt[0]))\n        ColWindow <= #Tp 1'b0;\n      else\n      if(StateIdle | StateIPG)\n        ColWindow <= #Tp 1'b1;\n    end\nend",
+        "always @ (posedge MTxClk or posedge Reset)\nbegin\n  if(Reset)\n    StopExcessiveDeferOccured <= #Tp 1'b0;\n  else\n    begin\n      if(~TxStartFrm)\n        StopExcessiveDeferOccured <= #Tp 1'b0;\n      else\n      if(ExcessiveDeferOccured)\n        StopExcessiveDeferOccured <= #Tp 1'b1;\n    end\nend"
+    ]
+}

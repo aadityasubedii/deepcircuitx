@@ -1,0 +1,1 @@
+        always @(posedge clk) ecc_err_addr <= #TCQ ecc_err_addr_ns;

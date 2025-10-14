@@ -1,0 +1,11 @@
+Module name: audio_codec. 
+
+Module specification: The 'audio_codec' is a key component of any FPGA-based system in charge of managing the interface with audio codec. This module plays a critical role in addressing several audio processing paths. Its primary functionality involves deserializing input audio data from serial format to parallel format and vice versa for outputting audio data. The procedure covers both left and right audio channels, providing read and write capabilities indicated by 'read_ready' and 'write_ready' signals. 
+
+Input ports include: 'CLOCK_50' (the module's main clock), 'reset' (resets internal states), 'read_s' and 'write_s' (enable read or write operations respectively), 'writedata_left' and 'writedata_right' (audio data to be written), 'AUD_ADCDAT' (audio input), 'AUD_BCLK' (bit clock for audio data), 'AUD_ADCLRCK' (left-right clock for input data), 'AUD_DACLRCK' (left-right clock for output data). 
+
+Output ports are: 'read_ready', 'write_ready', 'readdata_left', 'readdata_right' (data read from audio channels) and 'AUD_DACDAT' (serialized audio data). 
+
+Internal signals in charge of workflow control and operational indication include: 'bclk_rising_edge', 'bclk_falling_edge', 'adc_lrclk_rising_edge', 'adc_lrclk_falling_edge', 'new_left_channel_audio', 'new_right_channel_audio', 'left_channel_read_available', 'right_channel_read_available', 'dac_lrclk_rising_edge', 'dac_lrclk_falling_edge', 'left_channel_write_space', 'right_channel_write_space', 'done_adc_channel_sync', 'done_dac_channel_sync'. 
+
+The code is structured into four main blocks: Edge detection block determining the rising and falling edge of the various clocks, Audio Implementer block incorporating 'Altera_UP_Audio_In_Deserializer' and 'Altera_UP_Audio_Out_Serializer' expansions managing the reading, writing and syncing tasks of audio inputs and outputs, and the utility blocks. Overall, this module ensures timely and efficient operation of various complex audio handling tasks, adapting to sequential and concurrent data processing.

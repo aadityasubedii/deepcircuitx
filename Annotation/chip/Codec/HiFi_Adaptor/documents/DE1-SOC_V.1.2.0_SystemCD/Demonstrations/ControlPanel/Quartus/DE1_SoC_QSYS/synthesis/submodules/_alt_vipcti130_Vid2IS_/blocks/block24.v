@@ -1,0 +1,1 @@
+assign start_of_ap = ap & ~ap_reg;

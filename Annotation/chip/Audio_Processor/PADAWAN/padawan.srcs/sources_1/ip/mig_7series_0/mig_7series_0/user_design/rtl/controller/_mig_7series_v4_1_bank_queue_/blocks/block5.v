@@ -1,0 +1,1 @@
+  assign q_has_rd = q_has_rd_r;

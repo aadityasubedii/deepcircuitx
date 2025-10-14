@@ -1,0 +1,1 @@
+assign reset_total_sample = (update_total_sample & total_sample_count[0]);

@@ -1,0 +1,1 @@
+        always @(posedge clk) app_rd_data <= #TCQ rd_data;

@@ -1,0 +1,1 @@
+    assign reading = cs_ack & !wb_dbus_we;

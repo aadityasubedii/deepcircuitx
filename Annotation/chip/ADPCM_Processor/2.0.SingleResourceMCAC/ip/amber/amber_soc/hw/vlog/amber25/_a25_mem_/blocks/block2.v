@@ -1,0 +1,1 @@
+assign wb_stop = uncached_wb_stop_r || cached_wb_stop_r;

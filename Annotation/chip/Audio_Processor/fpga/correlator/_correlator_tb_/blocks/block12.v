@@ -1,0 +1,1 @@
+    assign rst = reset == 3;

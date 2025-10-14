@@ -1,0 +1,9 @@
+Module name: cmd_prbs_gen. 
+
+Module specification: The cmd_prbs_gen is a Verilog module that generates Pseudo-Random Binary Sequences (PRBS) of varying widths. These sequences are utilized in testing communication circuits. The PRBS generator is parameterized by the type of command (PRBS_CMD), the width of the Pseudo-Random Binary Sequence (PRBS_WIDTH), the seed width (SEED_WIDTH), among other parameters. 
+
+Input ports include clk_i (Clock Input) used to synchronize the operation of the module, prbs_seed_init that initiates PRBS generation, clk_en a clock enable signal for controlling the generator’s operation, and prbs_seed_i, a seed input for the PRBS generator of size SEED_WIDTH. The output port, prbs_o, emits the generated PRBS for utilization in other modules for testing purposes. 
+
+Internal signals within the module include prbs, a register that holds the generated PRBS, lfsr_q, a register forming the core of the PRBS generation and the wire signal, ZEROS of size ADDR_WIDTH, which is universally assigned a zero value. 
+
+The module is divided into three main generate-if blocks correlating to different PRBS_CMD conditions. For "ADDRESS" command and PRBS_WIDTH as 64, a 64-bit shift register is used, and for PRBS_WIDTH as 32, a 32-bit shift register is used. When the command is "INSTR" or "BLEN", a 20-bit shift register gets utilized. These registers are then used to generate or manipulate the PRBS. Additionally, there is a logb2 function responsible for the calculation of logarithm base 2 of an input integer - a function used within the 32-bit shift register generate block. The generated PRBS can then be used by other modules for testing communication circuits.

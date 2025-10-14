@@ -1,0 +1,1 @@
+  assign cpu_d_writedata = E_st_data;

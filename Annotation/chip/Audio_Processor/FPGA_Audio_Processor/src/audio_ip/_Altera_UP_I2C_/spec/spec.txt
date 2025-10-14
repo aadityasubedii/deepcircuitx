@@ -1,0 +1,28 @@
+Module name: Altera_UP_I2C.
+
+Module specification: The Altera_UP_I2C module is an implementation of an I2C transceiver in Verilog designed to handle inter-chip communications following the I2C protocol sequences. This module implements a Finite State Machine (FSM) for transitioning between several operational states, including idle, start, byte transfer, acknowledgement transfer, stop, and complete states.
+
+The module uses 12 input ports:
+1. clk: The main clock signal that synchronizes all operations.
+2. reset: A signal to reset the module back to its initial state.
+3. clear_ack: A control signal to clear acknowledgement flag.
+4. clk_400KHz: The clock signal for I2C bus.
+5. start_and_stop_en: A signal to trigger the start and stop sequences.
+6. change_output_bit_en: A control signal that enables the switching of output bits.
+7. send_start_bit, send_stop_bit: Signals to initiate the start and end of the I2C communication.
+8. data_in (8-bits): Input data to be transmitted on the I2C bus.
+9. transfer_data, read_byte: Control signals to perform data transfer and read a byte from the bus.
+10. num_bits_to_transfer (3-bits): Number of bits in the byte to be transferred.
+
+The module has 7 output ports:
+1. i2c_sdata: Bidirectional data line on the I2C bus.
+2. i2c_sclk: The clock line for the I2C bus.
+3. i2c_scen: A control signal to enable the I2C serial clock.
+4. enable_clk: This signal is the system clock enable.
+5. ack: An acknowledgement flag for completed data transfer.
+6. data_from_i2c (8-bits): Data received from the bus.
+7. transfer_complete: An indicator of when data transfer is complete.
+
+Internally, the module uses several signals to control operation flow. These include parameters for setting the bus mode (I2C_BUS_MODE), state parameters to represent different states of the FSM (I2C_STATE_*), current_bit to track the current bit being transferred, current_byte holding the current byte of data, and next and current state variables to control the transitions in the FSM (ns_i2c_transceiver, s_i2c_transceiver).
+
+In its core structure, the code includes different blocks for different operations. A block to control the FSM and change the state according to signals and bus conditions, blocks to update different signals (such as i2c_scen, ack, data_from_i2c) based on the current state, blocks to update current bit and byte during data transfer, and lastly, blocks to control the I2C bus lines (sdata, sclk) and transfer status based on the current state. Each block contributes to establishing and managing the I2C communications working in harmony with the I2C protocol rules.

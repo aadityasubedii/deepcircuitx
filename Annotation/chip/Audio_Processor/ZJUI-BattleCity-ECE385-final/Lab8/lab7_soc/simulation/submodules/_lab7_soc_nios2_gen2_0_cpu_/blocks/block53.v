@@ -1,0 +1,1 @@
+  assign R_ctrl_ld_ex_nxt = D_ctrl_ld_ex;

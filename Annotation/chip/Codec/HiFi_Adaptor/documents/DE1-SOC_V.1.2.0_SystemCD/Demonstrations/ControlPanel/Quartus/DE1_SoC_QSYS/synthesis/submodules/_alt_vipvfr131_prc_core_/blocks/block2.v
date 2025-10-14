@@ -1,0 +1,1 @@
+assign sop_out = valid_out ? pre_sop_out : sop_out_d1;

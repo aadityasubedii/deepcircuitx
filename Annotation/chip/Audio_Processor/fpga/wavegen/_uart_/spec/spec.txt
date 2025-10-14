@@ -1,0 +1,11 @@
+Module name: uart.
+
+Module specification: 
+
+The module named 'uart' acts as a simple representation of a Universal Asynchronous Receiver-Transmitter (UART) system, primarily designed to facilitate serial communication. Essential to constructing most types of device input-output functions, this module accepts a clock input `ck`, which is instrumental in controlling data transmission speed. Moreover, it is equipped to handle an 8-bit data input `tx_data`, which marks the information to be transmitted using the UART protocol.
+
+The module provides three output ports. First, `tx` presents the serialized data output, derived from `tx_data` input. Secondly, the `ready` output signal provides an indication of the module's readiness to transmit the succeeding data byte. It indicates readiness by remaining high when there is no ongoing transmission, i.e., upon completion of transmitting one start bit, 8 data bits, and one stop bit. The `baud` output is the third feature, which signals the baud rate and turns high when the `baud_counter` hits half its upper limit, which is 50 in this case.
+
+Furthermore, the module also uses internal signals, including `baud_counter`, `count`, and `shift`. The `baud_counter` is a 7-bit wide signal that effectively generates a baud rate, controlling the TX data transmission speed. Secondly, the `count`, a 4-bit wide signal, keeps track of the transmitted bits, thereby efficiently tracking the start bit, 8 data bits, and the stop bit that form a UART frame. The `shift`, a 10-bit wide signal, essentially operates as a shift register, storing and transmitting data loaded from a frame composed of the start bit, the `tx_data`, and the stop bit.
+
+In terms of code construction, the module comprises two prominent blocks. One block handles the `baud_counter` functioning through a conditional statement, aiding in controlling the modulation of the baud rate. The other block manages `count` and `shift` operations, significantly involved in formulating the UART frame, tracking the transmission, and initiating the process of transmission for the succeeding data byte.

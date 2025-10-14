@@ -1,0 +1,15 @@
+Module name: test
+Module specification: 
+
+The 'test' module is a testbench for validating clock generation and synchronization. It generates various clock signals and verifies their periodicity to ensure they are functioning as expected. The module also generates a serial clock and a frame synchronization signal. It further tests the frame synchronization signal against an expected signal and flags an error in case of a discrepancy.
+
+The input ports of the module include `clk` (the master clock for synchronization), `reset` (which resets all flip-flops and returns the system to a known state), `scan_in` (test mode scan input signals), `scan_enable` and `test_mode` (which control the operation modes), and `i_frame_syn` (which is used for the frame synchronization tests). 
+
+The output ports consist of `scan_out` (which represents the scanned outcomes in test mode), `o_sys_clk` (system clock output), `o_serial_clk` (serial clock output), `o_frame_syn` (the generated frame synchronization signal), and `o_co_proc_clk` (co-processor clock output). 
+
+Several internal signals are used to conduct operational processes, testing, and comparisons. These include control signals, clock signals, counters, internal frame synchronization signals, expected values for comparison during testing, control flags for the frame synchronization tests, and the start and end timestamps for different clock periods.
+
+The module's code has distinct sections each performing specific functions: 
+1. An instantiation of a CLK_GEN module whose output ports correspond to the various clocks and synchronization signal being tested.
+2. Always block that sets up the serial clock.
+3. Initial blocks which are mainly used for setup, testing, and displaying results. One block generates the various clock signals, while others set up and perform the testing of these clocks, comparing generated clock periods against the expected ones. They also manage the frame synchronization checking, test condition setup, and error display.

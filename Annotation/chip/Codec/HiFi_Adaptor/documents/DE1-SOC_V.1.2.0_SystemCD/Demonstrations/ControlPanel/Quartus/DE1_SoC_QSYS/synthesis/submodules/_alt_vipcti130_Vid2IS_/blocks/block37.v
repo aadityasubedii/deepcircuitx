@@ -1,0 +1,1 @@
+assign f = vid_f_reg;

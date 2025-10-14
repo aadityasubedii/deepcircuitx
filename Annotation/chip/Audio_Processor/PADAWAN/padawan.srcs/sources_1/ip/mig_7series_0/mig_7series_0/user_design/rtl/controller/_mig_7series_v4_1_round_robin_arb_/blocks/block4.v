@@ -1,0 +1,1 @@
+  assign grant_ns = req & ~inhibit & {WIDTH{~disable_grant}};

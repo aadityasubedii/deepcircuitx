@@ -1,0 +1,1 @@
+    always @(we_n   ) we_n_in    <= #BUS_DELAY we_n;

@@ -1,0 +1,1 @@
+  assign rst0    = rst0_sync_r[RST_SYNC_NUM-1];

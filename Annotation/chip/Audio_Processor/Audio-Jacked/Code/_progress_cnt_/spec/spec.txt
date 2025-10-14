@@ -1,0 +1,13 @@
+Module name: progress_cnt. 
+
+Module specification: The progress_cnt module is a Verilog module designed for counting progress based on the input signal 'menu'. This module operates on a system clock 'clk' and a reset signal 'rst'. The 2-bit 'menu' input dictates the operations on the internal counter 'i', effectively acting as a programmable frequency divider or a progress counter. 
+
+When 'menu' equals 2'b01, the counter 'i' increments by 1 at each positive edge of the internally generated clock 'div_clk', until it reaches a value of 19, post which it resets back to 0. If 'menu' is not equal to 2'b01, 'i' resets to 0. 
+
+The inputs to the module are 'clk', a signal representing the clock of the whole system, 'rst', the reset signal used to initial reset the system, and 'menu', the 2-bit signal which decides the behaviour of the counters. The output from the module is 'i', a 6-bit counter that increments based on the conditions of 'menu' and 'div_clk'. 
+
+The internal signals include a counter 'count' and 'div_clk'. 'count' is a 26-bit counter that decreases from 50,000,000 every clock cycle based on the conditions of 'menu', and toggles the value of 'div_clk' when it reaches 0. 'div_clk' is an internal clock that runs at a frequency divided down from 'clk' using 'count', and is used to control the increment rate of 'i'. 
+
+The module is primarily divided into two blocks. The first block takes in the clock and reset input signals, and based on 'menu', either resets or performs operations on the counter 'count' and 'div_clk'. The second block increments or resets the counter 'i' based on the positive edge of 'div_clk' and 'menu'. 
+
+Overall, this module provides a mechanism for a progress counter that can be controlled by the 'menu' input. This combination of counters and dividers allows for a wide range of control over the progress count speed.

@@ -1,0 +1,1 @@
+assign mcGo = mcGo_r[15];

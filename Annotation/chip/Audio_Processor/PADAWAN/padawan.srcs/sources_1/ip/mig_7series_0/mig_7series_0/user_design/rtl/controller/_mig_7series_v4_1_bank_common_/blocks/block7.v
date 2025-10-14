@@ -1,0 +1,1 @@
+      always @(posedge clk) send_cnt_r <= #TCQ send_cnt_ns;

@@ -1,0 +1,1 @@
+  assign W_status_reg = W_status_reg_pie;

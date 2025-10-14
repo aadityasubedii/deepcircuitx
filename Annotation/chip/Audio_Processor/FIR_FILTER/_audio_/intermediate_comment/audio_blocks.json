@@ -1,0 +1,71 @@
+{
+    "line_num": [
+        [
+            78,
+            79
+        ],
+        [
+            76,
+            77
+        ],
+        [
+            67,
+            70
+        ],
+        [
+            64,
+            64
+        ],
+        [
+            60,
+            62
+        ],
+        [
+            54,
+            57
+        ],
+        [
+            49,
+            52
+        ],
+        [
+            45,
+            45
+        ],
+        [
+            41,
+            44
+        ],
+        [
+            35,
+            38
+        ],
+        [
+            32,
+            32
+        ],
+        [
+            29,
+            29
+        ],
+        [
+            25,
+            28
+        ]
+    ],
+    "blocks": [
+        "assign AUD_XCK = xck[1];\n",
+        "always @(posedge CLOCK_50) xck++;\n",
+        "always @(posedge CLOCK_50)\n\tif(reset) ain <= 0;\n\telse if(cnt_in == 16) ain <= sr_in;\n",
+        "assign ain_new = (ai == 2'b01);",
+        "always @(posedge CLOCK_50)\n\tif(reset) ai <= 0;\n\telse ai <= {ai[0], (cnt_in == 16)};",
+        "always @(posedge AUD_BCLK)\n\tif(reset || AUD_ADCLRCK) cnt_in <= 0;\n\telse if(cnt_in < 16) cnt_in <= cnt_in + 1;\n",
+        "always @(posedge AUD_BCLK)\n\tif(reset) sr_in <= 0;\n\telse if(cnt_in < 16) sr_in <= {sr_in[14:0], AUD_ADCDAT};\n",
+        "assign aout_avail = (ai == 2'b01);",
+        "always @(posedge CLOCK_50)\n\tif(reset) ao <= 0;\n\telse ao <= {ao[0], (cnt_out == 32)};\n",
+        "always @(posedge AUD_BCLK)\n\tif(reset || AUD_DACLRCK) cnt_out <= 0;\n\telse if(cnt_out < 32) cnt_out <= cnt_out + 1;\n",
+        "always @(posedge AUD_BCLK) sync <= AUD_DACLRCK;",
+        "assign AUD_DACDAT = sr_out[15];",
+        "always @(negedge AUD_BCLK)\n\tif(reset) sr_out <= 0;\n\telse sr_out <= sync ? aout : {sr_out[14:0], sr_out[15]};\n"
+    ]
+}

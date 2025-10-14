@@ -1,0 +1,1 @@
+  always @(posedge clk) ocd_edge_detect_rdy_r <= #TCQ ocd_edge_detect_rdy_ns;

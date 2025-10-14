@@ -1,0 +1,1 @@
+assign RxFifoReset = SyncRxStartFrm_q & ~SyncRxStartFrm_q2;

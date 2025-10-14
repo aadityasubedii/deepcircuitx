@@ -1,0 +1,1 @@
+  assign mem_bytes = read_data;

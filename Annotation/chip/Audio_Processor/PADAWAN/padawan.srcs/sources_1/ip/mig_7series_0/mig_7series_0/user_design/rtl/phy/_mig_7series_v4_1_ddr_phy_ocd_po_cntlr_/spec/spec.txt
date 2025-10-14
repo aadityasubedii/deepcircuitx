@@ -1,0 +1,11 @@
+Module name: mig_7series_v4_1_ddr_phy_ocd_po_cntlr.
+
+Module specification: This module, part of a DDR memory interface generator, serves as a control unit for On-Chip-Delay (OCD) Postamble Offset (PO) used in DDR memory transmissions. It contains several input, output, and internal registers, and performs functions like calibration start, scan completion, offset adjustments, etc. It importantly includes a Finite State Machine (FSM) to manage the calibration and adjustment processes.
+
+Input ports of the module include clk, rst, etc., that handles clock and reset functionalities for synchronization and initialization. It also encompasses a variety of control signals for scan direction, postamble offset counter read value, calibration count for on-chip delay, etc.
+
+Output ports include scan_done which indicates the end of a scan cycle, oclkdelay_center_calib_start and oclkdelay_center_calib_done which handle the center calibration functionalities of on-chip delay, and others which deal with increment or decrement of on-chip delay in respective stages.
+
+The module uses multiple internal signals or registers like scan_done_r, oclkdelay_center_calib_done_r, etc., that store the previous or initial state of certain actions like calibration, scan completion, etc, which are crucial for the module to handle increment and decrement of on-chip delay across stages. They also support checking of readiness, backup mode operation for postamble offset counters, and finite state machine transitions.
+
+The module encompasses several sections such as a function that calculates the number of bits required for representing a given integer (clogb2), and always blocks that assign values to registers following each clock cycle. The essential part of the code is a large case statement within an always block, which forms the backbone of the Finite State Machine controlling the calibration process. It is seen that the on-chip delay is incrementally adjusted across two stages, iteratively tuning the hardware for optimal performance.

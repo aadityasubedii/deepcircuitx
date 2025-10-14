@@ -1,0 +1,1 @@
+  assign q = ram_q;

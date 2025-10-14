@@ -1,0 +1,1 @@
+  assign d_address = W_mem_baddr;

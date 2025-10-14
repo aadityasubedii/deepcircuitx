@@ -1,0 +1,1 @@
+assign rd_strobe = rd_en && !empty;

@@ -1,0 +1,9 @@
+Module name: init_mem_pattern_ctr. 
+
+Module specification: The `init_mem_pattern_ctr` module is designed for controlling and testing memory initialization patterns, specifically tailored for different FPGA families such as SPARTAN6 and VIRTEX6. It exhibits capabilities such as memory write and read operations, adjusting traffic based on the test patterns defined (e.g., CGEN_ALL, CGEN_BRAM), and supports dynamic configuration through Virtual Input/Output (VIO) adjustments.
+
+Input ports include `clk_i` (clock input for synchronization), `rst_i` (reset signal), `mcb_cmd_addr_i` (memory command address), and `mcb_cmd_bl_i` (burst length for memory commands), among others that enable memory operation and modifications at runtime like `vio_modify_enable` and `vio_data_mode_value`. Output ports such as `run_traffic_o` enable/disable memory traffic, `start_addr_o` and `end_addr_o` mark the address boundaries of memory operations, and configuration outputs such as `data_mode_o` and `addr_mode_o` that control memory operation modes.
+
+Internal signals such as `current_state` and `next_state` manage the module's state machine transitions. Registers like `mcb_init_done_reg` synchronize initialization completion signals. Comparators like `AC1_G_E1` check part of the operation addressing against boundaries to manage memory operations effectively.
+
+The code is structured around various conditional blocks (e.g., generates and always blocks) that handle tasks from initialization, conditional operation based on FPGA family, memory mode settings, and error handling in memory tests. Each block is specifically tailored to manage different aspects of memory control, error detection, and handling different operation modes (sequential, fixed, etc.), driven by the state machine that responds dynamically according to memory operation requirements and external triggers.

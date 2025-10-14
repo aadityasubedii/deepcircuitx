@@ -1,0 +1,1 @@
+  assign test_addr = {addr_crb, addr_col};

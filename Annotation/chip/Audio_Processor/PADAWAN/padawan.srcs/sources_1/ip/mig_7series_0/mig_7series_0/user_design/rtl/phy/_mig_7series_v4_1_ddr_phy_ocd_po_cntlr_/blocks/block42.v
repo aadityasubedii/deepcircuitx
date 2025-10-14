@@ -1,0 +1,1 @@
+  always @(posedge clk) stg3_r <= #TCQ stg3_ns;

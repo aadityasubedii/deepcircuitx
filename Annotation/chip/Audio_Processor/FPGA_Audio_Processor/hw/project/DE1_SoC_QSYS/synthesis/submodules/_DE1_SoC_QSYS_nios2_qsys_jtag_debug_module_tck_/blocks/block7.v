@@ -1,0 +1,1 @@
+  assign st_ready_test_idle = jtag_state_rti;

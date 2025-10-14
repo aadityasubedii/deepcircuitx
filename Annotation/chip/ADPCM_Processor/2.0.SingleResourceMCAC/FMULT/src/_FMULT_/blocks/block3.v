@@ -1,0 +1,1 @@
+assign WAnWBnMANT = (AnBnMAG)	? ((({AnBnMAG, 6'b000000} >> AnBnEXP) * SRnDQnMANT) + 12'h030) : (((6'h20) * SRnDQnMANT) + 12'h030);

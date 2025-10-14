@@ -1,0 +1,1 @@
+        assign h_total_int = h_total;

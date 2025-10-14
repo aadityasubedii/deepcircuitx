@@ -1,0 +1,1 @@
+  assign d_write_nxt = ((R_ctrl_st & (~R_ctrl_st_ex | W_up_ex_mon_state)) & E_new_inst & ~E_rf_ecc_valid_any) | (d_write & d_waitrequest);

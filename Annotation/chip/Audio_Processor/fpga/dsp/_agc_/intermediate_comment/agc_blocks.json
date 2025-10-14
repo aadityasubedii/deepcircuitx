@@ -1,0 +1,86 @@
+{
+    "line_num": [
+        [
+            277,
+            279
+        ],
+        [
+            275,
+            275
+        ],
+        [
+            271,
+            271
+        ],
+        [
+            254,
+            269
+        ],
+        [
+            243,
+            243
+        ],
+        [
+            226,
+            226
+        ],
+        [
+            215,
+            215
+        ],
+        [
+            200,
+            200
+        ],
+        [
+            195,
+            195
+        ],
+        [
+            186,
+            186
+        ],
+        [
+            164,
+            164
+        ],
+        [
+            156,
+            162
+        ],
+        [
+            154,
+            154
+        ],
+        [
+            143,
+            150
+        ],
+        [
+            134,
+            135
+        ],
+        [
+            79,
+            132
+        ]
+    ],
+    "blocks": [
+        "    wire busy;\n    assign busy = busy_start | out_we;\n    assign done = !busy;",
+        "    assign out_data = mul_signed[31:16];",
+        "    pipe #(.LENGTH(3)) delay_addr [CHAN_W-1:0] (.ck(ck), .in(addr), .out(out_addr));",
+        "    always @(posedge ck) begin\n\n        if (en) begin\n            busy_start <= 1;\n            addr <= 0;\n        end\n\n        if (busy_start) begin\n            addr <= addr + 1;\n\n            if (addr == (CHANS-1)) begin\n                busy_start <= 0;\n            end\n        end \n\n    end",
+        "    pipe #(.LENGTH(2)) delay(.ck(ck), .in(in_neg), .out(neg_out));",
+        "    assign mul_a = { gain[12:0], 3'b0 };",
+        "    twos_complement #(.WIDTH(OUT_W))",
+        "    assign shift_in = busy_start ? in_data : 0;",
+        "    assign shift_by = (SHIFT-1) - gain[GAIN_W-1:GAIN_W-(SHIFT_W+1)];",
+        "    initial addr = 0;",
+        "    assign out = shifted;",
+        "    generate\n\n        for (i = 0; i < OUT_W; i = i + 1) begin\n            assign shifted[OUT_W-(i+1)] = in[IN_W-(i+shift+1)];\n        end\n\n    endgenerate",
+        "    genvar i;",
+        "module shift\n#(parameter IN_W=24, OUT_W=16, SHIFT=IN_W-OUT_W, SHIFT_W=$clog2(SHIFT))\n(\n    input wire ck,\n    input wire [SHIFT_W-1:0] shift,\n    input wire [IN_W-1:0] in,\n    output wire [OUT_W-1:0] out\n);",
+        "    assign done = !busy;\n    assign src_addr = (find_max ? address : 0) | (find_gain ? gain_addr : 0);",
+        "    always @(posedge ck) begin\n\n        if (en) begin\n            \n            address <= 0;\n            find_max <= 1;\n            max_in <= 0;\n        end\n\n        find_normal <= find_max;\n\n        if (level_en) begin\n            level_en <= 0;\n            gain_wait <= 1;\n        end\n\n        if (gain_wait & level_ready) begin\n            gain_en <= 1;\n            gain_wait <= 0;\n        end\n\n        if (gain_en) begin\n            gain_en <= 0;\n        end\n\n        if (gain_ready & gain_wait) begin\n            gain_wait <= 0;\n        end\n\n        if (find_normal) begin\n            \n            if (normal > max_in) begin\n                max_in <= normal;\n            end\n            if ((address == CHANS-1) && !find_max) begin\n                \n                \n                level_en <= 1;\n            end\n        end\n\n        \n        \n        if (find_max && !level_en) begin\n\n            if (address != CHANS-1) begin\n                \n                address <= address + 1;\n            end else begin\n                find_max <= 0;\n            end\n\n        end\n    end"
+    ]
+}

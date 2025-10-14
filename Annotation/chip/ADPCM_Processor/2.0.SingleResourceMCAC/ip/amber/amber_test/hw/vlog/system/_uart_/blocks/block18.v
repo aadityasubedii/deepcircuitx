@@ -1,0 +1,1 @@
+assign rx_fifo_push  = rxd_state == RXD_STOP && rx_bit_pulse_count == 10'd0;

@@ -1,0 +1,1 @@
+assign overflow_nxt = (wrreq | overflow_reg) & full;

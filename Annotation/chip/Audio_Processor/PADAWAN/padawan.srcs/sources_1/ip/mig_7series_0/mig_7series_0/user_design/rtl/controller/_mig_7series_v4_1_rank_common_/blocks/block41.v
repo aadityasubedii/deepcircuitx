@@ -1,0 +1,1 @@
+        assign inhbt_srx = |ckesr_timer_r;

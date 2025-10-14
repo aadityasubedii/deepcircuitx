@@ -1,0 +1,1 @@
+assign int_sys_rst =  sys_rst | ~gated_pll_lock;

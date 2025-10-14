@@ -1,0 +1,1 @@
+  always @(posedge clk) rtp_timer_r <= #TCQ rtp_timer_ns;

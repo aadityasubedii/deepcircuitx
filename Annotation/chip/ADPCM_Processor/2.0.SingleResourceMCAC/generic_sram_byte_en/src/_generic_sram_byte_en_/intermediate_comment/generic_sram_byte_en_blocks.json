@@ -1,0 +1,11 @@
+{
+    "line_num": [
+        [
+            89,
+            116
+        ]
+    ],
+    "blocks": [
+        "always @(posedge clk or posedge reset) begin\n    if (reset) begin\n      if (INITIALIZE_TO_ZERO) begin\n        o_read_data <= {DATA_WIDTH{1'b0}};\n        for (j = 0; j < (2**ADDRESS_WIDTH); j = j + 1) begin\n            mem[j] <= (INITIALIZE_TO_ZERO == 2) ? {DATA_WIDTH{1'b1}} : {DATA_WIDTH{1'b0}};\n        end\n      end\n    end\n    else begin\n        \n        o_read_data <= i_write_enable ? {DATA_WIDTH{1'd0}} : mem[i_address];\n\n        \n        if (i_write_enable) begin\n            for (i=0;i<DATA_WIDTH/8;i=i+1) begin\n                mem[i_address][i*8+0] <= i_byte_enable[i] ? i_write_data[i*8+0] : mem[i_address][i*8+0] ;\n                mem[i_address][i*8+1] <= i_byte_enable[i] ? i_write_data[i*8+1] : mem[i_address][i*8+1] ;\n                mem[i_address][i*8+2] <= i_byte_enable[i] ? i_write_data[i*8+2] : mem[i_address][i*8+2] ;\n                mem[i_address][i*8+3] <= i_byte_enable[i] ? i_write_data[i*8+3] : mem[i_address][i*8+3] ;\n                mem[i_address][i*8+4] <= i_byte_enable[i] ? i_write_data[i*8+4] : mem[i_address][i*8+4] ;\n                mem[i_address][i*8+5] <= i_byte_enable[i] ? i_write_data[i*8+5] : mem[i_address][i*8+5] ;\n                mem[i_address][i*8+6] <= i_byte_enable[i] ? i_write_data[i*8+6] : mem[i_address][i*8+6] ;\n                mem[i_address][i*8+7] <= i_byte_enable[i] ? i_write_data[i*8+7] : mem[i_address][i*8+7] ;\n            end\n        end\n    end                                                \nend"
+    ]
+}

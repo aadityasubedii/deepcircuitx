@@ -1,0 +1,1 @@
+   assign wr_en    = cmd_valid_i & !full  & dfifo_has_enough_room_d1 & wait_done;

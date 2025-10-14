@@ -1,0 +1,1 @@
+   assign c3_sys_rst_i = C3_RST_ACT_LOW ? c3_sys_rst : ~c3_sys_rst;

@@ -1,0 +1,1 @@
+            assign binary_values_by_bit[(binary_pos*NO_OF_MODES)+one_hot_pos] = binary_values[(one_hot_pos*LOG2_NO_OF_MODES)+binary_pos];

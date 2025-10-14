@@ -1,0 +1,13 @@
+	assign Out0= out0;		
+	assign Out1= out1;
+	assign Out2= out2;
+	assign Out3= out3;
+	assign Out4= out4;
+	assign Out5Active= out5Active;
+	assign Out5A= out5A;
+	assign Out5B= out5B;
+	assign Out5C= out5C;
+	assign Out6= out6;
+	assign Out7= out7;
+	assign Out8= out8;
+	

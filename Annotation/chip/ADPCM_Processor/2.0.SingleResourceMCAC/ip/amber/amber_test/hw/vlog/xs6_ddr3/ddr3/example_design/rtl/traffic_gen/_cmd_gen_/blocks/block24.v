@@ -1,0 +1,1 @@
+    assign seq_addr = addr_counts;

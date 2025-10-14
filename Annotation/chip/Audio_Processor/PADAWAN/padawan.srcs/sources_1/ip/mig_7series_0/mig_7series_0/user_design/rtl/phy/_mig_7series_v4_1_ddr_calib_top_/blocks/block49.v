@@ -1,0 +1,1 @@
+  assign po_counter_load_en = 1'b0;

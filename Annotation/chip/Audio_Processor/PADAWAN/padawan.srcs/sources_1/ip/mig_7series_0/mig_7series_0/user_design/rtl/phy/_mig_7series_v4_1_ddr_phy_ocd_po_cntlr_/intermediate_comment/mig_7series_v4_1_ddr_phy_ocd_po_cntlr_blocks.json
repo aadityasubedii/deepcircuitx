@@ -1,0 +1,286 @@
+{
+    "line_num": [
+        [
+            369,
+            588
+        ],
+        [
+            360,
+            362
+        ],
+        [
+            359,
+            359
+        ],
+        [
+            356,
+            356
+        ],
+        [
+            346,
+            346
+        ],
+        [
+            343,
+            343
+        ],
+        [
+            336,
+            336
+        ],
+        [
+            331,
+            331
+        ],
+        [
+            318,
+            318
+        ],
+        [
+            317,
+            317
+        ],
+        [
+            312,
+            312
+        ],
+        [
+            310,
+            310
+        ],
+        [
+            309,
+            309
+        ],
+        [
+            306,
+            307
+        ],
+        [
+            273,
+            304
+        ],
+        [
+            271,
+            271
+        ],
+        [
+            258,
+            258
+        ],
+        [
+            254,
+            254
+        ],
+        [
+            248,
+            248
+        ],
+        [
+            246,
+            246
+        ],
+        [
+            243,
+            243
+        ],
+        [
+            242,
+            242
+        ],
+        [
+            240,
+            240
+        ],
+        [
+            239,
+            239
+        ],
+        [
+            236,
+            236
+        ],
+        [
+            234,
+            234
+        ],
+        [
+            231,
+            231
+        ],
+        [
+            229,
+            229
+        ],
+        [
+            216,
+            220
+        ],
+        [
+            215,
+            215
+        ],
+        [
+            212,
+            212
+        ],
+        [
+            210,
+            211
+        ],
+        [
+            206,
+            208
+        ],
+        [
+            203,
+            203
+        ],
+        [
+            202,
+            202
+        ],
+        [
+            199,
+            199
+        ],
+        [
+            198,
+            198
+        ],
+        [
+            196,
+            196
+        ],
+        [
+            195,
+            195
+        ],
+        [
+            192,
+            192
+        ],
+        [
+            186,
+            186
+        ],
+        [
+            184,
+            184
+        ],
+        [
+            181,
+            181
+        ],
+        [
+            178,
+            178
+        ],
+        [
+            176,
+            176
+        ],
+        [
+            174,
+            174
+        ],
+        [
+            170,
+            170
+        ],
+        [
+            168,
+            168
+        ],
+        [
+            165,
+            165
+        ],
+        [
+            163,
+            163
+        ],
+        [
+            160,
+            160
+        ],
+        [
+            158,
+            158
+        ],
+        [
+            148,
+            148
+        ],
+        [
+            146,
+            146
+        ],
+        [
+            142,
+            142
+        ],
+        [
+            128,
+            134
+        ]
+    ],
+    "blocks": [
+        "  always @(*) begin\n\n  \n\n    cmplx_samples_done_ns = cmplx_samples_done_r;\n    cmplx_stg3_final_ns = cmplx_stg3_final_r;\n    scanning_right_ns = scanning_right_r;\n    ninety_offsets_ns = ninety_offsets_r;\n    ocal_scan_win_not_found_ns = ocal_scan_win_not_found_r;\n    ocd_edge_detect_rdy_ns = ocd_edge_detect_rdy_r;\n    ocd_ktap_left_ns = ocd_ktap_left_r;\n    ocd_ktap_right_ns = ocd_ktap_right_r;\n    ocd2stg2_inc_r = 1'b0;\n    ocd2stg2_dec_r = 1'b0;\n    ocd2stg3_inc_r = 1'b0;\n    ocd2stg3_dec_r = 1'b0;\n    oclkdelay_center_calib_start_ns = oclkdelay_center_calib_start_r;\n    oclkdelay_center_calib_done_ns = 1'b0;\n    oclk_center_write_resume_ns = oclk_center_write_resume_r;\n    po_center_wait = 1'b0;\n    po_done_ns = po_done_r;\n    po_finish_scan = 1'b0;\n    po_slew = 1'b0;\n    poc_backup_ns = poc_backup_r;\n    scan_done_r = 1'b0;\n    simp_stg3_final_ns = simp_stg3_final_r;\n    sm_ns = sm_r;\n    taps_set_r = 1'b0;\n    up_ns = up_r;\n    stg2_ns = stg2_r;\n    stg3_ns = stg3_r;\n    two_ns = two_r;\n    resume_wait_ns = resume_wait_r;\n    \n    if (rst == 1'b1) begin\n      \n  \n      cmplx_samples_done_ns = 1'b0;\n      ocal_scan_win_not_found_ns = 1'b0;\n      ocd_ktap_left_ns = 1'b0;\n      ocd_ktap_right_ns = 1'b0;\n      ocd_edge_detect_rdy_ns = 1'b0;\n      oclk_center_write_resume_ns = 1'b0;\n      oclkdelay_center_calib_start_ns = 1'b0;\n      po_done_ns = 1'b1;\n      resume_wait_ns = 5'd0;\n      sm_ns = 4'd0;\n      \n    end else\n      \n  \n      case (sm_r)\n\n        4'd0:begin\n\t  poc_backup_ns = 1'b0;\n\t  stg2_ns = {3'b0, wl_po_fine_cnt_sel};\n          stg3_ns = stg3_init;\n\t  scanning_right_ns = 1'b0;\n\t  if (complex_oclkdelay_calib_start) cmplx_samples_done_ns = 1'b1;\n\t  if (!reset_scan && ~resume_wait) begin\n\t    cmplx_samples_done_ns = 1'b0;\n\t    ocal_scan_win_not_found_ns = 1'b0;\n\t    taps_set_r = 1'b1;\n\t    sm_ns = 4'd1;\n\t  end\n        end\n\n        4'd1:begin\n\t    if (samp_done && use_samp_done) begin\n\t      if (complex_oclkdelay_calib_start) cmplx_samples_done_ns = 1'b1;\n\t      scanning_right_ns = scanning_right_r || left_stop;\n\t      if (right_stop && scanning_right_r) begin\n\t\toclkdelay_center_calib_start_ns = 1'b1;\n\t\tocd_ktap_left_ns = 1'b1;\n\t\tocal_scan_win_not_found_ns = win_not_found;\n\t\tsm_ns = 4'd3;\n\t      end else begin\n\t\tif (scanning_right_ns) ocd2stg3_inc_r = 1'b1;\n\t\telse ocd2stg3_dec_r = 1'b1;\n\t        sm_ns = 4'd2;\n\t      end\n\t    end\n\tend\n\n\t4'd2:begin\n\t    if (po_done_r && ~resume_wait) begin\n\t      taps_set_r = 1'b1;\n\t      sm_ns = 4'd1;\n\t      cmplx_samples_done_ns = 1'b0;\n\t    end\n\tend\n\n\t4'd3:begin\n\t    po_slew = 1'b1;\n\t    ninety_offsets_ns = |ninety_offsets_final_r ? 2'b01 : 2'b00;\n\t    if (~resume_wait) begin\n\t      if (po_done_r) begin\n                if (inc_po_r) ocd2stg3_inc_r = 1'b1;\n                else if (dec_po_r) ocd2stg3_dec_r = 1'b1;\n\t        else if (~resume_wait) begin\n\t\t  cmplx_samples_done_ns = 1'b0;\n                  sm_ns = 4'd4;\n\t\t  oclk_center_write_resume_ns = 1'b1;\n\t        end\n\t      end \n\t    end\n\tend \n\n\t4'd4:\n\t    if (~resume_wait) begin \n\t      if (mmcm_edge_detect_done) begin\n\t        ocd_edge_detect_rdy_ns = 1'b0;\n      \t        if (ocd_ktap_left_r) begin\n\t\t  ocd_ktap_left_ns = 1'b0;\n\t\t  ocd_ktap_right_ns = 1'b1;\n\t\t  oclk_center_write_resume_ns = 1'b0;\n\t          sm_ns = 4'd3;\n\t         end else if (ocd_ktap_right_r) begin\n\t\t   ocd_ktap_right_ns = 1'b0;\n\t\t   sm_ns =  4'd5;\n\t\t end else if (~mmcm_lbclk_edge_aligned) begin\n\t\t    sm_ns = 4'd6;\n\t\t    oclk_center_write_resume_ns = 1'b0;  \n\t         end else begin\n                     if (ninety_offsets_r != ninety_offsets_final_r && ocd_edge_detect_rdy_r) begin\n                       ninety_offsets_ns = ninety_offsets_r + 2'b01;\n\t\t       sm_ns = 4'd5;\n\t\t     end else begin\n\t\t       oclk_center_write_resume_ns = 1'b0;\n\t\t       poc_backup_ns = poc_backup;\n\n                       sm_ns = 4'd8;\n\t             end\n\t\t  end \n\t      end else ocd_edge_detect_rdy_ns = 1'b1;\n\t    end \n\n\n       4'd5:\n\t sm_ns = 4'd4;\n\t\n       4'd6:\n\t if (~resume_wait) begin\n\t   ocd2stg3_dec_r = 1'b1;\n\t   sm_ns = 4'd7;\n\t end\n\n       4'd7: begin\n\t   po_center_wait = 1'b1;    \n           if (po_done_r) begin\n             sm_ns = 4'd4;\t  \n             oclk_center_write_resume_ns = 1'b1;\n\t   end\n       end\n\t   \n       4'd8: begin\n\t po_finish_scan = 1'b1;\n\t if (resume_wait_r == 5'd1) begin\n           if (~poc_backup_r) begin\n             oclkdelay_center_calib_done_ns = 1'b1;\n\t     oclkdelay_center_calib_start_ns = 1'b0;\n\t   end\n\t end\n\t if (~resume_wait) begin\n\t   if (po_rdy)\n\t     if (poc_backup_r) begin\n               ocd2stg3_inc_r = 1'b1;\n\t       poc_backup_ns = 1'b0;\n\t     end \n             else if (~final_stg2_inc && ~final_stg2_dec) begin\n\t       if (complex_oclkdelay_calib_start) cmplx_stg3_final_ns[oclkdelay_calib_cnt*6+:6] = stg3_r;\n\t       else simp_stg3_final_ns[oclkdelay_calib_cnt*6+:6] = stg3_r;\n\t       sm_ns = 4'd0;\n\t       scan_done_r = 1'b1;\n\t     end else begin\n\t       ocd2stg2_inc_r = final_stg2_inc;\n\t       ocd2stg2_dec_r = final_stg2_dec;\n\t     end\n\t end \n      end \n\t\n      endcase \n\n    if (ocd2stg3_inc_r) begin\n      stg3_ns = stg3_r + 6'h1;\n      up_ns = 1'b0;\n    end\n    if (ocd2stg3_dec_r) begin\n      stg3_ns = stg3_r - 6'h1;\n      up_ns = 1'b1;\n    end\n    if (ocd2stg3_inc_r || ocd2stg3_dec_r) begin\n      po_done_ns = 1'b0;\n      two_ns = 2'b00;\n    end\n\n    if (~po_done_r)\n      if (po_rdy)\n         if (two_r == 2'b10 || po_center_wait || po_slew || po_finish_scan) po_done_ns = 1'b1;\n         else begin\n\t   two_ns = two_r + 2'b1;\n           if (up_r) begin\n             stg2_ns = stg2_r + 9'b1;\n\t     if (stg2_r >= 9'd0 && stg2_r < 9'd63) ocd2stg2_inc_r = 1'b1;\n\t   end else begin\n             stg2_ns = stg2_r - 9'b1;\n\t     if (stg2_r > 9'd0 && stg2_r <= 9'd63) ocd2stg2_dec_r = 1'b1;\n\t   end\n\t end \n\n    if (ocd_ktap_left_ns && ~ocd_ktap_left_r) resume_wait_ns = 'b1;\n    else if (oclk_center_write_resume_ns && ~oclk_center_write_resume_r) \n      resume_wait_ns = POC_SAMPLE_CLEAR_WAIT[RESUME_WAIT_WIDTH-1:0];\n    else if (~oclk_center_write_resume_ns && oclk_center_write_resume_r) resume_wait_ns = 'd15;\n    else if (cmplx_samples_done_ns & ~cmplx_samples_done_r || \n             complex_oclkdelay_calib_start & reset_scan ||\n             poc_backup_r & ocd2stg3_inc_r) resume_wait_ns = 'd31;\n    else if (|resume_wait_r) resume_wait_ns = resume_wait_r - 'd1;\n    \n  end ",
+        "  always @(*) phy_rddata_en_3_second_ns = ~reset_scan && (phy_rddata_en_3 \n                                                    ? ~phy_rddata_en_3_second_r \n                                                    : phy_rddata_en_3_second_r);",
+        "  always @(posedge clk) phy_rddata_en_3_second_r <= #TCQ phy_rddata_en_3_second_ns;",
+        "  always @(posedge clk) sm_r <= #TCQ sm_ns;",
+        "  always @(posedge clk) two_r <= #TCQ two_ns;",
+        "  always @(posedge clk) up_r <= #TCQ up_ns;",
+        "  always @(posedge clk) po_done_r <= #TCQ po_done_ns;",
+        "  always @(posedge clk) resume_wait_r <= #TCQ resume_wait_ns;",
+        "  always @(posedge clk) dec_po_r <= #TCQ dec_po_ns;",
+        "  always @(posedge clk) inc_po_r <= #TCQ inc_po_ns;",
+        "  assign ocal_scan_win_not_found = ocal_scan_win_not_found_r;",
+        "  always @(posedge clk) ocal_scan_win_not_found_r <= #TCQ ocal_scan_win_not_found_ns;",
+        "  reg ocal_scan_win_not_found_ns, ocal_scan_win_not_found_r;",
+        "  output use_noise_window;\n  assign use_noise_window = ninety_offsets == 2'd1;",
+        "  always @(*) begin\n    left = lim2ocal_stg3_left_lim;\n    right = lim2ocal_stg3_right_lim;\n    ninety_offsets_final_ns = 2'd0;\n    win_not_found = 1'b0;\n    if (zero) begin\n      left = fuzz2zero;\n      right = zero2fuzz;\n    end\n    else if (noise) begin\n      left = zero2fuzz;\n      right = fuzz2oneeighty;\n      ninety_offsets_final_ns = 2'd1;\n    end\n    else if (oneeighty) begin\n      left = fuzz2oneeighty;\n      right = oneeighty2fuzz;\n      ninety_offsets_final_ns = 2'd2;\n    end\n    else if (z2f) begin\n      right = zero2fuzz;\n    end\n    else if (f2o) begin\n      left = fuzz2oneeighty;\n      ninety_offsets_final_ns = 2'd2;\n    end\n    else if (f2z) begin\n      left = fuzz2zero;\n    end\n    else win_not_found = 1'b1;\n    current_edge = ocd_ktap_left_r ? left : right;\n  end ",
+        "  always @(posedge clk) ninety_offsets_final_r <= #TCQ ninety_offsets_final_ns;",
+        "  assign taps_set = taps_set_r;",
+        "  always @(posedge clk) poc_backup_r <= #TCQ poc_backup_ns;",
+        "  assign ocd_edge_detect_rdy = ocd_edge_detect_rdy_r;",
+        "  always @(posedge clk) ocd_edge_detect_rdy_r <= #TCQ ocd_edge_detect_rdy_ns;",
+        "  assign ocd_ktap_right = ocd_ktap_right_r;",
+        "  assign ocd_ktap_left = ocd_ktap_left_r;",
+        "  always @(posedge clk) ocd_ktap_right_r <= #TCQ ocd_ktap_right_ns;",
+        "  always @(posedge clk) ocd_ktap_left_r <= #TCQ ocd_ktap_left_ns;",
+        "  assign scanning_right = scanning_right_r;",
+        "  always @(posedge clk) scanning_right_r <= #TCQ scanning_right_ns;",
+        "  assign ninety_offsets = ninety_offsets_r;",
+        "  always @(posedge clk) ninety_offsets_r <= #TCQ ninety_offsets_ns;",
+        "  always @(*) stg2_final_ns = stg2_target_r[8] == 1'b1\n\t                        ? 6'd0\n\t                        : stg2_target_r > 9'd63\n\t                          ? 6'd63\n\t                          : stg2_target_r[5:0];",
+        "  always @(posedge clk) stg2_final_r <= #TCQ stg2_final_ns;",
+        "  always @ (posedge clk) stg2_target_r <= #TCQ stg2_target_ns;",
+        "  wire signed [8:0] stg2_target_ns = $signed({3'b0, wl_po_fine_cnt_sel}) + stg2_steps;\n  reg signed [8:0] stg2_target_r;",
+        "  wire signed [8:0] stg2_steps = stg3_r > stg3_init \n                                   ? -9'sd2 * $signed({3'b0, (stg3_r - stg3_init)})\n                                   : 9'sd2 * $signed({3'b0, (stg3_init - stg3_r)});",
+        "  assign simp_stg3_final_sel = simp_stg3_final_shft[5:0];",
+        "  wire [DQS_WIDTH*6-1:0] simp_stg3_final_shft = simp_stg3_final_r >> oclkdelay_calib_cnt * 6;",
+        "  assign cmplx_stg3_final = cmplx_stg3_final_r;",
+        "  assign simp_stg3_final = simp_stg3_final_r;",
+        "  always @(posedge clk) cmplx_stg3_final_r <= #TCQ cmplx_stg3_final_ns;",
+        "  always @(posedge clk) simp_stg3_final_r <= #TCQ simp_stg3_final_ns;",
+        "  always @(posedge clk) po_counter_read_val_r <= #TCQ po_counter_read_val[5:0];",
+        "  assign stg3 = stg3_r;",
+        "  always @(posedge clk) stg3_r <= #TCQ stg3_ns;",
+        "  always @(posedge clk) stg2_r <= #TCQ stg2_ns;",
+        "",
+        "  assign ocd2stg3_inc = ocd2stg3_inc_r;",
+        "  assign ocd2stg2_inc = ocd2stg2_inc_r;",
+        "  assign oclk_center_write_resume = oclk_center_write_resume_r;",
+        "  always @(posedge clk) oclk_center_write_resume_r <= #TCQ oclk_center_write_resume_ns;",
+        "  assign oclkdelay_center_calib_done = oclkdelay_center_calib_done_r;",
+        "  always @(posedge clk) oclkdelay_center_calib_done_r <= #TCQ oclkdelay_center_calib_done_ns;",
+        "  assign oclkdelay_center_calib_start = oclkdelay_center_calib_start_r;",
+        "  always @(posedge clk) oclkdelay_center_calib_start_r <= #TCQ oclkdelay_center_calib_start_ns;",
+        "  assign ocal_num_samples_done_r = cmplx_samples_done_r;",
+        "  always @(posedge clk) cmplx_samples_done_r <= #TCQ cmplx_samples_done_ns;",
+        "  assign scan_done = scan_done_r;",
+        "  function integer clogb2 (input integer size); \n    begin\n      size = size - 1;\n      for (clogb2=1; size>1; clogb2=clogb2+1)\n            size = size >> 1;\n    end\n  endfunction "
+    ]
+}

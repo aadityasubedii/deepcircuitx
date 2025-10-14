@@ -1,0 +1,1 @@
+assign SetReadTxDataFromMemory = TxEn & TxEn_q & TxPointerRead;

@@ -1,0 +1,1 @@
+assign rx_fifo_half_or_more  = rx_fifo_count >= 5'd8;

@@ -1,0 +1,1 @@
+assign byte_enable_update              = !i_core_stall && execute && i_write_data_wen;

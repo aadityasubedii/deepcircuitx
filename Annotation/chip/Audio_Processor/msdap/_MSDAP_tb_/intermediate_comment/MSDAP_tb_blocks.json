@@ -1,0 +1,31 @@
+{
+    "line_num": [
+        [
+            140,
+            142
+        ],
+        [
+            135,
+            138
+        ],
+        [
+            119,
+            134
+        ],
+        [
+            75,
+            116
+        ],
+        [
+            58,
+            73
+        ]
+    ],
+    "blocks": [
+        "\t always\n\tbegin\n\t\t#(Sclk_period/2) Sclk = ~Sclk;",
+        "   always\n\tbegin\n\t\t#(Dclk_period/2) Dclk = ~Dclk;\n\tend  ",
+        "   always @ (posedge Sclk)\n\tbegin\n\t\tOutReady_buff <= OutReady;\n\t\tif(OutReady_buff == 1'b1)\n\t\tbegin\n\t\t\tout_data[0][ybt] = OutputL;\n\t\t\tout_data[1][ybt] = OutputR;\n\t\t\tybt = ybt+1;\n\t\t\tif(ybt == 40)\n\t\t\tbegin\n\t\t\t\t\n\t\t\t\t$fwrite (outfile,\"%h\\t%h\\n\",out_data[0],out_data[1] );\n\t\t\t\tybt=0;\n\t\t\tend\n\t\tend\n\tend",
+        "\talways @ (posedge Dclk)\n\tbegin\n\tif(InReady)\n\tbegin\n\t\tif( (k==0) && (j<15056) )\n\t\tbegin\n\t\t\tFrame = 1'b1;\n\t\t\t\n\t\tend\n\t\tif (k == 1)\n\t\tbegin\n\t\t\tFrame = 1'b0;\n\t\tend\n\t\t\n\t\tif ( j<15056 )\n\t\tbegin\n\t\t\tInputL = data[j][k];\n\t\t\tInputR = data[j+1][k];\n\t\tend\n\t\t\n\n\t\tk = k +1;\n\n\t\tif (k == 16)\n\t\tbegin\n\t\t\tk = 0;\n\t\t\tcount = (j/2)+1;\n\t\t\t\n\t\t\t\n\t\t\tj = j+2;\n\t\tend\n\t\tif(((j == 9458)|| (j == 13058)) && (k == 0))\n\t\tbegin\n\t\t\t#100\n\t\t\tReset = 1'b0;\n\t\t\t#100\n\t\t\tReset = 1'b1;\n\t\t\tFrame = 1'b0;\n\t\t\tk =0;\n\t\tend\n\tend\n\tend",
+        "\tinitial begin\n\t\t\n\t\tDclk = 0;\n\t\tSclk = 0; \n\t\tStart = 0;\n\t\tReset = 1;\n\t\tFrame = 0;\n\t\tInputL = 0;\n\t\tInputR = 0;\n\t\t$readmemh(\"./data1.in\", data);\n\t\toutfile = $fopen(\"data1.out\", \"wb\");\n\t\t#1250\n\t\tStart = 1;\n\t\t#130\n\t\tStart = 0;\n\tend"
+    ]
+}

@@ -1,0 +1,1 @@
+assign data_error_o = data_error;

@@ -1,0 +1,11 @@
+       assign phy_din[HIGHEST_LANE_B2*80+640-1:640] = 0;
+       assign _phy_ctl_a_full_p[2] = 0;
+       assign of_ctl_a_full_v[2]   = 0;
+       assign of_ctl_full_v[2]     = 0;
+       assign of_data_a_full_v[2]  = 0;
+       assign of_data_full_v[2]    = 0;
+       assign pre_data_a_full_v[2] = 0;
+       assign if_empty_v[2]        = 0;
+       assign byte_rd_en_v[2]      = 1;
+       assign pi_phase_locked_lanes[HIGHEST_LANE_B2+8-1:8]  = 4'b1111;
+       assign pi_dqs_found_lanes[HIGHEST_LANE_B2+8-1:8]  = 4'b1111;

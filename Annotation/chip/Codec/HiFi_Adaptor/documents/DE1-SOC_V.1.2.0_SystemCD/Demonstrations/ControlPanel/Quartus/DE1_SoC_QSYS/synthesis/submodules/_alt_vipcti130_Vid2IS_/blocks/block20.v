@@ -1,0 +1,1 @@
+assign early_eop = valid_reg & (lost_vid_locked | overflowed);

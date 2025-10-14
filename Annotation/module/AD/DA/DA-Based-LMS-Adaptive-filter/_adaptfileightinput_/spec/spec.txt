@@ -1,0 +1,9 @@
+Module name: adaptfileightinput. 
+
+Module specification: The 'adaptfileightinput' module is designed to take a single 8-bit signed input 'xin' and distribute it sequentially across four 8-bit signed output registers (x0, x1, x2, x3) based on a cycling counter, with the selection driven by the rising edge of a clock signal 'clk'. The distribution process is subject to a reset condition provided by the signal 'rst', which resets the counter to 0. 
+
+Input ports include: 'xin', a signed 8-bit data input; 'clk', a clock signal that dictates the timing of operations; and 'rst', a reset signal that initializes the counter to 0 when active. Output ports consist of four signed 8-bit registers 'x0', 'x1', 'x2', and 'x3', which hold the value of 'xin' in a round-robin fashion determined by the current counter state. 
+
+An internal 8-bit register 'count' serves as the counter that increments with each clock pulse, unless reset by 'rst', guiding the assignment of 'xin' to the outputs. 
+
+The Verilog code consists of two primary procedural blocks: The first 'always' block is triggered on the positive edge of 'clk', handling the reset condition and incrementing of 'count'. The second 'always' block also triggered on the positive edge of 'clk', contains a 'case' statement that assigns 'xin' to one of the four outputs based on the current value of 'count'. This RTL (Register-Transfer Level) design efficiently cycles the input signal through four distinct output registers in a predictable and synchronous manner, ensuring balanced distribution of the input data across multiple cycles.

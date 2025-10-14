@@ -1,0 +1,13 @@
+Module name: pwm. 
+
+Module Specification: 
+
+The 'pwm' module serves as a Pulse Width Modulation (PWM) signal generator operating on a digital circuit. This module functionality is driven by an input clock signal, 'CLOCK_50', which controls the timing and sequence of operations within the code block.
+
+Three input ports are used: 'CLOCK_50', 'SW', and 'load'. 'CLOCK_50' is the clock signal providing the ticks for loading and incrementing operations. 'SW' is a 10-bit switch input, the value of which (on 'load' being HIGH) determines the pulse width of the output. 'load', the last input, signals the load the value from 'SW' into 'd', a 10-bit internal signal.
+
+The single output port, 'pwm_out', drives the generated PWM signal, which transitions between HIGH and LOW states based on the comparison between an incrementing counter ('count') and 'd'.
+
+In terms of internal signals, 'd' is set to the value of 'SW' on 'load' being HIGH and adjusts the pulse width in the PWM. 'count' is a 10-bit incrementing counter clocked on 'CLOCK_50' pulses. 'pwm_out' carries the PWM signal, going HIGH or LOW depending on whether 'count' is less than or more than 'd', respectively.
+
+In the code flow, the value from 'SW' is loaded into 'd' at the positive edge of 'CLOCK_50' if 'load' is set to HIGH. Subsequently, 'count' increments on each clock pulse. If 'count' is more than 'd', 'pwm_out' shifts to LOW, else its state is HIGH. In this way, the value from 'SW' effectively modifies the duty cycle of the PWM signal output.

@@ -1,0 +1,15 @@
+Module name: main_mem. 
+
+Module specification: The main_mem module serves as a core memory model interacting with the Wishbone (WB) bus. It performs memory read and write operations synchronous to a given clock and reset in a functional design code written in Verilog RTL. 
+
+The main inputs to this module include clk (Clock), reset (Reset), scan_enable (Scan Enable), test_mode (Test Mode), i_mem_ctrl (Memory Control), i_wb_adr (Wishbone Address), i_wb_sel (Wishbone Select), i_wb_we (Wishbone Write Enable), i_wb_dat (Wishbone data for writing), i_wb_cyc (Wishbone cycle), and i_wb_stb (Wishbone Strobe). The primary role of these inputs is to control the operations of the memory model by synchronizing with the clock.
+
+Outcomes from the module include o_wb_dat (Wishbone data for reading), o_wb_ack (Wishbone Acknowledge), and o_wb_err (Wishbone Error). They provide information regarding the result of the data transfer cycle in terms of data, completion, and error signal status.
+
+Internally, the module uses signals such as ram (an array of memory), start_write (controls the start of write operations), start_read (controls start of read operations), start_read_d1, start_read_d2 (delay components), rd_data (read data), masked_wdata (masked write data), wr_en (write enable), wr_mask (write mask), wr_data (write data), addr_d1 (address data), busy (an indicator of memory block usage), and i, k, wb_rdata128, wb_rdata32 (loop and data variables).
+
+The module's design involves setting parameters for Wishbone bus data and selection width. The operations reflect whether the data width is 128 or 32. The module starts with initializing registers and conditionally handles data operations based on the signals from input ports. There are signal assignment and conditions controlling the write and read operations on the memory model. Several always blocks are used for functionality under specific conditions of reset and clock signal. 
+
+In a bit detailed view, the code focuses on the initialization and reset state of memory block, managing start signals of read/write operations, processing write operations with masked data, handling read operations, and coordinating write/read operations with the strobe signal. 
+
+This module is a potent hardware design example of a primary memory model interacting with an industry-standard bus architecture. It establishes a base for implementing larger and more complex digital systems.

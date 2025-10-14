@@ -1,0 +1,1 @@
+  assign fifo_wdata = av_writedata[7 : 0];

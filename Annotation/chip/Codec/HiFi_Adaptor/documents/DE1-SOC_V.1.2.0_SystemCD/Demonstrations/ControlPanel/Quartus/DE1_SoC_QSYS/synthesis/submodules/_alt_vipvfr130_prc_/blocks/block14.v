@@ -1,0 +1,1 @@
+assign packet_addr = registers[MM_ADDR_REQUIREDWIDTH-1:0];

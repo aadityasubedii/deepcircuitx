@@ -1,0 +1,1 @@
+  assign mc_ref_zq_wip_ns = maint_ref_zq_wip && col_read_fifo_empty;

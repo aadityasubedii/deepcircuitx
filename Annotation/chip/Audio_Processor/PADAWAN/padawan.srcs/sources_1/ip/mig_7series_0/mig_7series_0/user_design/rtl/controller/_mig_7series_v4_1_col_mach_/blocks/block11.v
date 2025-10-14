@@ -1,0 +1,1 @@
+      always @(posedge clk) fifo_out_data_r <= #TCQ fifo_out_data_ns;

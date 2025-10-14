@@ -1,0 +1,31 @@
+{
+    "line_num": [
+        [
+            127,
+            127
+        ],
+        [
+            126,
+            126
+        ],
+        [
+            125,
+            125
+        ],
+        [
+            113,
+            122
+        ],
+        [
+            96,
+            109
+        ]
+    ],
+    "blocks": [
+        "assign MdcEn_n = CountEq0 & Mdc;",
+        "assign MdcEn = CountEq0 & ~Mdc;",
+        "assign CountEq0 = Counter == 8'h0;",
+        "always @ (posedge Clk or posedge Reset)\nbegin\n  if(Reset)\n    Mdc <= #Tp 1'b0;\n  else\n    begin\n      if(CountEq0)\n        Mdc <= #Tp ~Mdc;\n    end\nend",
+        "always @ (posedge Clk or posedge Reset)\nbegin\n  if(Reset)\n    Counter[7:0] <= #Tp 8'h1;\n  else\n    begin\n      if(CountEq0)\n        begin\n          Counter[7:0] <= #Tp CounterPreset[7:0];\n        end\n      else\n        Counter[7:0] <= #Tp Counter - 8'h1;\n    end\nend"
+    ]
+}

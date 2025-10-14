@@ -1,0 +1,1 @@
+assign o_flags = flags_nxt;

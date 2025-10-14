@@ -1,0 +1,1 @@
+  reg [2*nCK_PER_CLK*PAYLOAD_WIDTH-1:0] ecc_rddata_r;

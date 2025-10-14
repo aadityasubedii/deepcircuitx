@@ -1,0 +1,1 @@
+        always @(posedge clk) rd_data_offset <= #TCQ rd_data_offset_ns;

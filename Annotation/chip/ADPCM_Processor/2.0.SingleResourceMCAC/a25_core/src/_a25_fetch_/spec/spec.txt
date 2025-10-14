@@ -1,0 +1,13 @@
+Module name: a25_fetch
+
+Module specification:
+
+The 'a25_fetch' module is designed for managing instruction fetches in a processor system. It efficiently handles memory-related operations like stalling and read-write requests while dealing with both cached and uncached instructions. Additionally, the module interfaces strongly with other parts of the processor system by handling signals for the readiness of the system and validity of instructions.
+
+The module accepts various inputs including system clock (clk), reset signal (reset), scan_enable and test_mode for testing, signals indicating system readiness (i_system_rdy) and status of the memory (i_mem_stall) and execution (i_exec_stall). Further, the module takes in inputs concerning memory address (i_iaddress), memory address validity (i_iaddress_valid), and information for next memory address (i_iaddress_nxt). Regarding cache operations, the module takes inputs like enabling or disabling cache (i_cache_enable), flushing the cache (i_cache_flush), delineation of cacheable area (i_cacheable_area), and readiness of write back (i_wb_ready).
+
+The outputs from this module highlight the state of the fetch operation (o_fetch_stall), output of fetched instruction (o_fetch_instruction), and signals and address information for write-back requests(o_wb_req and o_wb_address).
+
+This module uses a variety of internal signals such as core_stall that signals the need for the core to stall, cache_stall which signals the need for cache operations to stall, cache_read_data and cache_read_data128 which hold the data read from the cache, and uncached_instruction_read that signals if the instruction being read is not cacheable. There are also signals associated with the write-back process - wb_req_r that holds the write-back request status, wait_wb that indicates the status of a write-back operation, and wb_rdata32 which holds 32 bits of write back read data.
+
+The module can be divided into different functional sections. The sections are generally organized around the operation of fetching the instruction from either the cache or the memory, determining whether an instruction is cached or not, stalling operations, preparing information for write back if the instruction is not cacheable, and simultaneously preparing the next instruction to be fetched. This module includes an instantiation of another module named 'a25_icache' which is specifically designed for managing the Instruction Cache.

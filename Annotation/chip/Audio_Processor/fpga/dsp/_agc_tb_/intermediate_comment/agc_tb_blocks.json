@@ -1,0 +1,76 @@
+{
+    "line_num": [
+        [
+            345,
+            373
+        ],
+        [
+            322,
+            343
+        ],
+        [
+            297,
+            320
+        ],
+        [
+            289,
+            295
+        ],
+        [
+            278,
+            287
+        ],
+        [
+            267,
+            276
+        ],
+        [
+            244,
+            247
+        ],
+        [
+            125,
+            228
+        ],
+        [
+            114,
+            121
+        ],
+        [
+            95,
+            98
+        ],
+        [
+            84,
+            93
+        ],
+        [
+            35,
+            72
+        ],
+        [
+            19,
+            19
+        ],
+        [
+            11,
+            15
+        ]
+    ],
+    "blocks": [
+        "    initial begin\n\n        @(posedge ck);\n        @(posedge ck);\n\n        gain_gain <= 16'hffff;\n\n        in_0 <= 24'h111111;\n        in_1 <= 24'h222222;\n        in_2 <= 24'h444444;\n        in_3 <= 24'h123456;\n        gain_run();\n\n        $display(\"%x\", calc(in_0, gain_gain));\n\n        \n        \n        \n        \n\n        gain_gain <= 16'hffff;\n\n        in_0 <= 24'h111111;\n        in_1 <= 24'h222222;\n        in_2 <= 24'h444444;\n        in_3 <= 24'h888888;\n        gain_run();\n\n    end",
+        "    function automatic signed [15:0] calc(input [23:0] value, input [15:0] gain);\n\n        integer mantissa;\n        integer exp;\n        integer shift;\n        integer v;\n\n        begin\n\n            $display(\"v=%x g=%x\", value, gain);\n\n            mantissa = { 1'b1, gain[12:0], 2'b1 };\n            exp = gain[15:13];\n            shift = 7 - exp;\n            v = 16'hffff & (value >>> shift);\n            $display(\"e=%x m=%x\", exp, mantissa);\n            $display(\"v=%x s=%x\", v, shift);\n\n            calc = mul16(v, mantissa);\n        end\n\n    endfunction",
+        "    function automatic [32:0] mul16(input signed [15:0] a, signed [15:0] b);\n\n        integer sign;\n        integer twosc;\n        integer out;\n        integer m16;\n\n        begin\n\n            $display(\"a=%x b=%x\", a, b);\n\n            sign = a[15];\n            twosc = 16'hffff & ((~a) + 1);\n\n            out = b * (sign ? twosc : a);\n            $display(\"o=%x\", out);\n\n            m16 = sign ? (1 + ~out) : out;\n            $display(\"m16=%x\", m16);\n            mul16 = m16;\n\n        end\n\n    endfunction",
+        "    function [15:0] twosc(input signed [15:0] a);\n\n        begin\n            return a[15] ? (1 + ~a) : a;\n        end\n\n    endfunction",
+        "    task gain_run;\n        begin\n            gain_en <= 1;\n            @(posedge ck);\n            gain_en <= 0;\n            @(posedge ck);\n            wait(gain_done);\n            @(posedge ck);\n        end\n    endtask",
+        "    always @(posedge ck) begin\n        if (gain_out_we) begin\n            case (gain_out_addr)\n                0   :   out_0 <= gain_out_data;\n                1   :   out_1 <= gain_out_data;\n                2   :   out_2 <= gain_out_data;\n                3   :   out_3 <= gain_out_data;\n            endcase\n        end\n    end",
+        "    assign gain_in_data = (gain_addr == 0) ? in_0 : \n                         ((gain_addr == 1) ? in_1 :  \n                         ((gain_addr == 2) ? in_2 : \n                         in_3));",
+        "    initial begin\n        $display(\"test agc()\");\n        @(posedge ck);\n        @(posedge ck);\n        @(posedge ck);\n\n        \n        mic_0 <= 24'h100000;\n        mic_1 <= 24'h010000;\n        mic_2 <= 24'h001000;\n        mic_3 <= 24'h000100;\n        go();\n        wait(done);\n        @(posedge ck);\n\n        \n        mic_0 <= 24'h000001;\n        mic_1 <= 24'h000000;\n        mic_2 <= 24'h000000;\n        mic_3 <= 24'h000000;\n        @(posedge ck);\n        go();\n        wait(done);\n        tb_assert(level == 22);\n\n        mic_0 <= 24'h000000;\n        mic_1 <= 24'h000001;\n        mic_2 <= 24'h000000;\n        mic_3 <= 24'h000000;\n        @(posedge ck);\n        go();\n        wait(done);\n        tb_assert(level == 22);\n\n        mic_0 <= 24'h000000;\n        mic_1 <= 24'h000000;\n        mic_2 <= 24'h000001;\n        mic_3 <= 24'h000000;\n        @(posedge ck);\n        go();\n        wait(done);\n        tb_assert(level == 22);\n\n        mic_0 <= 24'h000000;\n        mic_1 <= 24'h000000;\n        mic_2 <= 24'h000000;\n        mic_3 <= 24'h000001;\n        @(posedge ck);\n        go();\n        wait(done);\n        tb_assert(level == 22);\n\n        \n        mic_0 <= 24'h000000;\n        mic_1 <= 24'h000000;\n        mic_2 <= 24'h400000;\n        mic_3 <= 24'h000000;\n        for (i = 0; i < 24; i++) begin\n            @(posedge ck);\n            go();\n            wait(done);\n            @(posedge ck);\n            tb_assert(level == i);\n            mic_2 <= mic_2 >> 1;\n        end\n\n        \n        mic_0 <= 24'h000000;\n        mic_1 <= 24'h000000;\n        mic_2 <= 24'hbfffff;\n        mic_3 <= 24'h000000;\n        for (i = 0; i < 22; i++) begin\n            @(posedge ck);\n            go();\n            wait(done);\n            @(posedge ck);\n            tb_assert(level == i);\n            mic_2 <= { 1'b1, mic_2[23:1] };\n        end\n\n        \n        mic_0 <= 24'h000000;\n        mic_1 <= 24'hfff000;\n        mic_2 <= 24'h000000;\n        mic_3 <= 24'h000000;\n        @(posedge ck);\n        go();\n        wait(done);\n        tb_assert(level == 10);\n\n        mic_0 <= 24'h000000;\n        mic_1 <= 24'h000fff;\n        mic_2 <= 24'h000000;\n        mic_3 <= 24'h000000;\n        @(posedge ck);\n        go();\n        wait(done);\n        tb_assert(level == 11);\n\n        @(posedge ck);\n        @(posedge ck);\n\n        $finish;\n    end",
+        "    task go;\n        begin\n            en <= 1;\n            @(posedge ck);\n            en <= 0;\n            @(posedge ck);\n        end\n    endtask",
+        "    assign in_data = (src_addr == 0) ? mic_0 : \n                     ((src_addr == 1) ? mic_1 :  \n                     ((src_addr == 2) ? mic_2 : \n                     mic_3));",
+        "    function [23:0] get_mic(input [1:0] addr);\n        begin\n            case (addr)\n                0   :   get_mic = mic_0;\n                1   :   get_mic = mic_1;\n                2   :   get_mic = mic_2;\n                3   :   get_mic = mic_3;\n            endcase\n        end\n    endfunction",
+        "    initial begin\n        @(posedge ck);\n        @(posedge ck);\n\n        shift_by <= 3'b000;\n        shift_in <= 24'h123456;\n        @(posedge ck);\n        tb_assert(shift_out == (16'hffff & (shift_in >> 8)));\n\n        shift_by <= 3'b001;\n        @(posedge ck);\n        tb_assert(shift_out == (16'hffff & (shift_in >> 7)));\n\n        shift_by <= 3'b010;\n        @(posedge ck);\n        tb_assert(shift_out == (16'hffff & (shift_in >> 6)));\n\n        shift_by <= 3'b011;\n        @(posedge ck);\n        tb_assert(shift_out == (16'hffff & (shift_in >> 5)));\n\n        shift_by <= 3'b100;\n        @(posedge ck);\n        tb_assert(shift_out == (16'hffff & (shift_in >> 4)));\n\n        shift_by <= 3'b101;\n        @(posedge ck);\n        tb_assert(shift_out == (16'hffff & (shift_in >> 3)));\n\n        shift_by <= 3'b110;\n        @(posedge ck);\n        tb_assert(shift_out == (16'hffff & (shift_in >> 2)));\n\n        shift_by <= 3'b111;\n        @(posedge ck);\n        tb_assert(shift_out == (16'hffff & (shift_in >> 1)));\n\n    end",
+        "    always #42 ck <= !ck;",
+        "    initial begin\n        $dumpfile(\"dsp.vcd\");\n        $dumpvars(0, tb);\n        #5000000 $finish;\n    end"
+    ]
+}

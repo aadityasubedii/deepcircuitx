@@ -1,0 +1,1 @@
+assign CLOCK_1_HZ = slow_clock;

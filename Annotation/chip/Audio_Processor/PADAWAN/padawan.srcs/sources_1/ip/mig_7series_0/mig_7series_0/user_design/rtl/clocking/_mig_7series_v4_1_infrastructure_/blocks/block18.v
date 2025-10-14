@@ -1,0 +1,1 @@
+  always @(*) mmcm_hi0_ns = ~first_rising_ps_clk_r || ~mmcm_hi0_r;

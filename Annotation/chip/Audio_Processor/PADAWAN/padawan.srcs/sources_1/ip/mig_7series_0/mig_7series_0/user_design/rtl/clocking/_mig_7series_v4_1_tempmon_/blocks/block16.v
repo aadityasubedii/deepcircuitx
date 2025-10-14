@@ -1,0 +1,1 @@
+  assign device_temp = device_temp_r;

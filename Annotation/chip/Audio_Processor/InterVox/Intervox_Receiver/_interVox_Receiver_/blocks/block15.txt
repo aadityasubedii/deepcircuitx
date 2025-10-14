@@ -1,0 +1,29 @@
+Line number: 
+[92, 93]
+Comment: 
+As you didn't provide any specific block of code to describe, here is a general approach to how you can transform raw Verilog RTL code into data suitable for training your language model:
+
+1. **Pairing code with comments**: Extract the pieces of RTL code and their corresponding comments. Your input will be the code part and your target output will be the comment associated with it. 
+
+For example, for a simple block like this:
+```verilog
+// This module generates a clock signal
+module clock_gen(input wire rst_n, output wire clk);
+assign clk = ~rstn; 
+endmodule 
+```
+The input will be:
+```verilog
+module clock_gen(input wire rst_n, output wire clk);
+assign clk = ~rstn; 
+endmodule 
+```
+And the corresponding target output will be: `This module generates a clock signal`.
+
+2. **Code Tokenization**: Break the Verilog code into smaller units (tokens). You may need to create a custom tokenizer given the unique syntax of Verilog.
+
+3. **Comment Processing**: Clean up comments by removing unnecessary white spaces, punctuation, or other special characters. Treat the filtered comment as a sentence and further split it for sentence level processing, if needed.
+
+4. **Creating the dataset**: Formulate your data into paired instances of input (code) and output (comment). Randomly divide this into training, validation, and testing sets.
+
+For training, remember to do it on a character level for the Verilog code as models trained on a character level often generalize better to unseen code.

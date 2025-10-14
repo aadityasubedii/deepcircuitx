@@ -1,0 +1,1 @@
+    always @(addr_in[ 7]) cmd_addr_timing_check(14);

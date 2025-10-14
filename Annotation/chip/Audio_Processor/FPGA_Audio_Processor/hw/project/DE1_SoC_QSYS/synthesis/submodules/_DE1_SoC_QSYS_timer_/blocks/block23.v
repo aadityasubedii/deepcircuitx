@@ -1,0 +1,1 @@
+  assign counter_is_zero = internal_counter == 0;

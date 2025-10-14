@@ -1,0 +1,1 @@
+assign eop_out = valid_out ? pre_eop_out : eop_out_d1;

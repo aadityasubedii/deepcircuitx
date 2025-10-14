@@ -1,0 +1,156 @@
+{
+    "line_num": [
+        [
+            280,
+            281
+        ],
+        [
+            180,
+            279
+        ],
+        [
+            176,
+            176
+        ],
+        [
+            172,
+            172
+        ],
+        [
+            170,
+            170
+        ],
+        [
+            167,
+            167
+        ],
+        [
+            165,
+            165
+        ],
+        [
+            162,
+            162
+        ],
+        [
+            155,
+            161
+        ],
+        [
+            151,
+            153
+        ],
+        [
+            149,
+            149
+        ],
+        [
+            148,
+            148
+        ],
+        [
+            147,
+            147
+        ],
+        [
+            146,
+            146
+        ],
+        [
+            144,
+            144
+        ],
+        [
+            143,
+            143
+        ],
+        [
+            142,
+            142
+        ],
+        [
+            138,
+            138
+        ],
+        [
+            136,
+            136
+        ],
+        [
+            133,
+            133
+        ],
+        [
+            131,
+            131
+        ],
+        [
+            128,
+            128
+        ],
+        [
+            126,
+            126
+        ],
+        [
+            120,
+            120
+        ],
+        [
+            118,
+            118
+        ],
+        [
+            113,
+            113
+        ],
+        [
+            109,
+            109
+        ],
+        [
+            108,
+            108
+        ],
+        [
+            107,
+            107
+        ],
+        [
+            106,
+            106
+        ]
+    ],
+    "blocks": [
+        "  \nendmodule ",
+        "  always @(*) begin\n\n  \n\n    byte_ns = byte_r;\n    complex_wrlvl_final_ns = complex_wrlvl_final_r;\n    lim_start_ns = lim_start_r;\n    oclkdelay_calib_done_ns = oclkdelay_calib_done_r;\n    complex_oclkdelay_calib_done_ns = complex_oclkdelay_calib_done_r;\n    ocd_cntlr2stg2_dec_r = 1'b0;\n    po_rd_wait_ns = po_rd_wait_r;\n    if (|po_rd_wait_r) po_rd_wait_ns = po_rd_wait_r - 4'b1;\n    reset_scan_ns = reset_scan_r;\n    wrlvl_final_ns = wrlvl_final_r;\n    sm_ns = sm_r;\n    ocd_prech_req_ns= 1'b0;\n    \n    if (rst == 1'b1) begin\n      \n  \n      complex_oclkdelay_calib_done_ns = 1'b0;\n      complex_wrlvl_final_ns = 1'b0;\n      sm_ns = 3'd0;\n      lim_start_ns = 1'b0;\n      oclkdelay_calib_done_ns = 1'b0;\n      reset_scan_ns = 1'b1;\n      wrlvl_final_ns = 1'b0;\n    end else\n      \n  \n      case (sm_r)\n        3'd0: begin\n\t  byte_ns = {DQS_CNT_WIDTH{1'b0}};\n\t  if (oclkdelay_calib_start && ~oclkdelay_calib_done_r ||\n\t      complex_oclkdelay_calib_start && ~complex_oclkdelay_calib_done_r)\n          begin\n            sm_ns = 3'd1;\n\t    lim_start_ns = 1'b1;\n\t  end\n        end\t\n\n        3'd1:\n\t    sm_ns = 3'd2;\n\n       3'd2:begin\n\t  if (lim_done) begin\n\t    lim_start_ns = 1'b0;\n\t    sm_ns = 3'd3;\n\t    reset_scan_ns = 1'b0;\n\t  end\n        end\n\n\t3'd3:begin\n\t  if (scan_done) begin\n\t    reset_scan_ns = 1'b1;\n\t    sm_ns = 3'd4;\n\t  end\n        end\n\n       3'd4:begin\n\t  sm_ns = 3'd5;\n\t  ocd_prech_req_ns = 1'b1;\n       end\n\t\n       3'd5:begin\n\t if (prech_done) sm_ns = 3'd6;\n       end\n\t\n\t3'd6:begin\n\t  byte_ns = byte_r + ONE[DQS_CNT_WIDTH-1:0];\n\t  if ({1'b0, byte_r} == DQS_WIDTH[DQS_CNT_WIDTH:0] - ONE[DQS_WIDTH:0]) begin\n\t    byte_ns = {DQS_CNT_WIDTH{1'b0}};\n\t    po_rd_wait_ns = 4'd8;\n\t    sm_ns = 3'd7;\n\t  end else begin\n\t    sm_ns = 3'd1;\n\t    lim_start_ns = 1'b1;\n\t  end\n        end\n\n\t3'd7:\n\t  if (~|po_rd_wait_r && po_rdy)\n\t    if (|po_counter_read_val[5:0]) ocd_cntlr2stg2_dec_r = 1'b1;\n\t    else begin\n\t      if ({1'b0, byte_r} == DQS_WIDTH[DQS_CNT_WIDTH:0] - ONE[DQS_WIDTH:0]) begin\n\t        sm_ns = 3'd0;\n\t        oclkdelay_calib_done_ns= 1'b1;\n\t        wrlvl_final_ns = 1'b1;\n\t        if (complex_oclkdelay_calib_start) begin\n                  complex_oclkdelay_calib_done_ns = 1'b1;\n\t          complex_wrlvl_final_ns = 1'b1;\n\t        end\n\t      end else begin\n\t\tbyte_ns = byte_r + ONE[DQS_CNT_WIDTH-1:0];\n\t\tpo_rd_wait_ns = 4'd8;\n\t      end\n\t    end \n    \n      endcase \n  end ",
+        "  always @(posedge clk) sm_r <= #TCQ sm_ns;",
+        "  assign reset_scan = reset_scan_r;",
+        "  always @(posedge clk) reset_scan_r <= #TCQ reset_scan_ns;",
+        "  assign oclkdelay_calib_cnt = {1'b0, byte_r};",
+        "  always @(posedge clk) byte_r <= #TCQ byte_ns;",
+        "  always @(posedge clk) po_rd_wait_r <= #TCQ po_rd_wait_ns;",
+        "  input [8:0] po_counter_read_val;\n  reg ocd_cntlr2stg2_dec_r;\n  output ocd_cntlr2stg2_dec;\n  assign ocd_cntlr2stg2_dec = ocd_cntlr2stg2_dec_r;\n  input po_rdy;\n\n  reg [3:0] po_rd_wait_ns, po_rd_wait_r;",
+        "  assign phy_rddata_en_1 = phy_rddata_en_r1;\n  assign phy_rddata_en_2 = phy_rddata_en_r2;\n  assign phy_rddata_en_3 = phy_rddata_en_r3;",
+        "  always @(posedge clk) phy_rddata_en_r3 <= #TCQ phy_rddata_en_r2;",
+        "  always @(posedge clk) phy_rddata_en_r2 <= #TCQ phy_rddata_en_r1;",
+        "  always @(posedge clk) phy_rddata_en_r1 <= #TCQ prde;",
+        "  reg phy_rddata_en_r1, phy_rddata_en_r2, phy_rddata_en_r3;",
+        "  wire prde = complex_oclkdelay_calib_start ? prde_r2 : phy_rddata_en;",
+        "  always @(posedge clk) prde_r2 <= #TCQ prde_r1;",
+        "  always @(posedge clk) prde_r1 <= #TCQ phy_rddata_en;",
+        "  assign oclkdelay_calib_done = oclkdelay_calib_done_r;",
+        "  always @(posedge clk) oclkdelay_calib_done_r <= #TCQ oclkdelay_calib_done_ns;",
+        "  assign complex_oclkdelay_calib_done = complex_oclkdelay_calib_done_r;",
+        "  always @(posedge clk) complex_oclkdelay_calib_done_r <= #TCQ complex_oclkdelay_calib_done_ns;",
+        "  assign lim_start = lim_start_r;",
+        "  always @(posedge clk) lim_start_r <= #TCQ lim_start_ns;",
+        "  assign ocd_prech_req = ocd_prech_req_r;",
+        "  always @(posedge clk) ocd_prech_req_r <= #TCQ ocd_prech_req_ns;",
+        "  assign oclk_init_delay_done = 1'b1;",
+        "  assign complex_wrlvl_final = complex_wrlvl_final_r;",
+        "  assign wrlvl_final = wrlvl_final_r;",
+        "  always @(posedge clk) complex_wrlvl_final_r <= #TCQ complex_wrlvl_final_ns;",
+        "  always @(posedge clk) wrlvl_final_r <= #TCQ wrlvl_final_ns;"
+    ]
+}

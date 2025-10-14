@@ -1,0 +1,31 @@
+{
+    "line_num": [
+        [
+            128,
+            128
+        ],
+        [
+            125,
+            125
+        ],
+        [
+            122,
+            123
+        ],
+        [
+            109,
+            119
+        ],
+        [
+            105,
+            108
+        ]
+    ],
+    "blocks": [
+        "assign wrdata_out[DQ_WIDTH+:(2*nCK_PER_CLK-1)*DQ_WIDTH] = wrdata_in[DQ_WIDTH+:(2*nCK_PER_CLK-1)*DQ_WIDTH];",
+        "assign wrdata_out[0+:DQ_WIDTH] = wrdata_in[0+:DQ_WIDTH] ^ fi_xor_data[0+:DQ_WIDTH];",
+        "end\nendgenerate",
+        "    always @(posedge clk) begin\n      if (wrdata_en) begin\n        fi_xor_data[i*DQ_PER_DQS+:DQ_PER_DQS] <= {DQ_PER_DQS{1'b0}};\n      end\n      else if (fi_xor_we[i]) begin\n        fi_xor_data[i*DQ_PER_DQS+:DQ_PER_DQS] <= fi_xor_wrdata[i*DQ_PER_DQS+:DQ_PER_DQS];\n      end \n      else begin\n        fi_xor_data[i*DQ_PER_DQS+:DQ_PER_DQS] <= fi_xor_data[i*DQ_PER_DQS+:DQ_PER_DQS];\n      end\n    end",
+        "generate\nbegin\n  genvar i;\n  for (i = 0; i < DQS_WIDTH; i = i + 1) begin : assign_fi_xor_data"
+    ]
+}

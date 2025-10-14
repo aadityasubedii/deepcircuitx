@@ -1,0 +1,9 @@
+Module name: eth_receivecontrol.
+Module specification: 
+The `eth_receivecontrol` module is designed for managing Ethernet frame reception control within a network interface. It primarily deals with the detection and processing of valid and pause frames as per Ethernet standards. This module receives input clock signals, MTxClk and MRxClk, for transmitting and receiving operations, along with reset signals, RxReset and TxReset, to initialize the logic circuits. It processes incoming data (RxData) validated by the RxValid signal and detects frame boundaries using RxStartFrm and RxEndFrm. Other inputs include various status and control signals such as MAC address to verify the legitimacy of the frame and control signals like RxFlow to manage data flow. 
+
+The module outputs signals like Pause, which controls data transfer based on network conditions; ReceivedPauseFrm, indicating a recognized pause frame; AddressOK, confirming the validity of the frame address; and SetPauseTimer, initiating a countdown for pause time management. 
+
+Internally, the module uses signals such as ByteCnt to track the number of bytes received and various flags (like TypeLengthOK, AddressOK) to validate frame type, length, and address. It also maintains timers (PauseTimer and SlotTimer) for managing pause durations and transmission slots in response to network controls, using synchronized signals (PauseTimerEq0_sync1, PauseTimerEq0_sync2) to coordinate across different clock domains.
+
+The Verilog code is structured into blocks handling initialization of registers on reset, checking frame types, addresses, computing timer values, and updating status flags based on the byte counters. Reception control logic decides when to set or reset the output signals based on the combination of input conditions and internal states, ensuring precise control over frame reception and network traffic management.

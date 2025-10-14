@@ -1,0 +1,1 @@
+assign locked_next = ~|sync_count_next | locked;

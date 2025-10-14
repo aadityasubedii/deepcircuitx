@@ -1,0 +1,1 @@
+        assign data_hit_way[i]     = tag_rdata_way[i][TAG_WIDTH-1] &&                                                  

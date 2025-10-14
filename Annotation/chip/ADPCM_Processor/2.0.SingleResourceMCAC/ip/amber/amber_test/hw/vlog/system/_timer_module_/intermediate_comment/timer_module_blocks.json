@@ -1,0 +1,51 @@
+{
+    "line_num": [
+        [
+            372,
+            393
+        ],
+        [
+            325,
+            370
+        ],
+        [
+            272,
+            302
+        ],
+        [
+            132,
+            266
+        ],
+        [
+            124,
+            126
+        ],
+        [
+            104,
+            119
+        ],
+        [
+            102,
+            102
+        ],
+        [
+            101,
+            101
+        ],
+        [
+            97,
+            99
+        ]
+    ],
+    "blocks": [
+        "always @(posedge i_clk)\n    begin\n    timer0_int_reg_d1 <= timer0_int_reg;\n    timer1_int_reg_d1 <= timer1_int_reg;\n    timer2_int_reg_d1 <= timer2_int_reg;\n    \n    if ( timer0_int_reg && !timer0_int_reg_d1 )\n        begin\n        `TB_DEBUG_MESSAGE\n        $display(\"Timer Module Timer 0 Interrupt\"); \n        end\n    if ( timer1_int_reg && !timer1_int_reg_d1 )\n        begin\n        `TB_DEBUG_MESSAGE\n        $display(\"Timer Module Timer 1 Interrupt\"); \n        end\n    if ( timer2_int_reg && !timer2_int_reg_d1 )\n        begin\n        `TB_DEBUG_MESSAGE\n        $display(\"Timer Module Timer 2 Interrupt\"); \n        end\n    end        ",
+        "always @(posedge i_clk)\n    if ( wb_read_ack || wb_start_write )\n        begin\n        `TB_DEBUG_MESSAGE\n        \n        if ( wb_start_write )\n            $write(\"Write 0x%08x to   \", i_wb_dat);\n        else\n            $write(\"Read  0x%08x from \", o_wb_dat);\n            \n        case ( i_wb_adr[15:0] )\n            AMBER_TM_TIMER0_LOAD:\n                $write(\" Timer Module Timer 0 Load\"); \n            AMBER_TM_TIMER1_LOAD:\n                $write(\" Timer Module Timer 1 Load\"); \n            AMBER_TM_TIMER2_LOAD:\n                $write(\" Timer Module Timer 2 Load\"); \n            AMBER_TM_TIMER0_CTRL:\n                $write(\" Timer Module Timer 0 Control\"); \n            AMBER_TM_TIMER1_CTRL:\n                $write(\" Timer Module Timer 1 Control\"); \n            AMBER_TM_TIMER2_CTRL:\n                $write(\" Timer Module Timer 2 Control\"); \n            AMBER_TM_TIMER0_VALUE:\n                $write(\" Timer Module Timer 0 Value\"); \n            AMBER_TM_TIMER1_VALUE:\n                $write(\" Timer Module Timer 1 Value\"); \n            AMBER_TM_TIMER2_VALUE:\n                $write(\" Timer Module Timer 2 Value\"); \n            AMBER_TM_TIMER0_CLR:    \n                $write(\" Timer Module Timer 0 Clear\"); \n            AMBER_TM_TIMER1_CLR:         \n                $write(\" Timer Module Timer 1 Clear\"); \n            AMBER_TM_TIMER2_CLR:           \n                $write(\" Timer Module Timer 2 Clear\"); \n\n            default:\n                begin\n                $write(\" unknown Amber IC Register region\");\n                $write(\", Address 0x%08h\\n\", i_wb_adr); \n                `TB_ERROR_MESSAGE\n                end\n        endcase\n        \n        $write(\", Address 0x%08h\\n\", i_wb_adr); \n        end",
+        "always @( posedge i_clk )\n    if ( wb_start_read )\n        case ( i_wb_adr[15:0] )\n            AMBER_TM_TIMER0_LOAD: wb_rdata32 <= {16'd0, timer0_load_reg};\n            AMBER_TM_TIMER1_LOAD: wb_rdata32 <= {16'd0, timer1_load_reg};\n            AMBER_TM_TIMER2_LOAD: wb_rdata32 <= {16'd0, timer2_load_reg};\n            AMBER_TM_TIMER0_CTRL: wb_rdata32 <= {24'd0, \n                                               timer0_ctrl_reg[7:6], \n                                               2'd0, \n                                               timer0_ctrl_reg[3:2],\n                                               2'd0 \n                                              };\n            AMBER_TM_TIMER1_CTRL: wb_rdata32 <= {24'd0, \n                                               timer1_ctrl_reg[7:6], \n                                               2'd0, \n                                               timer1_ctrl_reg[3:2],\n                                               2'd0 \n                                              };\n            AMBER_TM_TIMER2_CTRL: wb_rdata32 <= {24'd0, \n                                               timer2_ctrl_reg[7:6], \n                                               2'd0, \n                                               timer2_ctrl_reg[3:2],\n                                               2'd0 \n                                              };\n            AMBER_TM_TIMER0_VALUE: wb_rdata32 <= {16'd0, timer0_value_reg[23:8]};\n            AMBER_TM_TIMER1_VALUE: wb_rdata32 <= {16'd0, timer1_value_reg[23:8]};\n            AMBER_TM_TIMER2_VALUE: wb_rdata32 <= {16'd0, timer2_value_reg[23:8]};\n        \n            default:               wb_rdata32 <= 32'h66778899;\n            \n        endcase",
+        "always @( posedge i_clk )\n    begin\n    if ( wb_start_write )\n        case ( i_wb_adr[15:0] )\n            \n            AMBER_TM_TIMER0_CTRL: timer0_ctrl_reg <= i_wb_dat[7:0];\n            AMBER_TM_TIMER1_CTRL: timer1_ctrl_reg <= i_wb_dat[7:0];\n            AMBER_TM_TIMER2_CTRL: timer2_ctrl_reg <= i_wb_dat[7:0];\n        endcase\n\n    \n    \n    \n    if ( wb_start_write && i_wb_adr[15:0] == AMBER_TM_TIMER0_LOAD )\n        begin\n        timer0_value_reg <= {i_wb_dat[15:0], 8'd0};\n        timer0_load_reg  <= i_wb_dat[15:0];\n        end\n    else if ( timer0_ctrl_reg[7] ) \n        begin\n        if ( timer0_value_reg == 24'd0 )\n            begin\n            if ( timer0_ctrl_reg[6] )  \n                timer0_value_reg <= {timer0_load_reg, 8'd0};\n            else    \n                timer0_value_reg <= 24'hffffff;\n            end\n        else \n            case ( timer0_ctrl_reg[3:2] )\n                2'b00:  timer0_value_reg <= (timer0_value_reg & 24'hffff00) - 9'd256;\n                2'b01:  timer0_value_reg <= (timer0_value_reg & 24'hfffff0) - 9'd16;\n                2'b10:  timer0_value_reg <=  timer0_value_reg               - 1'd1;\n                default: \n                    begin\n                    \n                    `TB_ERROR_MESSAGE\n                    $write(\"unknown Timer Module Prescale Value %d for Timer 0\", \n                           timer0_ctrl_reg[3:2]);\n                    \n                    end\n            endcase\n        end\n\n    \n    \n    \n    \n    if ( wb_start_write && i_wb_adr[15:0] == AMBER_TM_TIMER1_LOAD )\n        begin\n        timer1_value_reg <= {i_wb_dat[15:0], 8'd0};\n        timer1_load_reg  <= i_wb_dat[15:0];\n        end\n    else if ( timer1_ctrl_reg[7] ) \n        begin\n        if ( timer1_value_reg == 24'd0 )\n            begin\n            if ( timer1_ctrl_reg[6] )  \n                timer1_value_reg <= {timer1_load_reg, 8'd0};\n            else    \n                timer1_value_reg <= 24'hffffff;\n            end\n        else\n            case ( timer1_ctrl_reg[3:2] )\n                2'b00:  timer1_value_reg <= (timer1_value_reg & 24'hffff00) - 9'd256;\n                2'b01:  timer1_value_reg <= (timer1_value_reg & 24'hfffff0) - 9'd16;\n                2'b10:  timer1_value_reg <=  timer1_value_reg - 1'd1;\n                default: \n                    begin\n                    \n                    `TB_ERROR_MESSAGE\n                    $write(\"unknown Timer Module Prescale Value %d for Timer 1\", \n                           timer1_ctrl_reg[3:2]);\n                    \n                    end\n            endcase\n        end\n            \n\n\n    \n    \n    \n    if ( wb_start_write && i_wb_adr[15:0] == AMBER_TM_TIMER2_LOAD )\n        begin\n        timer2_value_reg <= {i_wb_dat[15:0], 8'd0};\n        timer2_load_reg  <= i_wb_dat[15:0];\n        end\n    else if ( timer2_ctrl_reg[7] ) \n        begin\n        if ( timer2_value_reg == 24'd0 )\n            begin\n            if ( timer2_ctrl_reg[6] )  \n                timer2_value_reg <= {timer2_load_reg, 8'd0};\n            else    \n                timer2_value_reg <= 24'hffffff;\n            end\n        else\n            case ( timer2_ctrl_reg[3:2] )\n                2'b00:  timer2_value_reg <= (timer2_value_reg & 24'hffff00) - 9'd256;\n                2'b01:  timer2_value_reg <= (timer2_value_reg & 24'hfffff0) - 9'd16;\n                2'b10:  timer2_value_reg <=  timer2_value_reg - 1'd1;\n                default: \n                    begin\n                    \n                    `TB_ERROR_MESSAGE\n                    $write(\"unknown Timer Module Prescale Value %d for Timer 2\", \n                           timer2_ctrl_reg[3:2]);\n                    \n                    end\n            endcase\n        end\n        \n        \n    \n    \n    \n    if ( wb_start_write && i_wb_adr[15:0] == AMBER_TM_TIMER0_CLR )\n        timer0_int_reg <= 1'd0;\n    else if ( timer0_value_reg == 24'd0 )\n        \n        timer0_int_reg <= 1'd1;\n\n    if ( wb_start_write && i_wb_adr[15:0] == AMBER_TM_TIMER1_CLR)\n        timer1_int_reg <= 1'd0;\n    else if ( timer1_value_reg == 24'd0 )\n        \n        timer1_int_reg <= 1'd1;\n\n    if ( wb_start_write && i_wb_adr[15:0] == AMBER_TM_TIMER2_CLR)\n        timer2_int_reg <= 1'd0;\n    else if ( timer2_value_reg == 24'd0 )\n        \n        timer2_int_reg <= 1'd1;\n        \n    end",
+        "assign o_timer_int = { timer2_int_reg,\n                       timer1_int_reg,\n                       timer0_int_reg };",
+        "generate\nif (WB_DWIDTH == 128) \n    begin : wb128\n    assign wb_wdata32   = i_wb_adr[3:2] == 2'd3 ? i_wb_dat[127:96] :\n                          i_wb_adr[3:2] == 2'd2 ? i_wb_dat[ 95:64] :\n                          i_wb_adr[3:2] == 2'd1 ? i_wb_dat[ 63:32] :\n                                                  i_wb_dat[ 31: 0] ;\n                                                                                                                                            \n    assign o_wb_dat    = {4{wb_rdata32}};\n    end\nelse\n    begin : wb32\n    assign wb_wdata32  = i_wb_dat;\n    assign o_wb_dat    = wb_rdata32;\n    end\nendgenerate",
+        "assign o_wb_ack = i_wb_stb && ( wb_start_write || wb_start_read_d1 );",
+        "assign o_wb_err = 1'd0;",
+        "always @( posedge i_clk )\n    wb_start_read_d1 <= wb_start_read;\n"
+    ]
+}

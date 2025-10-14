@@ -1,0 +1,17 @@
+      assign  p1_arb_en_i        =  p1_arb_en        ; 
+      assign  p1_cmd_clk_i       =  p1_cmd_clk       ; 
+      assign  p1_cmd_en_i        =  p1_cmd_en        ; 
+      assign  p1_cmd_instr_i     =  p1_cmd_instr     ; 
+      assign  p1_cmd_bl_i        =  p1_cmd_bl        ; 
+      assign  p1_cmd_byte_addr_i =  p1_cmd_byte_addr ; 
+      assign  p1_cmd_empty       =  p1_cmd_empty_i   ; 
+      assign  p1_cmd_full        =  p1_cmd_full_i    ; 
+      assign  p1_wr_clk_i        =  p1_wr_clk        ; 
+      assign  p1_wr_en_i         =  p1_wr_en         ; 
+      assign  p1_wr_mask_i       =  p1_wr_mask       ; 
+      assign  p1_wr_data_i       =  p1_wr_data       ; 
+      assign  p1_wr_full         =  p1_wr_full_i     ; 
+      assign  p1_wr_empty        =  p1_wr_empty_i    ; 
+      assign  p1_wr_count        =  p1_wr_count_i    ; 
+      assign  p1_wr_underrun     =  p1_wr_underrun_i ; 
+      assign  p1_wr_error        =  p1_wr_error_i    ; 

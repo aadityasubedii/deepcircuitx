@@ -1,0 +1,1 @@
+    initial mem_bank=0;

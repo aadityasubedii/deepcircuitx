@@ -1,0 +1,1 @@
+assign o_cmd_en = cmd_en_r && !i_cmd_full;

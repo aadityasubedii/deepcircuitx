@@ -1,0 +1,1 @@
+  assign take_action_oci_intr_mask_reg = write_strobe & oci_reg_01_addressed;

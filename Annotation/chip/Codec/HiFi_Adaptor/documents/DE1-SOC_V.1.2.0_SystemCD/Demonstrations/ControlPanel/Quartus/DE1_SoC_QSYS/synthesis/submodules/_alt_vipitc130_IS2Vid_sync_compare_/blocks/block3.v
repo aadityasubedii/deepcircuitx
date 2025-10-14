@@ -1,0 +1,1 @@
+assign remove_samples_next = (syncing_lines) ? remove_lines_next : h_count_remove < h_count_repeat;

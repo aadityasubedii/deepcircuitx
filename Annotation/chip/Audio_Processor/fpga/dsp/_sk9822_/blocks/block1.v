@@ -1,0 +1,1 @@
+    assign led_data = enabled ? shift[31] : 0;

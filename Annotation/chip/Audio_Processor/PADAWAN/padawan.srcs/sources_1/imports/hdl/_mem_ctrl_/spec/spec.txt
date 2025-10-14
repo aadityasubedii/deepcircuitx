@@ -1,0 +1,14 @@
+Module name: mem_ctrl
+
+Module specification: The `mem_ctrl` module encapsulates the control logic for a memory subsystem, executing operations such as play, record, and delete in a finite state machine architecture. It handles commands for these operations, and has an address handling mechanism for managing and deleting specific memory blocks.
+
+Inputs: 
+The module takes in a `clk_100MHz` signal for clock synchronization, a `rst` signal as a reset toggle, `playing[7:0]` & `recording[7:0]` as 8-bit vectors to determine active memory bank operations, `delete` & `delete_bank[2:0]` as delete signals, and `max_block[22:0]` as a 23-bit vector signal to track maximum memory blocks. 
+
+Outputs: 
+It provides `delete_clear` indicating delete procedure clearance, `RamCEn`, `RamOEn`, `RamWEn` as memory control signals, `write_zero` to initiate zero address writing, `get_data` & `data_ready` signals to manage data accessibility, `mix_data` to possibly indicate audio mixing, `addrblock44khz[22:0]` & `mem_block_addr[22:0]` as address signals for memory blocks and `mem_bank[2:0]` to indicate the currently active memory bank.
+
+Internal signals: 
+It also uses internal signals like `address_enable` for enabling addressing when recording or playing, `count[12:0]` for general timing, `pstate[4:0]` & `nstate[3:0]` to track the current and next state in a finite machine, `delay_done` to indicate end of delay, `counterEnable` & `increment` to manage counter operation, `pulse` as a heartbeat signal, `max_delete_block[22:0]` & `delete_address[22:0]` to manage delete operation, and `WEn_d1` to control the write process.
+
+For the code implementation, it follows a Finite State Machine architecture with different states like BANK, FLAG, BANK_ACK, INC_BLOCK, WAIT, DELETE, DELETE_ACK, DELETE_INC, ONECYCLE, ENTERDELETE, and LEAVEDELETE, that govern the operation of memory management. A series of `always` blocks are set up that manage the signals and state transitions with clock signals, conditional checks and operation methods. It also contains an internal delay mechanism for synchronizing operations. The module provides a comprehensive way of controlling a memory subsystem with efficient state management.

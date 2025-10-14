@@ -1,0 +1,15 @@
+Module name: mig_7series_v4_1_ddr_phy_ck_addr_cmd_delay. 
+
+Module specification: 
+
+The mig_7series_v4_1_ddr_phy_ck_addr_cmd_delay module is a key constituent of a Memory Interface Generator (MIG), specifically designed for controlling the address and command delay for a 7-series DDR (Double Data Rate) memory interface. 
+
+The functionality of this module is governed by several parameters viz., TCQ (Global Clock Period), tCK (DDR Clock Period), DQS_CNT_WIDTH, N_CTL_LANES (Number of Control Lanes) and SIM_CAL_OPTION (Simulation Calibration Option). These parameters tune aspects like cycle time, the number of control lanes, and the calibration choice between normal simulation and fast calibration.
+
+This module has three input ports: clk (which is the synchronization clock signal), rst (active high reset signal), and cmd_delay_start (the signal that initiates the command delay procedure). Generated from the system are six output registers namely, ctl_lane_cnt (an array holding count values for control lanes), po_stg2_f_incdec, po_en_stg2_f (used to control delay increment/decrement in stage 2 of 'f'), po_stg2_c_incdec, po_en_stg2_c (controlling delay increment/decrement in stage 2 of 'c') and po_ck_addr_cmd_delay_done (signal which shows the completion status of the command addressing timing delay).
+
+Internally, the module implements 13 signals and registers that include several constants for managing delay counts e.g., TAP_CNT_LIMIT, FREQ_REF_DIV, PHASER_TAP_RES, CALC_TAP_CNT, TAP_CNT, TAP_DEC and certain registers that store ongoing counts and flags such as delay_dec_done, delay_done_r1 to delay_done_r4, delay_cnt_r, delaydec_cnt_r, po_cnt_inc, po_cnt_dec, wait_cnt_r.
+
+The code structure is divided into a number of hardware simulation sections. Initially, all local parameters are defined followed by the declaration and initialization of logic for internal signals. Then in consecutive blocks, delay increment, decrement actions and the control signal values to steer them are handled. The logic for ‘increment’ and ‘decrement’ based on various delays and conditions in the module is described next, along with control logic for different stages of delay. Then, the maintenance of delay counts and decrement count registers, control lane count handling, delay decrement completion status, and its propagation through pipeline stages are systematically handled.
+
+The detailed design and operation of this module make it vital for achieving the control and management of DDR memory interface command and addressing delay, thus providing substantial control over overall system timing.

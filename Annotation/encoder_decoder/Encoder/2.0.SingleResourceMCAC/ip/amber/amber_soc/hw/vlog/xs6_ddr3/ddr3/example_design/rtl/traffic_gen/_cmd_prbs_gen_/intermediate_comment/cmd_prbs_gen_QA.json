@@ -1,0 +1,43 @@
+{
+    "gpt-message": [
+        {
+            "role": "system",
+            "content": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+        },
+        {
+            "role": "user",
+            "content": "Name of the module and its functionality is as follows: \nModule name: cmd_prbs_gen.\nExplanation: The module 'cmd_prbs_gen' generates pseudo-random binary sequences (PRBS) based on different configurations specified by parameter settings. It operates with different widths and types of operations depending on the PRBS command (e.g., \"ADDRESS\", \"INSTR\", \"BLEN\"). The core mechanism relies on linear feedback shift registers (LFSRs) configured differently for generating sequences of varying lengths (32-bit, 64-bit, and company defined). The LFSR seeds and taps can be initialized and influenced by external inputs, and the generated sequences are output through the 'prbs_o' port. This module is configurable for different FPGA families and address/data widths, making it versatile for various applications requiring PRBS, such as communication systems, data integrity checks, and simulation tests."
+        },
+        {
+            "role": "user",
+            "content": "Input and output ports and their explanation is as follows: \nInput ports: clk_i, prbs_seed_init, clk_en, prbs_seed_i.\nExplanation: \n- `clk_i`: Clock input. It is the primary clock signal that drives the sequential logic inside the module.\n- `prbs_seed_init`: Seed initialization signal. When asserted (high), it allows for initializing the linear feedback shift register (LFSR) with the value provided on `prbs_seed_i`. \n- `clk_en`: Clock enable signal. Enables the update of the LFSR when asserted, allowing the generation of the pseudo-random binary sequence to proceed.\n- `prbs_seed_i`: PRBS Seed input. This input provides the initial seed value for the LFSR when `prbs_seed_init` is asserted.\n\nOutput ports: prbs_o.\nExplanation:\n- `prbs_o`: PRBS Output. This port outputs the generated pseudo-random binary sequence, which is the result of the LFSR computations based on the initialized seed and configured feedback taps."
+        },
+        {
+            "role": "user",
+            "content": "Internal signals and their explanation is as follows: \nInternal signals: ZEROS, prbs, lfsr_q. \nExplanation:\n- `ZEROS`: This is a wire of width equal to `ADDR_WIDTH - 1` initialized to be all zeros. It is used mainly to assist in correct bit width handling and to provide zero-padding in the generation of PRBS sequences where necessary. \n- `prbs`: This is a register that holds the current output of the pseudo-random binary sequence being generated. It reflects the final computed values based on the LFSR outputs and selective masking or bit-operations determined by other configuration parameters. `prbs` ultimately feeds the output port `prbs_o`.\n- `lfsr_q`: This is the main linear feedback shift register (LFSR) used in generating the PRBS. It is of variable width depending on the configuration (`PRBS_WIDTH`). `lfsr_q` is directly manipulated through feedback taps and shifting to create a diverse set of PRBS patterns. The computations on `lfsr_q` are triggered by clock inputs and optional external controls, and its contents are selectively loaded into `prbs` based on other parameter configurations."
+        }
+    ],
+    "claude-message": [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+                },
+                {
+                    "type": "text",
+                    "text": "Name of the module and its functionality is as follows: \nModule name: cmd_prbs_gen.\nExplanation: The module 'cmd_prbs_gen' generates pseudo-random binary sequences (PRBS) based on different configurations specified by parameter settings. It operates with different widths and types of operations depending on the PRBS command (e.g., \"ADDRESS\", \"INSTR\", \"BLEN\"). The core mechanism relies on linear feedback shift registers (LFSRs) configured differently for generating sequences of varying lengths (32-bit, 64-bit, and company defined). The LFSR seeds and taps can be initialized and influenced by external inputs, and the generated sequences are output through the 'prbs_o' port. This module is configurable for different FPGA families and address/data widths, making it versatile for various applications requiring PRBS, such as communication systems, data integrity checks, and simulation tests."
+                },
+                {
+                    "type": "text",
+                    "text": "Input and output ports and their explanation is as follows: \nInput ports: clk_i, prbs_seed_init, clk_en, prbs_seed_i.\nExplanation: \n- `clk_i`: Clock input. It is the primary clock signal that drives the sequential logic inside the module.\n- `prbs_seed_init`: Seed initialization signal. When asserted (high), it allows for initializing the linear feedback shift register (LFSR) with the value provided on `prbs_seed_i`. \n- `clk_en`: Clock enable signal. Enables the update of the LFSR when asserted, allowing the generation of the pseudo-random binary sequence to proceed.\n- `prbs_seed_i`: PRBS Seed input. This input provides the initial seed value for the LFSR when `prbs_seed_init` is asserted.\n\nOutput ports: prbs_o.\nExplanation:\n- `prbs_o`: PRBS Output. This port outputs the generated pseudo-random binary sequence, which is the result of the LFSR computations based on the initialized seed and configured feedback taps."
+                },
+                {
+                    "type": "text",
+                    "text": "Internal signals and their explanation is as follows: \nInternal signals: ZEROS, prbs, lfsr_q. \nExplanation:\n- `ZEROS`: This is a wire of width equal to `ADDR_WIDTH - 1` initialized to be all zeros. It is used mainly to assist in correct bit width handling and to provide zero-padding in the generation of PRBS sequences where necessary. \n- `prbs`: This is a register that holds the current output of the pseudo-random binary sequence being generated. It reflects the final computed values based on the LFSR outputs and selective masking or bit-operations determined by other configuration parameters. `prbs` ultimately feeds the output port `prbs_o`.\n- `lfsr_q`: This is the main linear feedback shift register (LFSR) used in generating the PRBS. It is of variable width depending on the configuration (`PRBS_WIDTH`). `lfsr_q` is directly manipulated through feedback taps and shifting to create a diverse set of PRBS patterns. The computations on `lfsr_q` are triggered by clock inputs and optional external controls, and its contents are selectively loaded into `prbs` based on other parameter configurations."
+                }
+            ]
+        }
+    ]
+}

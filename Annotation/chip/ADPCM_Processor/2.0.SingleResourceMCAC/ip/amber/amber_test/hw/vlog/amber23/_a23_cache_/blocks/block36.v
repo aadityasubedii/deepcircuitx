@@ -1,0 +1,1 @@
+assign read_miss        = enable && !i_write_enable && !(hit || wb_read_buf_hit);

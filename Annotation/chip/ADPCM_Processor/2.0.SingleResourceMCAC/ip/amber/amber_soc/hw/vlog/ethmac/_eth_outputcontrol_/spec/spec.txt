@@ -1,0 +1,9 @@
+Module name: eth_outputcontrol
+Module specification: 
+The 'eth_outputcontrol' module is a sequential logic unit used in Ethernet control for controlling the output operations. Its primary functionality includes writing operations based on several input control signals and thus controlling the output. It operates in a synchronous manner governed by a clock signal.
+
+The module has 8 input and 2 output signals. Input signals are as follows: Clk signal for clock synchronizations, Reset signal as an active high reset input, InProgress indicates the operation status, ShiftedBit carries the value of shifted bit during operations, 7-bit BitCounter to count the number of processed bits, and WriteOp, NoPre, and MdcEn_n are control signals to control the operations based on different requirements. Output signals included are Mdo showing the result of the processing stage and the MdoEn controlling the Mdo's status.
+
+The module uses 5 internal signals: SerialEn, MdoEn_2d, MdoEn_d, Mdo_2d, Mdo_d. SerialEn determines the status of the serialization operation. The rest of the signals each follow stages in a pipeline beginning with MdoEn_2d and Mdo_2d, up-to MdoEn and Mdo. They handle the carry of control and data signals respectively through the pipeline when MdcEn_n is active, setting the stage for each operational bit.
+
+The module is divided into different separate blocks. The assign statement for SerialEn defines its functionality based on the input control signals. Two 'always' blocks defined are responsible for the establishment of the two waves of the pipelining operation. They are sensitive to positive clock edge and reset signal, controlling the flow of signals across different stages in the pipeline upon each clock cycle, ensuring the correct sequence of operations. In case of reset being active, these control signals are reset. The module overall provides a reliable logic design for output control in an Ethernet-based device.

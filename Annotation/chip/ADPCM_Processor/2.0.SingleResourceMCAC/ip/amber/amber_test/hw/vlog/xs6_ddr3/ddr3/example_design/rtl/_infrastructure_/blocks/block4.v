@@ -1,0 +1,1 @@
+  assign async_rst = sys_rst | ~powerup_pll_locked;

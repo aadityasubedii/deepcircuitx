@@ -1,0 +1,56 @@
+{
+    "line_num": [
+        [
+            123,
+            123
+        ],
+        [
+            106,
+            121
+        ],
+        [
+            91,
+            103
+        ],
+        [
+            90,
+            90
+        ],
+        [
+            88,
+            88
+        ],
+        [
+            79,
+            87
+        ],
+        [
+            78,
+            78
+        ],
+        [
+            43,
+            77
+        ],
+        [
+            41,
+            41
+        ],
+        [
+            25,
+            40
+        ]
+    ],
+    "blocks": [
+        "  assign o_envelope = r_envelope;",
+        "  always @(*) begin\n    case (r_envelope_index)\n      4'd00: r_envelope = 'd10*2;\n      4'd01: r_envelope = 'd10*2;\n      4'd02: r_envelope = 'd10*2;\n      4'd03: r_envelope = 'd6*2;\n      4'd04: r_envelope = 'd6*2;\n      4'd05: r_envelope = 'd6*2;\n      4'd06: r_envelope = 'd4*2;\n      4'd07: r_envelope = 'd4*2;\n      4'd08: r_envelope = 'd2*2;\n      4'd09: r_envelope = 'd0;\n\n      default: r_envelope = 0;\n    endcase\n  end",
+        "  always @(posedge i_clk) begin\n    if (i_rst) begin\n      r_envelope_index <= 0;\n    end else if (r_new_note) begin\n      r_envelope_index <= 0;\n    end else if (i_tick_stb) begin\n      if (r_envelope_index == 4'd9) begin\n        r_envelope_index <= 4'd9;\n      end else begin\n        r_envelope_index <= r_envelope_index + 1;\n      end\n    end\n  end",
+        "  reg [3:0] r_envelope_index = 0;",
+        "  assign o_phase_delta = r_phase_delta;",
+        "  wire   [31:0]  r_phase_delta;\n  rom_async #(\n    .WIDTH(32),\n    .DEPTH(4),\n    .FILE(NOISE_TABLE_FILE)\n  ) noise_table (\n    .addr(r_note),\n    .data(r_phase_delta)\n  );",
+        "",
+        "  always @(*) begin\n    case (r_note_index)\n      5'd00: begin r_note = 2'd0;  r_note_len = note_len(30); end\n      5'd01: begin r_note = 2'd0;  r_note_len = note_len(30); end\n      5'd02: begin r_note = 2'd0;  r_note_len = note_len(30); end\n      5'd03: begin r_note = 2'd0;  r_note_len = note_len(30); end\n\n      5'd04: begin r_note = 2'd0;  r_note_len = note_len(22); end\n      5'd05: begin r_note = 2'd2;  r_note_len = note_len(2); end\n      5'd06: begin r_note = 2'd1;  r_note_len = note_len(2); end\n      5'd07: begin r_note = 2'd2;  r_note_len = note_len(2); end\n      5'd08: begin r_note = 2'd1;  r_note_len = note_len(2); end\n\n      5'd09: begin r_note = 2'd1;  r_note_len = note_len(2); end\n      5'd10: begin r_note = 2'd3;  r_note_len = note_len(2); end\n      5'd11: begin r_note = 2'd2;  r_note_len = note_len(2); end\n      5'd12: begin r_note = 2'd3;  r_note_len = note_len(2); end\n\n      5'd13: begin r_note = 2'd1;  r_note_len = note_len(2); end\n      5'd14: begin r_note = 2'd3;  r_note_len = note_len(2); end\n      5'd15: begin r_note = 2'd2;  r_note_len = note_len(2); end\n      5'd16: begin r_note = 2'd3;  r_note_len = note_len(2); end\n\n      5'd17: begin r_note = 2'd1;  r_note_len = note_len(2); end\n      5'd18: begin r_note = 2'd3;  r_note_len = note_len(2); end\n      5'd19: begin r_note = 2'd2;  r_note_len = note_len(2); end\n      5'd20: begin r_note = 2'd3;  r_note_len = note_len(2); end\n\n      5'd21: begin r_note = 2'd1;  r_note_len = note_len(2); end\n      5'd22: begin r_note = 2'd3;  r_note_len = note_len(2); end\n      5'd23: begin r_note = 2'd2;  r_note_len = note_len(2); end\n\n      default: begin r_note = 2'd0;   r_note_len = note_len(30); end\n    endcase\n  end",
+        "  wire r_new_note = i_note_stb & (r_duration_count == r_note_len);",
+        "  always @(posedge i_clk) begin\n    if (i_rst) begin\n      r_note_index <= 0;\n      r_duration_count <= 0;\n    end else if (i_note_stb) begin\n      if (r_duration_count == r_note_len) begin\n        r_duration_count <= 0;\n        r_note_index <= r_note_index + 1;\n        if (r_note_index == 5'd23) begin\n          r_note_index <= 5'd0;\n        end\n      end else begin\n        r_duration_count <= r_duration_count + 1;\n      end\n    end\n  end"
+    ]
+}

@@ -1,0 +1,1 @@
+assign found_edge	= last_test_clk ^ cur_test_clk;

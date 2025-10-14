@@ -1,0 +1,1 @@
+assign o_wb_ack = i_wb_stb && ( wb_start_write || wb_start_read_d1 );

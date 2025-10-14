@@ -1,0 +1,1 @@
+    assign mc_odt[0] = mc_aux_out0[1] | mc_aux_out_r[0] | mc_aux_out_r_1[0] | mc_aux_out_r_2[0] ;

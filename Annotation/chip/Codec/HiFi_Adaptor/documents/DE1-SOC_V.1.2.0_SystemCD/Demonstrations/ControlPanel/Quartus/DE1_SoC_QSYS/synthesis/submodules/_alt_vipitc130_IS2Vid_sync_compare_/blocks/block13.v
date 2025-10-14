@@ -1,0 +1,1 @@
+assign sof_cvo_int = sof_cvo & ~sof_cvo_reg;

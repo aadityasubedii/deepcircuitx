@@ -1,0 +1,1 @@
+assign audio_input = shift_in * volume_control;

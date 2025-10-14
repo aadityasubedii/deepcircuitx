@@ -1,0 +1,1 @@
+assign wdp_valid_o = wdp_valid;

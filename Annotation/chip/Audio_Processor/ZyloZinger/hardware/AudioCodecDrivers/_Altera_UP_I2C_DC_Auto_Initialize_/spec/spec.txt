@@ -1,0 +1,33 @@
+Module name: Altera_UP_I2C_DC_Auto_Initialize. 
+
+Module specification: This Verilog module is designed to perform automatic initialization operation of an I2C-based system using a tightly controlled state machine. Functionality includes generating start/stop data bits, handling byte transfer, managing error states, and tracking initialization progress. 
+
+The module has the following input ports: 
+
+1. clk: This is the system clock input, which is used to synchronize the steps in the state machine.
+
+2. reset: Resets the state machine to its initial state.
+
+3. clear_error: Clears the auto initialization error signal when set to high.
+
+4. ack: This indicates that the current transfer is complete.
+
+5. transfer_complete: Signaling that data transfer cycle is completed.
+
+Moreover, it has the following output ports:
+
+1. data_out: This 8-bit bus outputs the data being transferred during automatic initialization.
+
+2. transfer_data: Indicates that there is data ready to be transferred.
+
+3. send_start_bit: Signal that triggers the start of transfer of a data bit in sync with the clock signal.
+
+4. send_stop_bit: This signal sets the stop of the data bit transfer.
+
+5. auto_init_complete: Signal indicating the completion of the auto initialization
+
+6. auto_init_error: Indicates errors occurred during the initialization process.
+
+Internally, the module leverages various signals representing states of the machine states, ROM addresses, data, and control signals. The state machine has different states starting from 'AUTO_STATE_0_CHECK_STATUS' to 'AUTO_STATE_8_DONE'. Parameters 'MIN_ROM_ADDRESS' and 'MAX_ROM_ADDRESS' define the address limits of the ROM that are interfaced during the initialization. The signal 'change_state' determines when to move to the next state.
+
+The module is mainly made up of always blocks that update the state of the machine and output signals based on clock edges providing it specific synchronization. An 'always @(*)' block is used to assign the next state based on the current state. The initialization parameters and data for the specific hardware are represented through a case statement within an always block.

@@ -1,0 +1,1 @@
+  assign trc_on = trc_ctrl[1] & (trc_ctrl[9] | not_in_debug_mode);

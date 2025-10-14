@@ -1,0 +1,1 @@
+assign ex_read_hit      = exclusive_access && !i_write_enable && (hit || wb_read_buf_hit);

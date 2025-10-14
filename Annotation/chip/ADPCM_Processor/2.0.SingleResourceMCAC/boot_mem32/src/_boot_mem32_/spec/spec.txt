@@ -1,0 +1,9 @@
+Module name: boot_mem32.
+
+Module specification: The 'boot_mem32' module serves as a simulated memory system for a bootloader. It interfaces with the Wishbone bus, indicated by the prefix "i_wb" on many of its inputs and outputs. The module facilitates read and write operations upon receiving the required control signals. A debug mode can be toggled, introducing probable 'jitter' - a kind of randomness to simulate real-world situations. Depending on predefined conditions, the memory system interacts with either a Xilinx FPGA or a generic SRAM.
+
+Input ports include 'i_wb_clk' (the clock signal), 'i_wb_adr' (the memory address), 'i_wb_sel' (the selection signal), 'i_wb_we' (write enable signal), 'i_wb_dat' (data input bus), 'i_wb_cyc' (indicating an active bus cycle), and 'i_wb_stb' (the strobe signal). The output ports are 'o_wb_dat' (the data out bus) ,'o_wb_ack' (an acknowledgment signal), and 'o_wb_err' (an output error signal which is always tied to 0 in this module indicating that there's no error).
+
+Internally, the module operates using several signals, including 'start_write' and 'start_read' to indicate the beginning of memory operations, 'jitter_r' for introducing randomness in debug mode, registered versions of 'start_read' signal which are synchronized with the clock, 'byte_enable' for byte selection in memory operations, 'read_data' to hold the data that has been read from memory, 'write_data' to hold the data to be written to the memory, and 'address' derived from 'i_wb_adr' for the memory address for operations.
+
+The code is divided into several major blocks: declaration of signals and parameters, initialization of ports and wires, conditional compilation blocks for introducing jitter in debug mode, acknowledgment signal definition, and memory module instantiation for memory operations.

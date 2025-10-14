@@ -1,0 +1,96 @@
+{
+    "line_num": [
+        [
+            547,
+            550
+        ],
+        [
+            543,
+            546
+        ],
+        [
+            534,
+            540
+        ],
+        [
+            521,
+            527
+        ],
+        [
+            520,
+            520
+        ],
+        [
+            519,
+            519
+        ],
+        [
+            518,
+            518
+        ],
+        [
+            467,
+            515
+        ],
+        [
+            452,
+            464
+        ],
+        [
+            440,
+            449
+        ],
+        [
+            330,
+            438
+        ],
+        [
+            243,
+            258
+        ],
+        [
+            220,
+            226
+        ],
+        [
+            200,
+            217
+        ],
+        [
+            187,
+            189
+        ],
+        [
+            164,
+            175
+        ],
+        [
+            58,
+            61
+        ],
+        [
+            51,
+            55
+        ]
+    ],
+    "blocks": [
+        "  always @(fifo_EF)\n    begin\n      dataavailable = ~fifo_EF;\n    end",
+        "  assign r_ena = sim_r_ena;\n  assign t_ena = sim_t_ena;\n  assign t_dat = sim_t_dat;\n  assign t_pause = sim_t_pause;",
+        "  always @(posedge clk)\n    begin\n      sim_t_pause <= 1'b0;\n      sim_t_ena <= 1'b0;\n      sim_t_dat <= t_dav ? r_dat : {8{r_val}};\n      sim_r_ena <= 1'b0;\n    end",
+        "  always @(posedge clk or negedge rst_n)\n    begin\n      if (rst_n == 0)\n          readyfordata <= 0;\n      else \n        readyfordata <= ~fifo_FF;\n    end",
+        "  assign av_readdata = read_0 ? { {9{1'b0}},rfifo_full,rfifo_used,rvalid,woverflow,~fifo_FF,~fifo_EF,1'b0,ac,ipen_AE,ipen_AF,fifo_rdata } : { {9{1'b0}},(7'h40 - {fifo_FF,wfifo_used}),rvalid,woverflow,~fifo_FF,~fifo_EF,1'b0,ac,ipen_AE,ipen_AF,{6{1'b0}},ien_AE,ien_AF };",
+        "  assign fifo_rd = (av_chipselect & ~av_read_n & av_waitrequest & ~av_address) ? ~fifo_EF : 1'b0;",
+        "  assign fifo_wdata = av_writedata[7 : 0];",
+        "  always @(posedge clk or negedge rst_n)\n    begin\n      if (rst_n == 0)\n        begin\n          fifo_AE <= 1'b0;\n          fifo_AF <= 1'b0;\n          fifo_wr <= 1'b0;\n          rvalid <= 1'b0;\n          read_0 <= 1'b0;\n          ien_AE <= 1'b0;\n          ien_AF <= 1'b0;\n          ac <= 1'b0;\n          woverflow <= 1'b0;\n          av_waitrequest <= 1'b1;\n        end\n      else \n        begin\n          fifo_AE <= {fifo_FF,wfifo_used} <= 8;\n          fifo_AF <= (7'h40 - {rfifo_full,rfifo_used}) <= 8;\n          fifo_wr <= 1'b0;\n          read_0 <= 1'b0;\n          av_waitrequest <= ~(av_chipselect & (~av_write_n | ~av_read_n) & av_waitrequest);\n          if (activity)\n              ac <= 1'b1;\n          \n          if (av_chipselect & ~av_write_n & av_waitrequest)\n              \n              if (av_address)\n                begin\n                  ien_AF <= av_writedata[0];\n                  ien_AE <= av_writedata[1];\n                  if (av_writedata[10] & ~activity)\n                      ac <= 1'b0;\n                end\n              else \n                begin\n                  fifo_wr <= ~fifo_FF;\n                  woverflow <= fifo_FF;\n                end\n          \n          if (av_chipselect & ~av_read_n & av_waitrequest)\n            begin\n              \n              if (~av_address)\n                  rvalid <= ~fifo_EF;\n              read_0 <= ~av_address;\n            end\n        end\n    end",
+        "  always @(posedge clk or negedge rst_n)\n    begin\n      if (rst_n == 0)\n        begin\n          r_val <= 1'b0;\n          t_dav <= 1'b1;\n        end\n      else \n        begin\n          r_val <= r_ena & ~wfifo_empty;\n          t_dav <= ~rfifo_full;\n        end\n    end",
+        "  always @(posedge clk or negedge rst_n)\n    begin\n      if (rst_n == 0)\n          pause_irq <= 1'b0;\n      else \n      if (t_pause & ~fifo_EF)\n          pause_irq <= 1'b1;\n      else if (read_0)\n          pause_irq <= 1'b0;\n    end",
+        "\nmodule DE1_SoC_QSYS_jtag_uart (\n                                \n                                 av_address,\n                                 av_chipselect,\n                                 av_read_n,\n                                 av_write_n,\n                                 av_writedata,\n                                 clk,\n                                 rst_n,\n\n                                \n                                 av_irq,\n                                 av_readdata,\n                                 av_waitrequest,\n                                 dataavailable,\n                                 readyfordata\n                              )\n   ;\n\n  output           av_irq;\n  output  [ 31: 0] av_readdata;\n  output           av_waitrequest;\n  output           dataavailable;\n  output           readyfordata;\n  input            av_address;\n  input            av_chipselect;\n  input            av_read_n;\n  input            av_write_n;\n  input   [ 31: 0] av_writedata;\n  input            clk;\n  input            rst_n;\n\n\nreg              ac;\nwire             activity;\nwire             av_irq;\nwire    [ 31: 0] av_readdata;\nreg              av_waitrequest;\nreg              dataavailable;\nreg              fifo_AE;\nreg              fifo_AF;\nwire             fifo_EF;\nwire             fifo_FF;\nwire             fifo_clear;\nwire             fifo_rd;\nwire    [  7: 0] fifo_rdata;\nwire    [  7: 0] fifo_wdata;\nreg              fifo_wr;\nreg              ien_AE;\nreg              ien_AF;\nwire             ipen_AE;\nwire             ipen_AF;\nreg              pause_irq;\nwire    [  7: 0] r_dat;\nwire             r_ena;\nreg              r_val;\nwire             rd_wfifo;\nreg              read_0;\nreg              readyfordata;\nwire             rfifo_full;\nwire    [  5: 0] rfifo_used;\nreg              rvalid;\nreg              sim_r_ena;\nreg              sim_t_dat;\nreg              sim_t_ena;\nreg              sim_t_pause;\nwire    [  7: 0] t_dat;\nreg              t_dav;\nwire             t_ena;\nwire             t_pause;\nwire             wfifo_empty;\nwire    [  5: 0] wfifo_used;\nreg              woverflow;\nwire             wr_rfifo;\n  \n  assign rd_wfifo = r_ena & ~wfifo_empty;\n  assign wr_rfifo = t_ena & ~rfifo_full;\n  assign fifo_clear = ~rst_n;\n  DE1_SoC_QSYS_jtag_uart_scfifo_w the_DE1_SoC_QSYS_jtag_uart_scfifo_w\n    (\n      .clk         (clk),\n      .fifo_FF     (fifo_FF),\n      .fifo_clear  (fifo_clear),\n      .fifo_wdata  (fifo_wdata),\n      .fifo_wr     (fifo_wr),\n      .r_dat       (r_dat),\n      .rd_wfifo    (rd_wfifo),\n      .wfifo_empty (wfifo_empty),\n      .wfifo_used  (wfifo_used)\n    );\n\n  DE1_SoC_QSYS_jtag_uart_scfifo_r the_DE1_SoC_QSYS_jtag_uart_scfifo_r\n    (\n      .clk        (clk),\n      .fifo_EF    (fifo_EF),\n      .fifo_clear (fifo_clear),\n      .fifo_rd    (fifo_rd),\n      .fifo_rdata (fifo_rdata),\n      .rfifo_full (rfifo_full),\n      .rfifo_used (rfifo_used),\n      .rst_n      (rst_n),\n      .t_dat      (t_dat),\n      .wr_rfifo   (wr_rfifo)\n    );\n\n  assign ipen_AE = ien_AE & fifo_AE;\n  assign ipen_AF = ien_AF & (pause_irq | fifo_AF);\n  assign av_irq = ipen_AE | ipen_AF;",
+        "module DE1_SoC_QSYS_jtag_uart_scfifo_r (\n                                         \n                                          clk,\n                                          fifo_clear,\n                                          fifo_rd,\n                                          rst_n,\n                                          t_dat,\n                                          wr_rfifo,\n\n                                         \n                                          fifo_EF,\n                                          fifo_rdata,\n                                          rfifo_full,\n                                          rfifo_used\n                                       )\n;",
+        "  assign fifo_EF = bytes_left == 32'b0;\n  assign rfifo_full = bytes_left > 7'h40;\n  assign rfifo_entries = (rfifo_full) ? 7'h40 : bytes_left;\n  assign rfifo_used = rfifo_entries[5 : 0];\n  assign new_rom = 1'b0;\n  assign num_bytes = 32'b0;\n  assign fifo_rdata = 8'b0;",
+        "  always @(posedge clk or negedge rst_n)\n    begin\n      if (rst_n == 0)\n        begin\n          bytes_left <= 32'h0;\n          fifo_rd_d <= 1'b0;\n        end\n      else \n        begin\n          fifo_rd_d <= fifo_rd;\n          \n          if (fifo_rd_d)\n              bytes_left <= bytes_left - 1'b1;\n          \n          if (new_rom)\n              bytes_left <= num_bytes;\n        end\n    end",
+        "reg     [ 31: 0] bytes_left;\nwire             fifo_EF;\nreg              fifo_rd_d;",
+        "module DE1_SoC_QSYS_jtag_uart_sim_scfifo_r (\n                                             \n                                              clk,\n                                              fifo_rd,\n                                              rst_n,\n\n                                             \n                                              fifo_EF,\n                                              fifo_rdata,\n                                              rfifo_full,\n                                              rfifo_used\n                                           )",
+        "  assign wfifo_used = {6{1'b0}};\n  assign r_dat = {8{1'b0}};\n  assign fifo_FF = 1'b0;\n  assign wfifo_empty = 1'b1;",
+        "  always @(posedge clk)\n    begin\n      if (fifo_wr)\n          $write(\"%c\", fifo_wdata);\n    end"
+    ]
+}

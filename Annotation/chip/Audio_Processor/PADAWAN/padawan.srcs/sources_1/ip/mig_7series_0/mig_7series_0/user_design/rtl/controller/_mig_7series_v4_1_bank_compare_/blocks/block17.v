@@ -1,0 +1,1 @@
+  always @(posedge clk) req_row_r_lcl <= #TCQ req_row_ns;

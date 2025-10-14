@@ -1,0 +1,1 @@
+        assign new_sample = count_valids == (NUMBER_OF_COLOUR_PLANES - 1);

@@ -1,0 +1,31 @@
+{
+    "line_num": [
+        [
+            92,
+            102
+        ],
+        [
+            60,
+            90
+        ],
+        [
+            48,
+            58
+        ],
+        [
+            13,
+            18
+        ],
+        [
+            7,
+            10
+        ]
+    ],
+    "blocks": [
+        "    always @(posedge clk or posedge reset) begin\n        if (reset) begin\n            o_ready <= 1'b1;\n        end else if (o_valid && o_ready) begin\n            $write(\"l = %08h / r = %08h\\n\",  o_left, o_right);\n            o_ready <= 1'b0;\n            repeat(4) @(posedge clk);\n            o_ready <= 1'b1;\n            outlet_count += 2;\n        end\n    end",
+        "    initial begin\n\n        o_ready <= 1'b0;\n        i_valid <= 1'b0;\n        reset = 1'b1;\n        repeat(2) @(posedge clk);\n\n        reset = 1'b0;\n        repeat(2) @(posedge clk);\n\n        \n        intake(1'b1, 32'h00010000);\n        intake(1'b0, 32'h1fed1fed);\n\n        intake(1'b1, 32'h2eef2eef);\n        intake(1'b0, 32'h33333333);\n\n        intake(1'b1, 32'h12345678);\n        intake(1'b0, 32'h1fed1fed);\n\n        intake(1'b1, 32'h99911223);\n        intake(1'b0, 32'hABCDEF01);\n\n        intake(1'b1, 32'h55555555);\n        intake(1'b0, 32'h44444444);\n\n        wait (intake_count != outlet_count) @(posedge clk);\n\n        $finish();\n\n    end",
+        "    task intake(input is_left, input reg [31:0] value);\n        begin\n            i_valid <= 1'b1;\n            i_is_left <= is_left;\n            i_audio <= value;\n            wait (i_ready) @(posedge clk);\n            i_valid <= 1'b0;\n            @(posedge clk);\n            intake_count++;\n        end\n    endtask",
+        "    initial begin\n        clk = 1'b0;\n        forever begin\n            #(CLK_TIME / 2) clk = ~clk;\n        end\n    end",
+        "    initial begin\n        $dumpfile(\"stereo_audio_parallelizer_tb.vcd\");\n        $dumpvars;\n    end"
+    ]
+}

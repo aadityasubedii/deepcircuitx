@@ -1,0 +1,1 @@
+  assign q_has_priority = q_has_priority_r;

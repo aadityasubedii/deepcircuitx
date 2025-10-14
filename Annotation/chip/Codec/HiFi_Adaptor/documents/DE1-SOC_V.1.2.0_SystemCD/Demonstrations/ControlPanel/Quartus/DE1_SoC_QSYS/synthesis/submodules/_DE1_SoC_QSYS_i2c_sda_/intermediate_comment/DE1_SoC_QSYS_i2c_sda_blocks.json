@@ -1,0 +1,31 @@
+{
+    "line_num": [
+        [
+            77,
+            83
+        ],
+        [
+            76,
+            76
+        ],
+        [
+            75,
+            75
+        ],
+        [
+            66,
+            72
+        ],
+        [
+            57,
+            63
+        ]
+    ],
+    "blocks": [
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n          data_dir <= 0;\n      else if (chipselect && ~write_n && (address == 1))\n          data_dir <= writedata;\n    end",
+        "  assign data_in = bidir_port;",
+        "  assign bidir_port = data_dir ? data_out : 1'bZ;",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n          data_out <= 0;\n      else if (chipselect && ~write_n && (address == 0))\n          data_out <= writedata;\n    end",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n          readdata <= 0;\n      else if (clk_en)\n          readdata <= {32'b0 | read_mux_out};\n    end"
+    ]
+}

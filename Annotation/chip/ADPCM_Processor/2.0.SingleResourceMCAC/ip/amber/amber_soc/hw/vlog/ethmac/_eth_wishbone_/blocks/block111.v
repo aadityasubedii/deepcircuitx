@@ -1,0 +1,1 @@
+assign TxValidBytes = TxLengthLt4 ? TxLength[1:0] : 2'b0;

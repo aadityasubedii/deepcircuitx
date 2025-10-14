@@ -1,0 +1,1 @@
+assign wb_read_buf_hit  = enable && wb_read_buf_address == i_address && wb_read_buf_valid;

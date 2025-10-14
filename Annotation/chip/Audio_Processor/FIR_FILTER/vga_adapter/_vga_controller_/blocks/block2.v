@@ -1,0 +1,1 @@
+	assign VGA_SYNC = vcc;

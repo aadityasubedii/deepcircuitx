@@ -1,0 +1,1 @@
+  assign app_rdy = app_rdy_r;

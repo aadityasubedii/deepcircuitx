@@ -1,0 +1,13 @@
+Module name: eth_rxaddrcheck 
+
+Module specification:
+
+The eth_rxaddrcheck module serves a crucial role in Ethernet communication, ensuring data integrity by verifying the validity of the destination MAC address of an incoming Ethernet frame. It discerns whether the frame is a broadcast, multicast, or unicast frame and validates these based on certain conditions. This module operates on the positive edge of the clock (MRxClk) or at a reset (Reset).
+
+Key input ports include MRxClk (the system clock), Reset (resets the module), RxData (incoming Ethernet frame), Broadcast, r_Bro, r_Pro (control signals), ByteCntEq2 to ByteCntEq7 (signifiers of byte count conditions), HASH0 and HASH1 (hash values for multicast frame validation), CrcHash and CrcHashGood (CRC hash values for frame checking), Multicast, MAC (Mac Address for unicast validation), StateData (current state of data), RxEndFrm (end of frame signal), PassAll (control signal), and ControlFrmAddressOK (control frame's address validity). 
+
+The module outputs two main signals: RxAbort, which signals an abort of the frame reception due to address invalidity, and AddressMiss, triggered when the address fails to be recognized as either unicast, multicast, or broadcast.
+
+Internal signals used include BroadcastOK (indicates valid broadcast frame), RxAddressInvalid (shows unsuccessful address checks), RxCheckEn (enables check for frames), HashBit (holds hashing result), IntHash and ByteHash (involved in hash selection for multicast validation), MulticastOK and UnicastOK (indicate validation success of multicast and unicast frames respectively), and internal RxAbort and AddressMiss registers to hold the status of the output signals.
+
+The code is organized into several blocks, primarily 'always' blocks, which are evaluated at every positive edge of the clock or during a reset. These blocks define the operations of the module, including the multicast, unicast checks, hash selection for multicast validation, and setting the status of output signals. They perform the core functionality of the Ethernet frame address checking process.

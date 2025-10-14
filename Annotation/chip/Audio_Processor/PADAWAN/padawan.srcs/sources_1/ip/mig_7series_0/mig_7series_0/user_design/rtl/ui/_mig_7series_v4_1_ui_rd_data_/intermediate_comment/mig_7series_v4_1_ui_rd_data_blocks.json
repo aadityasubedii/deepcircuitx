@@ -1,0 +1,281 @@
+{
+    "line_num": [
+        [
+            442,
+            442
+        ],
+        [
+            438,
+            440
+        ],
+        [
+            432,
+            437
+        ],
+        [
+            430,
+            431
+        ],
+        [
+            412,
+            412
+        ],
+        [
+            411,
+            423
+        ],
+        [
+            403,
+            410
+        ],
+        [
+            401,
+            402
+        ],
+        [
+            394,
+            395
+        ],
+        [
+            385,
+            387
+        ],
+        [
+            380,
+            384
+        ],
+        [
+            377,
+            379
+        ],
+        [
+            372,
+            376
+        ],
+        [
+            371,
+            371
+        ],
+        [
+            367,
+            370
+        ],
+        [
+            364,
+            365
+        ],
+        [
+            362,
+            363
+        ],
+        [
+            361,
+            361
+        ],
+        [
+            358,
+            360
+        ],
+        [
+            330,
+            354
+        ],
+        [
+            330,
+            354
+        ],
+        [
+            328,
+            329
+        ],
+        [
+            327,
+            327
+        ],
+        [
+            323,
+            324
+        ],
+        [
+            320,
+            321
+        ],
+        [
+            316,
+            318
+        ],
+        [
+            312,
+            324
+        ],
+        [
+            287,
+            309
+        ],
+        [
+            284,
+            286
+        ],
+        [
+            277,
+            283
+        ],
+        [
+            276,
+            276
+        ],
+        [
+            270,
+            272
+        ],
+        [
+            262,
+            268
+        ],
+        [
+            250,
+            250
+        ],
+        [
+            247,
+            249
+        ],
+        [
+            246,
+            246
+        ],
+        [
+            245,
+            245
+        ],
+        [
+            244,
+            244
+        ],
+        [
+            243,
+            243
+        ],
+        [
+            240,
+            241
+        ],
+        [
+            239,
+            239
+        ],
+        [
+            238,
+            238
+        ],
+        [
+            237,
+            237
+        ],
+        [
+            235,
+            235
+        ],
+        [
+            233,
+            234
+        ],
+        [
+            223,
+            232
+        ],
+        [
+            218,
+            222
+        ],
+        [
+            209,
+            209
+        ],
+        [
+            208,
+            208
+        ],
+        [
+            192,
+            192
+        ],
+        [
+            191,
+            191
+        ],
+        [
+            189,
+            190
+        ],
+        [
+            181,
+            188
+        ],
+        [
+            179,
+            179
+        ],
+        [
+            173,
+            179
+        ]
+    ],
+    "blocks": [
+        "  endgenerate",
+        "        always @(posedge clk) rd_data_buf_addr_r_lcl <=\n                                #TCQ rd_data_buf_addr_ns;\n      end ",
+        "        always @(rd_accepted or rd_data_buf_addr_r_lcl or rst) begin\n          rd_data_buf_addr_ns = rd_data_buf_addr_r_lcl;\n          if (rst) rd_data_buf_addr_ns = 0;\n          else if (rd_accepted) rd_data_buf_addr_ns =\n                                  rd_data_buf_addr_r_lcl + 1;\n        end",
+        "      begin : data_buf_addr\n        reg [DATA_BUF_ADDR_WIDTH-1:0] rd_data_buf_addr_ns;",
+        "        assign rd_buf_full = occ_cnt_ns[DATA_BUF_ADDR_WIDTH];",
+        "        always @(posedge clk) occ_cnt_r <= #TCQ occ_cnt_ns;\n        assign rd_buf_full = occ_cnt_ns[DATA_BUF_ADDR_WIDTH];\n\n`ifdef MC_SVA\n  rd_data_buffer_full: cover property (@(posedge clk) (~rst && rd_buf_full));\n  rd_data_buffer_inc_dec_15: cover property (@(posedge clk)\n         (~rst && rd_accepted && free_rd_buf && (occ_cnt_r == 'hf)));\n  rd_data_underflow: assert property (@(posedge clk)\n         (rst || !((occ_cnt_r == 'b0) && (occ_cnt_ns == 'h1f))));\n  rd_data_overflow: assert property (@(posedge clk)\n         (rst || !((occ_cnt_r == 'h10) && (occ_cnt_ns == 'h11))));\n`endif\n    end ",
+        "        always @(free_rd_buf or occ_cnt_r or rd_accepted or rst or occ_minus_one or occ_plus_one) begin\n          occ_cnt_ns = occ_cnt_r;\n          if (rst) occ_cnt_ns = 0;\n          else case ({rd_accepted, free_rd_buf})\n                 2'b01 : occ_cnt_ns = occ_minus_one;\n                 2'b10 : occ_cnt_ns = occ_plus_one;\n          endcase \n        end",
+        "      begin : occupied_counter\n        reg [DATA_BUF_ADDR_WIDTH:0] occ_cnt_ns;",
+        "      always @(posedge clk) app_rd_data_valid_copy <= #TCQ app_rd_data_valid_ns;\n",
+        "        always @(posedge clk) app_ecc_single_err_r <= \n                                #TCQ app_ecc_single_err_ns;\n      end",
+        "      if (ECC != \"OFF\") begin : assign_app_ecc_single\n        wire [(2*nCK_PER_CLK)-1:0] app_ecc_single_err_ns =\n                              bypass\n                                ? ecc_single\n                                : rd_buf_out_data[(APP_DATA_WIDTH+(2*nCK_PER_CLK))+:(2*nCK_PER_CLK)];",
+        "        always @(posedge clk) app_ecc_multiple_err_r <= \n                                #TCQ app_ecc_multiple_err_ns;\n      end",
+        "      if (ECC != \"OFF\") begin : assign_app_ecc_multiple\n        wire [(2*nCK_PER_CLK)-1:0] app_ecc_multiple_err_ns =\n                              bypass\n                                ? ecc_multiple\n                                : rd_buf_out_data[APP_DATA_WIDTH+:(2*nCK_PER_CLK)];",
+        "      always @(posedge clk) app_rd_data <= #TCQ app_rd_data_ns;",
+        "      wire [APP_DATA_WIDTH-1:0] app_rd_data_ns =\n                              bypass\n                                ? rd_data\n                                : rd_buf_out_data[APP_DATA_WIDTH-1:0];",
+        "      assign single_data =\n          app_rd_data_valid_ns && app_rd_data_end_ns && ~rd_buf_indx_r[0];",
+        "      always @(posedge clk) app_rd_data_end <= #TCQ app_rd_data_end_ns;\n",
+        "      always @(posedge clk) app_rd_data_valid <= #TCQ app_rd_data_valid_ns;",
+        "      assign app_rd_data_valid_ns =\n              ram_init_done_r_lcl && (bypass || rd_data_rdy);\n      wire app_rd_data_end_ns = bypass ? rd_data_end : rd_status[1];",
+        "        genvar i;\n        for (i=0; i<RAM_CNT; i=i+1) begin : rd_buffer_ram\n          RAM32M\n            #(.INIT_A(64'h0000000000000000),\n              .INIT_B(64'h0000000000000000),\n              .INIT_C(64'h0000000000000000),\n              .INIT_D(64'h0000000000000000)\n          ) RAM32M0 (\n              .DOA(rd_buf_out_data[((i*6)+4)+:2]),\n              .DOB(rd_buf_out_data[((i*6)+2)+:2]),\n              .DOC(rd_buf_out_data[((i*6)+0)+:2]),\n              .DOD(),\n              .DIA(rd_buf_in_data[((i*6)+4)+:2]),\n              .DIB(rd_buf_in_data[((i*6)+2)+:2]),\n              .DIC(rd_buf_in_data[((i*6)+0)+:2]),\n              .DID(2'b0),\n              .ADDRA(rd_buf_indx_copy_r[4:0]),\n              .ADDRB(rd_buf_indx_copy_r[4:0]),\n              .ADDRC(rd_buf_indx_copy_r[4:0]),\n              .ADDRD(rd_buf_wr_addr),\n              .WE(rd_buf_we),\n              .WCLK(clk)\n             );\n        end \n      end",
+        "        genvar i;\n        for (i=0; i<RAM_CNT; i=i+1) begin : rd_buffer_ram\n          RAM32M\n            #(.INIT_A(64'h0000000000000000),\n              .INIT_B(64'h0000000000000000),\n              .INIT_C(64'h0000000000000000),\n              .INIT_D(64'h0000000000000000)\n          ) RAM32M0 (\n              .DOA(rd_buf_out_data[((i*6)+4)+:2]),\n              .DOB(rd_buf_out_data[((i*6)+2)+:2]),\n              .DOC(rd_buf_out_data[((i*6)+0)+:2]),\n              .DOD(),\n              .DIA(rd_buf_in_data[((i*6)+4)+:2]),\n              .DIB(rd_buf_in_data[((i*6)+2)+:2]),\n              .DIC(rd_buf_in_data[((i*6)+0)+:2]),\n              .DID(2'b0),\n              .ADDRA(rd_buf_indx_copy_r[4:0]),\n              .ADDRB(rd_buf_indx_copy_r[4:0]),\n              .ADDRC(rd_buf_indx_copy_r[4:0]),\n              .ADDRD(rd_buf_wr_addr),\n              .WE(rd_buf_we),\n              .WCLK(clk)\n             );\n        end \n      end",
+        "        always @(posedge clk) rd_buf_indx_copy_r <= #TCQ rd_buf_indx_ns[4:0];\n",
+        "        (* keep = \"true\" *) reg [4:0] rd_buf_indx_copy_r ;",
+        "            assign rd_buf_in_data = \n              {{6-REMAINDER{1'b0}}, ecc_single, ecc_multiple, rd_data};",
+        "          if (ECC == \"OFF\")\n            assign rd_buf_in_data = {{6-REMAINDER{1'b0}}, rd_data};",
+        "            assign rd_buf_in_data = rd_data;\n          else\n            assign rd_buf_in_data = {ecc_single, ecc_multiple, rd_data};",
+        "      begin : rd_buf\n        wire [RAM_WIDTH-1:0] rd_buf_in_data;\n        if (REMAINDER == 0)\n          if (ECC == \"OFF\")\n            assign rd_buf_in_data = rd_data;\n          else\n            assign rd_buf_in_data = {ecc_single, ecc_multiple, rd_data};\n        else\n          if (ECC == \"OFF\")\n            assign rd_buf_in_data = {{6-REMAINDER{1'b0}}, rd_data};\n          else\n            assign rd_buf_in_data = \n              {{6-REMAINDER{1'b0}}, ecc_single, ecc_multiple, rd_data};",
+        "        always @(posedge clk) rd_buf_we_r1 <= #TCQ rd_buf_we;\n        RAM32M\n          #(.INIT_A(64'h0000000000000000),\n            .INIT_B(64'h0000000000000000),\n            .INIT_C(64'h0000000000000000),\n            .INIT_D(64'h0000000000000000)\n           ) RAM32M0 (\n            .DOA(rd_status),\n            .DOB(),\n            .DOC(wr_status),\n            .DOD(),\n            .DIA(status_ram_wr_data_r),\n            .DIB(2'b0),\n            .DIC(status_ram_wr_data_r),\n            .DID(status_ram_wr_data_r),\n            .ADDRA(rd_buf_indx_r[4:0]),\n            .ADDRB(5'b0),\n            .ADDRC(status_ram_wr_addr_ns),\n            .ADDRD(status_ram_wr_addr_r),\n            .WE(rd_buf_we_r1),\n            .WCLK(clk)\n           );\n      end ",
+        "        always @(posedge clk) status_ram_wr_data_r <=\n                              #TCQ status_ram_wr_data_ns;\n        reg rd_buf_we_r1;",
+        "        wire [1:0] status_ram_wr_data_ns =\n                         ram_init_done_r_lcl\n                           ? {rd_data_end, ~(rd_data_offset\n                                              ? wr_status_r1\n                                              : wr_status[0])}\n                           : 2'b0;\n        reg [1:0] status_ram_wr_data_r;",
+        "        always @(posedge clk) wr_status_r1 <= #TCQ wr_status[0];",
+        "        always @(posedge clk) status_ram_wr_addr_r <=\n                             #TCQ status_ram_wr_addr_ns;\n        wire [1:0] wr_status;",
+        "      begin : status_ram\n\n\n\n        wire [4:0] status_ram_wr_addr_ns = ram_init_done_r_lcl\n                                           ? rd_buf_wr_addr\n                                           : rd_buf_indx_r[4:0];",
+        "    else begin : not_strict_mode",
+        "        always @(posedge clk) app_ecc_single_err_r <= #TCQ ecc_single;\n      end\n    end",
+        "        always @(posedge clk) app_ecc_multiple_err_r <= #TCQ ecc_multiple;",
+        "        always @(posedge clk) app_rd_data_end <= #TCQ rd_data_end;",
+        "        always @(posedge clk) app_rd_data_valid <= #TCQ rd_data_en;",
+        "        always @(posedge clk) app_rd_data <= #TCQ rd_data;",
+        "        always @(rd_data_end) app_rd_data_end = rd_data_end;\n      end",
+        "        always @(rd_data_en) app_rd_data_valid = rd_data_en;",
+        "        always @(rd_data) app_rd_data = rd_data;",
+        "      if (ECC == \"OFF\") begin : ecc_off",
+        "      assign rd_data_buf_addr_r = rd_data_buf_addr_ns;",
+        "      always @(posedge clk) rd_data_buf_addr_r_lcl <=\n                                #TCQ rd_data_buf_addr_ns;",
+        "  generate\n    if (ORDERING == \"STRICT\") begin : strict_mode\n      assign app_rd_data_valid_ns = 1'b0;\n      assign single_data = 1'b0;\n      assign rd_buf_full = 1'b0;\n      reg [DATA_BUF_ADDR_WIDTH-1:0] rd_data_buf_addr_r_lcl;\n      wire [DATA_BUF_ADDR_WIDTH-1:0] rd_data_buf_addr_ns =\n                   rst\n                    ? 0\n                    : rd_data_buf_addr_r_lcl + rd_accepted;",
+        "  localparam RD_BUF_WIDTH = APP_DATA_WIDTH + (ECC == \"OFF\" ? 0 : 2*2*nCK_PER_CLK);\n  localparam FULL_RAM_CNT = (RD_BUF_WIDTH/6);\n  localparam REMAINDER = RD_BUF_WIDTH % 6;\n  localparam RAM_CNT = FULL_RAM_CNT + ((REMAINDER == 0 ) ? 0 : 1);\n  localparam RAM_WIDTH = (RAM_CNT*6);",
+        "  assign app_ecc_single_err = app_ecc_single_err_r;",
+        "  assign app_ecc_multiple_err = app_ecc_multiple_err_r;",
+        "  assign ram_init_addr = rd_buf_indx_r[3:0];",
+        "  endgenerate",
+        "      always @(posedge clk) rd_buf_indx_r <= #TCQ rd_buf_indx_ns;\n    end",
+        "      always @(rd_buf_indx_r or rst or single_data\n               or upd_rd_buf_indx) begin\n        rd_buf_indx_ns = rd_buf_indx_r;\n        if (rst) rd_buf_indx_ns = 6'b0;\n        else if (upd_rd_buf_indx) rd_buf_indx_ns =\n          \n          rd_buf_indx_r + 6'h1 + (DATA_BUF_ADDR_WIDTH == 5 ? 0 : single_data);\n      end",
+        "      always @(posedge clk) ram_init_done_r_lcl <= #TCQ ram_init_done_ns;",
+        "  generate begin : rd_buf_indx\n      wire upd_rd_buf_indx = ~ram_init_done_r_lcl || app_rd_data_valid_ns;\n\n\n      wire ram_init_done_ns =\n            ~rst && (ram_init_done_r_lcl || (rd_buf_indx_r[4:0] == 5'h1f));\n      always @(posedge clk) ram_init_done_r_lcl <= #TCQ ram_init_done_ns;"
+    ]
+}

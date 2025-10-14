@@ -1,0 +1,1 @@
+assign rd_bl_o   = bl_i ;

@@ -1,0 +1,1 @@
+assign daddress_valid_p = i_daddress_valid && !daddress_valid_stop_r;

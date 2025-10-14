@@ -1,0 +1,9 @@
+Module name: a25_shifter. 
+
+Module specification: The a25_shifter is a highly configurable and parameterizable Verilog module that implements various bit shifting operations such as Logical Shift Left (LSL), Logical Shift Right (LSR), Arithmetic Shift Right (ASR), and Rotate Right (ROR). These operations are selected based on the 'i_function' input. The shifting operations consider specific factors such as the shift amount, incoming carry, and immediate zero. The resulting output and carry are outputted via 'o_out' and 'o_carry_out' respectively.
+
+The module uses five inputs: 'i_in' for input bits, 'i_carry_in' for setting a carry-in to the operation, 'i_shift_amount' for specifying the shift amount, 'i_shift_imm_zero' for specifying an immediate zero-shift, and 'i_function' for choosing the type of shift operation. The output ports are 'o_out' for delivering the result of the operation, and 'o_carry_out' for outputting any carry out from the operation.
+
+Internally, the module has four 33-bit wires (lsl_out, lsr_out, asr_out, ror_out) that respectively store the results of LSL, LSR, ASR and ROR operations, with an extra bit to store the carry-out information. These signals are cleverly used to store the independent shifting results, after which the final output is chosen among these outcomes based on the 'i_function' input signal.
+
+The module consists of several sections, specifically four generate-if blocks for different shift operations (LSL, LSR, ASR, ROR). Each block is able to perform full operations when the parameter 'FULL_BARREL' is set to 1, or execute simplified operations when it's set to 0. A final assignment statement is used to select the output and carry-out among the computed results based on 'i_function' value. This modular design along with judicious use of generate-if constructs facilitates highly efficient and adaptive bit-wise operations.

@@ -1,0 +1,1 @@
+  always @(posedge clk) prev_samp_valid_r <= #TCQ prev_samp_valid_ns;

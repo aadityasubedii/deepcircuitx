@@ -1,0 +1,1 @@
+  assign po_stg23_sel = po_stg23_sel_r;

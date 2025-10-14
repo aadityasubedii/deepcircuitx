@@ -1,0 +1,1 @@
+   assign dout = dreg[depth-2];

@@ -1,0 +1,1 @@
+      always @(posedge clk) rcd_timer_r <= #TCQ rcd_timer_ns;

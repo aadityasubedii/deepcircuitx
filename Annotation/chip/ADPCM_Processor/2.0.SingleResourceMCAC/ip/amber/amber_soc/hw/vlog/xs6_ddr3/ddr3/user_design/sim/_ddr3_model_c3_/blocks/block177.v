@@ -1,0 +1,1 @@
+    always @(posedge dqs_odd[14]) dqs_odd_receiver(14);

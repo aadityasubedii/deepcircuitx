@@ -1,0 +1,1 @@
+      always @(posedge clk) low_idle_cnt_r <= #TCQ low_idle_cnt_ns;

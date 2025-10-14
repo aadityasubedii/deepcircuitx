@@ -1,0 +1,1 @@
+assign enable  = state_r != CRC0;

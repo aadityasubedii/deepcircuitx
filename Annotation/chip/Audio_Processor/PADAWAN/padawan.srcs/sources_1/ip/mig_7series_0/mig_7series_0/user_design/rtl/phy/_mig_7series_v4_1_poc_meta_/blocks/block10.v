@@ -1,0 +1,1 @@
+  always @(*) prev_ns = done_ns ? diff_r : prev_r;

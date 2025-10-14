@@ -1,0 +1,1 @@
+  assign rmw_temp[15 : 8] = dqm[1] ? mem_bytes[15 : 8] : zs_dq[15 : 8];

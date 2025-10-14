@@ -1,0 +1,1 @@
+assign dabt = dabt_reg || i_dabt;

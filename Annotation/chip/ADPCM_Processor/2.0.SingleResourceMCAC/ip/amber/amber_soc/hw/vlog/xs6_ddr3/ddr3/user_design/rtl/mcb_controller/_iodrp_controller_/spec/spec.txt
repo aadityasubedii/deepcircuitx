@@ -1,0 +1,13 @@
+Module name: iodrp_controller. 
+
+Module specification: 
+
+The `iodrp_controller` module is essentially a controller for an IO read/write process. It employs a finite state machine (FSM), encoded in one-hot, to move in between different states like address phase, data phase, and few intermediate waiting phases for serial access to a data object.
+
+The module takes in the following inputs: `memcell_address` for the target memory cell address for IO operations, `write_data` being the data to be written to the memory cell, `rd_not_write` to perform a read/write operation depending on its value, `cmd_valid` to determine the command validity, `use_broadcast` to enable the broadcast feature, `sync_rst` to trigger a synchronous reset, `DRP_CLK` is the clock signal for the digital read/write processor and `DRP_SDO` is an input from the shift register containing the data bit from the external system.
+
+The module provides the following outputs: `read_data` which is the data read from the memory cell, `rdy_busy_n` to signify the controller's status (busy or ready), `DRP_CS` for the chip select signal, `DRP_SDI` carries the least significant bit from controller's shift register, `DRP_ADD` indicates the controller's address phase and `DRP_BKST` controls the broadcast feature.
+
+The module also utilizes internal signals such as `memcell_addr_reg` to hold the cell address for IO operation, `data_reg` to store immediate data to be written, `shift_through_reg` acts as a shift register used to serialize data, control signals `load_shift_n` and `addr_data_sel_n` control loading of shift register and selection between address and data respectively, and a counter `bit_cnt` to control a byte-wide operation. The controller's state within the FSM is held by `state` and `nextstate` signals and there is a multiplexer `data_out_mux` to load data into the shift register.
+
+The verilog code of this module can be demarcated into portions that handle the declaration of ports and signals, initialization of certain registers and signals, providing the FSM's state transitions, and data processing or decision-making based on the FSM's current state. The effective use of a FSM allows this module to carry out complex tasks in a well-organised manner. Furthermore, localparams are defined for better readability and interpretation of the code, which enhance the maintainability of the module.

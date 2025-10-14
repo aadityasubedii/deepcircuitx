@@ -1,0 +1,1 @@
+  always @(posedge clk) up_r <= #TCQ up_ns;

@@ -1,0 +1,1 @@
+assign remove_lines_next = v_count_remove < v_count_repeat;

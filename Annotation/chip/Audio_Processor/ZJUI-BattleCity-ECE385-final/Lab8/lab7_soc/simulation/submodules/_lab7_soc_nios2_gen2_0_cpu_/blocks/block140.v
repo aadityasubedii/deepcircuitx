@@ -1,0 +1,1 @@
+  assign R_ctrl_custom_multi_nxt = D_ctrl_custom_multi;

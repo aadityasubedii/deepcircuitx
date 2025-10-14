@@ -1,0 +1,16 @@
+Module name: sim_tb_top
+
+Module specification: 
+
+The 'sim_tb_top' module is a top-level testbench module for simulating a system utilizing DDR3 memory. This module doesn't directly interact with external components, but it provides an environment for testing the functionality of internal components.
+
+This module doesn't have traditional input or output ports due to its nature as a testbench. However, several parameters serve as 'inputs' to define system configurations, such as DEBUG_EN (debugging enable flag), C3_MEMCLK_PERIOD (system clock period), C3_NUM_DQ_PINS (number of DDR3 memory data pins), and various address width parameters. Internal signal wires, functioning as analogous 'outputs', interface with the instantiated design and DDR3 model. These signals include clock and reset signals (c3_sys_clk, c3_sys_clk_p, c3_sys_clk_n, c3_sys_rst, c3_sys_rst_i), DDR3 signal lines (mcb3_dram_*), system status signals (calib_done and error), and DDR3 impedance control line (rzq3). 
+
+The code is divided into several blocks with distinct functionalities: 
+1) Parameter and signal definitions: Parameters for system configuration and signal wires for interaction with DUT and DDR3 model are defined.
+2) Clock and reset signal generation: These signals are toggled at the start to provide necessary timing and initial conditions.
+3) design_top instantiation: The DUT is imported, and system signals and parameters are connected to it. 
+4) DDR3 model instantiation: Based on the number of data pins, the DDR3 model is instantiated, and memory signals are connected to it.
+5) Logging block: Once calibration is done, this block logs whether the test passed or failed based on the status of error and calibration signals.
+   
+Overall, the 'sim_tb_top' module is a crucial part of the system that facilitates testing the functionality of the design using a virtual DDR3 memory system.

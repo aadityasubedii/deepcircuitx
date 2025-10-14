@@ -1,0 +1,1 @@
+  assign rstdiv0 = rstdiv0_sync_r1 ;

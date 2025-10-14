@@ -1,0 +1,66 @@
+{
+    "line_num": [
+        [
+            410,
+            436
+        ],
+        [
+            358,
+            408
+        ],
+        [
+            302,
+            337
+        ],
+        [
+            290,
+            292
+        ],
+        [
+            284,
+            286
+        ],
+        [
+            278,
+            280
+        ],
+        [
+            149,
+            297
+        ],
+        [
+            141,
+            143
+        ],
+        [
+            121,
+            136
+        ],
+        [
+            119,
+            119
+        ],
+        [
+            118,
+            118
+        ],
+        [
+            110,
+            116
+        ]
+    ],
+    "blocks": [
+        "always @(posedge reset, posedge clk) begin\n\tif (reset) begin\n\t\ttimer0_int_reg_d1 <= 'd0;\n\t\ttimer1_int_reg_d1 <= 'd0;\n\t\ttimer2_int_reg_d1 <= 'd0;\n\tend else begin\n\t    timer0_int_reg_d1 <= timer0_int_reg;\n\t    timer1_int_reg_d1 <= timer1_int_reg;\n\t    timer2_int_reg_d1 <= timer2_int_reg;\n\t    \n\t    if ( timer0_int_reg && !timer0_int_reg_d1 )\n\t\t  begin\n\t\t  `TB_DEBUG_MESSAGE\n\t\t  $display(\"Timer Module Timer 0 Interrupt\"); \n\t\t  end\n\t    if ( timer1_int_reg && !timer1_int_reg_d1 )\n\t\t  begin\n\t\t  `TB_DEBUG_MESSAGE\n\t\t  $display(\"Timer Module Timer 1 Interrupt\"); \n\t\t  end\n\t    if ( timer2_int_reg && !timer2_int_reg_d1 )\n\t\t  begin\n\t\t  `TB_DEBUG_MESSAGE\n\t\t  $display(\"Timer Module Timer 2 Interrupt\"); \n\t\t  end\n\tend\nend   ",
+        "always @(posedge reset, posedge clk) begin\n\tif (reset) begin\n\n\tend else begin\n\t    if ( wb_read_ack || wb_start_write )\n\t\t  begin\n\t\t  `TB_DEBUG_MESSAGE\n\t\t  \n\t\t  if ( wb_start_write )\n\t\t      $write(\"Write 0x%08x to   \", i_wb_dat);\n\t\t  else\n\t\t      $write(\"Read  0x%08x from \", o_wb_dat);\n\t\t      \n\t\t  case ( i_wb_adr[15:0] )\n\t\t      AMBER_TM_TIMER0_LOAD:\n\t\t          $write(\" Timer Module Timer 0 Load\"); \n\t\t      AMBER_TM_TIMER1_LOAD:\n\t\t          $write(\" Timer Module Timer 1 Load\"); \n\t\t      AMBER_TM_TIMER2_LOAD:\n\t\t          $write(\" Timer Module Timer 2 Load\"); \n\t\t      AMBER_TM_TIMER0_CTRL:\n\t\t          $write(\" Timer Module Timer 0 Control\"); \n\t\t      AMBER_TM_TIMER1_CTRL:\n\t\t          $write(\" Timer Module Timer 1 Control\"); \n\t\t      AMBER_TM_TIMER2_CTRL:\n\t\t          $write(\" Timer Module Timer 2 Control\"); \n\t\t      AMBER_TM_TIMER0_VALUE:\n\t\t          $write(\" Timer Module Timer 0 Value\"); \n\t\t      AMBER_TM_TIMER1_VALUE:\n\t\t          $write(\" Timer Module Timer 1 Value\"); \n\t\t      AMBER_TM_TIMER2_VALUE:\n\t\t          $write(\" Timer Module Timer 2 Value\"); \n\t\t      AMBER_TM_TIMER0_CLR:    \n\t\t          $write(\" Timer Module Timer 0 Clear\"); \n\t\t      AMBER_TM_TIMER1_CLR:         \n\t\t          $write(\" Timer Module Timer 1 Clear\"); \n\t\t      AMBER_TM_TIMER2_CLR:           \n\t\t          $write(\" Timer Module Timer 2 Clear\"); \n\n\t\t      default:\n\t\t          begin\n\t\t          $write(\" unknown Amber IC Register region\");\n\t\t          $write(\", Address 0x%08h\\n\", i_wb_adr); \n\t\t          `TB_ERROR_MESSAGE\n\t\t          end\n\t\t  endcase\n\t\t  \n\t\t  $write(\", Address 0x%08h\\n\", i_wb_adr); \n\t\t  end\n\tend\nend",
+        "always @( posedge reset, posedge clk ) begin\n\tif (reset) begin\n\t\twb_rdata32 <= 'd0;\n\tend else begin\n\t    if ( wb_start_read )\n\t\t  case ( i_wb_adr[15:0] )\n\t\t      AMBER_TM_TIMER0_LOAD: wb_rdata32 <= {16'd0, timer0_load_reg};\n\t\t      AMBER_TM_TIMER1_LOAD: wb_rdata32 <= {16'd0, timer1_load_reg};\n\t\t      AMBER_TM_TIMER2_LOAD: wb_rdata32 <= {16'd0, timer2_load_reg};\n\t\t      AMBER_TM_TIMER0_CTRL: wb_rdata32 <= {24'd0, \n\t\t                                         timer0_ctrl_reg[7:6], \n\t\t                                         2'd0, \n\t\t                                         timer0_ctrl_reg[3:2],\n\t\t                                         2'd0 \n\t\t                                        };\n\t\t      AMBER_TM_TIMER1_CTRL: wb_rdata32 <= {24'd0, \n\t\t                                         timer1_ctrl_reg[7:6], \n\t\t                                         2'd0, \n\t\t                                         timer1_ctrl_reg[3:2],\n\t\t                                         2'd0 \n\t\t                                        };\n\t\t      AMBER_TM_TIMER2_CTRL: wb_rdata32 <= {24'd0, \n\t\t                                         timer2_ctrl_reg[7:6], \n\t\t                                         2'd0, \n\t\t                                         timer2_ctrl_reg[3:2],\n\t\t                                         2'd0 \n\t\t                                        };\n\t\t      AMBER_TM_TIMER0_VALUE: wb_rdata32 <= {16'd0, timer0_value_reg[23:8]};\n\t\t      AMBER_TM_TIMER1_VALUE: wb_rdata32 <= {16'd0, timer1_value_reg[23:8]};\n\t\t      AMBER_TM_TIMER2_VALUE: wb_rdata32 <= {16'd0, timer2_value_reg[23:8]};\n\t\t  \n\t\t      default:               wb_rdata32 <= 32'h66778899;\n\t\t      \n\t\t  endcase\n\tend\nend",
+        "\t    if ( wb_start_write && i_wb_adr[15:0] == AMBER_TM_TIMER2_CLR)\n\t\t  timer2_int_reg <= 1'd0;\n\t    else if ( timer2_value_reg == 24'd0 )",
+        "\t    if ( wb_start_write && i_wb_adr[15:0] == AMBER_TM_TIMER1_CLR)\n\t\t  timer1_int_reg <= 1'd0;\n\t    else if ( timer1_value_reg == 24'd0 )",
+        "\t    if ( wb_start_write && i_wb_adr[15:0] == AMBER_TM_TIMER0_CLR )\n\t\t  timer0_int_reg <= 1'd0;\n\t    else if ( timer0_value_reg == 24'd0 )",
+        "always @( posedge reset, posedge clk ) begin\n\tif (reset) begin\n\t\ttimer0_load_reg <= 'd0;   \n\t\ttimer1_load_reg <= 'd0;   \n\t\ttimer2_load_reg <= 'd0;   \n\t\ttimer0_value_reg <= 24'hffffff;  \n\t\ttimer1_value_reg <= 24'hffffff;  \n\t\ttimer2_value_reg <= 24'hffffff;  \n\t\ttimer0_ctrl_reg <= 'd0;   \n\t\ttimer1_ctrl_reg <= 'd0;   \n\t\ttimer2_ctrl_reg <= 'd0;   \n\t\ttimer0_int_reg <= 'd0;    \n\t\ttimer1_int_reg <= 'd0;    \n\t\ttimer2_int_reg <= 'd0;    \n\tend else begin\n\t    if ( wb_start_write )\n\t\t  case ( i_wb_adr[15:0] )\n\t\t      \n\t\t      AMBER_TM_TIMER0_CTRL: timer0_ctrl_reg <= i_wb_dat[7:0];\n\t\t      AMBER_TM_TIMER1_CTRL: timer1_ctrl_reg <= i_wb_dat[7:0];\n\t\t      AMBER_TM_TIMER2_CTRL: timer2_ctrl_reg <= i_wb_dat[7:0];\n\t\t  endcase\n\n\t    \n\t    \n\t    \n\t    if ( wb_start_write && i_wb_adr[15:0] == AMBER_TM_TIMER0_LOAD )\n\t\t  begin\n\t\t  timer0_value_reg <= {i_wb_dat[15:0], 8'd0};\n\t\t  timer0_load_reg  <= i_wb_dat[15:0];\n\t\t  end\n\t    else if ( timer0_ctrl_reg[7] ) \n\t\t  begin\n\t\t  if ( timer0_value_reg == 24'd0 )\n\t\t      begin\n\t\t      if ( timer0_ctrl_reg[6] )  \n\t\t          timer0_value_reg <= {timer0_load_reg, 8'd0};\n\t\t      else    \n\t\t          timer0_value_reg <= 24'hffffff;\n\t\t      end\n\t\t  else \n\t\t      case ( timer0_ctrl_reg[3:2] )\n\t\t          2'b00:  timer0_value_reg <= (timer0_value_reg & 24'hffff00) - 9'd256;\n\t\t          2'b01:  timer0_value_reg <= (timer0_value_reg & 24'hfffff0) - 9'd16;\n\t\t          2'b10:  timer0_value_reg <=  timer0_value_reg               - 1'd1;\n\t\t          default: \n\t\t              begin\n\t\t              \n\t\t              \n\t\t              $write(\"unknown Timer Module Prescale Value %d for Timer 0\", \n\t\t                     timer0_ctrl_reg[3:2]);\n\t\t              \n\t\t              end\n\t\t      endcase\n\t\t  end\n\n\t    \n\t    \n\t    \n\t    \n\t    if ( wb_start_write && i_wb_adr[15:0] == AMBER_TM_TIMER1_LOAD )\n\t\t  begin\n\t\t  timer1_value_reg <= {i_wb_dat[15:0], 8'd0};\n\t\t  timer1_load_reg  <= i_wb_dat[15:0];\n\t\t  end\n\t    else if ( timer1_ctrl_reg[7] ) \n\t\t  begin\n\t\t  if ( timer1_value_reg == 24'd0 )\n\t\t      begin\n\t\t      if ( timer1_ctrl_reg[6] )  \n\t\t          timer1_value_reg <= {timer1_load_reg, 8'd0};\n\t\t      else    \n\t\t          timer1_value_reg <= 24'hffffff;\n\t\t      end\n\t\t  else\n\t\t      case ( timer1_ctrl_reg[3:2] )\n\t\t          2'b00:  timer1_value_reg <= (timer1_value_reg & 24'hffff00) - 9'd256;\n\t\t          2'b01:  timer1_value_reg <= (timer1_value_reg & 24'hfffff0) - 9'd16;\n\t\t          2'b10:  timer1_value_reg <=  timer1_value_reg - 1'd1;\n\t\t          default: \n\t\t              begin\n\t\t              \n\t\t              \n\t\t              $write(\"unknown Timer Module Prescale Value %d for Timer 1\", \n\t\t                     timer1_ctrl_reg[3:2]);\n\t\t              \n\t\t              end\n\t\t      endcase\n\t\t  end\n\t\t      \n\n\n\t    \n\t    \n\t    \n\t    if ( wb_start_write && i_wb_adr[15:0] == AMBER_TM_TIMER2_LOAD )\n\t\t  begin\n\t\t  timer2_value_reg <= {i_wb_dat[15:0], 8'd0};\n\t\t  timer2_load_reg  <= i_wb_dat[15:0];\n\t\t  end\n\t    else if ( timer2_ctrl_reg[7] ) \n\t\t  begin\n\t\t  if ( timer2_value_reg == 24'd0 )\n\t\t      begin\n\t\t      if ( timer2_ctrl_reg[6] )  \n\t\t          timer2_value_reg <= {timer2_load_reg, 8'd0};\n\t\t      else    \n\t\t          timer2_value_reg <= 24'hffffff;\n\t\t      end\n\t\t  else\n\t\t      case ( timer2_ctrl_reg[3:2] )\n\t\t          2'b00:  timer2_value_reg <= (timer2_value_reg & 24'hffff00) - 9'd256;\n\t\t          2'b01:  timer2_value_reg <= (timer2_value_reg & 24'hfffff0) - 9'd16;\n\t\t          2'b10:  timer2_value_reg <=  timer2_value_reg - 1'd1;\n\t\t          default: \n\t\t              begin\n\t\t              \n\t\t              \n\t\t              $write(\"unknown Timer Module Prescale Value %d for Timer 2\", \n\t\t                     timer2_ctrl_reg[3:2]);\n\t\t              \n\t\t              end\n\t\t      endcase\n\t\t  end\n\t\t  \n\t\t  \n\t    \n\t    \n\t    \n\t    if ( wb_start_write && i_wb_adr[15:0] == AMBER_TM_TIMER0_CLR )\n\t\t  timer0_int_reg <= 1'd0;\n\t    else if ( timer0_value_reg == 24'd0 )\n\t\t  \n\t\t  timer0_int_reg <= 1'd1;\n\n\t    if ( wb_start_write && i_wb_adr[15:0] == AMBER_TM_TIMER1_CLR)\n\t\t  timer1_int_reg <= 1'd0;\n\t    else if ( timer1_value_reg == 24'd0 )\n\t\t  \n\t\t  timer1_int_reg <= 1'd1;\n\n\t    if ( wb_start_write && i_wb_adr[15:0] == AMBER_TM_TIMER2_CLR)\n\t\t  timer2_int_reg <= 1'd0;\n\t    else if ( timer2_value_reg == 24'd0 )\n\t\t  \n\t\t  timer2_int_reg <= 1'd1;\n        \n\tend\nend",
+        "assign o_timer_int = { timer2_int_reg,\n                       timer1_int_reg,\n                       timer0_int_reg };",
+        "generate\nif (WB_DWIDTH == 128) \n    begin : wb128\n    assign wb_wdata32   = i_wb_adr[3:2] == 2'd3 ? i_wb_dat[127:96] :\n                          i_wb_adr[3:2] == 2'd2 ? i_wb_dat[ 95:64] :\n                          i_wb_adr[3:2] == 2'd1 ? i_wb_dat[ 63:32] :\n                                                  i_wb_dat[ 31: 0] ;\n                                                                                                                                            \n    assign o_wb_dat    = {4{wb_rdata32}};\n    end\nelse\n    begin : wb32\n    assign wb_wdata32  = i_wb_dat;\n    assign o_wb_dat    = wb_rdata32;\n    end\nendgenerate",
+        "assign o_wb_ack = i_wb_stb && ( wb_start_write || wb_start_read_d1 );",
+        "assign o_wb_err = 1'd0;",
+        "always @( posedge reset, posedge clk ) begin\n\tif (reset) begin\n\t\twb_start_read_d1 <= 'd0;\n\tend else begin\n\t\twb_start_read_d1 <= wb_start_read;\n\tend\nend"
+    ]
+}

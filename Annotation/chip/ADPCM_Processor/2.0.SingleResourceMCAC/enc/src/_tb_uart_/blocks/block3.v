@@ -1,0 +1,1 @@
+assign rx_bit_start = (rx_bit_count == 4'h0);      

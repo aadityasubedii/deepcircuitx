@@ -1,0 +1,9 @@
+Module name: a23_multiply 
+
+Module specification: The a23_multiply module is designed to perform multiplication of two 32-bit numbers. It features control of its operation through the `i_function` input, which determines whether to perform multiplication (based on bit[0]) and whether to accumulate the result (bit[1]). 
+
+The module defines system clock signal `i_clk` to drive synchronous parts and `i_fetch_stall` to halt operations, and two 32-bit inputs `i_a_in`,`i_b_in` acting as multiplicands. An additional 1-bit `i_execute` signal triggers the operation. The output ports include a 32-bit result `o_out`, a 2-bit output signal `o_flags` indicating if the output is zero/negative, and a signal `o_done` marking completion of the operation.
+
+Internal signals include 2 control flags, two 34-bit representations of one multiplicand, 34-bit signals to hold intermediate values, two 6-bit counters to track the multiplication operation, a 68-bit signal to store the multiplication outcome, a 2-bit signal to store the next state of flags, and a 33-bit signal to accumulate the product.
+
+The module embodies a Booth style multiplication mechanism. The implementation involves several blocks, primarily for generating signals and specifying behavior aligned with the XILINX FPGA board or not, and a couple of always blocks defining the behavior based on counter value and specifying updates at positive edge of the clock. The module operation concludes with assigning final values to the outputs. This comprehensive module creates a well-structured framework necessary to carry out many iterations accurately and efficiently, which is common in RTL designs.

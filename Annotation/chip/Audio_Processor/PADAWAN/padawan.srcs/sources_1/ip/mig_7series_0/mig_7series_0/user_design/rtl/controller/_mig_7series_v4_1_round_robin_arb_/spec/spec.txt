@@ -1,0 +1,11 @@
+Module name: mig_7series_v4_1_round_robin_arb. 
+
+Module specification: The mig_7series_v4_1_round_robin_arb module implements a round-robin arbitration scheme guaranteeing fair servicing of requests (`req`) from multiple requestors, with the number of requestors defined by parameter `WIDTH`. 
+
+The module observes the following input ports. Port `clk` is the synchronization clock signal. Port `rst` is the reset signal. Port `req` ([WIDTH-1:0]) represents request signals from the masters. Port `disable_grant` is for disabling the grant signal. Port `current_master` ([WIDTH-1:0]) holds the index of the currently served master. Port `upd_last_master` is a control signal for updating the record of the last served master.
+
+The module actuates the following output ports. Port `grant_ns` ([WIDTH-1:0]) represents the next state grant signal. Port `grant_r` ([WIDTH-1:0]) gets allocated to the requestor after a stipulated delay (TCQ). Port `last_master_ns` represents the next state 'last served master'.
+
+Internally, the module uses the following signals. Signal `dbl_last_master_ns` (double 'last served master' signal) and `dbl_req` (double request signal) serve in the calculation of the inhibit signal. Signal `inhibit` decides which signal to be granted next. Signal `inh_group` is used in the inhibit calculation loop. Signal `last_master_r` stores the information about the last served master.
+
+The module comprises of blocks for signal manipulation, grant issuance based on a signal, and provisions for updating last served master details. The primary function of the blocks revolves around managing request signals, and granting them in a round-robin fashion ensuring fairness and efficiency. Assertion blocks for validation of grant signals and last_master signals are also present.

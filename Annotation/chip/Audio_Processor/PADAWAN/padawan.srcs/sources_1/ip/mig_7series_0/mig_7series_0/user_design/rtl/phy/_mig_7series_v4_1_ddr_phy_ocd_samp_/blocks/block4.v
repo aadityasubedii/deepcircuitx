@@ -1,0 +1,1 @@
+  wire data_end = data_cnt_r == ONE[DATA_CNT_WIDTH-1:0];

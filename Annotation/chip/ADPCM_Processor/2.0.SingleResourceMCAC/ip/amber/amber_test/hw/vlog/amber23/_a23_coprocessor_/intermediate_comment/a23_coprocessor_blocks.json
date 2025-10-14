@@ -1,0 +1,36 @@
+{
+    "line_num": [
+        [
+            170,
+            192
+        ],
+        [
+            163,
+            168
+        ],
+        [
+            138,
+            150
+        ],
+        [
+            132,
+            132
+        ],
+        [
+            119,
+            129
+        ],
+        [
+            100,
+            113
+        ]
+    ],
+    "blocks": [
+        "always @( posedge i_clk )\n    if ( !i_fetch_stall )\n        begin\n        if ( i_copro_operation == 2'd2 )  \n            case ( i_copro_crn )\n                4'd 1: begin `TB_DEBUG_MESSAGE $display (\"Write 0x%08h to   Co-Pro 15 #1, Flush Cache\", i_copro_write_data); end\n                4'd 2: begin `TB_DEBUG_MESSAGE $display (\"Write 0x%08h to   Co-Pro 15 #2, Cache Control\", i_copro_write_data); end\n                4'd 3: begin `TB_DEBUG_MESSAGE $display (\"Write 0x%08h to   Co-Pro 15 #3, Cacheable area\", i_copro_write_data); end\n                4'd 4: begin `TB_DEBUG_MESSAGE $display (\"Write 0x%08h to   Co-Pro 15 #4, Updateable area\", i_copro_write_data); end\n                4'd 5: begin `TB_DEBUG_MESSAGE $display (\"Write 0x%08h to   Co-Pro 15 #5, Disruptive area\", i_copro_write_data); end\n            endcase\n            \n        if ( copro_operation_d1 == 2'd1 ) \n            case ( copro_crn_d1 )\n                4'd 0: begin `TB_DEBUG_MESSAGE $display (\"Read  0x%08h from Co-Pro 15 #0, ID Register\", o_copro_read_data); end\n                4'd 2: begin `TB_DEBUG_MESSAGE $display (\"Read  0x%08h from Co-Pro 15 #2, Cache control\", o_copro_read_data); end\n                4'd 3: begin `TB_DEBUG_MESSAGE $display (\"Read  0x%08h from Co-Pro 15 #3, Cacheable area\", o_copro_read_data); end\n                4'd 4: begin `TB_DEBUG_MESSAGE $display (\"Read  0x%08h from Co-Pro 15 #4, Updateable area\", o_copro_read_data); end\n                4'd 5: begin `TB_DEBUG_MESSAGE $display (\"Read  0x%08h from Co-Pro 15 #4, Disruptive area\", o_copro_read_data); end\n                4'd 6: begin `TB_DEBUG_MESSAGE $display (\"Read  0x%08h from Co-Pro 15 #6, Fault Status Register\", o_copro_read_data); end\n                4'd 7: begin `TB_DEBUG_MESSAGE $display (\"Read  0x%08h from Co-Pro 15 #7, Fault Address Register\", o_copro_read_data); end\n            endcase\n    end",
+        "always @( posedge i_clk )\n    if ( !i_fetch_stall )\n        begin\n        copro_operation_d1  <= i_copro_operation;\n        copro_crn_d1        <= i_copro_crn;\n        end",
+        "always @ ( posedge i_clk )        \n    if ( !i_fetch_stall )\n        case ( i_copro_crn )\n            \n            4'd0:    o_copro_read_data <= 32'h4156_0300;\n            4'd2:    o_copro_read_data <= {29'd0, cache_control}; \n            4'd3:    o_copro_read_data <= cacheable_area; \n            4'd4:    o_copro_read_data <= updateable_area; \n            4'd5:    o_copro_read_data <= disruptive_area; \n            4'd6:    o_copro_read_data <= {24'd0, fault_status };\n            4'd7:    o_copro_read_data <= fault_address;\n            default: o_copro_read_data <= 32'd0;\n        endcase",
+        "assign copro15_reg1_write = !i_fetch_stall && i_copro_operation == 2'd2 && i_copro_crn == 4'd1;",
+        "always @ ( posedge i_clk )\n    if ( !i_fetch_stall )         \n        begin\n        if ( i_copro_operation == 2'd2 )\n            case ( i_copro_crn )\n                4'd2: cache_control   <= i_copro_write_data[2:0];\n                4'd3: cacheable_area  <= i_copro_write_data[31:0];\n                4'd4: updateable_area <= i_copro_write_data[31:0];\n                4'd5: disruptive_area <= i_copro_write_data[31:0];\n            endcase\n        end",
+        "always @ ( posedge i_clk )\n    if ( !i_fetch_stall )\n        begin\n        if ( i_fault )\n            begin\n            \n            `ifdef A23_COPRO15_DEBUG    \n            $display (\"Fault status  set to 0x%08x\", i_fault_status);\n            $display (\"Fault address set to 0x%08x\", i_fault_address);\n            `endif        \n            fault_status    <= i_fault_status;\n            fault_address   <= i_fault_address;\n            end\n        end"
+    ]
+}

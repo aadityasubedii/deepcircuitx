@@ -1,0 +1,1 @@
+	assign xin_data = (rd_en) ? data_mem[data_rd_addr] : 16'd0;

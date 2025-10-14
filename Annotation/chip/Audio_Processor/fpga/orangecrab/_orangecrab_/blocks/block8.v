@@ -1,0 +1,1 @@
+    assign ext_ck = clk;

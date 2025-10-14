@@ -1,0 +1,13 @@
+Module name: audio_and_video_config. 
+
+Module specification: The audio_and_video_config module serves the purpose of transmitting audio and video configurations through an I2C (Inter-Integrated Circuit) bus. The input ports to this module include a CLOCK_50, which is the main clocking signal for this module and a reset signal used to reset the state of all internal registers of the module. The module has an inout port I2C_SDAT, which serves as a data line for the I2C communication protocol. The module also has an output port I2C_SCLK, the clock line for the I2C communication protocol ensuring data transfer is coordinated correctly. 
+
+The internal signals within the module include clk_400KHz, start_and_stop_en, change_output_bit_en, enable_clk, send_start_bit, send_stop_bit as control signals for the I2C communication, and several others contributing to data transfer and error handling mechanism. These signals act to control the flow of data successfully throughout the module. 
+
+The code is divided into several blocks including the instantiation of the modules Altera_UP_Slow_Clock_Generator, Altera_UP_I2C_AV_Auto_Initialize, and Altera_UP_I2C, which provide the functionalities of clock generation, handling the process of auto-initialization, and allowing control over the I2C bus respectively. 
+
+In the past edge-sensitive process, the data_to_transfer and num_bits_to_transfer are updated in the active low reset state and the initialization state indicating what data byte to transfer and how many bits in it need to be transferred. 
+
+Several assign statements are used for direct assignment of signals related to data transfer and start and stop bits of I2C protocol. Furthermore, the module calls and configures parameters for different blocks which provides the core functionality of the systems such as clock generation, auto-initialization of data, and handling the I2C protocol mechanisms for data transfer.
+
+To ensure synchronicity during data transfer, specific conditions of the I2C bus like generating start and stop conditions, acknowledgment, and error handling are addressed in the module. The audio and video configurations, including parameters for audio line input/output, ADC/DAC path, power, data format, and samples control, are written to specific addresses in a ROM chip via the I2C bus operatively handled through this module.

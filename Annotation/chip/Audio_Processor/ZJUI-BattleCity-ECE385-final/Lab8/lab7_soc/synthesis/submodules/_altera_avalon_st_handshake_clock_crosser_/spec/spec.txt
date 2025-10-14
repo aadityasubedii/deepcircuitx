@@ -1,0 +1,13 @@
+Module name: altera_avalon_st_handshake_clock_crosser.
+
+Module specification: The altera_avalon_st_handshake_clock_crosser is a Verilog module designed to ensure safe clock domain crossing for Altera Avalon Streaming (ST) interfaces. It allows the data along with its associated parameters like packets, channels, errors, etc. (if used) to be transferred safely across different clock domains, thereby reducing potential synchronization issues like metastability. 
+
+It accepts both input and output clock signals (in_clk, out_clk) along with their reset signals (in_reset, out_reset) to establish the separate clock domains. Various input signals including in_valid, in_data, in_channel, in_error, in_startofpacket, in_endofpacket, in_empty, and out_ready provide the data and necessary operational flags for the module to process, with their responsibilities dependent on parameters set upon instantiation. 
+
+Similarly, output signals include in_ready, out_valid, out_data, out_channel, out_error, out_startofpacket, out_endofpacket, and out_empty, serving to deliver the processed data and its status flags. 
+
+This module also utilizes two internal signals in_payload and out_payload. These signals serve to consolidate the input and output information to be transferred. They encapsulate the input or output data along with its associated parameters into a single signal, helping to maintain synchronization and coherence during the crossing. 
+
+The module is logically divided into several code blocks, each performing a specific function. The first block identifies the data configuration based on the defined parameters. A second block collects and merges all input signals into 'in_payload'. The third block is the instantiation of a clock crosser module 'clock_xer' where the clock-domain crossing takes place. The final block separates the 'out_payload' into its individual components, producing the final output signals.
+
+The module also contains an internal function 'log2ceil', used to calculate the width of the empty signal dependent on the symbol rate. The function iteratively seeks the smallest power of two larger than or equal to its input value. This module provides a succinct design for handling complex clock-domain crossing scenarios with varied data configurations, making it highly flexible and valuable in larger hardware designs.

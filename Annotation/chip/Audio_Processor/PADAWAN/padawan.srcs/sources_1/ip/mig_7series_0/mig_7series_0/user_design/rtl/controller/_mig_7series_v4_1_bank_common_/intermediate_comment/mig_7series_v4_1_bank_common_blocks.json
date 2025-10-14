@@ -1,0 +1,241 @@
+{
+    "line_num": [
+        [
+            455,
+            455
+        ],
+        [
+            448,
+            449
+        ],
+        [
+            434,
+            447
+        ],
+        [
+            429,
+            433
+        ],
+        [
+            397,
+            397
+        ],
+        [
+            395,
+            396
+        ],
+        [
+            389,
+            389
+        ],
+        [
+            380,
+            388
+        ],
+        [
+            369,
+            373
+        ],
+        [
+            363,
+            366
+        ],
+        [
+            361,
+            361
+        ],
+        [
+            353,
+            353
+        ],
+        [
+            350,
+            350
+        ],
+        [
+            349,
+            352
+        ],
+        [
+            348,
+            348
+        ],
+        [
+            339,
+            339
+        ],
+        [
+            322,
+            322
+        ],
+        [
+            320,
+            320
+        ],
+        [
+            315,
+            315
+        ],
+        [
+            311,
+            320
+        ],
+        [
+            302,
+            302
+        ],
+        [
+            299,
+            299
+        ],
+        [
+            286,
+            291
+        ],
+        [
+            281,
+            282
+        ],
+        [
+            272,
+            273
+        ],
+        [
+            259,
+            259
+        ],
+        [
+            250,
+            250
+        ],
+        [
+            248,
+            248
+        ],
+        [
+            238,
+            247
+        ],
+        [
+            225,
+            237
+        ],
+        [
+            212,
+            216
+        ],
+        [
+            206,
+            206
+        ],
+        [
+            198,
+            202
+        ],
+        [
+            193,
+            193
+        ],
+        [
+            185,
+            189
+        ],
+        [
+            176,
+            180
+        ],
+        [
+            170,
+            170
+        ],
+        [
+            168,
+            168
+        ],
+        [
+            164,
+            164
+        ],
+        [
+            162,
+            162
+        ],
+        [
+            157,
+            157
+        ],
+        [
+            146,
+            150
+        ],
+        [
+            132,
+            132
+        ],
+        [
+            128,
+            128
+        ],
+        [
+            126,
+            126
+        ],
+        [
+            122,
+            122
+        ],
+        [
+            102,
+            108
+        ]
+    ],
+    "blocks": [
+        "      assign maint_end = (rfc_zq_xsdll_timer_r == THREE[RFC_ZQ_TIMER_WIDTH-1:0]);",
+        "      always @(posedge clk) rfc_zq_xsdll_timer_r <= #TCQ rfc_zq_xsdll_timer_ns;\n",
+        "      always @(insert_maint_r_lcl or maint_zq_r or maint_sre_r or maint_srx_r\n               or rfc_zq_xsdll_timer_r or rst) begin\n        rfc_zq_xsdll_timer_ns = rfc_zq_xsdll_timer_r;\n        if (rst) rfc_zq_xsdll_timer_ns = {RFC_ZQ_TIMER_WIDTH{1'b0}};\n        else if (insert_maint_r_lcl) rfc_zq_xsdll_timer_ns =  maint_zq_r ?\n                                                                nZQCS_CLKS :\n                                                              maint_sre_r ?\n                                                                {RFC_ZQ_TIMER_WIDTH{1'b0}} :\n                                                              maint_srx_r ?\n                                                                nXSDLL_CLKS :\n                                                                nRFC_CLKS;\n        else if (|rfc_zq_xsdll_timer_r) rfc_zq_xsdll_timer_ns =\n                                  rfc_zq_xsdll_timer_r - ONE[RFC_ZQ_TIMER_WIDTH-1:0];\n      end",
+        "  generate begin : rfc_zq_xsdll_timer\n\n      reg [RFC_ZQ_TIMER_WIDTH-1:0] rfc_zq_xsdll_timer_ns;\n      reg [RFC_ZQ_TIMER_WIDTH-1:0] rfc_zq_xsdll_timer_r;\n",
+        "  endgenerate",
+        "      always @(posedge clk) insert_maint_r_lcl <= #TCQ insert_maint_ns;\n    end ",
+        "      always @(posedge clk) send_cnt_r <= #TCQ send_cnt_ns;",
+        "      always @(maint_zq_r or maint_sre_r or maint_srx_r or present_count\n          or rst or send_cnt_r or start_maint)\n        if (rst) send_cnt_ns = 4'b0;\n        else begin\n          send_cnt_ns = send_cnt_r;\n          if (start_maint && (maint_zq_r || maint_sre_r || maint_srx_r)) send_cnt_ns = present_count;\n          if (|send_cnt_ns)\n            send_cnt_ns = send_cnt_ns - ONE[RANK_WIDTH-1:0];\n        end",
+        "      always @(present) begin\n        present_count = {RANK_WIDTH{1'b0}};\n        for (i=0; i<8; i=i+1)\n          present_count = present_count + {{RANK_WIDTH{1'b0}}, present[i]};\n      end",
+        "  generate begin : generate_maint_cmds\n\n\n",
+        "  assign insert_maint_r = insert_maint_r_lcl;",
+        "  endgenerate",
+        "    assign start_maint = maint_rdy && ~maint_rdy_r1 || maint_srx_r && ~maint_srx_r1;",
+        "    always @(posedge clk) maint_srx_r1 <= #TCQ maint_srx_r;\n    assign start_maint = maint_rdy && ~maint_rdy_r1 || maint_srx_r && ~maint_srx_r1;\n\n    end ",
+        "    always @(posedge clk) maint_rdy_r1 <= #TCQ maint_rdy;",
+        "      always @(posedge clk) maint_hit_busies_r <= #TCQ maint_hit_busies_ns;",
+        "      always @(posedge clk) maint_wip_r_lcl <= #TCQ maint_wip_ns;",
+        "      wire maint_wip_ns =",
+        "      assign maint_idle_lcl = ~(maint_req_r && ~periodic_rd_cntr_r) && ~maint_wip_r_lcl;",
+        "  generate begin : maint_controller\n\n\n\n      assign maint_idle_lcl = ~(maint_req_r && ~periodic_rd_cntr_r) && ~maint_wip_r_lcl;\n\n\n\n\n      wire maint_wip_ns =",
+        "  assign maint_idle = maint_idle_lcl;",
+        "  assign maint_wip_r = maint_wip_r_lcl;",
+        "  always @(posedge clk) begin\n     if (hi_priority)\n        was_priority <= #TCQ 1'b1;\n     else\n        was_priority <= #TCQ 1'b0;\n  end",
+        "  always @(posedge clk) was_wr <= #TCQ\n             cmd[0] && ~(periodic_rd_r && ~periodic_rd_ack_r_lcl);",
+        "    end\n  endgenerate",
+        "  wire upd_last_master = |end_rtp;  ",
+        "      always @(posedge clk) low_idle_cnt_r <= #TCQ low_idle_cnt_ns;",
+        "      always @(posedge clk) idle_cnt_r <= #TCQ idle_cnt_ns;",
+        "      always @(accept_req_lcl or idle_cnt_r or passing_open_bank\n               or rst or start_pre_wait)\n        if (rst) idle_cnt_ns = nBANK_MACHS;\n        else begin\n          idle_cnt_ns = idle_cnt_r - accept_req_lcl;\n          for (i = 0; i <= nBANK_MACHS-1; i = i + 1) begin\n            idle_cnt_ns = idle_cnt_ns + passing_open_bank[i];\n          end\n          idle_cnt_ns = idle_cnt_ns + |start_pre_wait;\n        end",
+        "  generate\n\n\n\n\n\n    if (nOP_WAIT == 0) begin : op_mode_disabled\n      assign op_exit_grant = {nBANK_MACHS{1'b0}};\n    end\n\n    else begin : op_mode_enabled\n      reg [BM_CNT_WIDTH:0] idle_cnt_r;\n      reg [BM_CNT_WIDTH:0] idle_cnt_ns;",
+        "  always @(next) begin\n     bank_mach_next = BM_CNT_ZERO;\n    for (i = 0; i <= nBANK_MACHS-1; i = i + 1)\n      if (next[i]) bank_mach_next = i[BM_CNT_WIDTH-1:0];\n  end",
+        "  assign adv_order_q = |ordered_issued;",
+        "  always @(ordered_r) begin\n    order_cnt = BM_CNT_ZERO;\n    for (i = 0; i < nBANK_MACHS; i = i + 1)\n      if (ordered_r[i]) order_cnt = order_cnt + BM_CNT_ONE;\n  end",
+        "  assign idle = init_calib_complete && &idle_r;",
+        "  always @(idle_r) begin\n    idle_cnt = BM_CNT_ZERO;\n    for (i = 0; i < nBANK_MACHS; i = i + 1)\n      if (idle_r[i]) idle_cnt = idle_cnt + BM_CNT_ONE;\n  end",
+        "  always @(rb_hit_busy_r) begin\n    rb_hit_busy_cnt = BM_CNT_ZERO;\n    for (i = 0; i < nBANK_MACHS; i = i + 1)\n      if (rb_hit_busy_r[i]) rb_hit_busy_cnt = rb_hit_busy_cnt + BM_CNT_ONE;\n  end",
+        "  assign accept_req = accept_req_lcl;",
+        "  wire accept_req_lcl = periodic_rd_ack_r_lcl || (accept_r && use_addr);",
+        "  assign periodic_rd_ack_r = periodic_rd_ack_r_lcl;",
+        "  always @(posedge clk) periodic_rd_ack_r_lcl <= #TCQ periodic_rd_ack_ns;",
+        "  assign periodic_rd_insert = periodic_rd_insert_lcl;",
+        "  always @(posedge clk) begin\n    if (rst) periodic_rd_cntr_r <= #TCQ 1'b0;\n    else if (periodic_rd_r && periodic_rd_ack_r_lcl)\n       periodic_rd_cntr_r <= #TCQ ~periodic_rd_cntr_r;\n  end",
+        "  assign accept = accept_r;",
+        "  always @(posedge clk) accept_r <= #TCQ accept_ns_lcl;",
+        "  assign accept_ns = accept_ns_lcl;",
+        "  always @(posedge clk) accept_internal_r <= accept_internal_ns;",
+        "  function integer clogb2 (input integer size); \n    begin\n      size = size - 1;\n      for (clogb2=1; size>1; clogb2=clogb2+1)\n            size = size >> 1;\n    end\n  endfunction "
+    ]
+}

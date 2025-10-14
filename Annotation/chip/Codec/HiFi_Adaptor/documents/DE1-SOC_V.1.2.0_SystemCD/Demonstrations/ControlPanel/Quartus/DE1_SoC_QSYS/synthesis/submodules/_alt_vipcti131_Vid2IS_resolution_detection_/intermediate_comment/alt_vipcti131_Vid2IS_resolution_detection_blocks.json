@@ -1,0 +1,151 @@
+{
+    "line_num": [
+        [
+            219,
+            219
+        ],
+        [
+            217,
+            217
+        ],
+        [
+            216,
+            216
+        ],
+        [
+            215,
+            215
+        ],
+        [
+            213,
+            213
+        ],
+        [
+            212,
+            212
+        ],
+        [
+            211,
+            211
+        ],
+        [
+            209,
+            209
+        ],
+        [
+            208,
+            208
+        ],
+        [
+            206,
+            206
+        ],
+        [
+            205,
+            205
+        ],
+        [
+            204,
+            204
+        ],
+        [
+            202,
+            202
+        ],
+        [
+            201,
+            201
+        ],
+        [
+            200,
+            200
+        ],
+        [
+            197,
+            197
+        ],
+        [
+            196,
+            196
+        ],
+        [
+            194,
+            195
+        ],
+        [
+            192,
+            192
+        ],
+        [
+            191,
+            191
+        ],
+        [
+            190,
+            190
+        ],
+        [
+            189,
+            189
+        ],
+        [
+            188,
+            188
+        ],
+        [
+            187,
+            187
+        ],
+        [
+            182,
+            185
+        ],
+        [
+            180,
+            180
+        ],
+        [
+            179,
+            179
+        ],
+        [
+            177,
+            177
+        ],
+        [
+            100,
+            175
+        ]
+    ],
+    "blocks": [
+        "assign update_sample = update_active_sample & update_total_sample;",
+        "assign update_total_line_f1 = field_1 && (next_total_line_count != total_line_count_f1[13:1] || !total_line_count_f1[0]) && first_start_new_field;",
+        "assign update_total_line_f0 = field_0 && (next_total_line_count != total_line_count_f0[13:1] || !total_line_count_f0[0]) && first_start_new_field;",
+        "assign update_total_sample = (end_of_active_line && second_active_line) && (next_total_sample_count != total_sample_count[14:1] || !total_sample_count[0]) && first_start_of_line;",
+        "assign update_active_line_f1 = field_1 && (next_active_line_count != active_line_count_f1[13:1] || !active_line_count_f1[0]) && first_start_new_field;",
+        "assign update_active_line_f0 = field_0 && (next_active_line_count != active_line_count_f0[13:1] || !active_line_count_f0[0]) && first_start_new_field;",
+        "assign update_active_sample = (end_of_active_line) && (next_active_sample_count != active_sample_count[14:1] || !active_sample_count[0]) && first_start_of_line;",
+        "assign field_1 = reset_line_count & f;",
+        "assign field_0 = reset_line_count & ~f;",
+        "assign reset_total_f1 = reset_total_sample | (update_total_line_f0 & total_line_count_f0[0]);",
+        "assign reset_total_f0 = reset_total_sample | (update_total_line_f1 & total_line_count_f1[0]);",
+        "assign reset_total_sample = (update_total_sample & total_sample_count[0]);",
+        "assign reset_f1 = reset_sample | (update_active_line_f0 & active_line_count_f0[0]);",
+        "assign reset_f0 = reset_sample | (update_active_line_f1 & active_line_count_f1[0]);",
+        "assign reset_sample = (update_active_sample & active_sample_count[0]);",
+        "assign resolution_valid_update = resolution_valid_nxt ^ resolution_valid;",
+        "assign stable_update = stable_next ^ stable;",
+        "assign field_update = (update_active_sample | update_active_line_f0 | update_active_line_f1 |\n                       update_total_sample | update_total_line_f0 | update_total_line_f1);",
+        "assign total_line_count_f1_nxt = (reset_total_f1) ? {total_line_count_f1[13:1], 1'b0} : (update_total_line_f1) ? {next_total_line_count, 1'b1} : total_line_count_f1;",
+        "assign total_line_count_f0_nxt = (reset_total_f0) ? {total_line_count_f0[13:1], 1'b0} : (update_total_line_f0) ? {next_total_line_count, 1'b1} : total_line_count_f0;",
+        "assign total_sample_count_nxt = (update_total_sample) ? {next_total_sample_count, 1'b1} : total_sample_count;",
+        "assign active_line_count_f1_nxt = (reset_f1) ? {active_line_count_f1[13:1], 1'b0} : (update_active_line_f1) ? {next_active_line_count, 1'b1} : active_line_count_f1;",
+        "assign active_line_count_f0_nxt = (reset_f0) ? {active_line_count_f0[13:1], 1'b0} : (update_active_line_f0) ? {next_active_line_count, 1'b1} : active_line_count_f0;",
+        "assign active_sample_count_nxt = (update_active_sample) ? {next_active_sample_count, 1'b1} : active_sample_count;",
+        "assign resolution_valid_nxt = active_sample_count_nxt[0] & total_sample_count_nxt[0] &\n                              active_line_count_f0_nxt[0] & total_line_count_f0_nxt[0] &\n                              ((active_line_count_f1_nxt[0] & total_line_count_f1_nxt[0]) | ~interlaced) &\n                              interlaced_valid;",
+        "assign stable_next = vid_locked & first_start_of_line & ((lines_next[0] & lines_next[1]) | (lines_next[0] & lines_next[2]) | (lines_next[1] & lines_next[2]));",
+        "assign lines_next = (~vid_locked) ? 3'b000 : (start_new_line) ? {lines[1:0], ~update_sample} : lines;",
+        "assign reset_line_count_nxt = start_new_line & (start_new_field | start_new_field_sticky);",
+        "always @ (posedge rst or posedge clk) begin\n    if(rst) begin\n        current_field <= {INTERLACED, 1'b0};\n        prev_field <= 2'b00;\n        interlaced <= 1'b0;\n        interlaced_valid <= 1'b0;\n        start_new_field_sticky <= 1'b0;\n        reset_line_count <= 1'b0;\n        \n        lines <= 3'b000;\n        stable <= 1'b0;\n        stable_reg <= 1'b0;\n        \n        active_line <= 1'b0;\n        next_active_sample_count <= 14'd0;\n        next_active_line_count <= 13'd0;\n        next_total_sample_count <= 14'd0;\n        next_total_line_count <= 13'd0;\n        active_sample_count <= {H_ACTIVE_PIXELS, 1'b1};\n        active_line_count_f0 <= {V_ACTIVE_LINES_F0, 1'b1};\n        active_line_count_f1 <= (INTERLACED) ? {V_ACTIVE_LINES_F1, 1'b1} : 17'd0;\n        total_sample_count <= 15'd0;\n        total_line_count_f0 <= 14'd0;\n        total_line_count_f1 <= 14'd0;\n        total_line_count <= 14'd0;\n        \n        update <= 1'b0;\n        first_start_new_field <= 1'b0;\n        first_start_of_line <= 1'b0;\n        second_active_line <= 1'b0;\n        \n        resolution_valid <= 1'b0;\n        resolution_valid_reg <= 1'b0;\n        resolution_change <= 1'b0;\n    end else begin\n        \n        \n        current_field <= (~vid_locked) ? {current_field[1], 1'b0} : (end_of_vsync) ? {f, 1'b1} : current_field;\n        prev_field <= (~vid_locked) ? {prev_field[1], 1'b0} : (end_of_vsync) ? current_field : prev_field;\n        interlaced <= current_field[1] | prev_field[1];\n        interlaced_valid <= current_field[0] & prev_field[0];\n        start_new_field_sticky <= (start_new_field | start_new_field_sticky) & ~start_new_line;\n        reset_line_count <= reset_line_count_nxt;\n        \n        \n        lines <= lines_next;\n        stable <= stable_next;\n        stable_reg <= stable;\n        \n        active_line <= (ap | active_line) & ~start_new_line;\n        next_active_sample_count <= (end_of_active_line) ? 14'd0 : (ap_plus_1) ? next_active_sample_count + 14'd1 : next_active_sample_count;\n        next_active_line_count <= (reset_line_count) ? 13'd0 : (end_of_active_line) ? next_active_line_count + 13'd1 : next_active_line_count;\n        next_total_sample_count <= (start_new_line) ? {13'd0, count_sample} : (count_sample) ? next_total_sample_count + 14'd1 : next_total_sample_count;\n        next_total_line_count <= (reset_line_count) ? 13'd0 : (start_new_line) ? next_total_line_count + 13'd1 : next_total_line_count;\n        \n        \n        active_sample_count <= active_sample_count_nxt;\n        active_line_count_f0 <= active_line_count_f0_nxt;\n        active_line_count_f1 <= active_line_count_f1_nxt;\n        total_sample_count <= total_sample_count_nxt;\n        total_line_count_f0 <= total_line_count_f0_nxt;\n        total_line_count_f1 <= total_line_count_f1_nxt;\n        total_line_count[13:1] <= (~interlaced) ? total_line_count_f0_nxt[13:1] : total_line_count_f0_nxt[13:1] + total_line_count_f1_nxt[13:1];\n        total_line_count[0] <= total_line_count_f0_nxt[0] & (~interlaced | total_line_count_f1_nxt[0]);\n        \n        update <= update ^ (field_update | stable_update | resolution_valid_update);\n        first_start_of_line <= (start_new_line | first_start_of_line) & vid_locked;\n        first_start_new_field <= (reset_line_count | first_start_new_field) & vid_locked;\n        second_active_line <= (end_of_active_line | (second_active_line & ~start_new_line)) & vid_locked;  \n                                                                                                           \n        \n        resolution_valid <= resolution_valid_nxt;\n        resolution_valid_reg <= resolution_valid;\n        resolution_change <= resolution_change ^ ((resolution_valid & resolution_valid_nxt & field_update) | (resolution_valid & ~resolution_valid_reg));\n    end\nend"
+    ]
+}

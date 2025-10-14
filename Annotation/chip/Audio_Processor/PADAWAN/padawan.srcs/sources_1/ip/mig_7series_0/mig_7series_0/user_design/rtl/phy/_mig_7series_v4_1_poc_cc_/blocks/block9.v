@@ -1,0 +1,1 @@
+  always @(posedge clk) mmcm_edge_detect_done_r <= #TCQ mmcm_edge_detect_done;

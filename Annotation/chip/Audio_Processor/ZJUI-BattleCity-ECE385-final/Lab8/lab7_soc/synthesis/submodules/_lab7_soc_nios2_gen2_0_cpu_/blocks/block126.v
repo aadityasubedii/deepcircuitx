@@ -1,0 +1,1 @@
+  assign D_ctrl_jmp_indirect = D_op_eret|D_op_bret|D_op_ret|D_op_jmp|D_op_callr;

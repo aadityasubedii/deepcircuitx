@@ -1,0 +1,1 @@
+assign temp = idle_cnt + idlers_below;

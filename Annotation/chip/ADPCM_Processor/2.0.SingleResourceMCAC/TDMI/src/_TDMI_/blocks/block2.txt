@@ -1,0 +1,4 @@
+Line number: 
+[90, 114]
+Comment: 
+This block of Verilog code manages the data input parsing for a serial communication. On each rising edge of `serial_clk`, or if a reset is triggered, the system will perform a series of actions to manipulate the state of several variables. If reset is high, system-wide variables are cleared or set to default values. Otherwise, if `tdmi_begin` is high, the code checks for the start of a frame using the `frame_sync` signal. On the start of a new frame, the block resets the `ch_count` (channel count), captures the first bit of data into `data_out_buf`, and prepares the `bit_count` for the incoming data. For each subsequent bit of data, the block updates `data_out_buf` and decreases `bit_count`. Once all bits in a frame have been accounted for (`bit_count` equals 3'b111), `ch_count` increments by one. The frame sync status of the previous cycle is updated at the end of each `tdmi_begin` process.

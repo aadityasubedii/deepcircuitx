@@ -1,0 +1,11 @@
+Module name: eth_test. 
+
+Module specification: The eth_test is a Verilog module specifically designed to control Ethernet activities in a system. It serves the purpose of managing the reading and writing of data packets from and to Ethernet interfaces. The module accurately handles the MAC (Media Access Control) part which is crucial in any data communication. It also interacts with the PHY layer of the network stack through the MDIO/MDC interface.
+
+The eth_test module takes in several input ports which include md_io, an inout port for MDIO communication, mdc_i, the MDC clock signal, mtx_clk_i, the main clock for the transmission part, mrxd_i for receiving data and mrxdv_i to signal when valid data is present. The output from this module is fed through output ports such as mtxd_o for transmitting data, mtxdv_o to signal when valid data is present on the output, and mtxerr_o to indicate any error condition.
+
+The operation of the eth_test module is regulated by several internal signals including State_r, md_state_r, and rx_state_r that manage different states of operations. Other signals like crc and crc_din are used for error-checking functions. Signals like mem, line_r, pkt_len_r, and others act as memory spaces and control signals used by the state machines for different module operations.
+
+The module is composed of different sections each with a unique function. At the heart of the module are processes that are triggered at the rising edge of the main clock, mtx_clk_i and the MDC clock, mdc_i, which control the state of the Ethernet module. Other sections include the initialization part, where initial values are set, a module for CRC error checking, and a task section which prints information on the data packets. The module also includes a function, rmem, for reading memory during transmission or reception. 
+
+The essence of this module centered around the handling of input from these ports, undergoing specific operations as per the module's function, and eventually sending the results to the output ports. It maintains the integrity of data communication, especially in Ethernet-based systems.

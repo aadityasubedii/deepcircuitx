@@ -1,0 +1,1 @@
+        assign count_sample = (hd_sdn) ? count_cycle : count_cycle & new_sample; 

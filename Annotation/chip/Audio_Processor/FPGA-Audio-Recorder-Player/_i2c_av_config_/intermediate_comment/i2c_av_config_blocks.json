@@ -1,0 +1,26 @@
+{
+    "line_num": [
+        [
+            52,
+            81
+        ],
+        [
+            50,
+            50
+        ],
+        [
+            48,
+            48
+        ],
+        [
+            31,
+            46
+        ]
+    ],
+    "blocks": [
+        "always @(posedge clk) begin\n    if (reset) begin\n        lut_index <= 4'd0;\n        i2c_start <= 1'b0;\n        control_state <= 2'b00;\n    end else begin\n        case (control_state)\n            2'b00: begin\n                i2c_start <= 1'b1;\n                i2c_data <= {8'h34, lut_data};\n                control_state <= 2'b01;\n            end\n            2'b01: begin\n                i2c_start <= 1'b0;\n                control_state <= 2'b10;\n            end\n            2'b10: if (i2c_done) begin\n                if (i2c_ack) begin\n                    if (lut_index == LAST_INDEX)\n                        control_state <= 2'b11;\n                    else begin\n                        lut_index <= lut_index + 1'b1;\n                        control_state <= 2'b00;\n                    end\n                end else\n                    control_state <= 2'b00;\n            end\n        endcase\n    end\nend",
+        "assign status = lut_index;",
+        "reg [1:0] control_state = 2'b00;",
+        "always @(*) begin\n    case (lut_index)\n        4'h0: lut_data <= 16'h0c10; \n        4'h1: lut_data <= 16'h0017; \n        4'h2: lut_data <= 16'h0217; \n        4'h3: lut_data <= 16'h0479; \n        4'h4: lut_data <= 16'h0679; \n        4'h5: lut_data <= 16'h08d4; \n        4'h6: lut_data <= 16'h0a04; \n        4'h7: lut_data <= 16'h0e01; \n        4'h8: lut_data <= 16'h1020; \n        4'h9: lut_data <= 16'h0c00; \n        4'ha: lut_data <= 16'h1201; \n        default: lut_data <= 16'h0000;\n    endcase\nend"
+    ]
+}

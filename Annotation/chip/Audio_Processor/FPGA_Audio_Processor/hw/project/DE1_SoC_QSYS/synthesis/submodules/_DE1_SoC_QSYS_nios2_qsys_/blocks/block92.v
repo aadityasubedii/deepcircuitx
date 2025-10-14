@@ -1,0 +1,1 @@
+  assign R_ctrl_exception_nxt = D_ctrl_exception;

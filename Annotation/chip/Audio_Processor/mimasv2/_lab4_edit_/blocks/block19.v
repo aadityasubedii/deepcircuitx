@@ -1,0 +1,1 @@
+  assign ready = ready_sync[1] & ~ready_sync[2];

@@ -1,0 +1,1 @@
+	initial en_lfsr = 1'b0;

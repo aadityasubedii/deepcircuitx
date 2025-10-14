@@ -1,0 +1,1 @@
+assign cmd_full = mcb_cmd_full_i;

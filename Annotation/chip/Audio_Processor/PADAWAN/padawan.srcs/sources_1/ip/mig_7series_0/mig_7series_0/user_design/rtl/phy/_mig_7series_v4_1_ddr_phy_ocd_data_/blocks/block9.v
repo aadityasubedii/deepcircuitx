@@ -1,0 +1,1 @@
+  always @(posedge clk) prbs_bytes_r <= #TCQ prbs_bytes_ns;

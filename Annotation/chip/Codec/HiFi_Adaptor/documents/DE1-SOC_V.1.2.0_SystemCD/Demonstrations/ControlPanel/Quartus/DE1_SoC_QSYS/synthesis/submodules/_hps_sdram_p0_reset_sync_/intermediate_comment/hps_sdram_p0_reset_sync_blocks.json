@@ -1,0 +1,21 @@
+{
+    "line_num": [
+        [
+            60,
+            60
+        ],
+        [
+            42,
+            56
+        ],
+        [
+            38,
+            41
+        ]
+    ],
+    "blocks": [
+        "\tassign reset_n_sync = reset_reg[RESET_SYNC_STAGES+NUM_RESET_OUTPUT-2:RESET_SYNC_STAGES-1];",
+        "\t\talways @(posedge clk or negedge reset_n)\n\t\tbegin\n\t\t\tif (~reset_n)\n\t\t\t\treset_reg[i] <= 1'b0;\n\t\t\telse\n\t\t\tbegin\n\t\t\t\tif (i==0)\n\t\t\t\t\treset_reg[i] <= 1'b1;\n\t\t\t\telse if (i < RESET_SYNC_STAGES)\n\t\t\t\t\treset_reg[i] <= reset_reg[i-1];\n\t\t\t\telse\n\t\t\t\t\treset_reg[i] <= reset_reg[RESET_SYNC_STAGES-2];\n\t\t\t\t\n\t\t\tend\n\t\tend",
+        "generate\ngenvar i;\n\tfor (i=0; i<RESET_SYNC_STAGES+NUM_RESET_OUTPUT-1; i=i+1)\n\tbegin: reset_stage"
+    ]
+}

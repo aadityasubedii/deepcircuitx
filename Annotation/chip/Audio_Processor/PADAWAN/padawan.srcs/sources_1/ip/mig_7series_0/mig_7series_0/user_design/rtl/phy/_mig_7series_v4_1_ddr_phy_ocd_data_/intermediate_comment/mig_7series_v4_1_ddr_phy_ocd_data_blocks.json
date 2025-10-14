@@ -1,0 +1,66 @@
+{
+    "line_num": [
+        [
+            226,
+            227
+        ],
+        [
+            180,
+            219
+        ],
+        [
+            171,
+            175
+        ],
+        [
+            170,
+            170
+        ],
+        [
+            167,
+            167
+        ],
+        [
+            162,
+            166
+        ],
+        [
+            155,
+            155
+        ],
+        [
+            154,
+            154
+        ],
+        [
+            150,
+            150
+        ],
+        [
+            149,
+            149
+        ],
+        [
+            148,
+            148
+        ],
+        [
+            147,
+            147
+        ]
+    ],
+    "blocks": [
+        "  output [1:0] match;\n  assign match = complex_oclkdelay_calib_start ? {&prbs180_masked, &prbs0_masked} : {&comp180_masked , &comp0_masked};",
+        "  always @(*) begin\n    comp0 = 8'hff;\n    comp180 = 8'hff;\n    prbs0 = 8'hff;\n    prbs180 = 8'hff;\n    data_bytes_ns = 64'b0;\n    prbs_bytes_ns = 64'b0;\n    for (ii=0; ii<2*nCK_PER_CLK; ii=ii+1) \n      begin\n        word = phy_rddata[ii*DQ_WIDTH+:DQ_WIDTH];\n\tword_shifted = word >> oclkdelay_calib_cnt*8;\n\tdata_bytes_ns[ii*8+:8] = word_shifted[7:0];\n\t\n        word = prbs_o[ii*DQ_WIDTH+:DQ_WIDTH];\n\tword_shifted = word >> oclkdelay_calib_cnt*8;\n\tprbs_bytes_ns[ii*8+:8] = word_shifted[7:0];\n\t\n\tcomp0[ii] = data_bytes[ii*8+:8] == (ii%2 ? 8'hff : 8'h00);\n\tcomp180[ii] = data_bytes[ii*8+:8] == (ii%2 ? 8'h00 : 8'hff);\n\t\n        prbs0[ii] = data_bytes[ii*8+:8] == prbs_bytes_r[ii*8+:8];\n      end \n    prbs180[0] = last_byte_r == prbs_bytes_r[7:0];\n    for (ii=1; ii<2*nCK_PER_CLK; ii=ii+1)\n       \tprbs180[ii] = data_bytes[(ii-1)*8+:8] == prbs_bytes_r[ii*8+:8];\n    if (nCK_PER_CLK == 4) begin\n      if (prbs_ignore_last_bytes_r) begin\n        prbs0[7:6] = 2'b11;\n\tprbs180[7] = 1'b1;\n      end\n      if (prbs_ignore_first_byte_r) prbs180[0] = 1'b1;\n    end else begin\n      if (second_half_r) begin\n        if (prbs_ignore_last_bytes_r) begin\n\t    prbs0[3:2] = 2'b11;\n\t    prbs180[3] = 1'b1;\n\tend\n      end else if (prbs_ignore_first_byte_r) prbs180[0] = 1'b1;\n    end \n  end ",
+        "  always @(*) begin\n    second_half_ns = second_half_r;\n    if (rst) second_half_ns = 1'b0;\n    else second_half_ns = phy_rddata_en_1 ^ second_half_r;\n  end",
+        "  always @(posedge clk) second_half_r <= #TCQ second_half_ns;",
+        "  always @(posedge clk) last_byte_r <= #TCQ last_byte_ns;",
+        "  generate if (nCK_PER_CLK == 4) begin\n    assign last_byte_ns = phy_rddata_en_1 ? data_bytes[63:56] : last_byte_r;\n  end else begin\n    assign last_byte_ns = phy_rddata_en_1 ? data_bytes[31:24] : last_byte_r;\n  end endgenerate",
+        "  always @(posedge clk) prbs_ignore_last_bytes_r <= #TCQ prbs_ignore_last_bytes;",
+        "  always @(posedge clk) prbs_ignore_first_byte_r <= #TCQ prbs_ignore_first_byte;",
+        "  always @(posedge clk) prbs_bytes_r <= #TCQ prbs_bytes_ns;",
+        "  always @(posedge clk) data_bytes_r2 <= #TCQ data_bytes_r1;",
+        "  always @(posedge clk) data_bytes_r1 <= #TCQ data_bytes_r;",
+        "  always @(posedge clk) data_bytes_r <= #TCQ data_bytes_ns;"
+    ]
+}

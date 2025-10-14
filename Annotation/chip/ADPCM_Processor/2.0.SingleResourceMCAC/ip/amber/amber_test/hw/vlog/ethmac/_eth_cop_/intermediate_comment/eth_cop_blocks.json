@@ -1,0 +1,51 @@
+{
+    "line_num": [
+        [
+            366,
+            384
+        ],
+        [
+            344,
+            363
+        ],
+        [
+            332,
+            342
+        ],
+        [
+            327,
+            327
+        ],
+        [
+            311,
+            324
+        ],
+        [
+            294,
+            307
+        ],
+        [
+            275,
+            290
+        ],
+        [
+            256,
+            271
+        ],
+        [
+            153,
+            253
+        ]
+    ],
+    "blocks": [
+        "always @ (posedge wb_clk_i)\nbegin\n  if(s1_wb_err_i & s1_wb_cyc_o) begin\n    $display(\"(%0t) ERROR: WB cycle finished with error acknowledge \", $time);\n    $display(\"s1_wb_dat_o = 0x%0x\", s1_wb_dat_o);\n    $display(\"s1_wb_adr_o = 0x%0x\", s1_wb_adr_o);\n    $display(\"s1_wb_sel_o = 0x%0x\", s1_wb_sel_o);\n    $display(\"s1_wb_we_o = 0x%0x\", s1_wb_we_o);\n    $stop;\n  end\n  if(s2_wb_err_i & s2_wb_cyc_o) begin\n    $display(\"(%0t) ERROR: WB cycle finished with error acknowledge \", $time);\n    $display(\"s2_wb_dat_o = 0x%0x\", s2_wb_dat_o);\n    $display(\"s2_wb_adr_o = 0x%0x\", s2_wb_adr_o);\n    $display(\"s2_wb_sel_o = 0x%0x\", s2_wb_sel_o);\n    $display(\"s2_wb_we_o = 0x%0x\", s2_wb_we_o);\n    $stop;\n  end\nend",
+        "always @ (posedge wb_clk_i)\nbegin\n  if(cnt==1000) begin\n    $display(\"(%0t)(%m) ERROR: WB activity ??? \", $time);\n    if(s1_wb_cyc_o) begin\n      $display(\"s1_wb_dat_o = 0x%0x\", s1_wb_dat_o);\n      $display(\"s1_wb_adr_o = 0x%0x\", s1_wb_adr_o);\n      $display(\"s1_wb_sel_o = 0x%0x\", s1_wb_sel_o);\n      $display(\"s1_wb_we_o = 0x%0x\", s1_wb_we_o);\n    end\n    else if(s2_wb_cyc_o) begin\n      $display(\"s2_wb_dat_o = 0x%0x\", s2_wb_dat_o);\n      $display(\"s2_wb_adr_o = 0x%0x\", s2_wb_adr_o);\n      $display(\"s2_wb_sel_o = 0x%0x\", s2_wb_sel_o);\n      $display(\"s2_wb_we_o = 0x%0x\", s2_wb_we_o);\n    end\n\n    $stop;\n  end\nend",
+        "always @ (posedge wb_clk_i or posedge wb_rst_i)\nbegin\n  if(wb_rst_i)\n    cnt <=#Tp 0;\n  else\n  if(s1_wb_ack_i | s1_wb_err_i | s2_wb_ack_i | s2_wb_err_i)\n    cnt <=#Tp 0;\n  else\n  if(s1_wb_cyc_o | s2_wb_cyc_o)\n    cnt <=#Tp cnt+1;\nend",
+        "assign m_wb_access_finished = m1_wb_ack_o | m1_wb_err_o | m2_wb_ack_o | m2_wb_err_o;",
+        "always @ (m2_in_progress or m2_wb_adr_i or s1_wb_err_i or s2_wb_err_i or `M2_ADDRESSED_S1 or `M2_ADDRESSED_S2 or\n          m2_wb_cyc_i or m2_wb_stb_i)\nbegin\n  if(m2_in_progress)  begin\n    if(`M2_ADDRESSED_S1)\n      m2_wb_err_o <= s1_wb_err_i;\n    else if(`M2_ADDRESSED_S2)\n      m2_wb_err_o <= s2_wb_err_i;\n  end\n  else if(m2_wb_cyc_i & m2_wb_stb_i & ~`M2_ADDRESSED_S1 & ~`M2_ADDRESSED_S2)\n    m2_wb_err_o <= 1'b1;\n  else\n    m2_wb_err_o <= 1'b0;\nend",
+        "always @ (m1_in_progress or m1_wb_adr_i or s1_wb_err_i or s2_wb_err_i or `M2_ADDRESSED_S1 or `M2_ADDRESSED_S2 or\n          m1_wb_cyc_i or m1_wb_stb_i)\nbegin\n  if(m1_in_progress)  begin\n    if(`M1_ADDRESSED_S1)\n      m1_wb_err_o <= s1_wb_err_i;\n    else if(`M1_ADDRESSED_S2)\n      m1_wb_err_o <= s2_wb_err_i;\n  end\n  else if(m1_wb_cyc_i & m1_wb_stb_i & ~`M1_ADDRESSED_S1 & ~`M1_ADDRESSED_S2)\n    m1_wb_err_o <= 1'b1;\n  else\n    m1_wb_err_o <= 1'b0;\nend",
+        "always @ (m2_in_progress or m2_wb_adr_i or s1_wb_ack_i or s2_wb_ack_i or s1_wb_dat_i or s2_wb_dat_i or `M2_ADDRESSED_S1 or `M2_ADDRESSED_S2)\nbegin\n  if(m2_in_progress)\n    begin\n      if(`M2_ADDRESSED_S1) begin\n        m2_wb_ack_o <= s1_wb_ack_i;\n        m2_wb_dat_o <= s1_wb_dat_i;\n      end\n      else if(`M2_ADDRESSED_S2) begin\n        m2_wb_ack_o <= s2_wb_ack_i;\n        m2_wb_dat_o <= s2_wb_dat_i;\n      end\n    end\n  else\n    m2_wb_ack_o <= 0;\nend",
+        "always @ (m1_in_progress or m1_wb_adr_i or s1_wb_ack_i or s2_wb_ack_i or s1_wb_dat_i or s2_wb_dat_i or `M1_ADDRESSED_S1 or `M1_ADDRESSED_S2)\nbegin\n  if(m1_in_progress)\n    begin\n      if(`M1_ADDRESSED_S1) begin\n        m1_wb_ack_o <= s1_wb_ack_i;\n        m1_wb_dat_o <= s1_wb_dat_i;\n      end\n      else if(`M1_ADDRESSED_S2) begin\n        m1_wb_ack_o <= s2_wb_ack_i;\n        m1_wb_dat_o <= s2_wb_dat_i;\n      end\n    end\n  else\n    m1_wb_ack_o <= 0;\nend",
+        "always @ (posedge wb_clk_i or posedge wb_rst_i)\nbegin\n  if(wb_rst_i)\n    begin\n      m1_in_progress <=#Tp 0;\n      m2_in_progress <=#Tp 0;\n      s1_wb_adr_o    <=#Tp 0;\n      s1_wb_sel_o    <=#Tp 0;\n      s1_wb_we_o     <=#Tp 0;\n      s1_wb_dat_o    <=#Tp 0;\n      s1_wb_cyc_o    <=#Tp 0;\n      s1_wb_stb_o    <=#Tp 0;\n      s2_wb_adr_o    <=#Tp 0;\n      s2_wb_sel_o    <=#Tp 0;\n      s2_wb_we_o     <=#Tp 0;\n      s2_wb_dat_o    <=#Tp 0;\n      s2_wb_cyc_o    <=#Tp 0;\n      s2_wb_stb_o    <=#Tp 0;\n    end\n  else\n    begin\n      case({m1_in_progress, m2_in_progress, m1_req, m2_req, m_wb_access_finished})  \n        5'b00_10_0, 5'b00_11_0 :\n          begin\n            m1_in_progress <=#Tp 1'b1;  \n            if(`M1_ADDRESSED_S1)\n              begin\n                s1_wb_adr_o <=#Tp m1_wb_adr_i;\n                s1_wb_sel_o <=#Tp m1_wb_sel_i;\n                s1_wb_we_o  <=#Tp m1_wb_we_i;\n                s1_wb_dat_o <=#Tp m1_wb_dat_i;\n                s1_wb_cyc_o <=#Tp 1'b1;\n                s1_wb_stb_o <=#Tp 1'b1;\n              end\n            else if(`M1_ADDRESSED_S2)\n              begin\n                s2_wb_adr_o <=#Tp m1_wb_adr_i;\n                s2_wb_sel_o <=#Tp m1_wb_sel_i;\n                s2_wb_we_o  <=#Tp m1_wb_we_i;\n                s2_wb_dat_o <=#Tp m1_wb_dat_i;\n                s2_wb_cyc_o <=#Tp 1'b1;\n                s2_wb_stb_o <=#Tp 1'b1;\n              end\n            else\n              $display(\"(%t)(%m)WISHBONE ERROR: Unspecified address space accessed\", $time);\n          end\n        5'b00_01_0 :\n          begin\n            m2_in_progress <=#Tp 1'b1;  \n            if(`M2_ADDRESSED_S1)\n              begin\n                s1_wb_adr_o <=#Tp m2_wb_adr_i;\n                s1_wb_sel_o <=#Tp m2_wb_sel_i;\n                s1_wb_we_o  <=#Tp m2_wb_we_i;\n                s1_wb_dat_o <=#Tp m2_wb_dat_i;\n                s1_wb_cyc_o <=#Tp 1'b1;\n                s1_wb_stb_o <=#Tp 1'b1;\n              end\n            else if(`M2_ADDRESSED_S2)\n              begin\n                s2_wb_adr_o <=#Tp m2_wb_adr_i;\n                s2_wb_sel_o <=#Tp m2_wb_sel_i;\n                s2_wb_we_o  <=#Tp m2_wb_we_i;\n                s2_wb_dat_o <=#Tp m2_wb_dat_i;\n                s2_wb_cyc_o <=#Tp 1'b1;\n                s2_wb_stb_o <=#Tp 1'b1;\n              end\n            else\n              $display(\"(%t)(%m)WISHBONE ERROR: Unspecified address space accessed\", $time);\n          end\n        5'b10_10_1, 5'b10_11_1 :\n          begin\n            m1_in_progress <=#Tp 1'b0;  \n            if(`M1_ADDRESSED_S1)\n              begin\n                s1_wb_cyc_o <=#Tp 1'b0;\n                s1_wb_stb_o <=#Tp 1'b0;\n              end\n            else if(`M1_ADDRESSED_S2)\n              begin\n                s2_wb_cyc_o <=#Tp 1'b0;\n                s2_wb_stb_o <=#Tp 1'b0;\n              end\n          end\n        5'b01_01_1, 5'b01_11_1 :\n          begin\n            m2_in_progress <=#Tp 1'b0;  \n            if(`M2_ADDRESSED_S1)\n              begin\n                s1_wb_cyc_o <=#Tp 1'b0;\n                s1_wb_stb_o <=#Tp 1'b0;\n              end\n            else if(`M2_ADDRESSED_S2)\n              begin\n                s2_wb_cyc_o <=#Tp 1'b0;\n                s2_wb_stb_o <=#Tp 1'b0;\n              end\n          end\n      endcase\n    end\nend"
+    ]
+}

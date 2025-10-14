@@ -1,0 +1,1 @@
+always @ (posedge WB_CLK_I or posedge Reset)

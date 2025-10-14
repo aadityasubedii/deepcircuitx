@@ -1,0 +1,11 @@
+Module name: DE1_SoC_QSYS_data_out. 
+
+Module specification: The DE1_SoC_QSYS_data_out is a data output module designed for a DE1 System on Chip (SoC) with a Quartus System (QSYS) interface. 
+
+Its functionality is primarily handling the data transactions on a bus-like system with five input ports - a 2-bit 'address' signal for targeting the operations; 'chipselect', a control signal effectuating the chip for transactions; 'clk', the system clock that sets the timing sequence of the operations; 'reset_n', an active low reset signal that clears the 'data_out' register; 'write_n', an active low signal controlling the data writing process; and 'writedata', a 32-bit input used for storing data into the 'data_out' register obeying the chipselect, write operation, and address equals 0 condition. 
+
+The data values of transactions are conveyed through two output ports - 'out_port', a 16-bit output mirroring the 'data_out' register, and 'readdata', a 32-bit output delivering reading functionality with a 16-bit leading zeros and lower 16 bits sourced from 'read_mux_out' wire, a masked(Bitwise and) value of address and 'data_out'. 
+
+Internal signals utilized within the module include 'clk_en', a wire controlling the clock enablement, always set to 1; 'data_out', a 16-bit register holding the masked lower 16 bits of 'writedata'; 'out_port', a wire reflecting data_out, providing its external output; 'read_mux_out', a wire optimizing 'data_out' with the condition (address == 0); and 'readdata', formed by concatenating 16 leading zeros with the 'read_mux_out' signal in a 32-bit format for transferring data for external use. 
+
+The module consists of two sections, an assignment section that dictates the functionality of 'clk_en', 'read_mux_out', 'readdata', and 'out_port'; and an always block that controls the functions of 'reset_n', 'chipselect', 'write_n', and 'address'. This concise division helps optimally manage data transactions, ensuring high operational efficiency.

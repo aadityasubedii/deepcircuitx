@@ -1,0 +1,1 @@
+            assign usedw_output = usedw[15:0];

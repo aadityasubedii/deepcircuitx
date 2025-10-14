@@ -1,0 +1,28 @@
+Module Name: [SDRAM_Controller]
+Module Specification: The SDRAM_Controller module is designed for interfacing with Synchronous Dynamic Random Access Memory (SDRAM). This module manages memory operations such as initialization, read, write, and refresh cycles by executing a sequence of commands defined by the provided macro instructions. It operates according to a state machine with states such as idle, active, and various operational states for different SDRAM timing periods.
+
+Input Ports: 
+- `clk`: The system clock which the module synchronizes its operations to.
+- `cmd`: Encoded commands that control the operation of the SDRAM using `CMD_` macros.
+- `address`: The memory address where operations are targeted.
+- `data_in`: Data provided to SDRAM for writing operations.
+
+Output Ports:
+- `data_out`: Data output from SDRAM read operations.
+- `busy`: Signal to indicate the controller is performing an operation and is not ready for new commands.
+- `error`: Signal to report any operational errors during memory access.
+
+Internal Signals: 
+- `state`: A register tracking the current state of the state machine, aligning with states defined by `W_` macros.
+- `cnt_clk`: A counter to ensure SDRAM timing constraints are met, including delays between commands.
+- `cmd_reg`: A register that latches the current command the module is processing.
+- `addr_reg`: Registers to store the memory address for the current command.
+- `data_reg`: A register for the temporary storage of data being written to or read from the SDRAM.
+
+Code Blocks and Functions:
+- Instruction Macros (`I_NOP`, `I_PRE`, etc.): Define operation codes that the state machine uses to execute memory operations.
+- State Machine States (`W_IDLE`, `W_ACTIVE`, etc.): Define various states for the internal control state machine.
+- Timing End Conditions (`end_trp`, `end_trfc`, etc.): Macros that equate to compare operations for timing constraints during various stages of SDRAM memory access.
+- Command Codes (`CMD_INIT`, `CMD_NOP`, etc.): Define the binary values for the various SDRAM commands issued by the state machine to perform initialization, read, write, and refresh operations.
+
+Overall, this speculative module encompasses a complex state machine to appropriately control SDRAM, including setup for timing parameters (like CAS latency and row/column delays), execution of commands, and transitioning through various states for each phase of operation. It supervises the process from issuing the initial SDRAM command sequences, ongoing read/write cycles, to the required periodic refresh commands, all regulated by the internal clock and the macro definitions provided.

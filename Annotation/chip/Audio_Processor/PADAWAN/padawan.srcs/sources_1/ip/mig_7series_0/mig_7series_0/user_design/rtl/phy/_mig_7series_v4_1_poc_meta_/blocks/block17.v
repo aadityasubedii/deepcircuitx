@@ -1,0 +1,1 @@
+  always @(posedge clk) center_diff_r <= #TCQ center_diff_ns;

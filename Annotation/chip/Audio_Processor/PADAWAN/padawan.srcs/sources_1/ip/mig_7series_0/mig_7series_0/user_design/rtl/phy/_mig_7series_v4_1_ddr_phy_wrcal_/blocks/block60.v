@@ -1,0 +1,1 @@
+  assign dbg_final_po_coarse_tap_cnt = po_coarse_tap_cnt_w;

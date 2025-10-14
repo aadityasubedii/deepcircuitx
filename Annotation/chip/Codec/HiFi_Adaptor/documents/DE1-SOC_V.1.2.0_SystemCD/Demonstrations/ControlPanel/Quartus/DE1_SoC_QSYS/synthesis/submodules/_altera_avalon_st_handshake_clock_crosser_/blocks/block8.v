@@ -1,0 +1,1 @@
+            assign {out_startofpacket, out_endofpacket} = 2'b0;

@@ -1,0 +1,1 @@
+  always @(posedge clk) f2o_r <= #TCQ f2o_ns;

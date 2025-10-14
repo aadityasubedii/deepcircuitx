@@ -1,0 +1,36 @@
+{
+    "line_num": [
+        [
+            90,
+            90
+        ],
+        [
+            89,
+            89
+        ],
+        [
+            67,
+            87
+        ],
+        [
+            63,
+            63
+        ],
+        [
+            29,
+            61
+        ],
+        [
+            26,
+            28
+        ]
+    ],
+    "blocks": [
+        "assign packet_out = write_buffer_packet | early_eop;",
+        "assign wrreq_out = (&write_buffer_valid) | early_eop;",
+        "always @ (posedge rst or posedge clk) begin\n    if(rst) begin\n        write_buffer_packet <= 1'b0;\n    end else begin\n        if(wrreq_in && !early_eop) begin\n            if(!hd_sdn) begin\n                if(packet_in) begin\n                    write_buffer_packet <= 1'b1;\n                end else if(wrreq_out) begin\n                    write_buffer_packet <= 1'b0;\n                end\n            end else begin\n                write_buffer_packet <= packet_in;\n            end\n        end else begin\n            if(wrreq_out) begin\n                write_buffer_packet <= 1'b0;\n            end\n        end\n    end\nend",
+        "        assign data_out[(i*BPS)+(BPS-1):(i*BPS)] = write_buffer_data[i];",
+        "        always @ (posedge rst or posedge clk) begin\n            if(rst) begin\n                write_buffer_data[i] <= {BPS{1'b0}};\n                write_buffer_valid[i] <= 1'b0;\n            end else begin\n                if(wrreq_in && !early_eop) begin\n                    if(!hd_sdn) begin\n                        if(!convert) begin\n                            \n                            \n                            write_buffer_data[i] <= data_in[BPS-1:0];\n                            write_buffer_valid[i] <= 1'b1;\n                        end else begin\n                            if((i == 0) ? write_buffer_valid[i] == 0 || wrreq_out : write_buffer_valid[i] == 0 && write_buffer_valid[i-1] == 1) begin    \n                                write_buffer_data[i] <= data_in[BPS-1:0]; \n                                write_buffer_valid[i] <= 1'b1;\n                            end else begin\n                                if(wrreq_out) begin\n                                    write_buffer_valid[i] <= 1'b0;   \n                                end\n                            end\n                        end\n                    end else begin\n                        write_buffer_data[i] <= data_in[(i*BPS)+(BPS-1):(i*BPS)];\n                        write_buffer_valid[i] <= 1'b1;\n                    end\n                end else begin\n                    if(wrreq_out) begin\n                        write_buffer_valid[i] <= 1'b0;   \n                    end\n                end\n            end\n        end",
+        "generate begin : write_buffer_generation\n    genvar i;\n    for(i = 0; i < NUMBER_OF_COLOUR_PLANES; i = i + 1) begin : write_buffer_generation_for_loop"
+    ]
+}

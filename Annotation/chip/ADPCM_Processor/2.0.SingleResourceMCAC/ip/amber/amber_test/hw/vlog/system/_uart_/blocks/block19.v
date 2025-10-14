@@ -1,0 +1,1 @@
+assign o_uart_rts_n  = ~rxen;

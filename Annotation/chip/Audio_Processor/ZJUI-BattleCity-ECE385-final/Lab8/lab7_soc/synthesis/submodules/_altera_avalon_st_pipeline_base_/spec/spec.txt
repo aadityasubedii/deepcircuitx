@@ -1,0 +1,13 @@
+Module name: `altera_avalon_st_pipeline_base`.
+
+Module Specification: 
+
+The `altera_avalon_st_pipeline_base` is a Verilog Hardware Description Language (HDL) module responsible for data pipelining in digital systems. It works as a buffer between data input and data output, enabling data transmission between stages to be managed and regulated efficiently. 
+
+The module consists of several input ports which include: `clk`, that acts as a clock signal for operational synchronization; `reset`, used to initialize the module's state; `in_valid`, signaling the validity of input data; `in_data`, the actual data input; and `out_ready`, a prompt from downstream logic signaling readiness to accept data. 
+
+On the other hand, output ports include: `in_ready`, a signal indicating to previous logic stages readiness to accept new data; `out_valid`, a signal for the validity of output data; and `out_data`, which is the actual output data of the module. 
+
+Integral to its function are the internal signals: `full0` & `full1`, serving as flags indicating if the internal registers `data0` & `data1` are full or not; and `data0` & `data1`, internal registers temporarily holding incoming and outgoing data respectively. 
+
+The code is partitioned into different sections, each performing different functions. The parameters are set up, the input and output ports are defined, alongside the internal signals used within the module are established. The code further has two primary sections distinguished by the `PIPELINE_READY` parameter: The 'REGISTERED_READY_PLINE' section implements a double-buffer buffering strategy using both `data0` and `data1`, providing seamless data transmission. The 'UNREGISTERED_READY_PLINE' section employs a single buffer utilizing only `data1`, serving as a more straightforward buffering strategy. Each of these sections handles data transfer in different manners to optimize the pipelining process according to system requirements.

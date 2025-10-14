@@ -1,0 +1,1 @@
+    assign xfer_re = block_en & dma_ack;

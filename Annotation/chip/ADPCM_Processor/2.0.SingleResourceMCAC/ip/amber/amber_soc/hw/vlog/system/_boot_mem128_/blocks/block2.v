@@ -1,0 +1,1 @@
+`ifdef XILINX_SPARTAN6_FPGA

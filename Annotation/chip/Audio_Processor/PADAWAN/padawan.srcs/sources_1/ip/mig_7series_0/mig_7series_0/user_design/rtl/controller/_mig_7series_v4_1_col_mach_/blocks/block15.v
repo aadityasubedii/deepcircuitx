@@ -1,0 +1,1 @@
+      always @(posedge clk) head_r <= #TCQ head_ns;

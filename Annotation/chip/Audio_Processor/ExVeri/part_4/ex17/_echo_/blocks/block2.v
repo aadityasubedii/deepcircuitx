@@ -1,0 +1,1 @@
+	assign y = x + {echo[9], echo[9:1]}; 

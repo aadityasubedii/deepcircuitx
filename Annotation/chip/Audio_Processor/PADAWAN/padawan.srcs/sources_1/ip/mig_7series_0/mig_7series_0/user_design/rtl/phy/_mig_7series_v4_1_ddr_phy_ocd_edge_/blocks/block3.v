@@ -1,0 +1,1 @@
+  always @(posedge clk) fuzz2oneeighty_r <= #TCQ fuzz2oneeighty_ns;

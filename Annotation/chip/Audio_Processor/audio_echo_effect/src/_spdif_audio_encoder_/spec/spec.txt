@@ -1,0 +1,9 @@
+Module name: spdif_audio_encoder. 
+
+Module specification: The spdif_audio_encoder is a Verilog hardware module specifically designed to encode digital audio data in Sony/Philips Digital Interface (SPDIF) format. Its primary functionality is to process and encode incoming stereo audio data according to the SPDIF format specification. The module receives inputs from `reset` - a synchronous reset signal, `clk` - operational clock, `clk256` - an external clock signal, `i_valid` - a signal indicating valid input audio data, `i_is_left` - a signal indicating the channel of the audio, and `i_audio` - the input audio data itself. The output signals are `i_ready` - a signal indicating module's readiness for next audio data, and `spdif` - the SPDIF encoded output data.
+
+Within the module, several internal signals are used for operations and synchronization across different blocks. These include `clk128` - an internal clock signal derived from clk256, `o_ready` - a signal indicating readiness of the dual_clock_buffer module, `o_valid` - a signal indicating valid data from the dual_clock_buffer, `o_is_left` - a signal indicating the audio channel, and `o_audio` - intern version of i_audio after being processed.
+
+The module mainly consists of two blocks: dual_clock_buffer and spdif_frame_encoder. The dual_clock_buffer allows operations with different clock domains and buffers incoming audio data. spdif_frame_encoder prepares SPDIF frames by composing preamble, audio data, validity, user data, control data and parity bit. The final encoded audio data in SPDIF format is output through the spdif port.
+
+The design and operation of the module is synchronous, based on the clock signals and requires a reset signal to initialize/reset its operations. A parameter "audio_width" defines the bit-width of one audio sample (defined as 16 for this module) which needs to be processed and encoded.

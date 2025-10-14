@@ -1,0 +1,1 @@
+assign Busy_IRQ = Busy_IRQ_sync2 & ~Busy_IRQ_sync3;

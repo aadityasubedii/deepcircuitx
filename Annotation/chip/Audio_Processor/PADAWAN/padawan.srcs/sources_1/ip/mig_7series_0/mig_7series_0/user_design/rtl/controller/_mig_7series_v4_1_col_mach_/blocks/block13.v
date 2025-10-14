@@ -1,0 +1,1 @@
+      assign col_read_fifo_empty = head_r == tail_r ? 1'b1 : 1'b0;

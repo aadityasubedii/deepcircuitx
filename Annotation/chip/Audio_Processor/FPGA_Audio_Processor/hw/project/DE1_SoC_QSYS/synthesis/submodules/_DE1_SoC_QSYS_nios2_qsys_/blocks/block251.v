@@ -1,0 +1,1 @@
+  assign xbrk_wrap_traceoff = trc_ctrl[10] & trc_wrap;

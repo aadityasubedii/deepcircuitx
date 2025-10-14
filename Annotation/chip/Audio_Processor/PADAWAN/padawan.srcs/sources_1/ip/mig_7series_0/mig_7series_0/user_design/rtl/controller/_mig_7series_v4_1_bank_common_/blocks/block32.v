@@ -1,0 +1,1 @@
+  assign adv_order_q = |ordered_issued;

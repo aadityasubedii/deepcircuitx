@@ -1,0 +1,13 @@
+Module name: tb
+
+Module specification: The 'tb' module provides a comprehensive test bench for running a series of test scenarios to validate the proper functioning of a Direct Memory Access (DMA) controller within a digital system. The test bench does not have explicit input or output ports, as all communication is handled via internal wires and registries. The tasks performed by the test bench range from sending different sequences of data to the DMA controller, reading and writing from several registers, initiating and inspecting block and complete data transfers, and asserting a reset signal when needed to restart the DMA engine. 
+
+The complexity of the process is supported by a set of internal signals such as control signals (wb_clk, wb_rst), Wishbone Bus transaction signals (wb_dbus_cyc, wb_dbus_we, wb_dbus_adr, wb_dbus_dat), DMA transaction signals (dma_cyc, dma_we, dma_sel, dma_adr, dma_dat, dma_ack, dma_rdt) and data transfer signals (xfer_re, xfer_adr, xfer_dat, xfer_block). 
+
+Various flags and counters are also employed within the test bench to monitor completion status, store read data and control continuous polling. 
+
+The 'tb' consists of a DMA instantiation with connections to all these internal signals for inputs and outputs. This DMA performs data transfers based on the instructions given by the test bench. The test bench also includes a series of tasks dedicated to performing specific operations such as read, write, waiting for a read or write to complete, and initiating a data transfer.
+
+Finally, the test bench flow is guided by a series of writes and reads to the control and status registers, along with various conditional wait statements for synchronizations. Assertions are used to ensure that upon completion of a test scenario/transaction, the status data and readback data are as per the expected values.
+
+Please note, some assertions and functions in the provided code ('tb_assert') are assumed as skeleton structure as the actual code or macro wasn't provided. The actual implementation might need these to be defined or replaced accordingly.

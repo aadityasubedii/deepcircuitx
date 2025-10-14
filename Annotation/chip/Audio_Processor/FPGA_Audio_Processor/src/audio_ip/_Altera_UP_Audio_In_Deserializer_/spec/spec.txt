@@ -1,0 +1,12 @@
+Module name: Altera_UP_Audio_In_Deserializer.
+Module specification: This module is responsible for the deserialization of incoming audio data. It operates by taking a serial audio input, maintaining a bit-count, and managing two sync FIFOs for the left and right audio channels. 
+
+The input ports include a global clock ('clk' and 'reset'), signals indicating the rising and falling edges of both bit clock and left/right clock, a channel sync signal ('done_channel_sync'), a serial audio input ('serial_audio_in_data'), and reading-enabling signals for the left and right audio data channels. 'clk' and 'reset' control operations, while the clock edge signals time the deserialization and channel selection operations. 'serial_audio_in_data' is the incoming serialized audio data, 'done_channel_sync' signals the end of a synchronization process, and read enabling signals control when data is read from each channel's FIFO.
+
+The output ports include two registers that indicate the available read space in both right and left audio FIFOs, and the output read data from the right and left channel FIFOs. The registers help to avoid buffer overflow while the other output ports give deserialized data for each audio channel.
+
+Internal signals are used to control the shifting of data into the storage register for valid incoming data, prevent data read requests when no data is available, prevent further data write operations into a full FIFO, maintain live count of data present in the FIFOs, and for storing incoming serial data before being forwarded to the correct channel.
+
+The code contains various blocks that are used for different purposes, like updating the read space register, shifting valid serial input into the shift register, maintaining bit count, and FIFO block for controlling data writing and reading into and from the FIFOs. 
+
+Overall, this module is an integral part of converting serialized stereo audio data into a format that can be utilized by a computational system.

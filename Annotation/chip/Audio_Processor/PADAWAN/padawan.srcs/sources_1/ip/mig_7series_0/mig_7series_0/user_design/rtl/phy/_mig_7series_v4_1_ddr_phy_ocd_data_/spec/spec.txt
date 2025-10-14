@@ -1,0 +1,19 @@
+Module name: mig_7series_v4_1_ddr_phy_ocd_data. 
+
+Module specification: This module is designed to optimize reading from memory by adjusting the phase of clock and data through a complex calibration process in a DDR memory interface. The calibration process takes in the raw data from the DDR (data from memory input generator), as well as PRBS (Pseudo Random Binary Sequence) data.
+
+The input ports are:
+1. `clk`: The main clock signal.
+2. `rst`: The reset signal which resets the internal registers.
+3. `complex_oclkdelay_calib_start`: A control signal starting the calibration process.
+4. `phy_rddata`: The raw data read from the memory.
+5. `prbs_o`: The PRBS output.
+6. `oclkdelay_calib_cnt`: The clock delay count factor for phase matching.
+7. `prbs_ignore_first_byte`, `prbs_ignore_last_bytes`: Signals specifying if the first byte or last bytes should be ignored.
+8. `phy_rddata_en_1`: A signal indicating whether the current byte of data should be read in.
+
+The module has a single output port `match` which contains two bits. Both bits represent results of matching processes in the calibration; when high, it indicates successful matches.
+
+Internal signals involve temporary registers `word` and `word_shifted` for processing; copies of bytes of memory data and PRBS data at various stages (`data_bytes_ns`, `data_bytes_r`, `data_bytes_r1`, `data_bytes_r2`, `prbs_bytes_ns`, `prbs_bytes_r`); control signals (`prbs_ignore_first_byte_r`, `prbs_ignore_last_bytes_r`); register for storing last byte of data (`last_byte_r`), a switch (`second_half_ns`, `second_half_r`); and comparison results (`comp0`, `comp180`, `prbs0`, `prbs180`).
+
+The code primarily consists of data manipulation and matching processes implemented using loops and conditional statements. The data is shifted and manipulated based on control signals, and comparisons are made for calibration. The result of these operations is stored in the `match` output port.

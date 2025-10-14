@@ -1,0 +1,1 @@
+  assign rst_tmp = sys_rst | ~syn_clk0_powerup_pll_locked;

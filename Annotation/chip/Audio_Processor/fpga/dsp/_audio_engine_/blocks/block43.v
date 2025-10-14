@@ -1,0 +1,1 @@
+    reg [(FRAME_W-1):0] frame_counter = 0;

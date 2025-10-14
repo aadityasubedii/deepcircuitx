@@ -1,0 +1,11 @@
+Module name: shifter. 
+
+Module specification: The 'shifter' is a hardware module implemented in Verilog, designed to perform bit shifting operations. The module's primary function is to shift the input bits to the right by an amount specified by the 'shift' parameter, and to store the shifted value in an output register. Shifting operations are performed only when the 'en' (enable) signal is high, and all operations are synchronized with the rising edge of the 'ck' (clock) signal. The module has been designed with flexibility in mind - the input width, output width, and shift width are all parameterized and can be specified during module instantiation. 
+
+The 'in' (input) port is a wire bus for supplying the IN_W-bit wide data for shifting. The 'out' (output) port is a register where the shifted data is stored. The 'shift' port specifies the number of bit positions by which the 'in' data is to be shifted. The 'ck' and 'en' control ports serve as the clock signal and the enable signal, respectively.
+
+The module uses an internal wire bus 'shifted' that temporarily holds the result of the shift operation before it is stored in the 'out' register. A 'genvar' 'i' is used in a generate loop during module compilation time to create dynamically 'assign' statements. Each iteration creates an instance of assignment logic for each bit of 'shifted' and 'in', effectively assigning the shifted values of 'in' to 'shifted'. 
+
+The code of the module can be segmented into three main blocks: the parameter and port declarations, the dynamic assignment of shifted bits, and the sequential logic block. The dynamic assignment block employs a generate loop to create assign statements for right shift operation. The sequential logic block, triggered at the positive edge of the clock signal, controls the transfer of the shifted value to the output register when the enable signal is active. 
+
+In summary, this module provides a flexible and simple-to-use bit shifter hardware block for use in a variety of digital design applications, particularly those needing dynamic bit shifting or mathematical operations such as multiplication and division by powers of two.

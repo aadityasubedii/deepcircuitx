@@ -1,0 +1,1 @@
+    assign led_half = prescale == ((1<<PRESCALE) / 2);

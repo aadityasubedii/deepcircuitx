@@ -1,0 +1,1 @@
+assign StateData[1:0] = {StateData1, StateData0};

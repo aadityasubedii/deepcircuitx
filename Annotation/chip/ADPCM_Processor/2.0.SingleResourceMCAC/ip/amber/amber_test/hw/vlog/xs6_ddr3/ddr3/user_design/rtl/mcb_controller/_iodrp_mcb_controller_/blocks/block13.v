@@ -1,0 +1,1 @@
+   assign rdy_busy_n = (state == READY);

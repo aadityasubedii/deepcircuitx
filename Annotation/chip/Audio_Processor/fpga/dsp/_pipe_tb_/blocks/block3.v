@@ -1,0 +1,1 @@
+    pipe #(.LENGTH(3)) pipes [15:0] (.ck(ck), .in(p_in), .out(p_out));

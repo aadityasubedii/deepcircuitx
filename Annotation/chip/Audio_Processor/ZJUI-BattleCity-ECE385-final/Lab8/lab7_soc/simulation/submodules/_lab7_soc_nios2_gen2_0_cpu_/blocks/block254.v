@@ -1,0 +1,1 @@
+  assign W_dst_regnum = R_dst_regnum;

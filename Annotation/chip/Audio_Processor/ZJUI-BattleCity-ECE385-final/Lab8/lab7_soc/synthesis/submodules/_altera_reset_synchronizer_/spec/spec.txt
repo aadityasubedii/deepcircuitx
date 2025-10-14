@@ -1,0 +1,10 @@
+Module name: altera_reset_synchronizer. 
+
+Module specification: 
+The altera_reset_synchronizer module is a reset synchronization system that handles both asynchronous and synchronous resets. It uses a chain of flip-flop synchronized to a clock for this process. The chain's size can be adjusted based on the DEPTH parameter. During an asynchronous reset, all elements in the chain are reset immediately, and during a synchronous reset, the reset signal is shifted through the elements in the chain with every clock edge to achieve synchronization.
+
+The module has two input ports. The 'reset_in' port is used as the reset input, either synchronously or asynchronously, depending on the state of an ASYNC_RESET parameter. The 'clk' port is the system clock to which the reset signal will be synchronized. There is one output port, 'reset_out', which carries the final output, i.e., the reset signal synchronized to the system clock. The synchronization behavior of this output depends on the setting of the ASYNC_RESET switch.
+
+Internally, the module uses two signals: 'altera_reset_synchronizer_int_chain', a chain of flip-flops sized by the DEPTH parameter that aids in reset synchronization, and 'altera_reset_synchronizer_int_chain_out', a single bit register that carries the last signal from the flip-flop chain, ultimately assigned to the 'reset_out' signal.
+
+The module's main sections are divided into an asynchronous reset process and a synchronous one, determined by the ASYNC_RESET parameter. They handle the signal synchronization differently to match their timing characteristics. The chained flip-flops used in either process provide stable synchronized output, leading to the efficient functioning of the device.

@@ -1,0 +1,1 @@
+    assign wb_rst = rst;

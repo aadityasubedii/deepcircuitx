@@ -1,0 +1,1 @@
+        assign sample_ticks = count_valids;

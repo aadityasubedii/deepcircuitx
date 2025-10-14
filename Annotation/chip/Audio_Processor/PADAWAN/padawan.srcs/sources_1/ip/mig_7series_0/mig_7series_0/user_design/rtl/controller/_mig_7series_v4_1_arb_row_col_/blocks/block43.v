@@ -1,0 +1,1 @@
+  always @(posedge clk) rnk_config_valid_r_lcl <= #TCQ rnk_config_valid_ns;

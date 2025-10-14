@@ -1,0 +1,1 @@
+  assign exc_addr = 32'b0;

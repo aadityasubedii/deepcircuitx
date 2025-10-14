@@ -1,0 +1,1 @@
+    always @(posedge dqs_even[ 3]) dqs_even_receiver( 3);

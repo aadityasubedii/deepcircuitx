@@ -1,0 +1,1 @@
+   assign                c3_sys_clk_p = c3_sys_clk;

@@ -1,0 +1,1 @@
+  assign is_exception_no_break = 1'b0;

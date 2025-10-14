@@ -1,0 +1,1 @@
+  assign o_compare = w_adjusted_output >> 2;

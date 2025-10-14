@@ -1,0 +1,11 @@
+Module name: Altera_UP_Audio_In_Deserializer. 
+
+Module specification: 
+
+The Altera_UP_Audio_In_Deserializer is a Verilog module designed to deserialize incoming serialized audio data. The module uses two synchronizing FIFOs to store the deserialized data for the left and right audio channels. A bit counter validifies the incoming audio stream. The audio data is read from the input, deserialized, and stored in the respective FIFO based on whether it's meant for the left or right channel.
+
+The module has several inputs including the clock (clk), the reset signal (reset), bit and channel clock signals for both rising and falling edges (bit_clk_rising_edge, bit_clk_falling_edge, left_right_clk_rising_edge, left_right_clk_falling_edge), the serialized audio input data (serial_audio_in_data), and two enable signals for reading audio data (read_left_audio_data_en, read_right_audio_data_en). The outputs are the read spaces of left and right audio FIFOs (left_audio_fifo_read_space, right_audio_fifo_read_space) and the deserialized left and right channel audio data (left_channel_data, right_channel_data).
+
+The module uses several internal signals including valid_audio_input for bit counter validation and data_in_shift_reg to hold incoming audio data. We also have flags to monitor if the FIFOs for left or right channels are full or empty and the number of words used in the FIFOs.
+
+The Verilog code includes different blocks such as the procedure to update read spaces of both FIFOs, the logic to manage data_in_shift_reg, and the instantiation of both the bit counter and FIFOs modules. The bit counter is used to validate the audio input while the FIFOs store the deserialized audio data which can be read when required. The module properly handles system reset, FIFO full and empty conditions. Overall, this module plays a central role in managing and deserializing incoming digital audio data streams.

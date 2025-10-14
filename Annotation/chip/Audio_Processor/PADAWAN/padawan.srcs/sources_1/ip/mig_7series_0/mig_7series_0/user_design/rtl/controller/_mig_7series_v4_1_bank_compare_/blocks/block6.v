@@ -1,0 +1,1 @@
+  assign col_addr = col_addr_template[ROW_WIDTH-1:0];

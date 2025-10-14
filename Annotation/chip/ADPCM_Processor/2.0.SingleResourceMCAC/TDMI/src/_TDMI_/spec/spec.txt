@@ -1,0 +1,9 @@
+Module name: TDMI. 
+
+Module specification: The TDMI module functions as a serial data receiver, primarily used for Test Data Input (TDI) within a JTAG interface. It receives and processes serial data under operation of the "ser_clk" signal, attends to frame synchronization via "frame_sync", and consequently stores processed data in system registers that are readable via a Wishbone interface. The module also provides test mode, scan mode, and typical operation mode options, and includes ports for handling reset, input-output operations, and error checks. 
+
+Data communication is enabled by numerous input and output ports such as "reset", "ser_clk", "data_in“, "frame_sync", "scan_in0 to scan_in4", "scan_enable", "test_mode" as input ports, and "new_data_int", "scan_out0 to scan_out4", "o_wb_dat", "o_wb_ack", "o_wb_err" as output ports. The input ports serve controls like data input, serial clocking, frame syncing, and Wishbone interfacing, while output ports deliver data and status information, demonstrating data's availability, acknowledging data transfers, or indicating errors.
+
+Internally, signals such as "sys_clk", "serial_clk", "selected_clk", "ch_count", "bit_count", "prev_frame_sync", "data_out_buf", "ch_buf_1", "ch_buf_2", "data_buf_1", "data_buf_2", "start_read", "int_buf_1", "int_set", "bit_count_buf", "tdmi_begin", "fs_start" are employed to manage clocking, data pipelining, bit counting, frame syncing, channel and data buffering, read triggering, interrupts, and process beginning.
+
+The RTL code is structured into distinct blocks corresponding to initialization, clock buffering, frame buffer operations, data and channel buffering, reading/writing operations, and error handling. Each block performs specific tasks, affording the module its serial data processing ability and interfacing functionality. With such design and operation, TDMI qualifies as an intricate part of the hardware system, purposing data reception and processing.

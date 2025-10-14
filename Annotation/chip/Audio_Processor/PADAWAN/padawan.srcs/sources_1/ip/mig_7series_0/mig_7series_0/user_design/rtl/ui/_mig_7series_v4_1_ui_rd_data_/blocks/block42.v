@@ -1,0 +1,1 @@
+        always @(rd_data) app_rd_data = rd_data;

@@ -1,0 +1,1 @@
+  assign R_ctrl_shift_logical_nxt = D_ctrl_shift_logical;

@@ -1,0 +1,1 @@
+    assign sd = tx_shift[63];

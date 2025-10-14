@@ -1,0 +1,1 @@
+      assign out_valid = out_valid_internal;

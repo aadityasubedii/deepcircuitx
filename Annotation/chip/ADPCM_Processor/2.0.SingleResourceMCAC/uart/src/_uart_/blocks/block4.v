@@ -1,0 +1,1 @@
+wire    [(10*8)-1:0]    xTXD_STATE;

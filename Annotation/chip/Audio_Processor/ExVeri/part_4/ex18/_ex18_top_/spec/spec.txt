@@ -1,0 +1,11 @@
+Module name: ex18_top. 
+
+Module specification: The 'ex18_top' module is a top-level hardware design block responsible for managing the communication and operational coherence among various sub-modules involving an Analog to Digital Converter (ADC), a Digital to Analog Converter (DAC), a 50MHz clock, some switches, and a Pulse Width Modulation (PWM) generator. The functional operation is synchronized using a 50MHz clock signal, CLOCK_50.
+
+The input ports for this module include 'CLOCK_50', a 10-bit switch ('SW'), and a Serial Data Output from the ADC ('ADC_SDO'). 'CLOCK_50' serves to synchronize the entire operation of the module. 'SW' is used for various control and data input purposes, while 'ADC_SDO' is the converted digital data from the ADC for further processing.
+
+The output ports comprise signals for SPI communication with DAC ('DAC_SDI', 'DAC_SCK', 'DAC_CS', 'DAC_LD') and the ADC ('ADC_SDI', 'ADC_SCK', 'ADC_CS'). Additionally, it has a PWM output 'PWM_OUT' and 7-segment display driving signals ('HEX0', 'HEX1', 'HEX2').
+
+Internally, the module uses signals such as 'tick_10k' (a pulse signal), 'data_in' (digital data from the ADC), 'data_out' (processed data for driving DAC and PWM generator), 'data_valid' (validity of data from ADC), and 'DAC_SCK', 'ADC_SCK' (SPI clocks for DAC and ADC).
+
+The code contains various blocks for specific functions. 'GEN_10K' generates the 'tick_10k' signal. 'SPI_DAC' and 'SPI_ADC' ensure SPI communication with DAC and ADC, respectively. 'pwm' serves as a PWM generator, while 'processor_echo' processes the received data from ADC. 'hex_to_7seg' segments are responsible for driving the 7-segment displays using pieces of received data from ADC.

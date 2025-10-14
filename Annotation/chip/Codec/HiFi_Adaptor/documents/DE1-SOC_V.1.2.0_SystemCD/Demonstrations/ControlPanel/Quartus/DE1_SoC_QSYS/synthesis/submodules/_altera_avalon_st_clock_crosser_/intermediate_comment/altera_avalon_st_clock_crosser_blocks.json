@@ -1,0 +1,36 @@
+{
+    "line_num": [
+        [
+            135,
+            135
+        ],
+        [
+            134,
+            134
+        ],
+        [
+            133,
+            133
+        ],
+        [
+            114,
+            139
+        ],
+        [
+            88,
+            98
+        ],
+        [
+            76,
+            86
+        ]
+    ],
+    "blocks": [
+        "      assign out_data = out_data_buffer;",
+        "      assign out_ready_internal = out_ready;",
+        "      assign out_valid = out_valid_internal;",
+        "  generate if (USE_OUTPUT_PIPELINE == 1) begin\n\n      altera_avalon_st_pipeline_base \n      #(\n         .BITS_PER_SYMBOL(BITS_PER_SYMBOL),\n         .SYMBOLS_PER_BEAT(SYMBOLS_PER_BEAT)\n      ) output_stage (\n         .clk(out_clk),\n         .reset(out_reset),\n         .in_ready(out_ready_internal),\n         .in_valid(out_valid_internal),\n         .in_data(out_data_buffer),\n         .out_ready(out_ready),\n         .out_valid(out_valid),\n         .out_data(out_data)\n      );\n\n  end else begin\n\n      assign out_valid = out_valid_internal;\n      assign out_ready_internal = out_ready;\n      assign out_data = out_data_buffer;\n\n  end\n\n  endgenerate",
+        "  always @(posedge out_clk or posedge out_reset) begin\n    if (out_reset) begin\n      out_data_toggle_flopped <= 1'b0;\n      out_data_buffer <= 'b0;\n    end else begin\n      out_data_buffer <= in_data_buffer;\n      if (out_data_taken) begin\n        out_data_toggle_flopped <= out_data_toggle;\n      end\n    end \n  end ",
+        "  always @(posedge in_clk or posedge in_reset) begin\n    if (in_reset) begin\n      in_data_buffer <= 'b0;\n      in_data_toggle <= 1'b0;\n    end else begin\n      if (take_in_data) begin\n        in_data_toggle <= ~in_data_toggle;\n        in_data_buffer <= in_data;\n      end\n    end \n  end "
+    ]
+}

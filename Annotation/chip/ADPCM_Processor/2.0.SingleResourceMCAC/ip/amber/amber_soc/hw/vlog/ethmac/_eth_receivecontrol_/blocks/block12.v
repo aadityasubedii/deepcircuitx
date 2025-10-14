@@ -1,0 +1,11 @@
+assign ByteCntEq0 = RxValid & ByteCnt[4:0] == 5'h0;
+assign ByteCntEq1 = RxValid & ByteCnt[4:0] == 5'h1;
+assign ByteCntEq2 = RxValid & ByteCnt[4:0] == 5'h2;
+assign ByteCntEq3 = RxValid & ByteCnt[4:0] == 5'h3;
+assign ByteCntEq4 = RxValid & ByteCnt[4:0] == 5'h4;
+assign ByteCntEq5 = RxValid & ByteCnt[4:0] == 5'h5;
+assign ByteCntEq12 = RxValid & ByteCnt[4:0] == 5'h0C;
+assign ByteCntEq13 = RxValid & ByteCnt[4:0] == 5'h0D;
+assign ByteCntEq14 = RxValid & ByteCnt[4:0] == 5'h0E;
+assign ByteCntEq15 = RxValid & ByteCnt[4:0] == 5'h0F;
+assign ByteCntEq16 = RxValid & ByteCnt[4:0] == 5'h10;

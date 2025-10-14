@@ -1,0 +1,1 @@
+  assign xbrk0_goto1_hit = 0;

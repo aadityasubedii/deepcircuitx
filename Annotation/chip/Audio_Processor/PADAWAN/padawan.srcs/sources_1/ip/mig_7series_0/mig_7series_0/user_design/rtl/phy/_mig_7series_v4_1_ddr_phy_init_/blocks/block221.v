@@ -1,0 +1,1 @@
+  assign wrcal_start_pre = (init_state_r == INIT_WRCAL_READ) || (init_state_r == INIT_WRCAL_MULT_READS);

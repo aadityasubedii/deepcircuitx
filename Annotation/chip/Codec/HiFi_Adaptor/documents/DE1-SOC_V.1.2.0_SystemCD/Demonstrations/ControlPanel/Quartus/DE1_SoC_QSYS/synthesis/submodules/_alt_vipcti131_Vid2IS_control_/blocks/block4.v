@@ -1,0 +1,1 @@
+assign is_update = update ^ is_update_reg;

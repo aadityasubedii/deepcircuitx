@@ -1,0 +1,1 @@
+assign s_readdata = read_data;

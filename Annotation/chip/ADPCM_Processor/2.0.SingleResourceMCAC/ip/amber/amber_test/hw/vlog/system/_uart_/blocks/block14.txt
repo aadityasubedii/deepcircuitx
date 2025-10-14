@@ -1,0 +1,4 @@
+Line number: 
+[582, 716]
+Comment: 
+The code block is an implementation of a state machine for handling UART (Universal Asynchronous Receiver/Transmitter) reception. The state machine transitions through states upon receiving each bit on the UART line, storing the received data into `rx_byte`. The module reacts on the positive edge of `i_clk`, and changes the state and memory bits based on the conditions within the case statement. If `rx_fifo_full` is high, it stays in `RXD_IDLE` and disables reception, else it moves to `RXD_START`. Once in `RXD_START`, it waits for `rx_start` to activate the transition. When a bit pulse is detected, it sequentially moves through `RXD_DATA` stages mapping each received bit into `rx_byte`. After receiving all the 8 bits, it moves to `RXD_STOP` to handle stop bit and then back to `RXD_IDLE`. The `restart_rx_bit_count` is used for resetting and starting of bit counting for each received data.

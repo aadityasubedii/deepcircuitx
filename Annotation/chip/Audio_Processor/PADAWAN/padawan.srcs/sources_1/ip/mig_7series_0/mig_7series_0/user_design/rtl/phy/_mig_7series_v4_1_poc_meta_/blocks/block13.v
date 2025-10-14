@@ -1,0 +1,1 @@
+  always @(posedge clk) diff_r <= #TCQ diff_ns;

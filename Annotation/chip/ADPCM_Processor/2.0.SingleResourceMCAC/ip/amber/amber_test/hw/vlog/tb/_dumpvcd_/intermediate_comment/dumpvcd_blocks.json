@@ -1,0 +1,16 @@
+{
+    "line_num": [
+        [
+            100,
+            134
+        ],
+        [
+            52,
+            98
+        ]
+    ],
+    "blocks": [
+        "always @(posedge `U_DECOMPILE.i_clk)\n    begin\n    if ( `U_DECOMPILE.clk_count == 10 )\n        begin\n        $dumpon;\n        $display(\"\\nDump on at  %d ticks\", `U_DECOMPILE.clk_count);\n        end\n            \n    if ( `U_DECOMPILE.clk_count == 20 )\n        begin\n        $dumpoff;\n        $display(\"\\nDump off at %d ticks\", `U_DECOMPILE.clk_count);\n        end\n\n\n    if ( `U_DECOMPILE.clk_count == ( `AMBER_DUMP_START + 0 ) )\n        begin\n        $dumpon;\n        $display(\"\\nDump on at  %d ticks\", `U_DECOMPILE.clk_count);\n        end\n                                   \n    if ( `U_DECOMPILE.clk_count == ( `AMBER_DUMP_START + `AMBER_DUMP_LENGTH ) )\n        begin\n        $dumpoff;\n        $display(\"\\nDump off at %d ticks\", `U_DECOMPILE.clk_count);\n        end\n        \n    `ifdef AMBER_TERMINATE\n    if ( `U_DECOMPILE.clk_count == ( `AMBER_DUMP_START + `AMBER_DUMP_LENGTH + 100) )\n        begin\n        $display(\"\\nAutomatic test termination after dump has completed\");\n        `TB_ERROR_MESSAGE\n        end\n    `endif\n    end",
+        "initial\n    begin\n    $display (\"VCD Dump enabled from %d to %d\", \n    ( `AMBER_DUMP_START                ),\n    ( `AMBER_DUMP_START + `AMBER_DUMP_LENGTH ) );\n    \n    $dumpfile(`AMBER_VCD_FILE);\n    $dumpvars(1, `U_TB.clk_count);\n    \n    $dumpvars(1, `U_DECOMPILE.xINSTRUCTION_EXECUTE);\n    $dumpvars(1, `U_EXECUTE.o_write_enable);\n    $dumpvars(1, `U_EXECUTE.o_exclusive);\n    $dumpvars(1, `U_EXECUTE.o_write_data);\n    $dumpvars(1, `U_EXECUTE.base_address);\n    $dumpvars(1, `U_EXECUTE.pc);\n    $dumpvars(1, `U_EXECUTE.u_register_bank.r0);\n    $dumpvars(1, `U_EXECUTE.u_register_bank.r1);\n    $dumpvars(1, `U_EXECUTE.u_register_bank.r2);\n    $dumpvars(1, `U_EXECUTE.u_register_bank.r3);\n    $dumpvars(1, `U_EXECUTE.u_register_bank.r4);\n    $dumpvars(1, `U_EXECUTE.u_register_bank.r5);\n    $dumpvars(1, `U_EXECUTE.u_register_bank.r6);\n    $dumpvars(1, `U_EXECUTE.u_register_bank.r7);\n    $dumpvars(1, `U_EXECUTE.u_register_bank.r8);\n    $dumpvars(1, `U_EXECUTE.u_register_bank.r9);\n    $dumpvars(1, `U_EXECUTE.u_register_bank.r10);\n    $dumpvars(1, `U_EXECUTE.u_register_bank.r11);\n    $dumpvars(1, `U_EXECUTE.u_register_bank.r12);\n    $dumpvars(1, `U_EXECUTE.u_register_bank.r13_out);\n    $dumpvars(1, `U_EXECUTE.u_register_bank.r14_out);\n    $dumpvars(1, `U_EXECUTE.u_register_bank.r14_irq);\n    $dumpvars(1, `U_EXECUTE.u_register_bank.r15);\n\n\n    $dumpvars(1, `U_FETCH);\n    $dumpvars(1, `U_CACHE);\n    $dumpvars(1, `U_DECODE);\n    $dumpvars(1, `U_WISHBONE);\n    $dumpvars(1, `U_AMBER);    \n     \n    `ifdef AMBER_A25_CORE\n    $dumpvars(1, `U_MEM);\n    $dumpvars(1, `U_DCACHE);\n    `endif\n    \n    $dumpoff;    \n    end"
+    ]
+}

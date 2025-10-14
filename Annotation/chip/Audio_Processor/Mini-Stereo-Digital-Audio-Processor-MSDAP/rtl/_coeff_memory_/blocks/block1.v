@@ -1,0 +1,1 @@
+assign data_coeff = (read_enable) ? coeffmem[coeffread] : 16'd0;

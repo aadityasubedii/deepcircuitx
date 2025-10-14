@@ -1,0 +1,11 @@
+Module name: iodrp_controller. 
+
+Module specification: The iodrp_controller manages the control logic for data processing. It includes an internal Finite State Machine (FSM) to handle read and write commands for a memory cell, transition through states like READY, DECIDE, ADDR_PHASE, DATA_PHASE, and ALMOST_READY, and provide the busy and ready signals accordingly. Moreover, it can broadcast data and be reset synchronously.
+
+Input ports: The module accepts memcell_address (memory cell address), write_data (data to write), rd_not_write (read or write signal), cmd_valid (command validity signal), use_broadcast (broadcast indication), sync_rst (reset signal), DRP_CLK (clock synchronization signal), and DRP_SDO (serial data output signal).
+
+Output ports: The module produces read_data (data read from a memory cell), rdy_busy_n (system readiness signal), DRP_CS (control signal), DRP_SDI (least significant bit), DRP_ADD (address phase signal), and DRP_BKST (broadcast indication signal).
+
+Internal signals: It utilizes various internal signals like memcell_addr_reg, data_reg, shift_through_reg (utilized for iterative processes), load_shift_n, addr_data_sel_n (control signals for data choice), bit_cnt (bit counter), rd_not_write_reg (store instruction about operation), AddressPhase, state, nextstate (for controlling FSM transitions), data_out_mux (multiplexer for data), and state_ascii (for debugging or display purpose).
+
+Code Blocks: The iodrp_controller is designed with several blocks such as a FSM handling different states, data selection and shifting process, counter increment during data and address phase, data capturing and state transition logic, and controlling signals for different operational phases. These blocks contribute to ensure smooth data processing, provide updating status, support read/write operations and maintain tight control over operational sequencing.

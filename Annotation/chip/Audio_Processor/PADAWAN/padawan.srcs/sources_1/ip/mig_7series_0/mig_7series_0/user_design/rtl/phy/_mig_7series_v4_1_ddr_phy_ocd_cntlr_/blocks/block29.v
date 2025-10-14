@@ -1,0 +1,1 @@
+  always @(posedge clk) complex_wrlvl_final_r <= #TCQ complex_wrlvl_final_ns;

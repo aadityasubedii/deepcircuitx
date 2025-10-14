@@ -1,0 +1,1 @@
+  assign rd_half_rmw = rd_half_rmw_lcl;

@@ -1,0 +1,1 @@
+  assign ktap_at_left_edge = ocd_ktap_left;

@@ -1,0 +1,1 @@
+always @* `U_TEST_MODULE.tb_uart_status_reg[1:0] = {txfifo_full, txfifo_empty};

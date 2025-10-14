@@ -1,0 +1,21 @@
+{
+    "line_num": [
+        [
+            153,
+            153
+        ],
+        [
+            152,
+            152
+        ],
+        [
+            113,
+            145
+        ]
+    ],
+    "blocks": [
+        "assign s_readdata = read_data;",
+        "assign SEG7 = (LOW_ACTIVE)?~reg_file:reg_file;",
+        "always @ (negedge s_clk)\nbegin\n\t\n\tif (s_reset)\n\tbegin\n\t\tinteger i;\n\t\tfor(i=0;i<SEG7_NUM*8;i=i+1)\n\t\tbegin\n\t\t\treg_file[i] = (DEFAULT_ACTIVE)?1'b1:1'b0; \n\t\tend\n\tend\n\telse if (s_write)\n\tbegin\n\t\tinteger j;\n\t\twrite_data = s_writedata;\n\t\tbase_index = s_address;\n\t\tbase_index = base_index << 3;\n\t\tfor(j=0;j<8;j=j+1)\n\t\tbegin\n\t\t\treg_file[base_index+j] = write_data[j];\n\t\tend\n\tend\n\telse if (s_read)\n\tbegin\n\t\tinteger k;\n\t\tbase_index = s_address;\n\t\tbase_index = base_index << 3;\n\t\tfor(k=0;k<8;k=k+1)\n\t\tbegin\n\t\t\tread_data[k] = reg_file[base_index+k];\n\t\tend\n\tend\t\nend"
+    ]
+}

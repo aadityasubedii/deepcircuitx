@@ -1,0 +1,23 @@
+  u_sram0 (
+    .REGCEA ( 1'd0                              ),
+    .CLKA   ( i_clk                             ),
+    .ENB    ( 1'd0                              ),
+    .RSTB   ( 1'd0                              ),
+    .CLKB   ( 1'd0                              ),
+    .REGCEB ( 1'd0                              ),
+    .RSTA   ( 1'd0                              ),
+    .ENA    ( 1'd1                              ),
+    .DIPA   ( 4'd0                              ),
+    .WEA    ( {wea_b0[3], wea_b0[3], 
+               wea_b0[3], wea_b0[3]}            ),
+    .DOA    ( data_out_b0[3]                    ),
+    .ADDRA  ( {i_address[10:0], 3'd0}           ),
+    .ADDRB  ( 14'd0                             ),
+    .DIB    ( 32'd0                             ),
+    .DOPA   (                                   ),
+    .DIPB   ( 4'd0                              ),
+    .DOPB   (                                   ),
+    .DOB    (                                   ),
+    .WEB    ( 4'd0                              ),
+    .DIA    ( {24'd0, i_write_data[31:24]}      )
+  );

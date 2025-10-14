@@ -1,0 +1,43 @@
+{
+    "gpt-message": [
+        {
+            "role": "system",
+            "content": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+        },
+        {
+            "role": "user",
+            "content": "Name of the module and its functionality is as follows: \nModule Name: shift\n\nExplanation: The module \"shift\" is a generic, parameterized Verilog module that implements a dynamic shift operation. It takes in three inputs - two numbers (a and b) and a control signal. If the control signal is 0, the module performs arithmetic shifting where it shifts `a` to the right by `b2` places when `b` is negative, otherwise it shifts `a` to the left by `b2` places. When the control signal is 1, the module performs logical shifting where it will use zeros to fill up the empty spots regardless of `b` being positive or negative. It also provides capability to handle negative shift amount (`b`). `b` is interpreted as a two's complement number and if it is negative, `b` is inverted and one is added to produce `b2`. The result of shift operation is stored and output in `c`."
+        },
+        {
+            "role": "user",
+            "content": "Input and output ports and their explanation is as follows: \nInput ports: `a`, `b`, `control`. \nExplanation: \n- `a` is one of the operands to be shifted. It is a `WIDTH` bit wide input.\n- `b` is another operand that determines the number of shift places. It is also a `WIDTH` bit wide input. If the most significant bit of `b` is 1, `b` is taken as a negative number.\n- `control` is the signal that determines the type of shift. If `control` is 0, the module performs arithmetic shifting. If `control` is 1, the module performs logical shifting.\n\nOutput ports: `c`.\nExplanation: \n- `c` is the result of the shift operation. If `control` is 0 and `b` is positive, `c` is the result of shifting `a` towards left by `b2` places, otherwise, `c` is the result of shifting `a` towards right by `b2` places. If `control` is 1, regardless of `b` being negative or positive, `a` is shifted to the right (`b` is positive) or to the left (`b` is negative) by `b2` places, filling the empty spots with zeros. `c` is a `WIDTH` bit wide output."
+        },
+        {
+            "role": "user",
+            "content": "Internal signals and their explanation is as follows: \nInternal signals: `neg`, `b2`.\nExplanation: \n- `neg` is a register used to store the information if the shift amount (`b`) is a negative number. If the most significant bit of `b` is 1, `neg` is set to 1 indicating `b` is negative. It is initially 0 and will only be set to 1 inside an if statement if `b` is negative.\n- `b2` is a `WIDTH` bit wide register used to store the absolute value of the shift amount. If `b` is negative, its complement is found and one is added to give `b2`. This is done because `b` is interpreted as a two's complement number and this operation gives the absolute value of `b`. if `b` is not negative, then `b2` is simply `b`. The value of `b2` is utilized as the shift amount in shift operations."
+        }
+    ],
+    "claude-message": [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+                },
+                {
+                    "type": "text",
+                    "text": "Name of the module and its functionality is as follows: \nModule Name: shift\n\nExplanation: The module \"shift\" is a generic, parameterized Verilog module that implements a dynamic shift operation. It takes in three inputs - two numbers (a and b) and a control signal. If the control signal is 0, the module performs arithmetic shifting where it shifts `a` to the right by `b2` places when `b` is negative, otherwise it shifts `a` to the left by `b2` places. When the control signal is 1, the module performs logical shifting where it will use zeros to fill up the empty spots regardless of `b` being positive or negative. It also provides capability to handle negative shift amount (`b`). `b` is interpreted as a two's complement number and if it is negative, `b` is inverted and one is added to produce `b2`. The result of shift operation is stored and output in `c`."
+                },
+                {
+                    "type": "text",
+                    "text": "Input and output ports and their explanation is as follows: \nInput ports: `a`, `b`, `control`. \nExplanation: \n- `a` is one of the operands to be shifted. It is a `WIDTH` bit wide input.\n- `b` is another operand that determines the number of shift places. It is also a `WIDTH` bit wide input. If the most significant bit of `b` is 1, `b` is taken as a negative number.\n- `control` is the signal that determines the type of shift. If `control` is 0, the module performs arithmetic shifting. If `control` is 1, the module performs logical shifting.\n\nOutput ports: `c`.\nExplanation: \n- `c` is the result of the shift operation. If `control` is 0 and `b` is positive, `c` is the result of shifting `a` towards left by `b2` places, otherwise, `c` is the result of shifting `a` towards right by `b2` places. If `control` is 1, regardless of `b` being negative or positive, `a` is shifted to the right (`b` is positive) or to the left (`b` is negative) by `b2` places, filling the empty spots with zeros. `c` is a `WIDTH` bit wide output."
+                },
+                {
+                    "type": "text",
+                    "text": "Internal signals and their explanation is as follows: \nInternal signals: `neg`, `b2`.\nExplanation: \n- `neg` is a register used to store the information if the shift amount (`b`) is a negative number. If the most significant bit of `b` is 1, `neg` is set to 1 indicating `b` is negative. It is initially 0 and will only be set to 1 inside an if statement if `b` is negative.\n- `b2` is a `WIDTH` bit wide register used to store the absolute value of the shift amount. If `b` is negative, its complement is found and one is added to give `b2`. This is done because `b` is interpreted as a two's complement number and this operation gives the absolute value of `b`. if `b` is not negative, then `b2` is simply `b`. The value of `b2` is utilized as the shift amount in shift operations."
+                }
+            ]
+        }
+    ]
+}

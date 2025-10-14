@@ -1,0 +1,43 @@
+{
+    "gpt-message": [
+        {
+            "role": "system",
+            "content": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+        },
+        {
+            "role": "user",
+            "content": "Name of the module and its functionality is as follows: \nModule name: ADDB.\nExplanation: The module 'ADDB' seems designed for handling scan chain inputs and outputs while simultaneously performing arithmetic operations on additional input signals. It includes functionality to manage reset conditions and clock signals. Specifically, the module performs an arithmetic addition between two processed input values, DQ and SE, which appear to be encoded with possibly signed values (i.e., handling of complement and sign extension). The processed inputs take into account special conditions indicated by their highest bits before being summed to produce an output 'SR'. It handles both regular operational modes and special test modes adjusted through various scan inputs and a test_mode signal."
+        },
+        {
+            "role": "user",
+            "content": "Input and output ports and their explanation is as follows: \nInput ports: reset, clk, scan_in0, scan_in1, scan_in2, scan_in3, scan_in4, scan_enable, test_mode, DQ, SE. \nExplanation: \n- `reset`: Used to reset the module and bring it to a known initial state.\n- `clk`: Clock signal used to synchronize the operations within the module.\n- `scan_in0` to `scan_in4`: Scan chain inputs used during test mode for testing and diagnostics.\n- `scan_enable`: Enables the scanning mode which is primarily used for testing circuit integrity.\n- `test_mode`: Signal to specify the module to operate in test mode.\n- `DQ`: 16-bit input signal; it represents data which is subject to arithmetic processing.\n- `SE`: 15-bit input signal, potentially another arithmetic operand, which is processed and added to DQ.\n\nOutput ports: scan_out0, scan_out1, scan_out2, scan_out3, scan_out4, SR.\nExplanation: \n- `scan_out0` to `scan_out4`: Outputs corresponding to the scan chain outputs, used during scan mode for diagnostics and testing.\n- `SR`: 16-bit output which holds the result of the arithmetic operation performed on the processed inputs DQ and SE, after handling sign and possible complement conditions."
+        },
+        {
+            "role": "user",
+            "content": "Internal signals and their explanation is as follows: \nInternal signals: DQS, SES, DQI, SEI.\nExplanation:\n- `DQS`: A single-bit internal signal derived from the most significant bit (MSB) of `DQ`. It is used to determine the processing type for `DQ`.\n- `SES`: A single-bit internal signal obtained from the MSB of `SE`. It helps in deciding the processing necessary for `SE`.\n- `DQI`: A 16-bit internal signal that represents the processed value of `DQ`. Depending on the value of `DQS`, `DQI` could either be the direct value of `DQ` or its two's complement.\n- `SEI`: A 15-bit internal signal depicting the processed value of `SE`. Based on `SES`, `SEI` can either be the direct value or the value obtained by adding `SE` with 32768 (sign extension)."
+        }
+    ],
+    "claude-message": [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+                },
+                {
+                    "type": "text",
+                    "text": "Name of the module and its functionality is as follows: \nModule name: ADDB.\nExplanation: The module 'ADDB' seems designed for handling scan chain inputs and outputs while simultaneously performing arithmetic operations on additional input signals. It includes functionality to manage reset conditions and clock signals. Specifically, the module performs an arithmetic addition between two processed input values, DQ and SE, which appear to be encoded with possibly signed values (i.e., handling of complement and sign extension). The processed inputs take into account special conditions indicated by their highest bits before being summed to produce an output 'SR'. It handles both regular operational modes and special test modes adjusted through various scan inputs and a test_mode signal."
+                },
+                {
+                    "type": "text",
+                    "text": "Input and output ports and their explanation is as follows: \nInput ports: reset, clk, scan_in0, scan_in1, scan_in2, scan_in3, scan_in4, scan_enable, test_mode, DQ, SE. \nExplanation: \n- `reset`: Used to reset the module and bring it to a known initial state.\n- `clk`: Clock signal used to synchronize the operations within the module.\n- `scan_in0` to `scan_in4`: Scan chain inputs used during test mode for testing and diagnostics.\n- `scan_enable`: Enables the scanning mode which is primarily used for testing circuit integrity.\n- `test_mode`: Signal to specify the module to operate in test mode.\n- `DQ`: 16-bit input signal; it represents data which is subject to arithmetic processing.\n- `SE`: 15-bit input signal, potentially another arithmetic operand, which is processed and added to DQ.\n\nOutput ports: scan_out0, scan_out1, scan_out2, scan_out3, scan_out4, SR.\nExplanation: \n- `scan_out0` to `scan_out4`: Outputs corresponding to the scan chain outputs, used during scan mode for diagnostics and testing.\n- `SR`: 16-bit output which holds the result of the arithmetic operation performed on the processed inputs DQ and SE, after handling sign and possible complement conditions."
+                },
+                {
+                    "type": "text",
+                    "text": "Internal signals and their explanation is as follows: \nInternal signals: DQS, SES, DQI, SEI.\nExplanation:\n- `DQS`: A single-bit internal signal derived from the most significant bit (MSB) of `DQ`. It is used to determine the processing type for `DQ`.\n- `SES`: A single-bit internal signal obtained from the MSB of `SE`. It helps in deciding the processing necessary for `SE`.\n- `DQI`: A 16-bit internal signal that represents the processed value of `DQ`. Depending on the value of `DQS`, `DQI` could either be the direct value of `DQ` or its two's complement.\n- `SEI`: A 15-bit internal signal depicting the processed value of `SE`. Based on `SES`, `SEI` can either be the direct value or the value obtained by adding `SE` with 32768 (sign extension)."
+                }
+            ]
+        }
+    ]
+}

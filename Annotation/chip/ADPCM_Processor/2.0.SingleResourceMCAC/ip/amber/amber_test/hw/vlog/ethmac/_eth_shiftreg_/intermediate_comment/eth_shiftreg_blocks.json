@@ -1,0 +1,16 @@
+{
+    "line_num": [
+        [
+            148,
+            148
+        ],
+        [
+            107,
+            145
+        ]
+    ],
+    "blocks": [
+        "assign ShiftedBit = ShiftReg[7];",
+        "always @ (posedge Clk or posedge Reset) \nbegin\n  if(Reset)\n    begin\n      ShiftReg[7:0] <= #Tp 8'h0;\n      Prsd[15:0] <= #Tp 16'h0;\n      LinkFail <= #Tp 1'b0;\n    end\n  else\n    begin\n      if(MdcEn_n)\n        begin \n          if(|ByteSelect)\n            begin\n              case (ByteSelect[3:0])  \n                4'h1 :    ShiftReg[7:0] <= #Tp {2'b01, ~WriteOp, WriteOp, Fiad[4:1]};\n                4'h2 :    ShiftReg[7:0] <= #Tp {Fiad[0], Rgad[4:0], 2'b10};\n                4'h4 :    ShiftReg[7:0] <= #Tp CtrlData[15:8];\n                4'h8 :    ShiftReg[7:0] <= #Tp CtrlData[7:0];\n              endcase\n            end \n          else\n            begin\n              ShiftReg[7:0] <= #Tp {ShiftReg[6:0], Mdi};\n              if(LatchByte[0])\n                begin\n                  Prsd[7:0] <= #Tp {ShiftReg[6:0], Mdi};\n                  if(Rgad == 5'h01)\n                    LinkFail <= #Tp ~ShiftReg[1];  \n                end\n              else\n                begin\n                  if(LatchByte[1])\n                    Prsd[15:8] <= #Tp {ShiftReg[6:0], Mdi};\n                end\n            end\n        end\n    end\nend"
+    ]
+}

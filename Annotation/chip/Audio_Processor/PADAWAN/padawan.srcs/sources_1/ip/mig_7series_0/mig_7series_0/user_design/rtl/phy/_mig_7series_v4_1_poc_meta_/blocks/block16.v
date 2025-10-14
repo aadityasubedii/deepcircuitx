@@ -1,0 +1,1 @@
+  wire [TAPCNTRWIDTH:0] window_center_ns = center(left, center_diff_r, TAPSPERKCLK);

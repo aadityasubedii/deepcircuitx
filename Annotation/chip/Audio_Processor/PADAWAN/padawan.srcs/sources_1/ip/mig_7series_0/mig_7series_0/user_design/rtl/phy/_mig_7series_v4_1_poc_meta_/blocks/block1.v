@@ -1,0 +1,1 @@
+  output mmcm_lbclk_edge_aligned;

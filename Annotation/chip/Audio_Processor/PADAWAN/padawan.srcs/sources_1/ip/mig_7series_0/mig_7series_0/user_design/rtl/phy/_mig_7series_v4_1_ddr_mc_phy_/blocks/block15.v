@@ -1,0 +1,1 @@
+       assign pre_data_a_full_v[1] = 0;

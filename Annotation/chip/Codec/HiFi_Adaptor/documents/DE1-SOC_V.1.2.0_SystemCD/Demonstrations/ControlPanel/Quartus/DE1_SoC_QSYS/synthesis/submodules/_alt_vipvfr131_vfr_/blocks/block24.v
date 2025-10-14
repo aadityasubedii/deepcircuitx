@@ -1,0 +1,1 @@
+localparam MM_MASTER_BURST_REQUIREDWIDTH = alt_vipfunc_required_width(RMASTER_BURST_TARGET);

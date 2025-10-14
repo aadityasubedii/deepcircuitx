@@ -1,0 +1,1 @@
+	assign rd_data = ram [addr_d1[27:2]];

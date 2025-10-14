@@ -1,0 +1,1 @@
+  assign tr_clk = 0 ? tr_clk_reg : 0;

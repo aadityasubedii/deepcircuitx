@@ -1,0 +1,1 @@
+            assign enable_count = enable;

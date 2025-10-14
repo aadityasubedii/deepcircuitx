@@ -1,0 +1,1 @@
+assign wb_hit           = i_address == wb_address && i_wb_cached_ready && fill_state;

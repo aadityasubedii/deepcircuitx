@@ -1,0 +1,9 @@
+Module name: cfg_chip. 
+
+Module specification: The cfg_chip module is responsible for configuring a chip using the I2C communication protocol. It uses a state machine to manage the operations, such as initializing, sending data, receiving acknowledgments, and indicating completion.
+
+The module takes two inputs: 'clock50', which is the clock signal sent at a frequency of 50 MHz that synchronizes all operations, and 'start', a control signal that initiates the chip configuration process. The module outputs are 'i2c_c', an I2C clock signal derived from the eighth bit of an internal counter, and 'done', a signal which indicates the completion of the chip configuration process.
+
+Internally, the module uses an array called 'data' to store the configuration data. A register 'addr' is used to store the address of the slave device on the I2C bus. 'Counter' is incremented with every clock pulse and triggers different states of the state machine. The 'mst' register tracks the progress of the I2C communication process while 'error' indicates if there was a non-acknowledgement during transmission. Other registers like 'bout', 'mout', 'wout', are used to monitor the progress of the data transmission. 'sout' is used to stage the data and address for transmission on the I2C bus. The signal 'fsm_c' is derived from the7th bit of the counter which helps in triggering the state machine behavior.
+
+The various blocks of code include the initialization block, the state machine progression, and the operations in each stage of the state machine. The initialization block sets the initial conditions and prepares the system for the start of I2C communication. The state machine's different states handle the aspects of sending data, checking for acknowledgments, stopping the communication, and handling any errors that occur during the process.

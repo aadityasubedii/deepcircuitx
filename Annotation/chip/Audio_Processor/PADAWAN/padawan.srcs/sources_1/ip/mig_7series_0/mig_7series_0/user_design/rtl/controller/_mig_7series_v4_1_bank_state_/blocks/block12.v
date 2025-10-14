@@ -1,0 +1,1 @@
+  assign rtc = ~rnk_config_match && ~rnk_config_kill_rts_col && order_q_zero && col_wait_r && demand_ok;

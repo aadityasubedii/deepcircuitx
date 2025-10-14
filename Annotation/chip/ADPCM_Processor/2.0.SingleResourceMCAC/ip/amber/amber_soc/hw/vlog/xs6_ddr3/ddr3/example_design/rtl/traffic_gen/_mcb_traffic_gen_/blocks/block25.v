@@ -1,0 +1,1 @@
+   assign bram_bl_i[5:0] = bram_cmd_i[38:33];

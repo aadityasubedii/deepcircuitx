@@ -1,0 +1,1 @@
+        assign start_of_sample = (hd_sdn) ? 1'b1 : (count_valids == {LOG2_NUMBER_OF_COLOUR_PLANES{1'b0}});

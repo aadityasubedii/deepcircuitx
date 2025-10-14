@@ -1,0 +1,1 @@
+  always @(posedge clk) ecc_rddata_r <= #TCQ ecc_rddata_ns;

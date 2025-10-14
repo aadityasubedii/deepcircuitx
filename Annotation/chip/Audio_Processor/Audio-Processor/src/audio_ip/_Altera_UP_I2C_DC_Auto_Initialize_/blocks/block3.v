@@ -1,0 +1,1 @@
+assign change_state	= transfer_complete & transfer_data;

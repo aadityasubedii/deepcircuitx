@@ -1,0 +1,1 @@
+	assign done = (mst == ms_done);

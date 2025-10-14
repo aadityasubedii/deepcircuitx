@@ -1,0 +1,21 @@
+{
+    "line_num": [
+        [
+            40,
+            42
+        ],
+        [
+            25,
+            38
+        ],
+        [
+            15,
+            20
+        ]
+    ],
+    "blocks": [
+        "    assign tx = shift[0];\n    assign ready = count == 0;\n    assign baud = baud_counter >= 50;",
+        "    always @(negedge ck) begin\n        if (baud_counter == 0) begin\n            \n            if (count == 0)\n                shift <= { 1'b1, tx_data, 1'b0 };\n            else\n                shift <= { 1'b1, shift[9:1] };\n\n            if (count == 10)\n                count <= 0;\n            else\n                count <= count + 1;            \n        end\n    end",
+        "    always @(negedge ck) begin\n        if (baud_counter < 104)\n            baud_counter <= baud_counter + 1;\n        else\n            baud_counter <= 0;\n    end"
+    ]
+}

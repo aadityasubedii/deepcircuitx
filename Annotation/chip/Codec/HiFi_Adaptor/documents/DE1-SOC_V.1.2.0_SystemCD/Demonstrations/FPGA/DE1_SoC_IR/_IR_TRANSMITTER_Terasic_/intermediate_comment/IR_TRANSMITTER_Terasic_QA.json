@@ -1,0 +1,43 @@
+{
+    "gpt-message": [
+        {
+            "role": "system",
+            "content": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+        },
+        {
+            "role": "user",
+            "content": "Name of the module and its functionality is as follows: \nModule name: IR_TRANSMITTER_Terasic.\n\nExplanation: The module is designed to handle infrared (IR) communication for transmitting data. It takes input signals including a clock signal (`iCLK_50`), reset signal (`iRST_n`), address (`iADDRESS`), command (`iCOMMAND`), and a trigger signal to send (`iSEND`). The module processes these inputs to generate an appropriate IR signal (`oIRDA`) for communication, adhering to specific timing and signal integrity defined by the parameters for pulse durations and lead times. The module is also able to indicate its busy state via the `oIR_TX_BUSY` output, informing external systems whether it is currently transmitting or is ready for a new operation. This is managed using a state machine that sequences through idle, leader signal generation, data bit transmission, and waiting periods to ensure accurate data transmission and adherence to IR communication standards."
+        },
+        {
+            "role": "user",
+            "content": "Input and output ports and their explanation is as follows: \nInput ports: `iCLK_50, iRST_n, iADDRESS, iCOMMAND, iSEND`.\nExplanation: \n- `iCLK_50`: This is the system clock, operating at 50 MHz, which provides timing for the module's operations.\n- `iRST_n`: This is the reset input, active low. It initializes internal states and signals when asserted.\n- `iADDRESS`: This 8-bit input specifies the address used in IR communication, identifying the intended receiver device.\n- `iCOMMAND`: This 8-bit input represents the command or data to be transmitted via IR.\n- `iSEND`: This input triggers the start of an IR transmission operation when asserted.\n\nOutput ports: `oIR_TX_BUSY, oIRDA`.\nExplanation: \n- `oIR_TX_BUSY`: This output signal indicates whether the IR transmitter is busy. It is asserted (high) when the module is processing an IR transmission, informing the external system that it is not ready to accept another operation.\n- `oIRDA`: This is the modulated output IR signal sent to the IR LED or transmission medium. It carries the encoded address and command information following specific timing defined within the module."
+        },
+        {
+            "role": "user",
+            "content": "Internal signals and their explanation is as follows: \nInternal signals: `oIRDA_out, tx_status, send_data, send_count, time_count, clk_38K_count, clk_38K`.\n\nExplanation:\n- `oIRDA_out`: This signal represents the internal state of the IR LED control (before being modulated with the 38KHz clock), determining whether the IR LED should be on or off depending on the transmission phase.\n- `tx_status`: This is a status register encoding the current state of the transmitter's finite state machine (FSM). It determines the operational phase of the module, such as idle, leader pulse high, data transmission, etc.\n- `send_data`: This register holds the combined data to be sent, which includes the address and command bits and their respective inverted bits. It shifts sequentially to transmit each bit.\n- `send_count`: This counter keeps track of the number of bits sent during the data transmission phase, helping to manage the iteration through all bits in `send_data`.\n- `time_count`: This timer counts the clock cycles to meet the required durations for different parts of the IR signal generation, such as leader pulse duration, data pulse duration, etc.\n- `clk_38K_count`: This counter helps generate a 38 kHz clock derived from the 50 MHz main clock which is used for modulating the IR transmission signal.\n- `clk_38K`: This is the generated 38 kHz clock signal used to modulate the `oIRDA_out` for producing the standard IR communication pulse."
+        }
+    ],
+    "claude-message": [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+                },
+                {
+                    "type": "text",
+                    "text": "Name of the module and its functionality is as follows: \nModule name: IR_TRANSMITTER_Terasic.\n\nExplanation: The module is designed to handle infrared (IR) communication for transmitting data. It takes input signals including a clock signal (`iCLK_50`), reset signal (`iRST_n`), address (`iADDRESS`), command (`iCOMMAND`), and a trigger signal to send (`iSEND`). The module processes these inputs to generate an appropriate IR signal (`oIRDA`) for communication, adhering to specific timing and signal integrity defined by the parameters for pulse durations and lead times. The module is also able to indicate its busy state via the `oIR_TX_BUSY` output, informing external systems whether it is currently transmitting or is ready for a new operation. This is managed using a state machine that sequences through idle, leader signal generation, data bit transmission, and waiting periods to ensure accurate data transmission and adherence to IR communication standards."
+                },
+                {
+                    "type": "text",
+                    "text": "Input and output ports and their explanation is as follows: \nInput ports: `iCLK_50, iRST_n, iADDRESS, iCOMMAND, iSEND`.\nExplanation: \n- `iCLK_50`: This is the system clock, operating at 50 MHz, which provides timing for the module's operations.\n- `iRST_n`: This is the reset input, active low. It initializes internal states and signals when asserted.\n- `iADDRESS`: This 8-bit input specifies the address used in IR communication, identifying the intended receiver device.\n- `iCOMMAND`: This 8-bit input represents the command or data to be transmitted via IR.\n- `iSEND`: This input triggers the start of an IR transmission operation when asserted.\n\nOutput ports: `oIR_TX_BUSY, oIRDA`.\nExplanation: \n- `oIR_TX_BUSY`: This output signal indicates whether the IR transmitter is busy. It is asserted (high) when the module is processing an IR transmission, informing the external system that it is not ready to accept another operation.\n- `oIRDA`: This is the modulated output IR signal sent to the IR LED or transmission medium. It carries the encoded address and command information following specific timing defined within the module."
+                },
+                {
+                    "type": "text",
+                    "text": "Internal signals and their explanation is as follows: \nInternal signals: `oIRDA_out, tx_status, send_data, send_count, time_count, clk_38K_count, clk_38K`.\n\nExplanation:\n- `oIRDA_out`: This signal represents the internal state of the IR LED control (before being modulated with the 38KHz clock), determining whether the IR LED should be on or off depending on the transmission phase.\n- `tx_status`: This is a status register encoding the current state of the transmitter's finite state machine (FSM). It determines the operational phase of the module, such as idle, leader pulse high, data transmission, etc.\n- `send_data`: This register holds the combined data to be sent, which includes the address and command bits and their respective inverted bits. It shifts sequentially to transmit each bit.\n- `send_count`: This counter keeps track of the number of bits sent during the data transmission phase, helping to manage the iteration through all bits in `send_data`.\n- `time_count`: This timer counts the clock cycles to meet the required durations for different parts of the IR signal generation, such as leader pulse duration, data pulse duration, etc.\n- `clk_38K_count`: This counter helps generate a 38 kHz clock derived from the 50 MHz main clock which is used for modulating the IR transmission signal.\n- `clk_38K`: This is the generated 38 kHz clock signal used to modulate the `oIRDA_out` for producing the standard IR communication pulse."
+                }
+            ]
+        }
+    ]
+}

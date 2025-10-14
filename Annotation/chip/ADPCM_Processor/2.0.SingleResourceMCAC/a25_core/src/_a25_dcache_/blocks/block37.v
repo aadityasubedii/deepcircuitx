@@ -1,0 +1,1 @@
+assign write_miss       = request_hold &&  i_write_enable && !idle_hit && !consecutive_write;

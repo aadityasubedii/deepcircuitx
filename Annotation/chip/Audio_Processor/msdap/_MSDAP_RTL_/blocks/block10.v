@@ -1,0 +1,1 @@
+	assign coeff_data = (rd_en) ? coeff_mem[coeff_rd_addr] : 16'd0;

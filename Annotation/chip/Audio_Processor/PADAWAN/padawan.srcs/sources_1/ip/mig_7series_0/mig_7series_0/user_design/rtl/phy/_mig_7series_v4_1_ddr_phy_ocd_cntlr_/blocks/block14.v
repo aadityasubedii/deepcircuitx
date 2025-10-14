@@ -1,0 +1,1 @@
+  reg phy_rddata_en_r1, phy_rddata_en_r2, phy_rddata_en_r3;

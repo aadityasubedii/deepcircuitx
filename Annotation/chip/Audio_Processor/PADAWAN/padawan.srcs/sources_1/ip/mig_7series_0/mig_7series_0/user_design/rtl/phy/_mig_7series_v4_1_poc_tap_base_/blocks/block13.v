@@ -1,0 +1,1 @@
+  assign samps_hi = samps_hi_r;

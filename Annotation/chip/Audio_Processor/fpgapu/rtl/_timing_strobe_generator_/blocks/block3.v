@@ -1,0 +1,1 @@
+  assign o_tick_stb = (r_tick_counter == CLOCKS_PER_TICK-1);

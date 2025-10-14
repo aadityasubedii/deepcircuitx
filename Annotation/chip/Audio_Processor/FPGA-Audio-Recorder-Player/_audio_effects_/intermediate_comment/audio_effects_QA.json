@@ -1,0 +1,43 @@
+{
+    "gpt-message": [
+        {
+            "role": "system",
+            "content": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+        },
+        {
+            "role": "user",
+            "content": "Name of the module and its functionality is as follows: \nModule name: audio_effects. \n\nExplanation: The 'audio_effects' module takes in several inputs related to an audio sample, control signals, and a clock pulse, and outputs processed audio data. It contains a look-up table 'romdata' to simulate sine waveform which can be accessed using the 'index', mainly used when the 'SINE' control signal is active. It also has a feature to provide a feedback by multiplying the last audio sample with the volume control when the 'FEEDBACK' control is active. If neither 'SINE' nor 'FEEDBACK' controls are active, it outputs a zero. The final output 'dat' is assigned to 'audio_output'. The module operates on the positive edge of the clock, accepting a new audio sample upon 'sample_end' signal, and processes a request ('sample_req') to fetch the next audio sample."
+        },
+        {
+            "role": "user",
+            "content": "Input and output ports and their explanation is as follows: \nInput ports: \n1. clk: This input port receives the clock signal on which the logic inside the module runs. All operations in the module are based on the positive edge of this clock.\n2. sample_end: This signal indicates the end of an audio sample. When this is active, the current 'audio_input' is stored in 'last_sample'.\n3. sample_req: This signal requests the processing of the next audio sample. When this is active, the 'dat' output value is calculated based on the control signals status.\n4. volume_control: This is a 2-bit input that controls the volume level during feedback operation. It's used to multiply the 'last_sample'.\n5. audio_input: This is a 16-bit input port that provides the audio sample data to the module.\n6. control: This 4-bit port provides the control signal. If 'FEEDBACK' is active, it uses 'last_sample' and 'volume_control' for 'dat', otherwise, if 'SINE' is active, it provides data from the 'romdata' look-up table.\n\nOutput ports: \n1. audio_output: This is a 16-bit output port that delivers the processed audio data from the module. It directly outputs the value of 'dat' register.\n\nExplanation: Based on the control signals, this signal can be either the feedback of the last sample adjusted with volume control, the value fetched from the sine lookup table, or zero."
+        },
+        {
+            "role": "user",
+            "content": "Internal signals and their explanation is as follows: \nInternal signals: \n\n1. romdata\n2. index\n3. last_sample\n4. dat\n\nExplanation: \n\n1. romdata: This is an array of size 100 with 16-bit values, and serves as a look-up table for sine waveform. It is initialized with pre-defined values in the initial block which replicates a sine waveform. It is used to multiply with the 'last_sample' value when the SINE control is active.\n\n2. index: It is a 7-bit signal, initially set to '0'. The 'index' is used to select an element from the romdata look-up table. If the SINE control is active, the index increments by one in each clock cycle until it reaches the maximum value of 99, then it goes back to zero, making it go through the 'romdata' sine look-up values cyclically.\n\n3. last_sample: This is a 16-bit signal that holds the last received audio sample whenever the 'sample_end' signal is active. If the FEEDBACK control is active, 'dat' is assigned to 'last_sample' times 'volume_control'.\n\n4. dat: This 16-bit signal is assigned to the 'audio_output'. Depending on the control signals, it acquires three possible values: 'last_sample' times 'volume_control' if FEEDBACK control signal is active, a value from the 'romdata' array if SINE control signal is active or zero if neither control signal is active."
+        }
+    ],
+    "claude-message": [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+                },
+                {
+                    "type": "text",
+                    "text": "Name of the module and its functionality is as follows: \nModule name: audio_effects. \n\nExplanation: The 'audio_effects' module takes in several inputs related to an audio sample, control signals, and a clock pulse, and outputs processed audio data. It contains a look-up table 'romdata' to simulate sine waveform which can be accessed using the 'index', mainly used when the 'SINE' control signal is active. It also has a feature to provide a feedback by multiplying the last audio sample with the volume control when the 'FEEDBACK' control is active. If neither 'SINE' nor 'FEEDBACK' controls are active, it outputs a zero. The final output 'dat' is assigned to 'audio_output'. The module operates on the positive edge of the clock, accepting a new audio sample upon 'sample_end' signal, and processes a request ('sample_req') to fetch the next audio sample."
+                },
+                {
+                    "type": "text",
+                    "text": "Input and output ports and their explanation is as follows: \nInput ports: \n1. clk: This input port receives the clock signal on which the logic inside the module runs. All operations in the module are based on the positive edge of this clock.\n2. sample_end: This signal indicates the end of an audio sample. When this is active, the current 'audio_input' is stored in 'last_sample'.\n3. sample_req: This signal requests the processing of the next audio sample. When this is active, the 'dat' output value is calculated based on the control signals status.\n4. volume_control: This is a 2-bit input that controls the volume level during feedback operation. It's used to multiply the 'last_sample'.\n5. audio_input: This is a 16-bit input port that provides the audio sample data to the module.\n6. control: This 4-bit port provides the control signal. If 'FEEDBACK' is active, it uses 'last_sample' and 'volume_control' for 'dat', otherwise, if 'SINE' is active, it provides data from the 'romdata' look-up table.\n\nOutput ports: \n1. audio_output: This is a 16-bit output port that delivers the processed audio data from the module. It directly outputs the value of 'dat' register.\n\nExplanation: Based on the control signals, this signal can be either the feedback of the last sample adjusted with volume control, the value fetched from the sine lookup table, or zero."
+                },
+                {
+                    "type": "text",
+                    "text": "Internal signals and their explanation is as follows: \nInternal signals: \n\n1. romdata\n2. index\n3. last_sample\n4. dat\n\nExplanation: \n\n1. romdata: This is an array of size 100 with 16-bit values, and serves as a look-up table for sine waveform. It is initialized with pre-defined values in the initial block which replicates a sine waveform. It is used to multiply with the 'last_sample' value when the SINE control is active.\n\n2. index: It is a 7-bit signal, initially set to '0'. The 'index' is used to select an element from the romdata look-up table. If the SINE control is active, the index increments by one in each clock cycle until it reaches the maximum value of 99, then it goes back to zero, making it go through the 'romdata' sine look-up values cyclically.\n\n3. last_sample: This is a 16-bit signal that holds the last received audio sample whenever the 'sample_end' signal is active. If the FEEDBACK control is active, 'dat' is assigned to 'last_sample' times 'volume_control'.\n\n4. dat: This 16-bit signal is assigned to the 'audio_output'. Depending on the control signals, it acquires three possible values: 'last_sample' times 'volume_control' if FEEDBACK control signal is active, a value from the 'romdata' array if SINE control signal is active or zero if neither control signal is active."
+                }
+            ]
+        }
+    ]
+}

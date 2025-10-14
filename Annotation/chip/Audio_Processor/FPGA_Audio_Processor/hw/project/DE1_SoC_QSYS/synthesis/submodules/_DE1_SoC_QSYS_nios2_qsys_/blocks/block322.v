@@ -1,0 +1,1 @@
+  assign fifo_head = fifo_read_mux;

@@ -1,0 +1,1 @@
+  assign o_beat_stb = o_tick_stb & (r_beat_counter == TICKS_PER_BEAT-1);

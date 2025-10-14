@@ -1,0 +1,1 @@
+    assign xfer_dat = xfer_re ? (16'h1111 << xfer_adr) : 0;

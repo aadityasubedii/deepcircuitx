@@ -1,0 +1,81 @@
+{
+    "line_num": [
+        [
+            202,
+            208
+        ],
+        [
+            175,
+            189
+        ],
+        [
+            160,
+            173
+        ],
+        [
+            159,
+            159
+        ],
+        [
+            158,
+            159
+        ],
+        [
+            149,
+            149
+        ],
+        [
+            146,
+            148
+        ],
+        [
+            144,
+            144
+        ],
+        [
+            143,
+            143
+        ],
+        [
+            142,
+            142
+        ],
+        [
+            141,
+            141
+        ],
+        [
+            139,
+            139
+        ],
+        [
+            130,
+            136
+        ],
+        [
+            116,
+            127
+        ],
+        [
+            108,
+            114
+        ]
+    ],
+    "blocks": [
+        "        initial\n            $display(\"Boot mem file is %s\", `BOOT_MEM128_PARAMS_FILE );\n    `endif\n`endif\n\n    \nendmodule",
+        "\tgeneric_sram_byte_en #(\n\t\t.DATA_WIDTH     ( WB_DWIDTH    ),\n\t\t.ADDRESS_WIDTH  ( MADDR_WIDTH  )\n\t)\n\tu_mem (\n\t\t.clk            ( clk          ),\n\t\t.reset          ( reset        ),\n\t\t.scan_enable    ( scan_enable  ),\n\t\t.test_mode      ( test_mode    ),\n\t\t.i_write_enable ( start_write  ),\n\t\t.i_byte_enable  ( byte_enable  ),\n\t\t.i_address      ( address      ),  \n\t\t.o_read_data    ( read_data    ),\n\t\t.i_write_data   ( write_data   )\n\t);",
+        "\tgenerate\n\t\tfor (n=0; n<16; n=n+1) begin : mem_gen\n\t\t\tgeneric_sram_byte_en_1024x8\n\t\t\tu_mem (\n\t\t\t\t.A(address),\n\t\t\t\t.CE(clk),\n\t\t\t\t.WEB(~(byte_enable[n] & start_write)),\n\t\t\t\t.OEB(1'b0),\n\t\t\t\t.CSB(1'b0),\n\t\t\t\t.I(write_data[8*(n+1)-1:8*n]),\n\t\t\t\t.O(read_data[8*(n+1)-1:8*n])\n\t\t\t);\n\t\tend\n\tendgenerate",
+        "\tgenvar n;",
+        "`ifndef verilog\n\tgenvar n;",
+        "    assign o_wb_ack    = i_wb_stb && ( start_write || start_read_r );",
+        "`ifdef AMBER_WISHBONE_DEBUG\n    assign o_wb_ack    = i_wb_stb && ( start_write || start_read_r[jitter_r[1]] );\n`else",
+        "assign address     = i_wb_adr[MADDR_WIDTH+3:4];",
+        "assign o_wb_dat    = read_data;",
+        "assign byte_enable = i_wb_sel;",
+        "assign write_data  = i_wb_dat;",
+        "assign o_wb_err = 1'd0;",
+        "\talways @( posedge reset, posedge clk ) begin\n\t\tif (reset) begin\n\t\t\tstart_read_r <= 'd0;\n\t\tend else begin\n\t\t\tstart_read_r <= start_read;\n\t\tend\n\tend",
+        "\talways @( posedge reset, posedge clk ) begin\n\t\tif (reset) begin\n\t\t\tstart_read_r <= 'd0;\n\t\tend else begin\n\t\t\tif (start_read)\n\t\t\t\tstart_read_r <= {3'd0, start_read};\n\t\t\telse if (o_wb_ack)\n\t\t\t\tstart_read_r <= 'd0;\n\t\t\telse\n\t\t\t\tstart_read_r <= {start_read_r[2:0], start_read};\n\t\tend\n\tend",
+        "\talways @( posedge reset, posedge clk ) begin\n\t\tif (reset) begin\n\t\t\tjitter_r <= 8'h0f;\n\t\tend else begin\n\t\t\tjitter_r <= {jitter_r[6:0], jitter_r[7] ^ jitter_r[4] ^ jitter_r[1]};\n\t\tend\n\tend"
+    ]
+}

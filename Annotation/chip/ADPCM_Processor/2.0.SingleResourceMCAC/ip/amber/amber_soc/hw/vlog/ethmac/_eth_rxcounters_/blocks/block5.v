@@ -1,0 +1,11 @@
+assign ByteCntEq0       = ByteCnt == 16'h0;
+assign ByteCntEq1       = ByteCnt == 16'h1;
+assign ByteCntEq2       = ByteCnt == 16'h2; 
+assign ByteCntEq3       = ByteCnt == 16'h3; 
+assign ByteCntEq4       = ByteCnt == 16'h4; 
+assign ByteCntEq5       = ByteCnt == 16'h5; 
+assign ByteCntEq6       = ByteCnt == 16'h6;
+assign ByteCntEq7       = ByteCnt == 16'h7;
+assign ByteCntGreat2    = ByteCnt >  16'h2;
+assign ByteCntSmall7    = ByteCnt <  16'h7;
+assign ByteCntMax       = ByteCnt == 16'hffff;

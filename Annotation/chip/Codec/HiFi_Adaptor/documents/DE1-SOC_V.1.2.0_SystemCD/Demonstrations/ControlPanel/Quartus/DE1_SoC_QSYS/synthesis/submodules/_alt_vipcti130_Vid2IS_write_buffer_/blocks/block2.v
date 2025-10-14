@@ -1,0 +1,1 @@
+assign wrreq_out = (&write_buffer_valid) | early_eop;

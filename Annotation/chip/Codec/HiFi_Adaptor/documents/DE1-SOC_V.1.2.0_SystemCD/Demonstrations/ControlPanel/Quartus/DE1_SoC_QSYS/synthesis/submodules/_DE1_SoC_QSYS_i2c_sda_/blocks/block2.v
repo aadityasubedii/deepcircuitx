@@ -1,0 +1,1 @@
+  assign data_in = bidir_port;

@@ -1,0 +1,1 @@
+assign rjdataR = rjr[index_rjR];

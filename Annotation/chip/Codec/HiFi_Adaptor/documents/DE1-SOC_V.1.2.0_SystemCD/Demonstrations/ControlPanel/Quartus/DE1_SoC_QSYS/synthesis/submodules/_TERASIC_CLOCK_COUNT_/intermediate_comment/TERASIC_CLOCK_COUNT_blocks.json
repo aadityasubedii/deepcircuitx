@@ -1,0 +1,36 @@
+{
+    "line_num": [
+        [
+            107,
+            117
+        ],
+        [
+            97,
+            105
+        ],
+        [
+            80,
+            88
+        ],
+        [
+            70,
+            77
+        ],
+        [
+            56,
+            66
+        ],
+        [
+            40,
+            53
+        ]
+    ],
+    "blocks": [
+        "always @ (posedge CLK_2 or posedge trigger_send)\nbegin\n\tif (trigger_send)\n\tbegin\n\t\tclk2_cnt <= 0;\n\tend\n\telse if (counting_now)\n\tbegin\n\t\tclk2_cnt <= clk2_cnt + 1;\n\tend\nend",
+        "always @ (posedge CLK_1 or posedge trigger_send)\nbegin\n\tif (trigger_send)\n\t\tclk1_cnt <= 0;\n\telse if (counting_now)\n\tbegin\n\t\tclk1_cnt <= clk1_cnt + 1;\n\tend\nend",
+        "always @ (posedge s_clk_in or posedge s_reset_in)\nbegin\n\tif (s_reset_in)\n\t\ttrigger_send <= 1'b0;\n\telse if (~pre_counting_now & counting_now)\n\t\ttrigger_send <= 1'b1;\n\telse\n\t\ttrigger_send <= 1'b0;\nend",
+        "always @ (posedge s_clk_in or posedge s_reset_in)\nbegin\n\tif (s_reset_in)\n\t\tpre_counting_now <= 1'b0;\n\telse\n\t\tpre_counting_now <= counting_now;\n\t\t\nend",
+        "always @ (posedge s_clk_in or posedge s_reset_in)\nbegin\n\tif (s_reset_in)\n\t\ts_readdata_out <= 0;\n\telse if (s_read_in && s_address_in == `REG_START)\n\t\ts_readdata_out <= {31'h0, counting_now};\n\telse if (s_read_in && s_address_in == `REG_READ_CLK1)\n\t\ts_readdata_out <= clk1_cnt;\n\telse if (s_read_in && s_address_in == `REG_READ_CLK2)\n\t\ts_readdata_out <= clk2_cnt;\nend",
+        "always @ (posedge s_clk_in or posedge s_reset_in)\nbegin\n\tif (s_reset_in)\n\t\tcnt_down <= 0;\n\telse if (s_write_in && s_address_in == `REG_START)\n\tbegin\n\t\tcnt_down <= s_writedata_in;\n\t\tcounting_now <= (s_writedata_in == 0)?1'b0:1'b1;\n\tend\n\telse if (cnt_down > 1)\n\t\tcnt_down <= cnt_down - 1;\n\telse\n\t\tcounting_now <= 1'b0;\nend"
+    ]
+}

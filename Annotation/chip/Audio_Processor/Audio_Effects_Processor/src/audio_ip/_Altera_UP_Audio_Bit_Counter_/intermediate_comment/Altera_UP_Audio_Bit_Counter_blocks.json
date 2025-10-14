@@ -1,0 +1,21 @@
+{
+    "line_num": [
+        [
+            140,
+            141
+        ],
+        [
+            126,
+            134
+        ],
+        [
+            116,
+            124
+        ]
+    ],
+    "blocks": [
+        "assign reset_bit_counter = left_right_clk_rising_edge | \n\t\t\t\t\t\t\tleft_right_clk_falling_edge;",
+        "always @(posedge clk)\nbegin\n\tif (reset == 1'b1)\n\t\tcounting <= 1'b0;\n\telse if (reset_bit_counter == 1'b1)\n\t\tcounting <= 1'b1;\n\telse if ((bit_clk_falling_edge == 1'b1) && (bit_counter == 5'h00))\n\t\tcounting <= 1'b0;\nend",
+        "always @(posedge clk)\nbegin\n\tif (reset == 1'b1)\n\t\tbit_counter <= 5'h00;\n\telse if (reset_bit_counter == 1'b1)\n\t\tbit_counter <= BIT_COUNTER_INIT;\n\telse if ((bit_clk_falling_edge == 1'b1) && (bit_counter != 5'h00))\n\t\tbit_counter <= bit_counter - 5'h01;\nend"
+    ]
+}

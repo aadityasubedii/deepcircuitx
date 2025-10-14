@@ -1,0 +1,1 @@
+      assign app_wdf_rdy = app_wdf_rdy_r;

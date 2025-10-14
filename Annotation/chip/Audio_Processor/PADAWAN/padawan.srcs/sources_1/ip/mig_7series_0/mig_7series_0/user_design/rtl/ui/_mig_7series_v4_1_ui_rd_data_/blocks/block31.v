@@ -1,0 +1,1 @@
+        always @(posedge clk) wr_status_r1 <= #TCQ wr_status[0];

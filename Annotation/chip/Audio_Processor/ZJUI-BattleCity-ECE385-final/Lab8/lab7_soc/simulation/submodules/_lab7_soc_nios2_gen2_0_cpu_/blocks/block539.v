@@ -1,0 +1,1 @@
+  assign break_b_rr = jdo[33 : 32];

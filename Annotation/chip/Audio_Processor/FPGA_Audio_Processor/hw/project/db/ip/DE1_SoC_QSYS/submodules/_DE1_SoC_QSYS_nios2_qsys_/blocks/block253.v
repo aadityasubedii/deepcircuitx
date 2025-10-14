@@ -1,0 +1,1 @@
+  assign tracemem_on = trc_enb;

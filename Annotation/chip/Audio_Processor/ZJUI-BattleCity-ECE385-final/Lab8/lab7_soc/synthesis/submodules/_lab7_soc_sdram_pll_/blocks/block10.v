@@ -1,0 +1,23 @@
+module  lab7_soc_sdram_pll
+	( 
+	address,
+	areset,
+	c0,
+	c1,
+	clk,
+	configupdate,
+	locked,
+	phasecounterselect,
+	phasedone,
+	phasestep,
+	phaseupdown,
+	read,
+	readdata,
+	reset,
+	scanclk,
+	scanclkena,
+	scandata,
+	scandataout,
+	scandone,
+	write,
+	writedata) ;

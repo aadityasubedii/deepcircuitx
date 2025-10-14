@@ -1,0 +1,1 @@
+assign cmd_rdy_o = cmd_rdy & fifo_not_full;

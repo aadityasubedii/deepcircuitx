@@ -1,0 +1,251 @@
+{
+    "line_num": [
+        [
+            1237,
+            1263
+        ],
+        [
+            1235,
+            1235
+        ],
+        [
+            1211,
+            1231
+        ],
+        [
+            1189,
+            1198
+        ],
+        [
+            1184,
+            1184
+        ],
+        [
+            1165,
+            1170
+        ],
+        [
+            1101,
+            1129
+        ],
+        [
+            1099,
+            1099
+        ],
+        [
+            1095,
+            1095
+        ],
+        [
+            1086,
+            1093
+        ],
+        [
+            1074,
+            1082
+        ],
+        [
+            1050,
+            1057
+        ],
+        [
+            995,
+            1048
+        ],
+        [
+            972,
+            993
+        ],
+        [
+            950,
+            964
+        ],
+        [
+            923,
+            923
+        ],
+        [
+            921,
+            923
+        ],
+        [
+            919,
+            921
+        ],
+        [
+            916,
+            916
+        ],
+        [
+            915,
+            915
+        ],
+        [
+            890,
+            898
+        ],
+        [
+            868,
+            880
+        ],
+        [
+            828,
+            846
+        ],
+        [
+            819,
+            824
+        ],
+        [
+            777,
+            817
+        ],
+        [
+            760,
+            775
+        ],
+        [
+            718,
+            736
+        ],
+        [
+            711,
+            717
+        ],
+        [
+            675,
+            696
+        ],
+        [
+            667,
+            671
+        ],
+        [
+            542,
+            655
+        ],
+        [
+            536,
+            540
+        ],
+        [
+            510,
+            513
+        ],
+        [
+            501,
+            509
+        ],
+        [
+            414,
+            481
+        ],
+        [
+            409,
+            411
+        ],
+        [
+            402,
+            407
+        ],
+        [
+            304,
+            371
+        ],
+        [
+            299,
+            301
+        ],
+        [
+            292,
+            297
+        ],
+        [
+            268,
+            271
+        ],
+        [
+            228,
+            246
+        ],
+        [
+            202,
+            210
+        ],
+        [
+            176,
+            177
+        ],
+        [
+            153,
+            174
+        ],
+        [
+            144,
+            152
+        ],
+        [
+            119,
+            134
+        ],
+        [
+            99,
+            107
+        ],
+        [
+            81,
+            89
+        ]
+    ],
+    "blocks": [
+        "  always @(posedge clock) begin\n    if(ready) begin\t\n\t\t \n\t\t index  <= 0;\t\t\n       accum  <= 10'sh1FF * x;   \n       done   <= 0;\t\t \n\t end\n\n    if (!ready && (index < size) ) begin   \n\t    accum <= accum + revamp * sample[offset - delay];\n\t    index <= index + 4'd1;\n    end\t\t\n    if (!done && (index == size) ) begin         \n\n       if(filtnum == 6 ) begin\n\t\t\t\tsample[offset] <=   x;               \n       end\n\t\t \n       else begin\t    \n\t\t\t   sample[offset] <=   accum[17:10];     \n\t    end\n\n       output_reg     <=  accum;\n       done <= 1;           \n    end\t\n\n  end",
+        "  delay4k del(index,delay);",
+        "  always @(posedge clock) begin   \n     if (ready) begin\n        offset <= offset + 12'h1;  \n        if (filtnum == 6) begin    \n           size   <= 8'd1;\n           revamp <= 10'sh1FF;\n        end\t\t \n\n\t\t  else if (filtnum == 7) begin  \n\t\t     size   <= 8'd1;\n\t\t\t  revamp <= 10'sh1FF;\n\t\t  \n\t\t  end\n \n\t\t  else begin\n\t\t     size <= 8'd4;\n\t\t\t  revamp <= 10'sh0DF;\n\t\t  end\n\n     end\nend",
+        "initial begin\noffset    <= 12'h0;\n     \nindex     <= 4'h0;\n     \naccum     <= 18'd0;\noutput_reg <= 18'd0;\t  \t  \nsample[0] <= 0;\n\nend",
+        "   assign y    = output_reg;   ",
+        "module DelayModule(\ninput wire clock,reset,ready, \ninput wire signed [7:0] x,\noutput wire signed [17:0] y,\ninput wire [3:0] filtnum\n);",
+        "  always @(posedge clock) begin\n    if (ready) state <= state+ 4'h1;\n\n    case (state)\n      4'h0: \n        begin\n          command <= 24'h80_0000;\n          command_valid <= 1'b1;\n        end\n      4'h1: \n        command <= 24'h80_0000;\n      4'h3: \n        command <= { 8'h04, 3'b000, vol, 3'b000, vol };\n      4'h5: \n        command <= 24'h18_0808;\n      4'h6: \n        command <= { 8'h1A, 5'b00000, source, 5'b00000, source};\n      4'h7: \n        command <= 24'h1C_0F0F;\n      4'h9: \n        command <= 24'h0E_8048;\n      4'hA: \n        command <= 24'h0A_0000;\n      4'hB: \n        command <= 24'h20_8000;\n      default:\n        command <= 24'h80_0000;\n    endcase \n  end ",
+        "  assign vol = 31-volume;  ",
+        "  assign command_address = command[23:16];",
+        "  initial begin\n    command <= 4'h0;\n    \n    command_valid <= 1'b0;\n    \n    state <= 16'h0000;\n    \n  end",
+        "module ac97commands (\n  input wire clock,\n  input wire ready,\n  output wire [7:0] command_address,\n  output wire [15:0] command_data,\n  output reg command_valid,\n  input wire [4:0] volume,\n  input wire [2:0] source\n);",
+        "  always @(negedge ac97_bit_clock) begin\n    if ((bit_count >= 57) && (bit_count <= 76))\n      \n      left_in_data <= { left_in_data[18:0], ac97_sdata_in };\n    else if ((bit_count >= 77) && (bit_count <= 96))\n      \n      right_in_data <= { right_in_data[18:0], ac97_sdata_in };\n  end",
+        "  always @(posedge ac97_bit_clock) begin\n    \n    if (bit_count == 255)\n      ac97_synch <= 1'b1;\n    if (bit_count == 15)\n      ac97_synch <= 1'b0;\n\n    \n    if (bit_count == 128)\n      ready <= 1'b1;\n    if (bit_count == 2)\n      ready <= 1'b0;\n\n    \n    \n    if (bit_count == 255) begin\n      l_cmd_addr <= {command_address, 12'h000};\n      l_cmd_data <= {command_data, 4'h0};\n      l_cmd_v <= command_valid;\n      l_left_data <= left_data;\n      l_left_v <= left_valid;\n      l_right_data <= right_data;\n      l_right_v <= right_valid;\n    end\n\n    if ((bit_count >= 0) && (bit_count <= 15))\n      \n      case (bit_count[3:0])\n        4'h0: ac97_sdata_out <= 1'b1;      \n        4'h1: ac97_sdata_out <= l_cmd_v;   \n        4'h2: ac97_sdata_out <= l_cmd_v;   \n        4'h3: ac97_sdata_out <= l_left_v;  \n        4'h4: ac97_sdata_out <= l_right_v; \n        default: ac97_sdata_out <= 1'b0;\n      endcase\n    else if ((bit_count >= 16) && (bit_count <= 35))\n      \n      ac97_sdata_out <= l_cmd_v ? l_cmd_addr[35-bit_count] : 1'b0;\n    else if ((bit_count >= 36) && (bit_count <= 55))\n      \n      ac97_sdata_out <= l_cmd_v ? l_cmd_data[55-bit_count] : 1'b0;\n    else if ((bit_count >= 56) && (bit_count <= 75)) begin\n      \n      ac97_sdata_out <= l_left_v ? l_left_data[19] : 1'b0;\n      l_left_data <= { l_left_data[18:0], l_left_data[19] };\n    end\n    else if ((bit_count >= 76) && (bit_count <= 95))\n      \n      ac97_sdata_out <= l_right_v ? l_right_data[95-bit_count] : 1'b0;\n    else\n      ac97_sdata_out <= 1'b0;\n\n    bit_count <= bit_count+1;\n  end ",
+        "  initial begin\n    ready <= 1'b0;\n    \n    ac97_sdata_out <= 1'b0;\n    \n    ac97_synch <= 1'b0;\n    \n\n    bit_count <= 8'h00;\n    \n    l_cmd_v <= 1'b0;\n    \n    l_left_v <= 1'b0;\n    \n    l_right_v <= 1'b0;\n    \n\n    left_in_data <= 20'h00000;\n    \n    right_in_data <= 20'h00000;\n    \n  end",
+        "module ac97 (\n  output reg ready,\n  input wire [7:0] command_address,\n  input wire [15:0] command_data,\n  input wire command_valid,\n  input wire [19:0] left_data,\n  input wire left_valid,\n  input wire [19:0] right_data,\n  input wire right_valid,\n  output reg [19:0] left_in_data, right_in_data,\n  output reg ac97_sdata_out,\n  input wire ac97_sdata_in,\n  output reg ac97_synch,\n  input wire ac97_bit_clock\n);",
+        "  assign right_out_data = left_out_data;",
+        "  assign audio_in_data = left_in_data[19:12];\n  assign left_out_data = {out_data, 12'b000000000000};\n  assign right_out_data = left_out_data;",
+        "  always @ (posedge CLK_100MHz)\n    if (ready) out_data <= audio_out_data;\n  assign audio_in_data = left_in_data[19:12];",
+        "  assign ready = ready_sync[1] & ~ready_sync[2];",
+        "  always @ (posedge CLK_100MHz) ready_sync <= {ready_sync[1:0], ac97_ready};",
+        "  always @(posedge CLK_100MHz) begin\n    if (reset) begin\n      audio_reset_b = 1'b0;\n      reset_count = 0;\n    end else if (reset_count == 1023)\n      audio_reset_b = 1'b1;\n    else\n      reset_count = reset_count+ 10'h1;\n  end",
+        "module lab4audio (\n  input wire CLK_100MHz,\n  input wire reset,\n  input wire [4:0] volume,\n  output wire [7:0] audio_in_data,\n  input wire [7:0] audio_out_data,\n  output wire ready,\n  output reg audio_reset_b,   \n  output wire ac97_sdata_out,\n  input wire ac97_sdata_in,\n  output wire ac97_synch,\n  input wire ac97_bit_clock\n);",
+        "  always @(posedge clock) begin\n    if(ready) begin\n\t    sample[offset] <= x;\t\n\t\t \nindex  <= 0;\t\t\n       accum  <= 0;\n       done   <= 0;\t\t \n\t end\n\t \n    if (!ready && (index < 30) ) begin   \n\t    accum <= accum + coeff * sample[offset-index];\n\t    index <= index + 5'h1;\n    end\t\t\n    if (!done && (index == 30) ) begin   \n\t\t output_reg <= accum;   \n\t\t done <= 1'b1;           \n    end\t\n\n  end",
+        "  always @(posedge clock) begin   \n     if (ready) begin\n         offset <= offset + 5'h1;\n     end\t\t\t\n  \nend",
+        "    initial begin\n\n        index = 5'h0;\n\t\t\taccum <= 18'd0;\n\t\t  output_reg <= 5'h0;\n       \n\t\t \n\t\tsample[0] <= 0;\n\t  sample[1] <= 0;\n\t  sample[2] <= 0;\n\t  sample[3] <= 0;\n\t  sample[4] <= 0;\n\t  sample[5] <= 0;\n\t  sample[6] <= 0;\n\t  sample[7] <= 0;\n\t  sample[8] <= 0;\n\t  sample[9] <= 0;\n\t  sample[10] <= 0;\n\t  sample[11] <= 0;\n\t  sample[12] <= 0;\n\t  sample[13] <= 0;\n\t  sample[14] <= 0;\n\t  sample[15] <= 0;\n\t  sample[16] <= 0;\n\t  sample[17] <= 0;\n\t  sample[18] <= 0;\n\t  sample[19] <= 0;\n\t  sample[20] <= 0;\n\t  sample[21] <= 0;\n\t  sample[22] <= 0;\n\t  sample[23] <= 0;\n\t  sample[24] <= 0;\n\t  sample[25] <= 0;\n\t  sample[26] <= 0;\n\t  sample[27] <= 0;\n\t  sample[28] <= 0;\n\t  sample[29] <= 0;\n\t  sample[30] <= 0;\n\t  sample[31] <= 0;\n\n    end",
+        "module fir31(\n  input wire clock,reset,ready,\n  input wire signed [7:0] x,\n  output wire signed [17:0] y,\n  input wire [3:0] filtnum\n);\n\n    reg [4:0] index;\n\t reg [4:0] offset;\n    reg signed [7:0] sample [0:31];\n\t reg signed [17:0] accum;\n\t reg signed [17:0] output_reg;\n\t wire signed [9:0] coeff;\n\t reg done;\n\n\t\tassign y = output_reg;",
+        "  always @(posedge clock)\n    if (reset) begin\n      count <= 0;\n      new <= noisy;\n      clean <= noisy;\n    end\n    else if (noisy != new) begin\n      \n      new <= noisy;\n      count <= 0;\n    end\n    else if (count == 270000)\n      \n      clean <= new;\n    else\n      \n      count <= count+1'b1;\n\nendmodule",
+        "module debounce (\n  input wire reset, clock, noisy,\n  output reg clean\n);\n  reg [18:0] count;\n  reg new;\n",
+        "always @(index)\n \n     case (index[3:0])          \n           4'd0:  delay =  12'd4079; \n           4'd1:  delay =  12'd3469;  \n           4'd2:  delay =  12'd2579;   \n           4'd3:  delay =  12'd1823;   \n           4'd4:  delay =  12'd1;   \n           4'd5:  delay =  12'd1;   \n           4'd6:  delay =  12'd1;   \n           4'd7:  delay =  12'd1;   \n           4'd8:  delay =  12'd1;\n           4'd9:  delay =  12'd1;\n           4'd10: delay =  12'd1;\n           4'd11: delay =  12'd1;\n           4'd12: delay =  12'd1;\n           4'd13: delay =  12'd1;  \n           4'd14: delay =  12'd1;  \n           4'd15: delay =  12'd1;    \n           default: delay = 12'd1;\n      \n\t\tendcase ",
+        "module delay4k(\n  input wire [3:0] index,\n  \noutput reg [11:0] delay\n);",
+        "  always @(index or select)\n     case (select[3:0])           \n4'd1: begin \n         case (index[4:0]) \n\t\t\t  5'd0:  coeff = -10'sd1;  \n           5'd1:  coeff = -10'sd2;  \n           5'd2:  coeff = -10'sd3;   \n           5'd3:  coeff = -10'sd5;   \n           5'd4:  coeff = -10'sd6;   \n           5'd5:  coeff = -10'sd7;   \n           5'd6:  coeff = -10'sd5;   \n           5'd7:  coeff = -10'sd0;    \n           5'd8:  coeff = 10'sd11;\n           5'd9:  coeff = 10'sd27;\n           5'd10: coeff = 10'sd47;\n           5'd11: coeff = 10'sd69;\n           5'd12: coeff = 10'sd91;\n           5'd13: coeff = 10'sd110;  \n           5'd14: coeff = 10'sd122;  \n           5'd15: coeff = 10'sd127;  \n           5'd16: coeff = 10'sd122;  \n           5'd17: coeff = 10'sd110;  \n           5'd18: coeff = 10'sd91;\n           5'd19: coeff = 10'sd69;\n           5'd20: coeff = 10'sd47;\n           5'd21: coeff = 10'sd27;\n           5'd22: coeff = 10'sd11;\n           5'd23: coeff = 10'sd0;\n           5'd24: coeff = -10'sd5;\n           5'd25: coeff = -10'sd7;\n           5'd26: coeff = -10'sd6;\n           5'd27: coeff = -10'sd5;\n           5'd28: coeff = -10'sd3;\n           5'd29: coeff = -10'sd2;\n           5'd30: coeff = -10'sd1;\n           default: coeff = 10'h0;\n         endcase \nend \n4'd2: begin  \n         case (index[4:0])          \n           5'd0:  coeff = -10'sd8;  \n           5'd1:  coeff = -10'sd9;  \n           5'd2:  coeff = -10'sd13;   \n           5'd3:  coeff = -10'sd18;   \n           5'd4:  coeff = -10'sd22;   \n           5'd5:  coeff = -10'sd25;   \n           5'd6:  coeff = -10'sd24;   \n           5'd7:  coeff = -10'sd17;    \n           5'd8: coeff =  -10'sd4;\n           5'd9: coeff =   10'sd15;\n           5'd10: coeff =  10'sd39;\n           5'd11: coeff =  10'sd65;\n           5'd12: coeff =  10'sd90;\n           5'd13: coeff =  10'sd112;\n           5'd14: coeff =  10'sd126;\n           5'd15:  coeff = 10'sd131;  \n           5'd16:  coeff = 10'sd126;\n           5'd17: coeff =  10'sd112;\n           5'd18: coeff =  10'sd90;\n           5'd19: coeff =  10'sd65;\n           5'd20: coeff =  10'sd39;  \n           5'd21: coeff =  10'sd15;  \n           5'd22: coeff = -10'sd4;  \n           5'd23: coeff = -10'sd17;  \n           5'd24: coeff = -10'sd24;  \n           5'd25: coeff = -10'sd25;\n           5'd26: coeff = -10'sd22;\n           5'd27: coeff = -10'sd18;\n           5'd28: coeff = -10'sd13;\n           5'd29: coeff = -10'sd9;\n           5'd30: coeff = -10'sd8;\n           default: coeff = 10'h0;\n         endcase  \n\t\t end\n\t\t \n\t\t 4'd3: begin  \n         case (index[4:0])          \n           5'd0:  coeff =  10'sd1;  \n           5'd1:  coeff =  10'sd1;  \n           5'd2:  coeff =  10'sd1;   \n           5'd3:  coeff =  10'sd1;   \n           5'd4:  coeff =  10'sd1;   \n           5'd5:  coeff =  10'sd0;   \n           5'd6:  coeff = -10'sd2;   \n           5'd7:  coeff = -10'sd6;    \n           5'd8: coeff =  -10'sd11;\n           5'd9: coeff =  -10'sd18;\n           5'd10: coeff = -10'sd25;\n           5'd11: coeff = -10'sd33;\n           5'd12: coeff = -10'sd40;\n           5'd13: coeff = -10'sd46;\n           5'd14: coeff = -10'sd49;\n           5'd15:  coeff = 10'sd462;  \n           5'd16:  coeff =-10'sd49;\n           5'd17: coeff = -10'sd46;\n           5'd18: coeff = -10'sd40;\n           5'd19: coeff = -10'sd33;\n           5'd20: coeff = -10'sd25;  \n           5'd21: coeff = -10'sd18;  \n           5'd22: coeff = -10'sd11;  \n           5'd23: coeff = -10'sd6;  \n           5'd24: coeff = -10'sd2;  \n           5'd25: coeff = -10'sd0;\n           5'd26: coeff =  10'sd1;\n           5'd27: coeff =  10'sd1;\n           5'd28: coeff =  10'sd1;\n           5'd29: coeff =  10'sd1;\n           5'd30: coeff =  10'sd1;\n           default: coeff = 10'h0;\n         endcase  \n\t\t end\n\t\t \n\t\t default: coeff = 10'h0;  \n     endcase",
+        "module coeffs31(\n  input wire [3:0] select,\n  input wire [4:0] index,\n  output reg signed [9:0] coeff\n);",
+        "   always @(posedge clk) begin\n     if (we) mem[addr] <= din;\n     dout <= mem[addr];\n   end",
+        "module mybram #(parameter LOGSIZE=14, WIDTH=1)\n              (input wire [LOGSIZE-1:0] addr,\n               input wire clk,\n               input wire [WIDTH-1:0] din,\n               output reg [WIDTH-1:0] dout,\n               input wire we);\n   \n   (* ram_style = \"block\" *)\n   reg [WIDTH-1:0] mem[(1<<LOGSIZE)-1:0];",
+        "   always @(index) begin\n      case (index[15:10])\n        6'h00: pcm_data <= 20'h00000;\n        6'h01: pcm_data <= 20'h0C8BD;\n        6'h02: pcm_data <= 20'h18F8B;\n        6'h03: pcm_data <= 20'h25280;\n        6'h04: pcm_data <= 20'h30FBC;\n        6'h05: pcm_data <= 20'h3C56B;\n        6'h06: pcm_data <= 20'h471CE;\n        6'h07: pcm_data <= 20'h5133C;\n        6'h08: pcm_data <= 20'h5A827;\n        6'h09: pcm_data <= 20'h62F20;\n        6'h0A: pcm_data <= 20'h6A6D9;\n        6'h0B: pcm_data <= 20'h70E2C;\n        6'h0C: pcm_data <= 20'h7641A;\n        6'h0D: pcm_data <= 20'h7A7D0;\n        6'h0E: pcm_data <= 20'h7D8A5;\n        6'h0F: pcm_data <= 20'h7F623;\n        6'h10: pcm_data <= 20'h7FFFF;\n        6'h11: pcm_data <= 20'h7F623;\n        6'h12: pcm_data <= 20'h7D8A5;\n        6'h13: pcm_data <= 20'h7A7D0;\n        6'h14: pcm_data <= 20'h7641A;\n        6'h15: pcm_data <= 20'h70E2C;\n        6'h16: pcm_data <= 20'h6A6D9;\n        6'h17: pcm_data <= 20'h62F20;\n        6'h18: pcm_data <= 20'h5A827;\n        6'h19: pcm_data <= 20'h5133C;\n        6'h1A: pcm_data <= 20'h471CE;\n        6'h1B: pcm_data <= 20'h3C56B;\n        6'h1C: pcm_data <= 20'h30FBC;\n        6'h1D: pcm_data <= 20'h25280;\n        6'h1E: pcm_data <= 20'h18F8B;\n        6'h1F: pcm_data <= 20'h0C8BD;\n        6'h20: pcm_data <= 20'h00000;\n        6'h21: pcm_data <= 20'hF3743;\n        6'h22: pcm_data <= 20'hE7075;\n        6'h23: pcm_data <= 20'hDAD80;\n        6'h24: pcm_data <= 20'hCF044;\n        6'h25: pcm_data <= 20'hC3A95;\n        6'h26: pcm_data <= 20'hB8E32;\n        6'h27: pcm_data <= 20'hAECC4;\n        6'h28: pcm_data <= 20'hA57D9;\n        6'h29: pcm_data <= 20'h9D0E0;\n        6'h2A: pcm_data <= 20'h95927;\n        6'h2B: pcm_data <= 20'h8F1D4;\n        6'h2C: pcm_data <= 20'h89BE6;\n        6'h2D: pcm_data <= 20'h85830;\n        6'h2E: pcm_data <= 20'h8275B;\n        6'h2F: pcm_data <= 20'h809DD;\n        6'h30: pcm_data <= 20'h80000;\n        6'h31: pcm_data <= 20'h809DD;\n        6'h32: pcm_data <= 20'h8275B;\n        6'h33: pcm_data <= 20'h85830;\n        6'h34: pcm_data <= 20'h89BE6;\n        6'h35: pcm_data <= 20'h8F1D4;\n        6'h36: pcm_data <= 20'h95927;\n        6'h37: pcm_data <= 20'h9D0E0;\n        6'h38: pcm_data <= 20'hA57D9;\n        6'h39: pcm_data <= 20'hAECC4;\n        6'h3A: pcm_data <= 20'hB8E32;\n        6'h3B: pcm_data <= 20'hC3A95;\n        6'h3C: pcm_data <= 20'hCF044;\n        6'h3D: pcm_data <= 20'hDAD80;\n        6'h3E: pcm_data <= 20'hE7075;\n        6'h3F: pcm_data <= 20'hF3743;\n      endcase \n   end ",
+        "   always @(posedge clock) begin\n      if (ready) index <= index + step;\n   end",
+        "   initial begin\n      index <= 8'h00;\n      \n      pcm_data <= 20'h00000;\n      \n   end",
+        "   always @(index) begin\n      case (index[5:0])\n        6'h00: pcm_data <= 20'h00000;\n        6'h01: pcm_data <= 20'h0C8BD;\n        6'h02: pcm_data <= 20'h18F8B;\n        6'h03: pcm_data <= 20'h25280;\n        6'h04: pcm_data <= 20'h30FBC;\n        6'h05: pcm_data <= 20'h3C56B;\n        6'h06: pcm_data <= 20'h471CE;\n        6'h07: pcm_data <= 20'h5133C;\n        6'h08: pcm_data <= 20'h5A827;\n        6'h09: pcm_data <= 20'h62F20;\n        6'h0A: pcm_data <= 20'h6A6D9;\n        6'h0B: pcm_data <= 20'h70E2C;\n        6'h0C: pcm_data <= 20'h7641A;\n        6'h0D: pcm_data <= 20'h7A7D0;\n        6'h0E: pcm_data <= 20'h7D8A5;\n        6'h0F: pcm_data <= 20'h7F623;\n        6'h10: pcm_data <= 20'h7FFFF;\n        6'h11: pcm_data <= 20'h7F623;\n        6'h12: pcm_data <= 20'h7D8A5;\n        6'h13: pcm_data <= 20'h7A7D0;\n        6'h14: pcm_data <= 20'h7641A;\n        6'h15: pcm_data <= 20'h70E2C;\n        6'h16: pcm_data <= 20'h6A6D9;\n        6'h17: pcm_data <= 20'h62F20;\n        6'h18: pcm_data <= 20'h5A827;\n        6'h19: pcm_data <= 20'h5133C;\n        6'h1A: pcm_data <= 20'h471CE;\n        6'h1B: pcm_data <= 20'h3C56B;\n        6'h1C: pcm_data <= 20'h30FBC;\n        6'h1D: pcm_data <= 20'h25280;\n        6'h1E: pcm_data <= 20'h18F8B;\n        6'h1F: pcm_data <= 20'h0C8BD;\n        6'h20: pcm_data <= 20'h00000;\n        6'h21: pcm_data <= 20'hF3743;\n        6'h22: pcm_data <= 20'hE7075;\n        6'h23: pcm_data <= 20'hDAD80;\n        6'h24: pcm_data <= 20'hCF044;\n        6'h25: pcm_data <= 20'hC3A95;\n        6'h26: pcm_data <= 20'hB8E32;\n        6'h27: pcm_data <= 20'hAECC4;\n        6'h28: pcm_data <= 20'hA57D9;\n        6'h29: pcm_data <= 20'h9D0E0;\n        6'h2A: pcm_data <= 20'h95927;\n        6'h2B: pcm_data <= 20'h8F1D4;\n        6'h2C: pcm_data <= 20'h89BE6;\n        6'h2D: pcm_data <= 20'h85830;\n        6'h2E: pcm_data <= 20'h8275B;\n        6'h2F: pcm_data <= 20'h809DD;\n        6'h30: pcm_data <= 20'h80000;\n        6'h31: pcm_data <= 20'h809DD;\n        6'h32: pcm_data <= 20'h8275B;\n        6'h33: pcm_data <= 20'h85830;\n        6'h34: pcm_data <= 20'h89BE6;\n        6'h35: pcm_data <= 20'h8F1D4;\n        6'h36: pcm_data <= 20'h95927;\n        6'h37: pcm_data <= 20'h9D0E0;\n        6'h38: pcm_data <= 20'hA57D9;\n        6'h39: pcm_data <= 20'hAECC4;\n        6'h3A: pcm_data <= 20'hB8E32;\n        6'h3B: pcm_data <= 20'hC3A95;\n        6'h3C: pcm_data <= 20'hCF044;\n        6'h3D: pcm_data <= 20'hDAD80;\n        6'h3E: pcm_data <= 20'hE7075;\n        6'h3F: pcm_data <= 20'hF3743;\n      endcase \n   end ",
+        "   always @(posedge clock) begin\n      if (ready) index <= index+9'h1;\n   end",
+        "   initial begin\n      index <= 8'h00;\n      \n      pcm_data <= 20'h00000;\n      \n   end",
+        "   always @(posedge clock) begin\n\t   if(ready) \n\t\t   prod <= x * y  ;\t\t\t\n\tend",
+        "   always @ (posedge clock) begin\n      if (ready) begin\n\t    \n\t\t\tcase (filtnum[3:0])\n\t\t\t\t4'h0:  to_ac97_data <= from_ac97_data;\n\t\t\t\t4'h1:  to_ac97_data <= filtered[17:10]; \n\t\t\t\t4'h2:  to_ac97_data <= filtered[17:10]; \n\t\t\t\t4'h3:  to_ac97_data <= filtered[17:10]; \n\t\t\t\t4'h4:  to_ac97_data <= tone[19:12];\n\t\t\t\t4'h5:  to_ac97_data <= tone_2[19:12];\n\t\t\t\t4'h6:  to_ac97_data <= delayed[17:10];   \n\t\t\t\t4'h7:  to_ac97_data <= delayed[17:10];   \n\t\t\t\t4'h8:  to_ac97_data <= delayed[17:10];   \n\t\t\t\t4'h9:  to_ac97_data <= mult[15:8];\t\t\t\t\n\t\t\t\tdefault: to_ac97_data <= from_ac97_data;\n\t\t\tendcase\n\t \n      end\n   end",
+        "module FilterControlModule(\n  input wire clock,\t           \n  input wire reset,                \n  input wire ready,                \n  input wire [15:0]step,             \n  input wire [3:0] filtnum,        \n  input wire [7:0] from_ac97_data, \n  output reg [7:0] to_ac97_data    \n);  ",
+        "assign SevenSegmentEnable = enable;\nassign SevenSegment = bcd[filtnum];",
+        "initial begin\n\n\tenable  <= 3'b101;\n\n\tbcd[0]  = 8'b00000011;\n\tbcd[1]  = 8'b10011111;\n\tbcd[2]  = 8'b00100101;\n\tbcd[3]  = 8'b00001101;\n\tbcd[4]  = 8'b10011001;\n\tbcd[5]  = 8'b01001001;\n\tbcd[6]  = 8'b01000001;\n\tbcd[7]  = 8'b00011111;\n\tbcd[8]  = 8'b00000001;\n\tbcd[9]  = 8'b00011001;\n\tbcd[10] = 8'b00010001;\n\tbcd[11] = 8'b11000001;\n\tbcd[12] = 8'b01100011;\n\tbcd[13] = 8'b10000101;\n\tbcd[14] = 8'b01100001;\n\tbcd[15] = 8'b01110001;\n\nend",
+        "module FilterDisplay(\n  input wire [3:0] filtnum,        \n  output wire [7:0] SevenSegment,\n  output wire [2:0] SevenSegmentEnable\n\t);\n\nreg [2:0]  enable;\nreg [7:0]  bcd [0:15];  \n",
+        "   always @ (posedge CLK_100MHz) begin\n     \n\tif (reset) \n\tstep <= 16'h0400;\n     \n\telse begin\n\t\tif (sup & ~old_sup & step != 16'hFFFF)  \n\t\tstep <= step + 16'h0F;       \n\t\tif (sdown & ~old_sdown & step != 16'h0) \n\t\tstep <= step - 16'h0F; \t\t     \n\tend\n     \n\told_sup <= sup;\n\told_sdown <= sdown;\n   \n\tend",
+        "   always @ (posedge CLK_100MHz) begin\n     if (reset) filtnum <= 4'd0;\n     else begin\n\tif (fup & ~old_fup & filtnum != 4'd15) filtnum <= filtnum+4'h1;       \n\tif (fdown & ~old_fdown & filtnum != 4'd0) filtnum <= filtnum-4'h1;       \n     end\n     old_fup <= fup;\n     old_fdown <= fdown;\n   end",
+        "   always @ (posedge CLK_100MHz) begin\n     if (reset) volume <= 5'd20;\n     else begin\n\tif (vup & ~old_vup & volume != 5'd31) volume <= volume+5'd1;       \n\tif (vdown & ~old_vdown & volume != 5'd0) volume <= volume-5'd1;       \n     end\n     old_vup <= vup;\n     old_vdown <= vdown;\n   end"
+    ]
+}

@@ -1,0 +1,1 @@
+assign ram_ce = 1'b1;

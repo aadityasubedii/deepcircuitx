@@ -1,0 +1,11 @@
+Module name: eth_rxcounters. 
+
+Module specification: 
+
+The "eth_rxcounters" module is an integral part of an Ethernet receiver, designed to manage various counters associated with the decoding of incoming Ethernet frames. This module is synchronized with an input clock signal MRxClk and can be reset asynchronously using the Reset signal. It processes incoming signals associated with the current state of received Ethernet frames, the status of the receiver (MRxDV), the decision output from a receiver equalizer, and control signals like DlyCrcEn, HugEn, and r_IFG. It uses these inputs to control and maintain a byte counter (ByteCnt), an Interframe Gap (IFG) counter, and a CRC counter (DlyCrcCnt). 
+
+The ByteCnt is operated by the internal signals ResetByteCounter and IncrementByteCounter, making its decisions based on various input signal states and by comparing ByteCnt to values such as maximum frame length (MaxFL). Different instances of ByteCnt related conditions are output as signals such as ByteCntEq[0:7], ByteCntGreat2, and ByteCntSmall7 for further processing. The IFGCounter is managed by ResetIFGCounter and IncrementIFGCounter internal signals and its status when equals 24 is output through IFGCounterEq24. DlyCrcCnt aids in processing cyclic redundancy checks and is controlled based on CRC enable signal and CRC states.
+
+The module is divided into three primary blocks: ByteCnt control, IFGCounter control, and DlyCrcCnt control. Each block is responsible for maintaining and updating the corresponding signal based on the received Ethernet frame's states and other input control signals. 
+
+The Output BYTE Count information is emitted through ByteCntOut, which can be the original count or a delayed version based on DlyCrcEn. Finally, the module supports jumbo frames by considering the HugEn input signal when determining if a frame is of maximum length, giving its output through ByteCntMaxFrame.

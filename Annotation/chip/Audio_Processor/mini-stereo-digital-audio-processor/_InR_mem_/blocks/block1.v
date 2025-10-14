@@ -1,0 +1,1 @@
+assign inputdataR = inr[index_inR];

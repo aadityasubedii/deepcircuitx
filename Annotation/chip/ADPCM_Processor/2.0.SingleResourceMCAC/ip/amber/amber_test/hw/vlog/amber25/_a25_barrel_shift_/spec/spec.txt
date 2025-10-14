@@ -1,0 +1,11 @@
+Module name: a25_barrel_shift. 
+
+Module specification: The a25_barrel_shift module is designed to perform various types of barrel shift operations on a 32-bit input data. It supports shifting of the input data, i_in, based on the directions provided by the control signal, i_function. The shift amount is controlled by the 8-bit input, i_shift_amount. The module possesses a "quick" and "full" mode for performing the operations. It falls back to "full" mode when the shift amount is large (i_shift_amount[7:2] has non-zero bits). The outputs of this module are the result of the operation (o_out), a carry output from the shift operation (o_carry_out), and a stall signal (o_stall) which indicates a potential delay due to an exhaustive operation in "full" mode.
+
+The module has several input ports such as clk (the clock signal), reset (to revert module to default state), scan_enable (used for scan-based design testing), test_mode, i_in (32-bit input data), i_carry_in (carry signal for adjacent operations), i_shift_amount (controls the shift amount), i_shift_imm_zero (a non-used signal which would presumably command the data to be immediately shifted to zero, bypassing normal shift operations), and i_function (2-bit control signal determining type of shift). 
+
+The outputs from the module are o_out (32-bit output, the result of shift operation), o_carry_out (carry signal after operation), and o_stall (signals a potential delay due to time-consuming full operation).
+
+Internally, the module comprises of signals such as quick_out, quick_carry_out, full_out, full_carry_out which store the results and carry signals from "quick" and "full" operational modes respectively. The module also uses full_out_r, full_carry_out_r (registers storing "full" operation results from previous clock cycle), and a flag use_quick_r (indicating whether "quick" mode was used in last cycle).
+
+The module implementation includes different blocks such as synchronous reset and updating of output signals, two instances of a25_shifter for "quick" and "full" modes respectively, along with an assign block for mapping output and internal signals. It employs concept of pipelining, shifting tasks across different branches of code based on required operation i.e., "quick" or "full".

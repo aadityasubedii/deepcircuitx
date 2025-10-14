@@ -1,0 +1,1 @@
+  always @(posedge clk) poc_error_r <= #TCQ poc_error_ns;

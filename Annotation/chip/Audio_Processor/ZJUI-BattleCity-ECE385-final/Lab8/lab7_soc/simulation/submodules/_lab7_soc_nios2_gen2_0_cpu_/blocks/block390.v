@@ -1,0 +1,1 @@
+  assign dtm_valid = |dtm[35 : 32] & trc_this;

@@ -1,0 +1,11 @@
+Module name: afifo. 
+
+Module specification: The 'afifo' module is an implementation of an asynchronous FIFO (First-In-First-Out) design for memory management. The module operates under asynchronous conditions where write and read operations are controlled by separate clock signals. 
+
+Input ports of the module include "wr_clk" (write clock), "rd_clk" (read clock), "i_data" (input data), "i_push" (write enable signal), "i_pop" (read enable signal). The "wr_clk" and "rd_clk" control the timing for write and read operations respectively while "i_data" is the input data that gets stored into the FIFO. The signals "i_push" and "i_pop", when high, enable the FIFO to accept incoming data or read the output data if FIFO is not full or empty, respectively. 
+
+The output of the module is given through "o_data" (output data), "o_full", and "o_empty". "o_data" carries the data read from the FIFO. The signals "o_full" and "o_empty" serve as status flags indicating whether the FIFO is full or empty, respectively.
+
+The internal signals include the write and read pointers ("wr_pointer" and "rd_pointer"), their delayed versions for synchronization ("wr_pointer_d1", "rd_pointer_d1", "wr_pointer_d2", and "rd_pointer_d2"), and their Gray code decoded versions ("wr_pointer_rd", "rd_pointer_wr") along with the FIFO buffer represented as a 'data' array. The pointers are used to index the next write or read positions in the FIFO. The Gray code versions and their delays are used for synchronization across different clock domains. 
+
+The code is organized into sections that handle write/read operations (updating pointers and data array), synchronization (using Gray code conversion for pointers), and status updates. A pair of functions ("gray8" and "ungray8") is used for Gray code conversions. Overall, 'afifo' serves as a fundamental structure for memory organization, especially in managing data flow within the hardware design.

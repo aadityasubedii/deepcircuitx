@@ -1,0 +1,1 @@
+  assign periodic_rd_insert = periodic_rd_insert_lcl;

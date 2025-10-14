@@ -1,0 +1,1 @@
+  assign R_ctrl_intr_inst_nxt = D_ctrl_intr_inst;

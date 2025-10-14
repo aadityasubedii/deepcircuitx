@@ -1,0 +1,13 @@
+Module name: infrastructure. 
+
+Module specification: 
+
+The 'infrastructure' module is specifically tailored for clock management in digital systems. It adeptly handles various clock input configurations—both differential (via sys_clk_p and sys_clk_n) and single-ended (via sys_clk)—and is capable of generating multiple frequency and phase-varied clock outputs through a sophisticated phase-locked loop (PLL_ADV). The module effectively manages reset synchronization, using an input reset sys_rst_i, and ensures smooth buffering of the output clocks.
+
+Key output ports include clk0, a primary clock output; rst0, a synchronized reset signal; async_rst, an asynchronous reset signal; higher-frequency clock outputs, sysclk_2x and sysclk_2x_180; and specialized outputs like mcb_drp_clk for memory control, as well as pll_ce_0 and pll_ce_90 for phase-locked loop control signals, and pll_lock, an indicator of the PLL's lock status.
+
+Internally, the module uses signals such as clk_2x_0 and clk_2x_180 for double-frequency outputs from the PLL and rst0_sync_r for generating the synchronized reset output. Other signals such as clk0_bufg for buffering or sys_rst for conditioning the reset input based on configuration, play crucial roles in maintaining stability and performance.
+
+The Verilog implementation entails several sections: input handling which conditions the reset signal and selects the appropriate clock source based on configuration; a PLL block configured for best performance depending on parameter inputs like input clock period and output divides; buffering sections for output clocks; synchronization logic for reset signals to ensure proper system reset behavior; and a BUFPLL_MCB block that manages high-speed output clocks and synchronization signals.
+
+Collectively, these components and their organization within the 'infrastructure' module ensure robust, flexible, and reliable clocking and reset logic suitable for complex digital systems, making it a foundational block in system design.

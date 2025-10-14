@@ -1,0 +1,1 @@
+assign tx_push      = `U_TEST_MODULE.tb_uart_push;

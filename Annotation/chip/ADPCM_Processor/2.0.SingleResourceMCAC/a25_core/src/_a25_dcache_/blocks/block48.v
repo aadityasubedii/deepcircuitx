@@ -1,0 +1,1 @@
+assign read_miss_wdata  = wb_rdata_burst;

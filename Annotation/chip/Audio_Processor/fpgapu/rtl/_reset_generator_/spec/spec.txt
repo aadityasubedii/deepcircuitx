@@ -1,0 +1,11 @@
+Module name: reset_generator.
+
+Module specification:
+
+The reset_generator is a Verilog RTL module with a significant role in creating reset signals for external digital circuits. The core functionality of the module hinges on a counter revolutionizing based on a clock input (i_clk). This counter manipulates the status of the reset signal output (o_rst) on every clock's positive edge if it is already asserted high (1). Due to the action of the counter, it consequently generates a reset period lasting for a count determined by the parameter COUNT_WIDTH.
+
+The module has one input wire, i_clk, serving as the clock input to govern the frequency of operation of the reset counter. The rising edge of this clock incites the counter increment operation, impacting the reset signal's status. In contrast, the module has one output wire, o_rst. This reset signal output begins as an active-high signal, transitioning to low (0) based on the counter's value. Hence, the COUNT_WIDTH parameter dictates the duration for which the reset signal remains activated before its transition to low. This output port assumes the role as the reset signal for other encompassing digital circuits.
+
+This module makes use of an internal signal in the form of a register, rst_count, sized based on COUNT_WIDTH plus one bit. It acts as the reset counter, incrementing on every positive edge of i_clk if the reset signal is high. The signal's role is integral to track the high state's duration of the reset signal, which eventually leads to the reset signal turning low when the counter value influences a state change of MSB.
+
+The module's code comprises of two major sections. The initial section declares and initializes the internal signal rst_count and assigns the reset output signal o_rst equal to the negation of the most significant bit of rst_count. The latter section in the always block implements the logic that if reset (o_rst) is high, it increments the counter (rst_count) on every positive edge of the clock (i_clk). When the counter value reaches a certain threshold causing the MSB's state change, the reset period ends eventually, reverting the reset signal to low.

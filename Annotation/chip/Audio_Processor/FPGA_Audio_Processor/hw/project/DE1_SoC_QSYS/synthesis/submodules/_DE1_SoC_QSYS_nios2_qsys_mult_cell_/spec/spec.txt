@@ -1,0 +1,9 @@
+Module name: DE1_SoC_QSYS_nios2_qsys_mult_cell. 
+
+Module specification: The DE1_SoC_QSYS_nios2_qsys_mult_cell module serves as a multiplication cell that operates in synchronization with a clock signal and can be reset using a reset signal. It processes two 32-bit unsigned numbers, A_mul_src1 and A_mul_src2, into a single 32-bit multiplication result, A_mul_cell_result. The multiplication operation is achieved by segmenting the task into two smaller tasks: the_altmult_add_part_1 and the_altmult_add_part_2. The former multiplies the lower 16 bits of the two inputs, while the latter multiplies the upper 16 bits of the first input with the lower 16 bits of the second input. 
+
+There are four input ports: A_mul_src1 and A_mul_src2 serve as the input operands for the multiplication, clk is used to provide the timing signal for sequencing the operations, and reset_n is used to return the module to its initial state. For output, the module uses the A_mul_cell_result port to deliver the computed multiplication results. 
+
+Internally, the module employs several signals. A_mul_cell_result is a 32-bit wire used to store and output the multiplied result. The signals A_mul_cell_result_part_1 and A_mul_cell_result_part_2 store the partial results from the sub-multiplication tasks. The mul_clr wire is used to handle the clearing of the multiplier contents when reset_n is off. 
+
+The code is structured into different blocks representing the memory instances for the two multiplication tasks performed on the lower and upper halves of the input. Each part makes use of an Altera primitive called altera_mult_add, which carries out the multiplication and addition operations. The multiplication results are then put together to form the final result output by the module. Overall, the module efficiently computes the multiplication of two 32-bit values in an FPGA-friendly manner.

@@ -1,0 +1,1 @@
+  assign afull = (entry_cnt >= ALMOST_FULL_VALUE);

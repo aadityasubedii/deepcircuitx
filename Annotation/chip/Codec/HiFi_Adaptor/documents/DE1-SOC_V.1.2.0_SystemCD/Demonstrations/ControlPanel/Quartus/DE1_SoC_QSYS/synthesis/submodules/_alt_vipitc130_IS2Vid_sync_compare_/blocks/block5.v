@@ -1,0 +1,1 @@
+assign sync_compare_v_reset_next = (remove_lines_next) ? v_count_remove : v_count_repeat;

@@ -1,0 +1,1 @@
+assign packet = last_sample | early_eop;

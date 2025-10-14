@@ -1,0 +1,1 @@
+always #(`CLK_PERIOD/2) clk = ~clk;

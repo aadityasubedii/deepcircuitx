@@ -1,0 +1,46 @@
+{
+    "line_num": [
+        [
+            184,
+            190
+        ],
+        [
+            182,
+            182
+        ],
+        [
+            172,
+            179
+        ],
+        [
+            170,
+            170
+        ],
+        [
+            166,
+            166
+        ],
+        [
+            163,
+            165
+        ],
+        [
+            161,
+            161
+        ],
+        [
+            156,
+            159
+        ]
+    ],
+    "blocks": [
+        "always @( posedge i_clk )\n    if ( !wb_stop || o_mem_stall )\n        begin\n        mem_read_data_r         <= mem_read_data_c;\n        mem_load_rd_r           <= mem_load_rd_c;\n        mem_read_data_valid_r   <= mem_read_data_valid_c;\n        end",
+        "assign wb_stop = uncached_wb_stop_r || cached_wb_stop_r;",
+        "always @( posedge i_clk )\n    begin\n    uncached_wb_stop_r      <= (uncached_wb_stop_r || (uncached_data_access_p&&!cache_stall)) && (i_fetch_stall || o_mem_stall);\n    cached_wb_stop_r        <= (cached_wb_stop_r   || cached_wb_req)          && (i_fetch_stall || o_mem_stall);\n    daddress_valid_stop_r   <= (daddress_valid_stop_r || daddress_valid_p)    && (i_fetch_stall || o_mem_stall);\n    \n    mem_stall_r <= o_mem_stall;\n    end",
+        "assign daddress_valid_p = i_daddress_valid && !daddress_valid_stop_r;",
+        "assign void_output = (fetch_only_stall_r && fetch_only_stall) || (fetch_only_stall_r && mem_read_data_valid_r);",
+        "always @( posedge i_clk )\n    fetch_only_stall_r <= fetch_only_stall;\n",
+        "assign fetch_only_stall     = i_fetch_stall && !o_mem_stall;",
+        "always @( posedge i_clk )\n    begin\n    uncached_wb_req_r <=  (o_wb_uncached_req || uncached_wb_req_r) && !i_wb_uncached_ready;\n    end"
+    ]
+}

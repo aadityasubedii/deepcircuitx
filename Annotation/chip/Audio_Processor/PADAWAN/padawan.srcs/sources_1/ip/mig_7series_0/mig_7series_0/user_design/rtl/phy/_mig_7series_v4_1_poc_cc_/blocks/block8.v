@@ -1,0 +1,1 @@
+  always @(posedge clk) aligned_cnt_r <= #TCQ aligned_cnt_ns;

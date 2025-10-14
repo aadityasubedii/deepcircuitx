@@ -1,0 +1,1 @@
+  assign input_tm_cnt = compute_input_tm_cnt;

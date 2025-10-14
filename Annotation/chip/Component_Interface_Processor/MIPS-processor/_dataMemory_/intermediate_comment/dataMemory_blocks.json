@@ -1,0 +1,36 @@
+{
+    "line_num": [
+        [
+            69,
+            69
+        ],
+        [
+            55,
+            67
+        ],
+        [
+            24,
+            36
+        ],
+        [
+            16,
+            18
+        ],
+        [
+            14,
+            15
+        ],
+        [
+            12,
+            14
+        ]
+    ],
+    "blocks": [
+        "\tassign dataOut=Out;   ",
+        "always @(posedge clock)     \nbegin\n\n\tif(regRead==1'b1)     \n\tbegin\n\tOut=registers[dataInAdd];\n\tend\n\t\n\tif(regWrite==1'b1)    \n\tbegin\n\tregisters[dataInAdd]=dataIn;\n\tend\t\nend",
+        "\tinitial\n\tbegin\n\t\t\n\t\t#5 regWrite=1; regRead=0; dataInAdd = 16'd370; dataIn = 16'd170;\n\t\t#10 regRead=1; regWrite=0;  dataInAdd = 16'd370;\n\t\t#1 $display(\"Test1: dataOut=%b\",dataOut);\n\t\t\n\t\t\n\t\t#9 regWrite=1; regRead=0; dataInAdd = 16'd590; dataIn = 16'd54896;\n\t\t#10 regRead=1; regWrite=0;  dataInAdd = 16'd590;\n\t\t#1 $display(\"Test2: dataOut=%b\",dataOut); \n\t\t\n\tend",
+        "initial\n#1000 $finish;\n",
+        "always\n\t#5 CLK = ~CLK;",
+        "initial\n\tCLK = 1'b0;\nalways"
+    ]
+}

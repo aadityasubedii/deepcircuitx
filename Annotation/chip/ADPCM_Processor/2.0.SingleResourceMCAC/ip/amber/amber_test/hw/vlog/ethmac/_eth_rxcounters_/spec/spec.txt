@@ -1,0 +1,12 @@
+Module name: eth_rxcounters.
+
+Module specification: 
+The eth_rxcounters module functions within a larger Ethernet receiver system, primarily dedicated to counting certain characteristics of the incoming data frames. The module records the byte count of each frame received and handles cases related to Inter-Frame-Gaps (IFGs) and Cyclic Redundancy Checks (CRCs). It provides crucial statistics about the received Ethernet frames that are useful for maintaining synchronization and responding to threshold-based conditions. 
+
+It has numerous input ports such as MRxClk (the clock signal for the module), Reset (reset all counters and internal states), MRxDV (data valid signal), and more that signify various states of the Ethernet frame. Outputs include IFGCounterEq24 (Indicates when IFG counter equals 24), DlyCrcCnt (Delay in CRC), ByteCntEq0 to ByteCntEq7 (Indicates when the byte count equals corresponding values), ByteCntGreat2 (Indicates when byte count is above 2), etc., that provide signals based on certain conditions such as byte count or IFG counter reaching certain values. 
+
+Internally, the module uses signals such as ResetByteCounter and IncrementByteCounter for managing the byte counts, ResetIFGCounter and IncrementIFGCounter for handling IFGs, and DlyCrcCnt for implementing a delayed CRC. Also, it makes use of ByteCnt, IFGCounter, and ByteCntDelayed for recordkeeping of important metrics.
+
+The code consists of several blocks, including the identification and assignment of input/output ports and internal signals, logic for resetting and incrementing byte and IFG counters, managing delay in CRC, and setting conditions for various output signals. 
+
+Overall, the eth_rxcounters module is important for processing and analyzing key statistics about the incoming Ethernet frames, providing meaningful metrics for further actions within the receiving system.

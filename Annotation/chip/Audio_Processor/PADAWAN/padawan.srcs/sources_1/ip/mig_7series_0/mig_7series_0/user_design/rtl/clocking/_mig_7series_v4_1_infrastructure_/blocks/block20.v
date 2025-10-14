@@ -1,0 +1,1 @@
+  always @(*) first_rising_ps_clk_ns = ~rstdiv0;

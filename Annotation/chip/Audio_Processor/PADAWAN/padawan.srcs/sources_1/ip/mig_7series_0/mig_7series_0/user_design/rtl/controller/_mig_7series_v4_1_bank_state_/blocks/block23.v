@@ -1,0 +1,1 @@
+  wire req_bank_rdy_ns = order_q_zero && col_wait_r;

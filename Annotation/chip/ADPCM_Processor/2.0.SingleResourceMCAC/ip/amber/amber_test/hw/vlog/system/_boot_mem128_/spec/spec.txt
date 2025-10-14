@@ -1,0 +1,11 @@
+Module name: boot_mem128. 
+
+Module specification: The boot_mem128 module serves as a memory module for a system that follows the Wishbone-bus architecture. It reads and writes data to the memory and supports a parameterized data width for versatile operations. Furthermore, the module can selectively enable specific bytes at the memory location during read or write operations. Additionally, it has conditional compilation directives to support debugging mode and different use cases with the Xilinx FPGA.
+
+Input Ports: The input ports to this module include i_wb_clk, i_wb_rst, i_wb_adr, i_wb_sel, i_wb_we, i_wb_dat, i_wb_cyc, and i_wb_stb. i_wb_clk and i_wb_rst are the clock and reset signals for the module. i_wb_adr is the memory address bus. i_wb_sel is the byte-select lines. i_wb_we is the write-enable signal. i_wb_dat is the data to be written into the memory. i_wb_cyc and i_wb_stb are the cycle and strobe signals for the Wishbone protocol-based system.
+
+Output Ports: There are two output ports, o_wb_dat, o_wb_ack, and o_wb_err. o_wb_dat is the data read from the memory. o_wb_ack is the read/write operation acknowledgment signal and o_wb_err is the error signal.
+
+Internal Signals: The internal signals are start_write, start_read, read_data, write_data, byte_enable, and address. start_write and start_read initiate the write and read operations. read_data and write_data hold the data read or written from or to the memory. byte_enable selectively enables specific bytes at the memory location, and address represents the address lines.
+
+Code Blocks: The module includes signals and always blocks for conditional compilation depending on the AMBER_WISHBONE_DEBUG and XILINX_FPGA directives. The signals start_write and start_read are conditionally assigned for standard and debug modes. Also, It includes synchronous blocks to update signals like start_read_r depending on the operating conditions in normal mode and debug mode. If XILINX_FPGA is defined, a Xilinx SRAM is instantiated, else a generic SRAM is instantiated. The module also includes files based on the BOOT_MEM128_PARAMS_FILE and BOOT_LOADER_ETHMAC directives. The end portion of the code includes a display directive if both XILINX_SPARTAN6_FPGA and BOOT_MEM128_PARAMS_FILE are defined to display the boot memory file in use.

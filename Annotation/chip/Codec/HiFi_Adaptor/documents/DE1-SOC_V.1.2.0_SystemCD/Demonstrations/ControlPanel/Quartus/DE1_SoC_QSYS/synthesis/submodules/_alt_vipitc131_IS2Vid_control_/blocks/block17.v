@@ -1,0 +1,1 @@
+        assign av_waitrequest = av_write & ~(av_write_ack | is_side_registers);

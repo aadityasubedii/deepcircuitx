@@ -1,0 +1,32 @@
+Module name: spi_shift_out.
+
+Module specification: The "spi_shift_out" module is dedicated to managing the serial transmission of data according to the SPI (Serial Peripheral Interface) protocol. It converts parallel input data into a serial output and controls the data flow using various signaling inputs.
+
+The input ports consist of the following:
+- "clk" is the system clock that orchestrates the timing of the module operations.
+- "rst" asynchronously resets the internal states.
+- "len" determines the number of bits to shift out, defined to the width of `SPI_CHAR_LEN_BITS-1`.
+- "lsb" specifies whether to shift out data starting with the least significant bit.
+- "go" acts as a trigger signal to start the data transmission.
+- "capture" is a control signal to load data from the parallel input into the module's register.
+- "pos_edge" and "neg_edge" determine which clock edge triggers operations.
+- "tx_negedge" decides whether to shift out data on the falling edge.
+- "p_in" is a 24-bit wide parallel input that contains the data meant to be shifted out.
+
+The output ports include:
+- "tip" indicates whether a data transfer is currently active.
+- "last" denotes that the module is sending the last bit.
+- "s_out" outputs the shifted serial data bit.
+
+Key internal signals:
+- "cnt" acts as a counter to track the number of shifted bits.
+- "data" registers the parallel input and then sequentially shifts out the bits.
+- "tx_bit_pos" is a derived signal that calculates the current shifting bit position, which changes based on LSB/MSB-first mode.
+- "tx_clk" is a generated clock signal derived from the edge controls and "last" output that dictates transmission clock pacing.
+
+The Verilog code is structured into several blocks:
+- The counter logic block, which maintains the count of transferred bits.
+- The "tip" status flag block, which manages the active state of transmission.
+- The serial output data ("s_out") handling block, which determines the bit to be outputted based on the current edge of the clock and the transmission status.
+- The parallel input ("p_in") loading block, which captures data into the "data" register when it is not currently transmitting.
+These blocks interact through conditional logic, primarily driven by the clock edge ("posedge clk") and reset signals, synchronizing data transfer with system operations.

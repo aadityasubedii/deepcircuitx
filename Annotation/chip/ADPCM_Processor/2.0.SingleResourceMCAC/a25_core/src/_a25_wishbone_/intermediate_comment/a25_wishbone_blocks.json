@@ -1,0 +1,16 @@
+{
+    "line_num": [
+        [
+            264,
+            264
+        ],
+        [
+            212,
+            261
+        ]
+    ],
+    "blocks": [
+        "assign {wbuf_rdata_valid[2], wbuf_rdata_valid[1], wbuf_rdata_valid[0]} = {3{i_wb_ack & ~ o_wb_we}} & serving_port;",
+        "always @(posedge reset, posedge clk) begin\n\tif (reset) begin\n\t\tserving_port <= 'd0;\n\t\to_wb_adr <= 'd0;\n\t\to_wb_sel <= 'd0;\n\t\to_wb_we  <= 'd0;\n\t\to_wb_dat <= 'd0;\n\t\to_wb_cyc <= 'd0;\n\t\to_wb_stb <= 'd0;\n\tend else begin\n\t\tif (new_access) begin\n\t\t\tif (wbuf_valid[0]) begin\n\t\t\t\to_wb_adr        <= wbuf_addr [0];\n\t\t\t\to_wb_sel        <= wbuf_be   [0];\n\t\t\t\to_wb_we         <= wbuf_write[0];\n\t\t\t\to_wb_dat        <= wbuf_wdata[0];\n\t\t\t\to_wb_cyc        <= 1'd1;\n\t\t\t\to_wb_stb        <= 1'd1;\n\t\t\t\tserving_port    <= 3'b001;\n\t\t\tend else if (wbuf_valid[1]) begin\n\t\t\t\to_wb_adr        <= wbuf_addr [1];\n\t\t\t\to_wb_sel        <= wbuf_be   [1];\n\t\t\t\to_wb_we         <= wbuf_write[1];\n\t\t\t\to_wb_dat        <= wbuf_wdata[1];\n\t\t\t\to_wb_cyc        <= 1'd1;\n\t\t\t\to_wb_stb        <= 1'd1;\n\t\t\t\tserving_port    <= 3'b010;\n\t\t      end else if (wbuf_valid[2]) begin\n\t\t\t\to_wb_adr        <= wbuf_addr [2];\n\t\t\t\to_wb_sel        <= wbuf_be   [2];\n\t\t\t\to_wb_we         <= wbuf_write[2];\n\t\t\t\to_wb_dat        <= wbuf_wdata[2];\n\t\t\t\to_wb_cyc        <= 1'd1;\n\t\t\t\to_wb_stb        <= 1'd1;\n\t\t\t\tserving_port    <= 3'b100;\n\t\t      end else begin\n\t\t\t\to_wb_cyc        <= 1'd0;\n\t\t\t\to_wb_stb        <= 1'd0;\n\n\t\t\t\t\n\t\t\t\t\n\t\t\t\to_wb_we         <= 1'd0;\n\t\t\t\to_wb_adr        <= 'd0;\n\t\t\t\to_wb_dat        <= 'd0;\n\n\t\t\t\tserving_port    <= 3'b000;\n\t\t\tend    \n\t\tend\n\tend\nend"
+    ]
+}

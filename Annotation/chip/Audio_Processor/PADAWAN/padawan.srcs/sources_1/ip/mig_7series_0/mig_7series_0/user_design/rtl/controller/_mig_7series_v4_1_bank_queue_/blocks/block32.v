@@ -1,0 +1,1 @@
+  assign idle_ns = idle_ns_lcl;

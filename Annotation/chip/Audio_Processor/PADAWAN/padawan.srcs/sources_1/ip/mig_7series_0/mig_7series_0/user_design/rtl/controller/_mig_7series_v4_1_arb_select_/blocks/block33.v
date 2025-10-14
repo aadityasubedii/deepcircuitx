@@ -1,0 +1,1 @@
+  reg [OUT_CMD_WIDTH-1:0] cmd0 = {OUT_CMD_WIDTH{1'b1}};

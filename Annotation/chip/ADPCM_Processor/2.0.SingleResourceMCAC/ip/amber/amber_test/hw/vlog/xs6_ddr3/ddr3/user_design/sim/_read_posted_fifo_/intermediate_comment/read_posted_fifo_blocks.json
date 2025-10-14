@@ -1,0 +1,76 @@
+{
+    "line_num": [
+        [
+            234,
+            234
+        ],
+        [
+            224,
+            230
+        ],
+        [
+            221,
+            223
+        ],
+        [
+            209,
+            219
+        ],
+        [
+            201,
+            208
+        ],
+        [
+            190,
+            198
+        ],
+        [
+            178,
+            188
+        ],
+        [
+            170,
+            176
+        ],
+        [
+            166,
+            169
+        ],
+        [
+            163,
+            163
+        ],
+        [
+            152,
+            160
+        ],
+        [
+            138,
+            149
+        ],
+        [
+            127,
+            136
+        ],
+        [
+            124,
+            126
+        ]
+    ],
+    "blocks": [
+        "   assign gen_valid_o = !empty;",
+        "   always @ (posedge clk_i)\n   begin \n   if (rst_i)\n       rd_first_data <= #TCQ 1'b0;\n   else if (~empty && empty_r)\n       rd_first_data <= #TCQ 1'b1;\n   end   ",
+        "   always @ (posedge clk_i)\n        empty_r <= #TCQ empty;\n        ",
+        "   always @(gen_rdy_i, empty,empty_r,rd_mdata_fifo_empty,rd_first_data ,data_valid_i,data_valid_r,user_bl_cnt_not_1)\n   begin\n        if (FAMILY == \"SPARTAN6\")\n            rd_en = gen_rdy_i & !empty;\n        else \n             if ( MEM_BURST_LEN == 4)\n                   rd_en = (~empty & empty_r & ~rd_first_data) | (~rd_mdata_fifo_empty & ~empty ) | (user_bl_cnt_not_1 & data_valid_i);\n             else\n                   rd_en = (data_valid_i & ~data_valid_r) | (user_bl_cnt_not_1 & data_valid_i);\n   \n        end",
+        " always @ (posedge clk_i)\n                  \n                  \n                  \n     buf_avail_r <= #TCQ 64 - (rd_data_counts_asked - rd_data_received_counts);\n \n \n   ",
+        " always @ (posedge clk_i)\n begin\n if (rst_i) begin\n     rd_data_received_counts <= #TCQ 'b0;\n     end\n else if (data_valid_i) begin\n     rd_data_received_counts <= #TCQ rd_data_received_counts + 1;\n     end     \n end",
+        " always @ (posedge clk_i)\n begin\n if (rst_i) begin\n    rd_data_counts_asked <= #TCQ 'b0;\n    end\n else if (cmd_en_i && cmd_sent[0] == 1) begin\n\n    rd_data_counts_asked <= #TCQ rd_data_counts_asked + (bl_sent + 7'b0000001) ;\n\n    end\n end",
+        "  always @ (posedge clk_i)\n  begin\n  if (data_valid_i && user_bl_cnt_is_1)  \n     user_bl_cnt_not_1 <= #TCQ 1'b1;\n  else     \n     user_bl_cnt_not_1 <= #TCQ 1'b0;\n  end  ",
+        "   always @ (posedge clk_i)\n       data_valid_r <= #TCQ data_valid_i;\n  \n  ",
+        "   assign wr_en    = cmd_valid_i & !full  & dfifo_has_enough_room_d1 & wait_done;",
+        "   always @ (posedge clk_i)\n   begin \n         \n         \n         \n       dfifo_has_enough_room <= #TCQ (buf_avail_r >= 62  ) ? 1'b1: 1'b0;\n\n       dfifo_has_enough_room_d1 <= #TCQ dfifo_has_enough_room ;\n   end",
+        "   always @(posedge clk_i)\n   begin\n   if (rst_i)\n      wait_done <= #TCQ 1'b1;\n   else if (cmd_rdy_o && cmd_valid_i)\n      wait_done <= #TCQ 1'b0;\n   else if (wait_cnt == 0)\n      wait_done <= #TCQ 1'b1;\n   else\n      wait_done <= #TCQ 1'b0;\n   \n   end",
+        "   always @ (posedge clk_i)\n   begin\n   if (rst_i)\n       wait_cnt <= #TCQ 'b0;\n   else if (cmd_rdy_o && cmd_valid_i)\n       wait_cnt <= #TCQ 2'b10;\n   else if (wait_cnt > 0)\n         wait_cnt <= #TCQ wait_cnt - 1;\n       \n   end",
+        "   always @ (posedge clk_i)\n       cmd_rdy_o <= #TCQ !full  & dfifo_has_enough_room & wait_done;\n"
+    ]
+}

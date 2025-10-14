@@ -1,0 +1,21 @@
+Module name: altera_avalon_st_clock_crosser. 
+
+Module specification: The altera_avalon_st_clock_crosser module serves as a clock boundary crossing interface. It is used in designs where different modules run on different clock domains to safely transfer valid data across two clock zones, avoiding metastability or glitches. The module facilitates synchronization of signals from input to an output clock domain or 'backward' synchronization of output signals to an input clock domain. 
+
+The module uses several input ports and two output ports. These input ports are: 
+- in_clk: the system input clock, which controls the timing of reading data inputs in the source clock domain. 
+- in_reset: the system input reset signal, used to reset the data lines and state machines in the source clock domain.
+- in_ready: a signal that tells the source that the module is ready to accept data. 
+- in_valid: tells the module that the source data is ready to be transferred. 
+- in_data: carries the input data from the source to the target clock domain.
+- out_clk: the timing signal controlling reading data outputs in the target clock domain.
+- out_reset: the system output reset signal, used to reset the data lines and state machines in the target clock domain.
+- out_ready: a signal indicating the receiving end is ready to accept data in the next clock cycle.
+
+The output ports are:
+- out_valid: indicates the output data's validity, confirming if it's ready to be latched in the next clock cycle.
+- out_data: carries the synchronized data being transferred to the target domain.
+
+To manage the data transfers and synchronization, the module uses various internal signals, including in_data_buffer and out_data_buffer, which hold input and output data respectively; in_data_toggle and in_data_toggle_returned signals, which distinguish between fresh and old data; out_data_toggle and out_data_toggle_flopped, which match the toggle signal in the receiving end; take_in_data and out_data_taken, indicating readiness of the module to take or send data.
+
+The code includes specifications for parameters such as SYMBOLS_PER_BEAT and BITS_PER_SYMBOL, and specific parameters for synchronization depth and the use of output pipelines. Two submodules, altera_std_synchronizer_nocut, are used for forward and backward synchronizations. Furthermore, depending on the USE_OUTPUT_PIPELINE parameter, either a pipeline base is instantiated, or the output is directly assigned. This module effectively handles clock domain crossing, essential in FPGA design where multiple clock domains often exist.

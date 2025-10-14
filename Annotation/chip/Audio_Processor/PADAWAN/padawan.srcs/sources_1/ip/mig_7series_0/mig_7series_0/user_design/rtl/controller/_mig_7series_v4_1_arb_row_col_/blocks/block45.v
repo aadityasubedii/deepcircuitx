@@ -1,0 +1,1 @@
+  assign upd_rnk_config_last_master = rnk_config_strobe_r[0];

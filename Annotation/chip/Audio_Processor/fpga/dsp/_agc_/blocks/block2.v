@@ -1,0 +1,1 @@
+    assign out_data = mul_signed[31:16];

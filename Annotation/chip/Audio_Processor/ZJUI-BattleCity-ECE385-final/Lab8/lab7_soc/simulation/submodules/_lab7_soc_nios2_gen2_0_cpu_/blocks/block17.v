@@ -1,0 +1,1 @@
+  assign R_ctrl_wrctl_inst_nxt = D_ctrl_wrctl_inst;

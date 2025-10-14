@@ -1,0 +1,1 @@
+  assign ocd2stg2_inc = ocd2stg2_inc_r;

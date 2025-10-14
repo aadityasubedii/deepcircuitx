@@ -1,0 +1,1 @@
+      always @(posedge clk) col_size_r <= #TCQ col_size_ns;

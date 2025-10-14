@@ -1,0 +1,1 @@
+  assign xbrk0_value = 32'b0;

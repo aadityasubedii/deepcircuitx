@@ -1,0 +1,1 @@
+assign address     = i_wb_adr[MADDR_WIDTH+3:4];

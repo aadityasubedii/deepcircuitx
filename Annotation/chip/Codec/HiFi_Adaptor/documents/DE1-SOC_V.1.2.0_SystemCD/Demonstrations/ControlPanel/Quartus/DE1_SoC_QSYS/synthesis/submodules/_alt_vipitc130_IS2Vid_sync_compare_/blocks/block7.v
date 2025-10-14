@@ -1,0 +1,1 @@
+assign valid = v_count_remove_valid & v_count_repeat_valid;

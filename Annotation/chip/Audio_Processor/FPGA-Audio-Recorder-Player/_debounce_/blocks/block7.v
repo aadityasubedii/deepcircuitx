@@ -1,0 +1,1 @@
+    always @(posedge clk) sync_0 <= i_btn;

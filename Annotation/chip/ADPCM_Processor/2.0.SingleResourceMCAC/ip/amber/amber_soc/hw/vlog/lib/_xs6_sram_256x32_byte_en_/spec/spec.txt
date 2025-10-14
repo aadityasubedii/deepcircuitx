@@ -1,0 +1,11 @@
+Module name: xs6_sram_256x32_byte_en. 
+
+Module specification: The xs6_sram_256x32_byte_en is a Verilog module that simulates a 256x32 byte-enabled Static Random-Access Memory (SRAM) using the Block RAM primitive (RAMB8BWER) from the Xilinx design suite. It performs write and read operations based on signals synchronized with an input clock `i_clk`.
+
+It has five input ports - `i_clk`, `i_write_data`, `i_write_enable`, `i_address`, and `i_byte_enable`. Here, `i_clk` is a clock signal for synchronization. `i_write_data` takes DATA_WIDTH from the source for writing operation, and this signal is controlled by write_enable signal `i_write_enable`. `i_address` specifies the destination address for read and write operations. `i_byte_enable` gives byte level control over write operations by allowing each byte to be individually written to.
+
+The output port `o_read_data` presents the data read from SRAM when `i_write_enable` signal is low.
+
+Internally, the module uses a few signals like `nc31`, `nc32`, `nc33`, `nc22`, and `wea`. The signals `nc31` to `nc22` are possibly unused and may be remnants from a previous design or placeholders for potential future upgrades. The `wea` signal is employed as a byte-write enable for the Block RAM.
+
+The code is comprised of a block that executes the read-write operations, and an initial block that checks if DATA_WIDTH and ADDRESS_WIDTH conform to the module's requirements (32 and 8 respectively). Any discrepancy in these inputs will trigger a warning message. It assures efficient memory operations by using a bitwise AND between the global write-enable signal and individual byte enable signals for the Block RAM.

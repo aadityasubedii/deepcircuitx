@@ -1,0 +1,1 @@
+  assign record_dct_outcome_in_sync = dct_is_taken & sync_timer_reached_zero;

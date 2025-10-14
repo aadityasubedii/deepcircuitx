@@ -1,0 +1,1 @@
+  assign trc_ctrl = (0 || 0) ? {6'b000000, trc_ctrl_reg} : 0;

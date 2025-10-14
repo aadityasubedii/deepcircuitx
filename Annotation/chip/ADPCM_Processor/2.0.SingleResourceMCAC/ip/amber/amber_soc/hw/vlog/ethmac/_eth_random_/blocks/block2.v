@@ -1,0 +1,1 @@
+assign RandomEq0 = RandomLatched == 10'h0; 

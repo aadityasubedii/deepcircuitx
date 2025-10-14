@@ -1,0 +1,1 @@
+    else begin : not_strict_mode

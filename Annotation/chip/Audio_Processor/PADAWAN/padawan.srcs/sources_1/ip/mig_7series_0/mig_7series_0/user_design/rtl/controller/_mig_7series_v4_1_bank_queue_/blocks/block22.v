@@ -1,0 +1,1 @@
+  assign auto_pre_r = auto_pre_r_lcl;

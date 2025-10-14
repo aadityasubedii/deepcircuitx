@@ -1,0 +1,1 @@
+            assign start_count = ticks == {TICKS_WORD_LENGTH{1'b0}} || !enable_ticks;

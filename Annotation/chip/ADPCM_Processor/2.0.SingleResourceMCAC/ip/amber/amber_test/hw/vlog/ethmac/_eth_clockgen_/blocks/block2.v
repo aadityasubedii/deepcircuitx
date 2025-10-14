@@ -1,0 +1,1 @@
+assign MdcEn = CountEq0 & ~Mdc;

@@ -1,0 +1,1 @@
+assign hit              = |data_hit_way;

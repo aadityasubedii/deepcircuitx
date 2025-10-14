@@ -1,0 +1,1 @@
+assign SEG7 = (LOW_ACTIVE)?~reg_file:reg_file;

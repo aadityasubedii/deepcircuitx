@@ -1,0 +1,1 @@
+  generate if (SIM_CAL_OPTION == "NONE" || POC_USE_METASTABLE_SAMP == "TRUE") begin : no_eXes

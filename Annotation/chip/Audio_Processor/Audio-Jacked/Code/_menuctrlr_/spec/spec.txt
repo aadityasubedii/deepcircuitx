@@ -1,0 +1,19 @@
+Module name: menuctrlr. 
+
+Module specification: The 'menuctrlr' is a hardware module defined in Verilog, designed to serve as a controller for a menu system in a hardware design. The module drives a menu interface by interpreting touch screen inputs in comparison to predefined touch regions and a 'menu2_cnt' value. 
+
+The module has several inputs including a clock signal 'clk', a reset signal 'reset', a 6-bit 'menu2_cnt', and three 12-bit touch coordinates 'tp_x', 'tp_y', 'tp_z'. The 'clk' signal is used for synchronizing the logic design, 'reset' for bringing the system back to its initial or a specific state, and 'menu2_cnt' is a counter potentially measuring a certain feature of the menu. The touchpoint values 'tp_x', 'tp_y', 'tp_z' represent coordinates on a touchscreen, dictating system progression. 
+
+The module outputs 2-bit 'menu_in', suggesting the presently selected menu, and 3-bit 'filter', indicating the selected filter. 
+
+Internally, the module uses signals like 'record', 'stop', 'record_new', 'no_touch', 'end_progress_bar', 'filter1', 'filter2', 'filter3', 'filter4', and states 'present_state', 'next_state' to govern its functionality, using concepts like touch regions, Finite State Machine (FSM), and conditional assignments. 
+
+The Verilog code is divided into blocks to:
+1. Define module and its ports.
+2. Declare internal signals.
+3. Assign specific functionalities to the internal signals.
+4. Define current and next states of the FSM, and the corresponding state transitions.
+5. At the positive edge of the clock pulse, the 'present_state' of the FSM is updated.
+6. Also at the positive edge of the clock pulse, the outputs 'menu_in' and 'filter' are set depending on the 'present_state'. 
+
+Overall, based on the touchscreen inputs, 'menu2_cnt' value, and reset conditions, the states and signals are processed with the FSM, resulting in the establishment of an active menu and filter.

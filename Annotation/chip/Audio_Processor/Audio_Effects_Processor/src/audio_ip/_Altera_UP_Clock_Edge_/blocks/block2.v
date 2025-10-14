@@ -1,0 +1,1 @@
+assign falling_edge	= found_edge & last_test_clk;

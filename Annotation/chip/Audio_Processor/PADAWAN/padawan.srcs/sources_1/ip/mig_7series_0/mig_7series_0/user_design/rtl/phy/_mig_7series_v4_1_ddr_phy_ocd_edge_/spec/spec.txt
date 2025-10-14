@@ -1,0 +1,11 @@
+Module name: mig_7series_v4_1_ddr_phy_ocd_edge. 
+
+Module specification: The mig_7series_v4_1_ddr_phy_ocd_edge module is a piece of the Memory Interface Generator (MIG) tailored for double data rate (DDR) physical interface operation, control, and debugging on Xilinx 7 series FPGA chips. It primarily serves as a signal scanner that manages signal transitions within different states: ZERO, FUZZ, and ONEEIGHTY (assumed to be phase shift of 180 degrees).
+
+The inputs to this module include: `clk` which is the clock for synchronization; `samp_done`, `phy_rddata_en_2`, and `stg3` that are involved in sample read operations; `reset_scan` for resetting the scanning operation; `scanning_right` to determine scan direction; `samp_result` which holds the results of sample operations.
+
+Outputs from the module: `scan_right`, confirming the direction of scanning; `z2f`, `f2z`, `o2f`, `f2o`, enabling transitions or state changes from ZERO to FUZZ, FUZZ to ZERO, ONEEIGHTY to FUZZ, and FUZZ to ONEEIGHTY respectively. `zero2fuzz`, `fuzz2zero`, `oneeighty2fuzz`, `fuzz2oneeighty`, storing state transition results in a 6-bit format.
+
+Internally, the module uses various signals to control the planned state transitions and to store the preliminary outcomes. These include `samp_valid` which indicates when a valid sample data is ready, `prev_samp_valid_ns`, `prev_samp_valid_r`, `prev_samp_ns` and `prev_samp_r` for storing previous sample validity and result, `scan_right_ns`, `scan_right_r` to decide the direction of scanning in each state. For each state transition, corresponding signals like `z2f_ns`, `z2f_r`, `f2z_ns`, `f2z_r`, `o2f_ns`, `o2f_r`, `f2o_ns`, `f2o_r` are used to decide the triggering of the transition, while `zero2fuzz_ns`, `zero2fuzz_r`, `fuzz2zero_ns`, `fuzz2zero_r`,`oneeighty2fuzz_ns`, `oneeighty2fuzz_r`, `fuzz2oneeighty_ns`, `fuzz2oneeighty_r` maintain the 6-bit result of these transitions.
+
+The code can be categorized into three primary blocks: Initial parameters and signal declaration, then various always blocks handling the control and timing for each state transition, and eventually a case statement that governs the internal signal control for different transition scenarios between the pre-defined states based on various input signals.

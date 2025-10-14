@@ -1,0 +1,16 @@
+{
+    "line_num": [
+        [
+            60,
+            60
+        ],
+        [
+            39,
+            58
+        ]
+    ],
+    "blocks": [
+        "  assign o_pwm = ({1'b0, r_counter} < r_compare)? 1'b1 : 1'b0;",
+        "  always @(posedge i_clk) begin\n    if (i_top_valid) begin\n      r_latched_top <= i_top;\n    end\n\n    if (i_compare_valid) begin\n      r_latched_compare <= i_compare;\n    end\n\n    if (r_counter == r_top) begin\n      r_counter <= 0;\n      \n      r_top <= r_latched_top;\n      r_compare <= r_latched_compare;\n      o_cycle_end <= 1;\n    end else begin\n      r_counter <= r_counter + 1;\n      o_cycle_end <= 0;\n    end\n  end"
+    ]
+}

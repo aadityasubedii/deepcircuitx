@@ -1,0 +1,1 @@
+      wire op_active = ~rst && ~passing_open_bank && ((end_rtp_lcl && tail_r)

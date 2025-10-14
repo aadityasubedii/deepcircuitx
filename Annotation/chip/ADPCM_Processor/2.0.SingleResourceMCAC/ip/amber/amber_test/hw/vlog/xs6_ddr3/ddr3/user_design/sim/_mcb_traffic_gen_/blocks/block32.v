@@ -1,0 +1,1 @@
+assign     mcb_wr_full = mcb_wr_full_i;

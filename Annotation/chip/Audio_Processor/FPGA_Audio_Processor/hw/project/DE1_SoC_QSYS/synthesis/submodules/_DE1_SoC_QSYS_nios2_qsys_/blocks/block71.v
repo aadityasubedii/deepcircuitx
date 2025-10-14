@@ -1,0 +1,1 @@
+  assign R_ctrl_rot_right_nxt = D_ctrl_rot_right;

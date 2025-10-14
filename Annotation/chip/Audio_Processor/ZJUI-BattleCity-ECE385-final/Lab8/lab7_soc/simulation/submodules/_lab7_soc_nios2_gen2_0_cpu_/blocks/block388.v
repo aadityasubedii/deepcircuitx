@@ -1,0 +1,1 @@
+  assign ge3_free = ge2_free & ~&fifo_cnt[3 : 0];

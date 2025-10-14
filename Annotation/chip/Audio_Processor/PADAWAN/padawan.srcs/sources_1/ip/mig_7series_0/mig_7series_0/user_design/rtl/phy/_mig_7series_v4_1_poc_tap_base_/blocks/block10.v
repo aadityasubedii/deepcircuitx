@@ -1,0 +1,1 @@
+  always @(posedge clk) tap_r <= #TCQ tap_ns;

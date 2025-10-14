@@ -1,0 +1,56 @@
+{
+    "line_num": [
+        [
+            208,
+            208
+        ],
+        [
+            198,
+            206
+        ],
+        [
+            182,
+            196
+        ],
+        [
+            170,
+            180
+        ],
+        [
+            168,
+            168
+        ],
+        [
+            143,
+            166
+        ],
+        [
+            131,
+            141
+        ],
+        [
+            129,
+            129
+        ],
+        [
+            127,
+            127
+        ],
+        [
+            123,
+            125
+        ]
+    ],
+    "blocks": [
+        "  assign afull = (entry_cnt >= ALMOST_FULL_VALUE);",
+        "  always @ (posedge clk)\n  begin\n    if (rst)\n      entry_cnt <= 'b0;\n    else if (wr_en_in & full_in & !my_full[4])\n      entry_cnt <= entry_cnt + 1'b1;\n    else if (!wr_en_in & !full_in & !my_empty[7])\n      entry_cnt <= entry_cnt - 1'b1;\n  end",
+        "  always @ (posedge clk)\n  begin\n    if (rst)\n      my_full <= 6'b000000;\n    else if (!my_empty[6] & my_full[0] & !full_in & !wr_en_in)\n      my_full <= 6'b000000;\n    else if (!my_empty[6] & !my_full[0] & full_in & wr_en_in) begin\n      my_full[0] <= (nxt_wr_ptr == rd_ptr_timing);\n      my_full[1] <= (nxt_wr_ptr == rd_ptr_timing);\n      my_full[2] <= (nxt_wr_ptr == rd_ptr_timing);\n      my_full[3] <= (nxt_wr_ptr == rd_ptr_timing);\n      my_full[4] <= (nxt_wr_ptr == rd_ptr_timing);\n      my_full[5] <= (nxt_wr_ptr == rd_ptr_timing);\n    end\n  end",
+        "  always @ (posedge clk)\n  begin\n    if (rst) begin\n      wr_ptr <= 'b0;\n      wr_ptr_timing <= 'b0;\n    end\n    else if ((wr_en_in) & ((!my_empty[5] & !full_in) | (!my_full[1] & full_in))) begin\n      wr_ptr <= nxt_wr_ptr;\n      wr_ptr_timing <= nxt_wr_ptr;\n    end\n  end",
+        "  assign nxt_wr_ptr = (wr_ptr + 1'b1)%DEPTH;",
+        "  always @ (posedge clk)\n  begin\n    if (rst)\n      my_empty <= 9'h1ff;\n    else begin\n      if (my_empty[2] & !my_full[3] & full_in & wr_en_in)\n        my_empty[3:0] <= 4'b0000;\n      else if (!my_empty[2] & !my_full[3] & !full_in & !wr_en_in) begin\n        my_empty[0] <= (nxt_rd_ptr == wr_ptr_timing);\n        my_empty[1] <= (nxt_rd_ptr == wr_ptr_timing);\n        my_empty[2] <= (nxt_rd_ptr == wr_ptr_timing);\n        my_empty[3] <= (nxt_rd_ptr == wr_ptr_timing);\n      end\n      if (my_empty[8] & !my_full[5] & full_in & wr_en_in)\n        my_empty[8:4] <= 5'b00000;\n      else if (!my_empty[8] & !my_full[5] & !full_in & !wr_en_in) begin\n        my_empty[4] <= (nxt_rd_ptr == wr_ptr_timing);\n        my_empty[5] <= (nxt_rd_ptr == wr_ptr_timing);\n        my_empty[6] <= (nxt_rd_ptr == wr_ptr_timing);\n        my_empty[7] <= (nxt_rd_ptr == wr_ptr_timing);\n        my_empty[8] <= (nxt_rd_ptr == wr_ptr_timing);\n      end\n    end\n  end",
+        "  always @ (posedge clk)\n  begin\n    if (rst) begin\n      rd_ptr <= 'b0;\n      rd_ptr_timing <= 'b0;\n    end\n    else if ((!my_empty[4]) & (!full_in)) begin\n      rd_ptr <= nxt_rd_ptr;\n      rd_ptr_timing <= nxt_rd_ptr;\n    end\n  end",
+        "  assign nxt_rd_ptr = (rd_ptr + 1'b1)%DEPTH;",
+        "  assign mem_out = mem[rd_ptr];",
+        "  always @ (posedge clk)\n    if (wr_en)\n      mem[wr_ptr] <= #TCQ d_in;"
+    ]
+}

@@ -1,0 +1,1 @@
+assign test_out = test_mask;

@@ -1,0 +1,1 @@
+  wire [DQS_WIDTH*6-1:0] simp_stg3_final_shft = simp_stg3_final_r >> oclkdelay_calib_cnt * 6;

@@ -1,0 +1,13 @@
+Module name: interrupt_controller. 
+
+Module Specification: 
+
+The `interrupt_controller` is a Verilog module designed to handle various types of interrupts within a system. This module manages the enabling and disabling of interrupt requests (IRQs) and fast interrupt requests (FIRQs), along with setting and clearing of software interrupts. It interfaces with components like UARTs, Ethernet MAC, and timers by adopting the Wishbone Bus protocol for data read and write operations. It also provides support for debugging, enabling tracing of register access.
+
+The input ports include i_clk (system clock input), i_wb_adr (Wishbone Bus address input signal), i_wb_sel (Wishbone Bus select signal), i_wb_we (Wishbone Bus write enable signal),i_wb_dat (Wishbone Bus data input), i_wb_cyc (Wishbone Bus cycle signal), i_wb_stb (Wishbone Bus strobe input signal), i_uart0_int, i_uart1_int (interrupt inputs from UART0 and UART1), i_ethmac_int (interrupt input from Ethernet MAC), i_test_reg_irq, i_test_reg_firq (test inputs for the IRQ and FIRQ), i_tm_timer_int (interrupts from timers). 
+
+The output ports include o_wb_dat (Wishbone Bus data output), o_wb_ack (Wishbone Bus acknowledge signal), o_wb_err (Wishbone Bus error signal), o_irq (interrupt request signal), o_firq (fast interrupt request signal).
+
+Internally, the module uses an enable register to control interrupt source, two registers to hold the status of software interrupts, a wire to collect raw interrupt signals, several wires to hold interrupt signals after being masked, registers for storing data related to read operations, and wires to carry data for writing into a register. 
+
+The module operation can be mainly divided into two blocks. One block is for handling data read and write operations, and the other block is for interrupt handling. The first block includes signals and conditions for detecting and executing read and write operations. It includes a mechanism to generate acknowledge and error signals based on the operations performed. The second block is for interrupt handling where interrupt signals are collected, masked or unmasked, and then the interrupt request signals are generated. Further, test registers are in place for debugging purposes.

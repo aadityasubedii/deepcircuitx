@@ -1,0 +1,7 @@
+Module name: REVERB. 
+
+Module specification: The REVERB module is tailored for digital signal processing, being useful in implementing reverb effects for audio signals. It has two input ports and one output port - namely clk, DATA_IN, and DATA_OUT. The clk input is crucial to the module's operation, driving the sequence and timing of operations. DATA_IN, a 12-bit wide data input port, furnishes the data to be processed, influencing the shift register and the output computation. DATA_OUT, as the output port and also a 12-bit wide register, holds the outcome of the module's operations. 
+
+Internally, REVERB deploys a 12-bit wide, 41-element signed register array IN[]. IN[] is used as a shift register where, at every positive edge of the clock signal, the content of IN[] shifts, incorporating the new DATA_IN at index 0. 
+
+The core logic of REVERB is segmented in two code blocks. The initialization section sets DATA_OUT and all indexes of IN[] to zero. The computation and shifting section comprises of two always blocks that function on change of DATA_IN and at every positive edge of clk. In these blocks, the DATA_OUT is computed by summing DATA_IN and specific heavily manipulated elements (8th,16th,24th,32nd,40th indexes) of IN[], while the array IN[] shifts right to accommodate the new DATA_IN at the 0th position. Dynamically updating DATA_OUT and sequentially shifting IN[] constitute the central operation of the REVERB module.

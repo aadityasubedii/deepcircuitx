@@ -1,0 +1,26 @@
+{
+    "line_num": [
+        [
+            125,
+            155
+        ],
+        [
+            95,
+            123
+        ],
+        [
+            75,
+            93
+        ],
+        [
+            59,
+            71
+        ]
+    ],
+    "blocks": [
+        "always @(posedge Sclk)\nbegin\n\tif(OutReady==1'b1)\n\tbegin\n\tif (l==40)\n\tbegin\n\t\tif(Frame==1'b1)\n\t\t\tk=k+1;\n\tend\n\tif(k<7000 && k>=0)\n\tbegin\n\t\tif(l>-1)\n\t\tbegin\n\t\t\tl=l-1;\n\t\t\tdata_outl[k][l]= OutputL;\n\t\t\tdata_outr[k][l]= OutputR;\t\n\t\t\tif(l==0)\n\t\t\tbegin\n\t\t\t\t$fwrite(data_out,\"   %h      %h\\n\",data_outl[k],data_outr[k]);\n\t\t\t\t\n\t\t\t\tl=40;\n\t\t\tend\n\t\tend\n\tend\n\tif(k==7000)\n\tbegin\n\t\t$fclose(data_out);\n\t\t\n\tend\n\tend\nend",
+        "always @(posedge Dclk)\nbegin\n\tif(Reset_n==1'b1)\n\tbegin\n\tif(InReady\t== 1)\n\tbegin\n\t\t\n\t\tif(ib<15056)\n\t\tbegin\n\t\t\tif(jb==15)\n\t\t\tbegin\n\t\t\t\tFrame = 1'b1;\n\t\t\tend\n\t\t\tif(jb>-1)\n\t\t\tbegin\n\t\t\t\tInputL = input_data[ib][jb]; \n\t\t\t\tInputR = input_data[ib+1][jb];#1302;\n\t\t\t\tFrame = 1'b0;\n\t\t\t\tjb = jb-1;\n\t\t\tend\n\t\t\tif(jb==-1)\n\t\t\tbegin\n\t\t\t\tib=ib+2;\n\t\t\t\tjb=15;\n\t\t\tend\n\t\tend\n\tend\n\tend\nend",
+        "\tinitial \n\tbegin\n\t\tDclk=1'b0;\n\t\tSclk=1'b0;\n\t\tReset_n=1'b1;\n\t\t\n\t\tStart = 1;\n\t\t$readmemh(\"midin.in\", input_data) ;\n\t\tdata_out=$fopen(\"data_out.out\",\"w\");\n\t\t\n\t\n\t\t#1302; Start = 0;\n\t\tFrame = 0;\n\t\tib = 0;\n\t\tjb = 15;\n\t\tk = -1;\n\t\tl = 40;\n\t\n\tend",
+        "always @ (*)\nbegin\n\tif(ib==9456 && jb==5)\n\tbegin\n\t\tReset_n = 1'b0;\n\t\t#13020; Reset_n = 1'b1;\n\tend\n\tif(ib==13056 && jb==9)\n\tbegin\n\t\tReset_n = 1'b0;\n\t\t#13020; Reset_n = 1'b1;\n\tend\nend"
+    ]
+}

@@ -1,0 +1,1 @@
+assign ResetByteCnt = StartBackoff | StateIdle & TxStartFrm | PacketFinished_q;

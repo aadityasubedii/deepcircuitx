@@ -1,0 +1,1 @@
+	initial start_count = 1'b0;

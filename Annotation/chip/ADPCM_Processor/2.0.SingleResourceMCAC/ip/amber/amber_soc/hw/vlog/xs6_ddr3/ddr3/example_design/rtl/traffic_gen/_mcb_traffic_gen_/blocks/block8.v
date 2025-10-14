@@ -1,0 +1,1 @@
+assign rdpath_data_valid_i =(FAMILY == "VIRTEX6" && MEM_BLEN == 4) ? (!rd_mdata_fifo_empty & rd_mdata_afull_set) :!mcb_rd_empty ;

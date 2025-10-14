@@ -1,0 +1,1 @@
+  assign clocken = ~reset_req;

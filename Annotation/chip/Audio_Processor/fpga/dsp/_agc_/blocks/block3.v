@@ -1,0 +1,1 @@
+    pipe #(.LENGTH(3)) delay_addr [CHAN_W-1:0] (.ck(ck), .in(addr), .out(out_addr));

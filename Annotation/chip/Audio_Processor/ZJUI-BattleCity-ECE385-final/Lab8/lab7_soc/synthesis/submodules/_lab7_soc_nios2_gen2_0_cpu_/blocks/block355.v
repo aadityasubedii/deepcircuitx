@@ -1,0 +1,10 @@
+  input            E_valid;
+  input   [ 26: 0] F_pc;
+  input            clk;
+  input            reset_n;
+  input            trigger_state_0;
+  input            trigger_state_1;
+  input   [  7: 0] xbrk_ctrl0;
+  input   [  7: 0] xbrk_ctrl1;
+  input   [  7: 0] xbrk_ctrl2;
+  input   [  7: 0] xbrk_ctrl3;

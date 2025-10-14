@@ -1,0 +1,1 @@
+	initial pre_trigger = 1'b0;

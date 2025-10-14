@@ -1,0 +1,9 @@
+Module name: adc9653_intf.
+
+Module specification: The adc9653_intf module serves as an interface between a digital system and the ADC9653 Analog-to-Digital Converter. It manages power-down and synchronization operations, handles the conversion of differential signal pairs into 16-bit digital outputs for four separate channels, and controls the conversion timing through clock and reset signals.
+
+Input ports include: 'rst' (a reset signal), 'adc_fco_p/n' (frame clock inputs from the ADC), 'adc_dco_p/n' (data clock inputs from the ADC), 'adc_d0_a_p/n' to 'adc_d1_d_p/n' (differential data inputs for four ADC channels), and 'dly_clk' (input clock for delay purposes). Output ports comprise 'adc_pdwn' (power-down control signal), 'adc_sync' (synchronization control signal), 'clk_adc' (output clock for data registers), and 'dout0' to 'dout3' (16-bit digital output data for each channel).
+
+Internal signals include 'fco' and 'dco' (frame and data clocks from the differential buffer), 'ch_d0_p/n' and 'ch_d1_p/n' (aggregated differential data lines for processing), 'adc_clk' (internal ADC clock signal), 'data_out' (64-bit synchronized ADC data output), 'rst_sys_async/sync' and 'rst_adc' (reset management signals), 'sync_async/sync' (signals for sync control), 'tap_out' (diagnostic signal), and 'data1/data2' (intermediate data registers).
+
+The code is structured into several blocks: differential input buffers for 'fco' and 'dco', asynchronous-to-synchronous reset conversion logic for the system and ADC reset, a synchronization logic block, the ADC_interface instantiation that processes incoming ADC data, a clock buffer for 'adc_clk', and data pipeline registers that buffer and synchronize the data to produce the final output 'dout0' to 'dout3'. These blocks work in conjunction to ensure that the ADC data is accurately captured, synchronized, and made available to the digital system in a stable and reliable manner.

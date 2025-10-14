@@ -1,0 +1,1 @@
+  assign active_bank = {active_addr[24],active_addr[10]};

@@ -1,0 +1,31 @@
+{
+    "line_num": [
+        [
+            41,
+            57
+        ],
+        [
+            37,
+            39
+        ],
+        [
+            26,
+            35
+        ],
+        [
+            15,
+            15
+        ],
+        [
+            14,
+            14
+        ]
+    ],
+    "blocks": [
+        "    always @(posedge ck) begin\n\n        if (sample) begin\n\n            shift <= { shift[BITS-2:0], sd };\n\n            if (frame == EOW_LEFT) begin\n                left <= shift;\n            end\n\n            if (frame == EOW_RIGHT) begin\n                right <= shift;\n            end\n\n        end\n\n    end",
+        "    assign EOW_LEFT = MASK & (1 + BITS);\n    assign EOW_RIGHT = MASK & (1 + BITS + midpoint);\n    assign frame = frame_posn & MASK;",
+        "    generate\n        if (CLOCKS==64) begin\n            assign MASK = 6'b111111;\n            assign midpoint = 32;\n        end\n        if (CLOCKS==32) begin\n            assign MASK = 6'b011111;\n            assign midpoint = 16;\n        end\n    endgenerate",
+        "    initial right = 0;",
+        "    initial left = 0;"
+    ]
+}

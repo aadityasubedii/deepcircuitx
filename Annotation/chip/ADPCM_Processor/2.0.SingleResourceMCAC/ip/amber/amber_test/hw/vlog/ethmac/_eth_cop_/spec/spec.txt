@@ -1,0 +1,9 @@
+Module name: eth_cop. 
+
+Module specification: The eth_cop module serves as a traffic controller for Wishbone bus data processing. It handles two main data sources named m1 and m2, controlling data reading, writing, error handling, and acknowledging transactions. Internally, the module uses several signals like m1_in_progress and m2_in_progress for indicating ongoing transactions for m1 and m2, the s1_wb_adr_o and s1_wb_sel_o signals for managing address and selection for s1 output channel, and similar signals for s2 channel. It also uses signals to handle the acknowledgement and addressing for m1 and m2 like m1_wb_ack_o, m1_wb_dat_o and corresponding signals for m2.
+
+The module's input ports include clock and reset signals (wb_clk_i, wb_rst_i), address and data inputs for m1 and m2 channels (m1_wb_adr_i, m1_wb_dat_i, m2_wb_adr_i, m2_wb_dat_i), selection signals (m1_wb_sel_i, m2_wb_sel_i), cycle start (m1_wb_cyc_i, m2_wb_cyc_i), data strobe (m1_wb_stb_i, m2_wb_stb_i), write enable (m1_wb_we_i, m2_wb_we_i), acknowledge (s1_wb_ack_i, s1_wb_err_i, s2_wb_ack_i, s2_wb_err_i) and data inputs (s1_wb_dat_i, s2_wb_dat_i) for s1 and s2 output channels.
+
+Output ports include data, acknowledgement, and error outputs for m1 and m2 channels (m1_wb_dat_o, m1_wb_ack_o, m1_wb_err_o, m2_wb_dat_o, m2_wb_ack_o, m2_wb_err_o), and data, address, selection, write enable, cycle start, data strobe outputs for s1 and s2 channels (s1_wb_adr_o, s1_wb_sel_o, s1_wb_we_o, s1_wb_cyc_o, s1_wb_stb_o, s1_wb_dat_o, s2_wb_adr_o, s2_wb_sel_o, s2_wb_we_o, s2_wb_cyc_o, s2_wb_stb_o, s2_wb_dat_o).
+
+The code is divided into blocks controlling different aspects - one block handles reset conditions and control flow depending on the progress and requests of m1 and m2; other blocks handle acknowledgement, data output and error conditions for m1 and m2; one major block also takes care of access acknowledgements and errors for the Wishbone bus.

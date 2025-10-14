@@ -1,0 +1,1 @@
+    highest_bit level_test(.ck(ck), .in(level_in), .out(level_out));

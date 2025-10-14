@@ -1,0 +1,1 @@
+  always @(posedge clk) raw_not_ecc_r <= #TCQ raw_not_ecc;

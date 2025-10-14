@@ -1,0 +1,11 @@
+Module name: Altera_UP_Audio_Bit_Counter. 
+
+Module specification: The `Altera_UP_Audio_Bit_Counter` is a critical block in digital audio systems where it's responsible for bit counting. The operation is largely centered around the `clk` signal. When an active `reset` signal is received, it zeroes the current bit count. New bit counting is initiated with the activations of either `left_right_clk_rising_edge` or `left_right_clk_falling_edge`. Each falling edge (as determined by the `bit_clk_falling_edge`) triggers decrementing the counter unless it's already zero. 
+
+The design receives inputs through several ports including `clk`, `reset`, `bit_clk_rising_edge`, `bit_clk_falling_edge`, `left_right_clk_rising_edge`, and `left_right_clk_falling_edge`. Among these, `clk` is the module's main timing reference, `reset` enables resetting of the bit counter, and the rest are used to manipulate and control the counting mechanism. The presence of an active counting procedure is signaled by the `counting` output port.
+
+Internally, two main signals are noticed: `bit_counter` and `reset_bit_counter`. `bit_counter` is a 5-bit register used for the counting operation, and `reset_bit_counter`, a wire, orchestrates the resetting of `bit_counter`, being responsive to both edges of `left_right_clk`.
+
+The module code can be divided into several blocks: (1) module declaration and parameter definition, (2) input and output port declarations, (3) internal signal assignments and register declarations, and (4) always blocks for managing `bit_counter` and `counting` following their operational logic defined by the given input signals. 
+
+Overall, this module manages bit counting operations for a digital audio system, ensuring effective implementation of audio processing tasks. It delivers a cohesive approach to managing bit count based on clock inputs and dedicated reset functions.

@@ -1,0 +1,31 @@
+{
+    "line_num": [
+        [
+            49,
+            50
+        ],
+        [
+            44,
+            47
+        ],
+        [
+            33,
+            41
+        ],
+        [
+            27,
+            29
+        ],
+        [
+            19,
+            25
+        ]
+    ],
+    "blocks": [
+        "assign plot = (streg == st_ploty);\nassign color = (y == 8'd120+{data[15], data[6:0]});",
+        "always @(posedge clock)\n\tif(reset || (streg == st_done)) y <= 0;\n\telse if(y < ymax) y <= y + 1;\n",
+        "always @(posedge clock)\n\tif(reset) begin\n\t\tdelay_counter <= 0;\n\t\tx <= 0;\n\tend else if(streg == st_done)\n\t\tif(delay_counter == sweep_delay) begin\n\t\t\tdelay_counter <= 0;\n\t\t\tx <= (x == xmax) ? 0 : x + 1;\n\t\tend else delay_counter <= delay_counter + 1;",
+        "always @(posedge clock)\n\tif(reset) streg <= st_done;\n\telse streg <= st;",
+        "always @(*) begin\n\tst = streg;\n\tcase(streg)\n\t\tst_ploty: if(y == ymax) st = st_done;\n\t\tst_done: if(!freeze && (delay_counter == sweep_delay)) st = st_ploty;\n\tendcase\nend"
+    ]
+}

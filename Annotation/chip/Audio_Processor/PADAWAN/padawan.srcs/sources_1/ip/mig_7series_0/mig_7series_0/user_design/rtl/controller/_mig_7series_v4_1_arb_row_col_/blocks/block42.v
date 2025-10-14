@@ -1,0 +1,1 @@
+  assign rnk_config_valid_r = rnk_config_valid_r_lcl;

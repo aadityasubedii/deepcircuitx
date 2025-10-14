@@ -1,0 +1,14 @@
+Module name: audio_top. 
+
+Module specification: The audio_top module is a hardware design for processing audio data in an embedded system setting. The module takes in system clock (SYS_CLK), audio data (GPIO3), and switch control signals (SW). It generates Master Clock (MCLK), Left Right Clock (LRCK), Serial Clock (SCLK), and data clock (data_CLK) using a Phase Locked Loop (PLL) and clock dividers. These clocks synchronize the decoding of incoming I2S audio data and controlling its processing effects. The processed and re-encoded audio data is output through a GPIO pin (GPIO4), and the status of processed left channel data is displayed using a 10-bit LED array (LEDR).
+
+The internal signals of the module include: 
+1. MCLK - Master Clock.
+2. LRCK - Left Right Clock for distinguishing the left and right channel data signals.
+3. SCLK - Serial Clock controlling the timing of data transfers.
+4. Data_clk - used for data timing after division operation on SCLK.
+5. "Locked" - a Boolean signal indicating if the Phase Locked Loop has been successful.
+6. "Reset" signal - used for reset operations.
+7. "Effects_L_out" and "effects_R_out" signals - output of the processing effects modules for the left and right channels respectively.
+
+The module block can be divided into clock generation, decoders, encoders, effects, and flip-flops handling individual tasks. The clocks provide timing signals for data decoding, processing, and encoding. The "i2s_decode" block decodes incoming I2S data. Then, the "effects" block applies certain processing effects. The "flip_flop_data" block holds data temporarily before the "i2s_encode" block encodes the processed audio data back into I2S format. The processed audio data is output through GPIO4, whose status is represented by LEDR LED array.

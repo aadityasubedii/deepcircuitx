@@ -1,0 +1,1 @@
+assign wdp_validC_o = wdp_validC;

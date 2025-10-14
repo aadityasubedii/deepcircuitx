@@ -1,0 +1,1 @@
+  assign cmd_code = {ras_n, cas_n, we_n};

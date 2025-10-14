@@ -1,0 +1,1 @@
+        assign data_wenable_way[i] = (source_sel[C_FILL] && select_way[i]) || 

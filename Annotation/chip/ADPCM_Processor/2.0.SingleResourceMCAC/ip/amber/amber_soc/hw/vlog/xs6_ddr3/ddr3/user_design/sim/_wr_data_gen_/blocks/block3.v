@@ -1,0 +1,1 @@
+assign data_valid_o = data_valid & fifo_not_full;

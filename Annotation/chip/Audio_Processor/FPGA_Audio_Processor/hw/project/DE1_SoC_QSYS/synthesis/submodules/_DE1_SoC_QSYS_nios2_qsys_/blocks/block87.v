@@ -1,0 +1,1 @@
+  assign D_ctrl_crst = D_op_crst|D_op_rsvx63;

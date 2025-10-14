@@ -1,0 +1,296 @@
+{
+    "line_num": [
+        [
+            1186,
+            1188
+        ],
+        [
+            1153,
+            1179
+        ],
+        [
+            1151,
+            1152
+        ],
+        [
+            1143,
+            1149
+        ],
+        [
+            1113,
+            1141
+        ],
+        [
+            1103,
+            1110
+        ],
+        [
+            1094,
+            1101
+        ],
+        [
+            1085,
+            1092
+        ],
+        [
+            1077,
+            1084
+        ],
+        [
+            1064,
+            1071
+        ],
+        [
+            1053,
+            1059
+        ],
+        [
+            1041,
+            1049
+        ],
+        [
+            1028,
+            1035
+        ],
+        [
+            1018,
+            1026
+        ],
+        [
+            1000,
+            1013
+        ],
+        [
+            980,
+            993
+        ],
+        [
+            965,
+            978
+        ],
+        [
+            955,
+            961
+        ],
+        [
+            947,
+            953
+        ],
+        [
+            935,
+            943
+        ],
+        [
+            925,
+            933
+        ],
+        [
+            912,
+            919
+        ],
+        [
+            903,
+            910
+        ],
+        [
+            893,
+            901
+        ],
+        [
+            883,
+            891
+        ],
+        [
+            860,
+            873
+        ],
+        [
+            845,
+            858
+        ],
+        [
+            830,
+            843
+        ],
+        [
+            821,
+            827
+        ],
+        [
+            813,
+            819
+        ],
+        [
+            805,
+            811
+        ],
+        [
+            793,
+            801
+        ],
+        [
+            783,
+            791
+        ],
+        [
+            773,
+            781
+        ],
+        [
+            760,
+            767
+        ],
+        [
+            751,
+            758
+        ],
+        [
+            742,
+            749
+        ],
+        [
+            732,
+            740
+        ],
+        [
+            722,
+            730
+        ],
+        [
+            712,
+            720
+        ],
+        [
+            706,
+            711
+        ],
+        [
+            695,
+            703
+        ],
+        [
+            681,
+            692
+        ],
+        [
+            671,
+            679
+        ],
+        [
+            660,
+            669
+        ],
+        [
+            647,
+            654
+        ],
+        [
+            643,
+            645
+        ],
+        [
+            397,
+            635
+        ],
+        [
+            392,
+            395
+        ],
+        [
+            390,
+            390
+        ],
+        [
+            377,
+            382
+        ],
+        [
+            367,
+            371
+        ],
+        [
+            346,
+            364
+        ],
+        [
+            335,
+            344
+        ],
+        [
+            325,
+            325
+        ],
+        [
+            324,
+            324
+        ],
+        [
+            302,
+            322
+        ],
+        [
+            267,
+            297
+        ]
+    ],
+    "blocks": [
+        "  always @(posedge clk) begin\n    pi_dqs_found_err    <= #TCQ |pi_dqs_found_err_r;\n  end",
+        "        always @(posedge clk) begin\n          if (rst) begin\n            final_data_offset[i][6*j+:6] <= #TCQ 'b0;\n\t  end\n          else begin\n\t  \n           \n          \n          if (init_dqsfound_done_r && ~init_dqsfound_done_r1) begin\n\t    if ( DATA_PRESENT [ j*4+:4] != 0) begin \n               final_data_offset[i][6*j+:6] <= #TCQ rd_byte_data_offset[i][6*j+:6];\n               if (CWL_M % 2) \n                 final_data_offset_mc[i][6*j+:6] <= #TCQ rd_byte_data_offset[i][6*j+:6] - 1;\n               else \n                 final_data_offset_mc[i][6*j+:6] <= #TCQ rd_byte_data_offset[i][6*j+:6];\n            end \n\t  end\n          else if (init_dqsfound_done_r5 ) begin\n\t       if ( DATA_PRESENT [ j*4+:4] == 0) begin \n                  final_data_offset[i][6*j+:6] <= #TCQ final_do_max[i];\n                  final_data_offset_mc[i][6*j+:6] <= #TCQ final_do_max[i];\n               end\t\n          end\n\t  end\n        end\n      end\n    end",
+        "      for (j = 0; j < HIGHEST_BANK; j = j + 1) begin: bank_final_loop\n        ",
+        "\talways @(posedge clk) \n\t    if (rst) begin\n\t       final_do_index[i] <= #TCQ 0;\n\t    end\n\t    else begin\n\t       final_do_index[i] <= #TCQ final_do_index[i] + 1;\n\t    end",
+        "       always @(posedge clk)  begin\n          if (rst) \n\t      final_do_max[i] <= #TCQ 0;\n\t  else begin\n\t     final_do_max[i] <= #TCQ final_do_max[i]; \n             case (final_do_index[i])\n\t        3'b000: if ( | DATA_PRESENT[3:0]) \n\t               if (final_do_max[i] < final_do_cand[i])\n\t                 if (CWL_M % 2) \n\t\t            final_do_max[i] <= #TCQ final_do_cand[i] - 1;\n\t\t         else\n\t\t            final_do_max[i] <= #TCQ final_do_cand[i];\n\t        3'b001: if ( | DATA_PRESENT[7:4]) \n\t               if (final_do_max[i] < final_do_cand[i])\n\t\t         if (CWL_M % 2) \n\t\t            final_do_max[i] <= #TCQ final_do_cand[i] - 1;\n\t\t         else\n\t\t            final_do_max[i] <= #TCQ final_do_cand[i];\n\t        3'b010: if ( | DATA_PRESENT[11:8]) \n\t               if (final_do_max[i] < final_do_cand[i])\n\t\t         if (CWL_M % 2) \n\t\t            final_do_max[i] <= #TCQ final_do_cand[i] - 1;\n\t\t         else\n\t\t            final_do_max[i] <= #TCQ final_do_cand[i];\n                default:\n\t               final_do_max[i] <= #TCQ final_do_max[i];\n\t      endcase\n\t   end\n\tend",
+        "         always @(*) begin\n            case (final_do_index[i])\n\t      3'b000:  final_do_cand[i]  = final_data_offset[i][5:0];\n\t      3'b001:  final_do_cand[i]  = 'd0;\n\t      3'b010:  final_do_cand[i]  = 'd0;\n\t      default: final_do_cand[i]  = 'd0;\n\t    endcase\n         end",
+        "         always @(*) begin\n            case (final_do_index[i])\n\t      3'b000:  final_do_cand[i]  = final_data_offset[i][5:0];\n\t      3'b001:  final_do_cand[i]  = final_data_offset[i][11:6];\n\t      3'b010:  final_do_cand[i]  = 'd0;\n\t      default: final_do_cand[i]  = 'd0;\n\t    endcase\n         end",
+        "         always @(*) begin\n            case (final_do_index[i])\n\t      3'b000:  final_do_cand[i]  = final_data_offset[i][5:0];\n\t      3'b001:  final_do_cand[i]  = final_data_offset[i][11:6];\n\t      3'b010:  final_do_cand[i]  = final_data_offset[i][17:12];\n\t      default: final_do_cand[i]  = 'd0;\n\t    endcase\n         end",
+        "  generate\n  genvar i;\n  genvar j;\n    for (i = 0; i < RANKS; i = i + 1) begin: rank_final_loop\n       reg [5:0] final_do_cand [RANKS-1:0];\n       \n       \n       if (HIGHEST_BANK == 3) begin",
+        "  always @(posedge clk) begin\n    if (rst)\n      pi_rst_stg1_cal <= #TCQ {HIGHEST_BANK{1'b0}};\n    else if (rst_dqs_find)\n      pi_rst_stg1_cal <= #TCQ {HIGHEST_BANK{1'b1}};\n    else\n      pi_rst_stg1_cal <= #TCQ pi_rst_stg1_cal_r;\n  end",
+        "      always @(posedge clk) begin\n        if (rst)\n          pi_dqs_found_err_r[0] <= #TCQ 1'b0;\n        else if (~pi_dqs_found_all_bank[0] && (retry_cnt[0+:10] == NUM_DQSFOUND_CAL) &&\n                (rd_byte_data_offset[rnk_cnt_r][0+:6] < (nCL + nAL - 1)))\n          pi_dqs_found_err_r[0] <= #TCQ 1'b1;\n      end",
+        "      always @(posedge clk) begin\n        if (rst || rank_done_r)\n          retry_cnt[0+:10] <= #TCQ 'b0;\n        else if ((rd_byte_data_offset[rnk_cnt_r][0+:6] < (nCL + nAL - 1)) &&\n                 ~pi_dqs_found_all_bank[0])\n          retry_cnt[0+:10] <= #TCQ retry_cnt[0+:10] + 1;\n        else\n          retry_cnt[0+:10] <= #TCQ retry_cnt[0+:10];\n      end",
+        "      always @(posedge clk) begin\n        if (rst || fine_adjust)\n          pi_rst_stg1_cal_r1[0]  <= #TCQ 1'b0;\n        else if (pi_rst_stg1_cal_r[0])\n          pi_rst_stg1_cal_r1[0]  <= #TCQ 1'b1;\n        else if (~pi_dqs_found_any_bank_r[0] && ~pi_dqs_found_all_bank[0])\n          pi_rst_stg1_cal_r1[0]  <= #TCQ 1'b0;\n      end",
+        "      always @(posedge clk) begin\n        if (rst || pi_rst_stg1_cal_r1[0] || fine_adjust)\n          pi_rst_stg1_cal_r[0] <= #TCQ 1'b0;\n        else if ((pi_dqs_found_start && ~dqs_found_start_r) ||\n                 \n                 (pi_dqs_found_any_bank_r[0] && ~pi_dqs_found_all_bank[0]) ||\n                 (rd_byte_data_offset[rnk_cnt_r][0+:6] < (nCL + nAL - 1)))\n          pi_rst_stg1_cal_r[0] <= #TCQ 1'b1;\n      end",
+        "      always @(posedge clk) begin\n        if (rst) begin\n          for (l = 0; l < RANKS; l = l + 1) begin: bank_rst_loop\n            rd_byte_data_offset[l] <= #TCQ nCL + nAL + LATENCY_FACTOR;\n          end\n        end else if ((rank_done_r1 && ~init_dqsfound_done_r)  ||\n                     (rd_byte_data_offset[rnk_cnt_r] < (nCL + nAL - 1)))\n          rd_byte_data_offset[rnk_cnt_r] <= #TCQ nCL + nAL + LATENCY_FACTOR;\n        else if (dqs_found_start_r && ~pi_dqs_found_all_bank[0] &&\n                 \n                 (detect_pi_found_dqs && (detect_rd_cnt == 'd1)) && ~init_dqsfound_done_r && ~fine_adjust)\n          rd_byte_data_offset[rnk_cnt_r]\n          <= #TCQ rd_byte_data_offset[rnk_cnt_r] - 1;\n      end",
+        "      always @(posedge clk) begin\n        if (rst) begin\n          for (r = 0; r < RANKS; r = r + 1) begin: two_bank1_rst_loop\n            rd_byte_data_offset[r][6+:6] <= #TCQ nCL + nAL + LATENCY_FACTOR;\n          end\n        end else if ((rank_done_r1 && ~init_dqsfound_done_r)  ||\n                     (rd_byte_data_offset[rnk_cnt_r][6+:6] < (nCL + nAL - 1)))\n            rd_byte_data_offset[rnk_cnt_r][6+:6] <= #TCQ nCL + nAL + LATENCY_FACTOR;\n        else if (dqs_found_start_r && ~pi_dqs_found_all_bank[1] &&\n                 \n                 (detect_pi_found_dqs && (detect_rd_cnt == 'd1)) && ~init_dqsfound_done_r && ~fine_adjust)\n          rd_byte_data_offset[rnk_cnt_r][6+:6]\n          <= #TCQ rd_byte_data_offset[rnk_cnt_r][6+:6] - 1;\n      end",
+        "      always @(posedge clk) begin\n        if (rst) begin\n          for (q = 0; q < RANKS; q = q + 1) begin: two_bank0_rst_loop\n            rd_byte_data_offset[q][0+:6] <= #TCQ nCL + nAL + LATENCY_FACTOR;\n          end\n        end else if ((rank_done_r1 && ~init_dqsfound_done_r)  ||\n                     (rd_byte_data_offset[rnk_cnt_r][0+:6] < (nCL + nAL - 1)))\n            rd_byte_data_offset[rnk_cnt_r][0+:6] <= #TCQ nCL + nAL + LATENCY_FACTOR;\n        else if (dqs_found_start_r && ~pi_dqs_found_all_bank[0] &&\n                 \n                 (detect_pi_found_dqs && (detect_rd_cnt == 'd1)) && ~init_dqsfound_done_r && ~fine_adjust)\n          rd_byte_data_offset[rnk_cnt_r][0+:6]\n          <= #TCQ rd_byte_data_offset[rnk_cnt_r][0+:6] - 1;\n      end",
+        "      always @(posedge clk) begin\n        if (rst)\n          pi_dqs_found_err_r[1] <= #TCQ 1'b0;\n        else if (~pi_dqs_found_all_bank[1] && (retry_cnt[10+:10] == NUM_DQSFOUND_CAL) &&\n                (rd_byte_data_offset[rnk_cnt_r][6+:6] < (nCL + nAL - 1)))\n          pi_dqs_found_err_r[1] <= #TCQ 1'b1;\n      end",
+        "\t  always @(posedge clk) begin\n        if (rst)\n          pi_dqs_found_err_r[0] <= #TCQ 1'b0;\n        else if (~pi_dqs_found_all_bank[0] && (retry_cnt[0+:10] == NUM_DQSFOUND_CAL) &&\n                (rd_byte_data_offset[rnk_cnt_r][0+:6] < (nCL + nAL - 1)))\n          pi_dqs_found_err_r[0] <= #TCQ 1'b1;\n      end",
+        "\t  always @(posedge clk) begin\n        if (rst || rank_done_r)\n          retry_cnt[10+:10] <= #TCQ 'b0;\n        else if ((rd_byte_data_offset[rnk_cnt_r][6+:6] < (nCL + nAL - 1)) &&\n                 ~pi_dqs_found_all_bank[1])\n          retry_cnt[10+:10] <= #TCQ retry_cnt[10+:10] + 1;\n        else\n          retry_cnt[10+:10] <= #TCQ retry_cnt[10+:10];\n      end",
+        "      always @(posedge clk) begin\n        if (rst || rank_done_r)\n          retry_cnt[0+:10] <= #TCQ 'b0;\n        else if ((rd_byte_data_offset[rnk_cnt_r][0+:6] < (nCL + nAL - 1)) &&\n                 ~pi_dqs_found_all_bank[0])\n          retry_cnt[0+:10] <= #TCQ retry_cnt[0+:10] + 1;\n        else\n          retry_cnt[0+:10] <= #TCQ retry_cnt[0+:10];\n      end",
+        "      always @(posedge clk) begin\n        if (rst || fine_adjust)\n          pi_rst_stg1_cal_r1[1]  <= #TCQ 1'b0;\n        else if (pi_rst_stg1_cal_r[1])\n          pi_rst_stg1_cal_r1[1]  <= #TCQ 1'b1;\n        else if (~pi_dqs_found_any_bank_r[1] && ~pi_dqs_found_all_bank[1])\n          pi_rst_stg1_cal_r1[1]  <= #TCQ 1'b0;\n      end",
+        "      always @(posedge clk) begin\n        if (rst || fine_adjust)\n          pi_rst_stg1_cal_r1[0]  <= #TCQ 1'b0;\n        else if (pi_rst_stg1_cal_r[0])\n          pi_rst_stg1_cal_r1[0]  <= #TCQ 1'b1;\n        else if (~pi_dqs_found_any_bank_r[0] && ~pi_dqs_found_all_bank[0])\n          pi_rst_stg1_cal_r1[0]  <= #TCQ 1'b0;\n      end",
+        "      always @(posedge clk) begin\n        if (rst || pi_rst_stg1_cal_r1[1] || fine_adjust)\n          pi_rst_stg1_cal_r[1] <= #TCQ 1'b0;\n        else if ((pi_dqs_found_start && ~dqs_found_start_r) ||\n                 \n                 (pi_dqs_found_any_bank_r[1] && ~pi_dqs_found_all_bank[1]) ||\n                 (rd_byte_data_offset[rnk_cnt_r][6+:6] < (nCL + nAL - 1)))\n          pi_rst_stg1_cal_r[1] <= #TCQ 1'b1;\n      end",
+        "      always @(posedge clk) begin\n        if (rst || pi_rst_stg1_cal_r1[0] || fine_adjust)\n          pi_rst_stg1_cal_r[0] <= #TCQ 1'b0;\n        else if ((pi_dqs_found_start && ~dqs_found_start_r) ||\n                 \n                 (pi_dqs_found_any_bank_r[0] && ~pi_dqs_found_all_bank[0]) ||\n                 (rd_byte_data_offset[rnk_cnt_r][0+:6] < (nCL + nAL - 1)))\n          pi_rst_stg1_cal_r[0] <= #TCQ 1'b1;\n      end",
+        "      always @(posedge clk) begin\n        if (rst) begin\n          for (s = 0; s < RANKS; s = s + 1) begin: three_bank2_rst_loop\n            rd_byte_data_offset[s][12+:6] <= #TCQ nCL + nAL + LATENCY_FACTOR;\n          end\n        end else if ((rank_done_r1 && ~init_dqsfound_done_r)  ||\n                     (rd_byte_data_offset[rnk_cnt_r][12+:6] < (nCL + nAL - 1)))\n            rd_byte_data_offset[rnk_cnt_r][12+:6] <= #TCQ nCL + nAL + LATENCY_FACTOR;\n        else if (dqs_found_start_r && ~pi_dqs_found_all_bank[2] &&\n                 \n                 (detect_pi_found_dqs && (detect_rd_cnt == 'd1)) && ~init_dqsfound_done_r && ~fine_adjust)\n          rd_byte_data_offset[rnk_cnt_r][12+:6]\n          <= #TCQ rd_byte_data_offset[rnk_cnt_r][12+:6] - 1;\n      end",
+        "      always @(posedge clk) begin\n        if (rst) begin\n          for (r = 0; r < RANKS; r = r + 1) begin: three_bank1_rst_loop\n            rd_byte_data_offset[r][6+:6] <= #TCQ nCL + nAL + LATENCY_FACTOR;\n          end\n        end else if ((rank_done_r1 && ~init_dqsfound_done_r)  ||\n                     (rd_byte_data_offset[rnk_cnt_r][6+:6] < (nCL + nAL - 1)))\n            rd_byte_data_offset[rnk_cnt_r][6+:6] <= #TCQ nCL + nAL + LATENCY_FACTOR;\n        else if (dqs_found_start_r && ~pi_dqs_found_all_bank[1] &&\n                 \n                 (detect_pi_found_dqs && (detect_rd_cnt == 'd1)) && ~init_dqsfound_done_r && ~fine_adjust)\n          rd_byte_data_offset[rnk_cnt_r][6+:6]\n          <= #TCQ rd_byte_data_offset[rnk_cnt_r][6+:6] - 1;\n      end",
+        "      always @(posedge clk) begin\n        if (rst) begin\n          for (q = 0; q < RANKS; q = q + 1) begin: three_bank0_rst_loop\n            rd_byte_data_offset[q][0+:6] <= #TCQ nCL + nAL + LATENCY_FACTOR;\n          end\n        end else if ((rank_done_r1 && ~init_dqsfound_done_r)  ||\n                     (rd_byte_data_offset[rnk_cnt_r][0+:6] < (nCL + nAL - 1)))\n            rd_byte_data_offset[rnk_cnt_r][0+:6] <= #TCQ nCL + nAL + LATENCY_FACTOR;\n        else if (dqs_found_start_r && ~pi_dqs_found_all_bank[0] &&\n                 \n                 (detect_pi_found_dqs && (detect_rd_cnt == 'd1)) && ~init_dqsfound_done_r && ~fine_adjust)\n          rd_byte_data_offset[rnk_cnt_r][0+:6]\n          <= #TCQ rd_byte_data_offset[rnk_cnt_r][0+:6] - 1;\n      end",
+        "      always @(posedge clk) begin\n        if (rst)\n          pi_dqs_found_err_r[2] <= #TCQ 1'b0;\n        else if (~pi_dqs_found_all_bank[2] && (retry_cnt[20+:10] == NUM_DQSFOUND_CAL) &&\n                (rd_byte_data_offset[rnk_cnt_r][12+:6] < (nCL + nAL - 1)))\n          pi_dqs_found_err_r[2] <= #TCQ 1'b1;\n      end",
+        "      always @(posedge clk) begin\n        if (rst)\n          pi_dqs_found_err_r[1] <= #TCQ 1'b0;\n        else if (~pi_dqs_found_all_bank[1] && (retry_cnt[10+:10] == NUM_DQSFOUND_CAL) &&\n                (rd_byte_data_offset[rnk_cnt_r][6+:6] < (nCL + nAL - 1)))\n          pi_dqs_found_err_r[1] <= #TCQ 1'b1;\n      end",
+        "      always @(posedge clk) begin\n        if (rst)\n          pi_dqs_found_err_r[0] <= #TCQ 1'b0;\n        else if (~pi_dqs_found_all_bank[0] && (retry_cnt[0+:10] == NUM_DQSFOUND_CAL) &&\n                (rd_byte_data_offset[rnk_cnt_r][0+:6] < (nCL + nAL - 1)))\n          pi_dqs_found_err_r[0] <= #TCQ 1'b1;\n      end",
+        "\t  always @(posedge clk) begin\n        if (rst || rank_done_r)\n          retry_cnt[20+:10] <= #TCQ 'b0;\n        else if ((rd_byte_data_offset[rnk_cnt_r][12+:6] < (nCL + nAL - 1)) &&\n                 ~pi_dqs_found_all_bank[2])\n          retry_cnt[20+:10] <= #TCQ retry_cnt[20+:10] + 1;\n        else\n          retry_cnt[20+:10] <= #TCQ retry_cnt[20+:10];\n      end",
+        "\t  always @(posedge clk) begin\n        if (rst || rank_done_r)\n          retry_cnt[10+:10] <= #TCQ 'b0;\n        else if ((rd_byte_data_offset[rnk_cnt_r][6+:6] < (nCL + nAL - 1)) &&\n                 ~pi_dqs_found_all_bank[1])\n          retry_cnt[10+:10] <= #TCQ retry_cnt[10+:10] + 1;\n        else\n          retry_cnt[10+:10] <= #TCQ retry_cnt[10+:10];\n      end",
+        "      always @(posedge clk) begin\n        if (rst || rank_done_r)\n          retry_cnt[0+:10] <= #TCQ 'b0;\n        else if ((rd_byte_data_offset[rnk_cnt_r][0+:6] < (nCL + nAL - 1)) &&\n                 ~pi_dqs_found_all_bank[0])\n          retry_cnt[0+:10] <= #TCQ retry_cnt[0+:10] + 1;\n        else\n          retry_cnt[0+:10] <= #TCQ retry_cnt[0+:10];\n      end",
+        "      always @(posedge clk) begin\n        if (rst || fine_adjust)\n          pi_rst_stg1_cal_r1[2]  <= #TCQ 1'b0;\n        else if (pi_rst_stg1_cal_r[2])\n          pi_rst_stg1_cal_r1[2]  <= #TCQ 1'b1;\n        else if (~pi_dqs_found_any_bank_r[2] && ~pi_dqs_found_all_bank[2])\n          pi_rst_stg1_cal_r1[2]  <= #TCQ 1'b0;\n      end",
+        "      always @(posedge clk) begin\n        if (rst || fine_adjust)\n          pi_rst_stg1_cal_r1[1]  <= #TCQ 1'b0;\n        else if (pi_rst_stg1_cal_r[1])\n          pi_rst_stg1_cal_r1[1]  <= #TCQ 1'b1;\n        else if (~pi_dqs_found_any_bank_r[1] && ~pi_dqs_found_all_bank[1])\n          pi_rst_stg1_cal_r1[1]  <= #TCQ 1'b0;\n      end",
+        "      always @(posedge clk) begin\n        if (rst || fine_adjust)\n          pi_rst_stg1_cal_r1[0]  <= #TCQ 1'b0;\n        else if (pi_rst_stg1_cal_r[0])\n          pi_rst_stg1_cal_r1[0]  <= #TCQ 1'b1;\n        else if (~pi_dqs_found_any_bank_r[0] && ~pi_dqs_found_all_bank[0])\n          pi_rst_stg1_cal_r1[0]  <= #TCQ 1'b0;\n      end",
+        "      always @(posedge clk) begin\n        if (rst || pi_rst_stg1_cal_r1[2] || fine_adjust)\n          pi_rst_stg1_cal_r[2] <= #TCQ 1'b0;\n        else if ((pi_dqs_found_start && ~dqs_found_start_r) ||\n                 \n                 (pi_dqs_found_any_bank_r[2] && ~pi_dqs_found_all_bank[2]) ||\n                 (rd_byte_data_offset[rnk_cnt_r][12+:6] < (nCL + nAL - 1)))\n          pi_rst_stg1_cal_r[2] <= #TCQ 1'b1;\n      end",
+        "      always @(posedge clk) begin\n        if (rst || pi_rst_stg1_cal_r1[1] || fine_adjust)\n          pi_rst_stg1_cal_r[1] <= #TCQ 1'b0;\n        else if ((pi_dqs_found_start && ~dqs_found_start_r) ||\n                 \n                 (pi_dqs_found_any_bank_r[1] && ~pi_dqs_found_all_bank[1]) ||\n                 (rd_byte_data_offset[rnk_cnt_r][6+:6] < (nCL + nAL - 1)))\n          pi_rst_stg1_cal_r[1] <= #TCQ 1'b1;\n      end",
+        "      always @(posedge clk) begin\n        if (rst || pi_rst_stg1_cal_r1[0] || fine_adjust)\n          pi_rst_stg1_cal_r[0] <= #TCQ 1'b0;\n        else if ((pi_dqs_found_start && ~dqs_found_start_r) ||\n                 \n                 (pi_dqs_found_any_bank_r[0] && ~pi_dqs_found_all_bank[0]) ||\n                 (rd_byte_data_offset[rnk_cnt_r][0+:6] < (nCL + nAL - 1)))\n          pi_rst_stg1_cal_r[0] <= #TCQ 1'b1;\n      end",
+        "  generate\n    if (HIGHEST_BANK == 3) begin \n\n      \n      \n      ",
+        "  always @(posedge clk) begin\n    if (rst)\n      dqs_found_done_r <= #TCQ 1'b0;\n    else if (&pi_dqs_found_all_bank && (rnk_cnt_r == RANKS-1) && init_dqsfound_done_r1 &&\n             (fine_adj_state_r == FINE_ADJ_DONE))\n      dqs_found_done_r <= #TCQ 1'b1;\n    else\n      dqs_found_done_r <= #TCQ 1'b0;\n  end",
+        "  always @(posedge clk) begin\n    pi_dqs_found_lanes_r1   <= #TCQ pi_dqs_found_lanes;\n    pi_dqs_found_lanes_r2   <= #TCQ pi_dqs_found_lanes_r1;\n    pi_dqs_found_lanes_r3   <= #TCQ pi_dqs_found_lanes_r2;\n    init_dqsfound_done_r1   <= #TCQ init_dqsfound_done_r;\n    init_dqsfound_done_r2   <= #TCQ init_dqsfound_done_r1;\n    init_dqsfound_done_r3   <= #TCQ init_dqsfound_done_r2;\n    init_dqsfound_done_r4   <= #TCQ init_dqsfound_done_r3;\n    init_dqsfound_done_r5   <= #TCQ init_dqsfound_done_r4;\n    rank_done_r1            <= #TCQ rank_done_r;\n    dqsfound_retry_r1       <= #TCQ dqsfound_retry;\n  end",
+        "  always @(posedge clk) begin\n    if (rst  ||\n       (init_dqsfound_done_r && (rnk_cnt_r == RANKS-1)))\n      rank_done_r       <= #TCQ 1'b0;\n    else if (&pi_dqs_found_all_bank && ~(&pi_dqs_found_all_bank_r))\n      rank_done_r <= #TCQ 1'b1;\n    else\n      rank_done_r       <= #TCQ 1'b0;\n  end",
+        "    always @(posedge clk) begin\n    if (rst || (|pi_rst_stg1_cal_r))\n      init_dqsfound_done_r  <= #TCQ 1'b0;\n    else if (&pi_dqs_found_all_bank) begin\n      if (rnk_cnt_r == RANKS-1)\n        init_dqsfound_done_r  <= #TCQ 1'b1;\n      else\n        init_dqsfound_done_r  <= #TCQ 1'b0;\n    end\n  end",
+        "  always @(posedge clk) begin\n    if (rst)\n      rnk_cnt_r <= #TCQ 2'b00;\n    else if (init_dqsfound_done_r)\n      rnk_cnt_r <= #TCQ rnk_cnt_r;\n    else if (rank_done_r)\n      rnk_cnt_r <= #TCQ rnk_cnt_r + 1;\n  end",
+        "  always@(posedge clk)\n    dqs_found_start_r <= #TCQ pi_dqs_found_start;\n  ",
+        "   always @(posedge clk) begin\n      if(rst)begin\n        fine_adjust        <= #TCQ 1'b0;\n        ctl_lane_cnt       <= #TCQ 'd0;\n        fine_adj_state_r   <= #TCQ FINE_ADJ_IDLE;\n        fine_adjust_done_r <= #TCQ 1'b0;\n        ck_po_stg2_f_indec <= #TCQ 1'b0;\n        ck_po_stg2_f_en    <= #TCQ 1'b0;\n        rst_dqs_find       <= #TCQ 1'b0;\n        init_dec_cnt       <= #TCQ 'd31;\n        dec_cnt            <= #TCQ 'd0;\n        inc_cnt            <= #TCQ 'd0;\n        init_dec_done      <= #TCQ 1'b0;\n        final_dec_done     <= #TCQ 1'b0;\n        first_fail_detect  <= #TCQ 1'b0;\n        second_fail_detect <= #TCQ 1'b0;\n        first_fail_taps    <= #TCQ 'd0;\n        second_fail_taps   <= #TCQ 'd0;\n        stable_pass_cnt    <= #TCQ 'd0;\n        dqs_found_prech_req<= #TCQ 1'b0;\n      end else begin\n        case (fine_adj_state_r)\n           \n           FINE_ADJ_IDLE: begin\n             if (init_dqsfound_done_r5) begin\n               if (SIM_CAL_OPTION == \"FAST_CAL\") begin\n                 fine_adjust      <= #TCQ 1'b1;\n                 fine_adj_state_r <= #TCQ FINE_ADJ_DONE;\n                 rst_dqs_find     <= #TCQ 1'b0;\n               end else begin\n                 fine_adjust      <= #TCQ 1'b1;\n                 fine_adj_state_r <= #TCQ RST_WAIT;\n                 rst_dqs_find     <= #TCQ 1'b1;\n               end\n             end\n           end\n           \n           RST_WAIT: begin\n             if (~(|pi_dqs_found_any_bank) && rst_dqs_find_r2) begin\n               rst_dqs_find     <= #TCQ 1'b0;\n               if (|init_dec_cnt)\n                 fine_adj_state_r <= #TCQ FINE_DEC_PREWAIT;\n               else if (final_dec_done)\n                 fine_adj_state_r <= #TCQ FINE_ADJ_DONE;\n               else\n                 fine_adj_state_r <= #TCQ RST_POSTWAIT;\n             end\n           end\n           \n           RST_POSTWAIT: begin\n             fine_adj_state_r <= #TCQ RST_POSTWAIT1;\n           end\n           \n           RST_POSTWAIT1: begin\n             fine_adj_state_r <= #TCQ FINE_ADJ_INIT;\n           end\n           \n           FINE_ADJ_INIT: begin\n             \n               fine_adj_state_r <= #TCQ FINE_INC;\n           end\n           \n           FINE_INC: begin\n             fine_adj_state_r   <= #TCQ FINE_INC_WAIT;\n             ck_po_stg2_f_indec <= #TCQ 1'b1;\n             ck_po_stg2_f_en    <= #TCQ 1'b1;\n             if (ctl_lane_cnt == N_CTL_LANES-1)\n               inc_cnt          <= #TCQ inc_cnt + 1;\n           end\n           \n           FINE_INC_WAIT: begin\n             ck_po_stg2_f_indec <= #TCQ 1'b0;\n             ck_po_stg2_f_en    <= #TCQ 1'b0;\n             if (ctl_lane_cnt != N_CTL_LANES-1) begin\n               ctl_lane_cnt     <= #TCQ ctl_lane_cnt + 1;\n               fine_adj_state_r <= #TCQ FINE_INC_PREWAIT;\n             end else if (ctl_lane_cnt == N_CTL_LANES-1) begin\n               ctl_lane_cnt     <= #TCQ 'd0;\n               fine_adj_state_r <= #TCQ DETECT_PREWAIT;\n             end\n           end\n           \n           FINE_INC_PREWAIT: begin\n             fine_adj_state_r <= #TCQ FINE_INC;\n           end\n           \n           DETECT_PREWAIT: begin\n             if (detect_pi_found_dqs && (detect_rd_cnt == 'd1))\n               fine_adj_state_r <= #TCQ DETECT_DQSFOUND;\n\t\t\t else\n\t\t\t   fine_adj_state_r <= #TCQ DETECT_PREWAIT;\n           end\n           \n           DETECT_DQSFOUND: begin\n             if (detect_pi_found_dqs && ~(&pi_dqs_found_all_bank)) begin\n               stable_pass_cnt     <= #TCQ 'd0;\n               if (~first_fail_detect && (inc_cnt == 'd63)) begin\n                 \n                 \n                 first_fail_detect <= #TCQ 1'b1;\n                 first_fail_taps   <= #TCQ inc_cnt;\n                 fine_adj_state_r  <= #TCQ FINE_DEC;\n                 dec_cnt           <= #TCQ 'd32;\n               end else if (~first_fail_detect && (inc_cnt > 'd30) && (stable_pass_cnt > 'd29)) begin\n                 \n                 \n                 first_fail_detect <= #TCQ 1'b1;\n                 first_fail_taps   <= #TCQ inc_cnt;\n                 fine_adj_state_r  <= #TCQ FINE_DEC;\n                 dec_cnt           <= #TCQ (inc_cnt>>1) + 1;\t\t\t\t \n\t\t\t   end else if (~first_fail_detect || (first_fail_detect && (stable_pass_cnt < 'd30) && (inc_cnt <= 'd32))) begin\n                 \n                 \n                 first_fail_detect <= #TCQ 1'b1;\n                 first_fail_taps   <= #TCQ inc_cnt;\n                 rst_dqs_find      <= #TCQ 1'b1;\n                 if ((inc_cnt == 'd12) || (inc_cnt == 'd24)) begin\n                   dqs_found_prech_req <= #TCQ 1'b1;\n                   fine_adj_state_r    <= #TCQ PRECH_WAIT;\n                 end else\n                 fine_adj_state_r  <= #TCQ RST_WAIT;\n               end else if (first_fail_detect && (inc_cnt > 'd32) && (inc_cnt < 'd63) && (stable_pass_cnt < 'd30)) begin\n                 \n                 \n                 first_fail_detect <= #TCQ 1'b1;\n                 first_fail_taps   <= #TCQ inc_cnt;\n                 rst_dqs_find      <= #TCQ 1'b1;\n                 if ((inc_cnt == 'd36) || (inc_cnt == 'd48) || (inc_cnt == 'd60)) begin\n                   dqs_found_prech_req <= #TCQ 1'b1;\n                   fine_adj_state_r    <= #TCQ PRECH_WAIT;\n                 end else\n                   fine_adj_state_r  <= #TCQ RST_WAIT;\n               end else if (first_fail_detect && (inc_cnt == 'd63)) begin\n                 if (stable_pass_cnt < 'd30) begin\n                   \n                   \n                   first_fail_detect <= #TCQ 1'b1;\n                   first_fail_taps   <= #TCQ inc_cnt;\n                   fine_adj_state_r  <= #TCQ FINE_DEC;\n                   dec_cnt           <= #TCQ 'd32;\n                 end else begin\n                   \n                   \n                   fine_adj_state_r  <= #TCQ FINE_DEC;\n                   dec_cnt           <= #TCQ ((inc_cnt - first_fail_taps)>>1);\n                 end\n               end else begin\n                 \n                 \n                 second_fail_detect <= #TCQ 1'b1;\n                 second_fail_taps   <= #TCQ inc_cnt;\n                 dec_cnt            <= #TCQ ((inc_cnt - first_fail_taps)>>1);\n                 fine_adj_state_r   <= #TCQ FINE_DEC;\n               end\n             end else if (detect_pi_found_dqs && (&pi_dqs_found_all_bank)) begin\n               stable_pass_cnt    <= #TCQ stable_pass_cnt + 1;\n               if ((inc_cnt == 'd12) || (inc_cnt == 'd24) || (inc_cnt == 'd36) || \n                   (inc_cnt == 'd48) || (inc_cnt == 'd60)) begin\n                 dqs_found_prech_req <= #TCQ 1'b1;\n                 fine_adj_state_r    <= #TCQ PRECH_WAIT;\n               end else if (inc_cnt < 'd63) begin\n                 rst_dqs_find     <= #TCQ 1'b1;\n                 fine_adj_state_r <= #TCQ RST_WAIT;\n               end else begin\n                 fine_adj_state_r <= #TCQ FINE_DEC;\n                 if (~first_fail_detect || (first_fail_taps > 'd33))\n                   \n                   dec_cnt <= #TCQ 'd32;\n                 \n                 \n                 \n                 \n                 else\n                   \n                   \n                   dec_cnt <= #TCQ ((inc_cnt - first_fail_taps)>>1);\n               end\n             end\n           end\n           \n           PRECH_WAIT: begin\n             if (prech_done) begin\n               dqs_found_prech_req <= #TCQ 1'b0;\n               rst_dqs_find        <= #TCQ 1'b1;\n               fine_adj_state_r    <= #TCQ RST_WAIT;\n             end\n           end\n               \n               \n           FINE_DEC: begin\n             fine_adj_state_r   <= #TCQ FINE_DEC_WAIT;\n             ck_po_stg2_f_indec <= #TCQ 1'b0;\n             ck_po_stg2_f_en    <= #TCQ 1'b1;\n             if ((ctl_lane_cnt == N_CTL_LANES-1) && (init_dec_cnt > 'd0))\n               init_dec_cnt     <= #TCQ init_dec_cnt - 1;\n             else if ((ctl_lane_cnt == N_CTL_LANES-1) && (dec_cnt > 'd0))\n               dec_cnt          <= #TCQ dec_cnt - 1;\n           end\n           \n           FINE_DEC_WAIT: begin\n             ck_po_stg2_f_indec <= #TCQ 1'b0;\n             ck_po_stg2_f_en    <= #TCQ 1'b0;\n             if (ctl_lane_cnt != N_CTL_LANES-1) begin\n               ctl_lane_cnt     <= #TCQ ctl_lane_cnt + 1;\n               fine_adj_state_r <= #TCQ FINE_DEC_PREWAIT;\n             end else if (ctl_lane_cnt == N_CTL_LANES-1) begin\n               ctl_lane_cnt     <= #TCQ 'd0;\n               if ((dec_cnt > 'd0) || (init_dec_cnt > 'd0))\n                 fine_adj_state_r <= #TCQ FINE_DEC_PREWAIT;\n               else begin\n                 fine_adj_state_r <= #TCQ FINAL_WAIT;\n                 if ((init_dec_cnt == 'd0) && ~init_dec_done)\n                   init_dec_done <= #TCQ 1'b1;\n                 else\n                   final_dec_done   <= #TCQ 1'b1;\n               end\n             end\n           end\n           \n           FINE_DEC_PREWAIT: begin\n             fine_adj_state_r <= #TCQ FINE_DEC;\n           end\n           \n           FINAL_WAIT: begin\n             rst_dqs_find     <= #TCQ 1'b1;\n             fine_adj_state_r <= #TCQ RST_WAIT;\n           end\n           \n           FINE_ADJ_DONE: begin\n             if (&pi_dqs_found_all_bank) begin\n               fine_adjust_done_r <= #TCQ 1'b1;\n               rst_dqs_find       <= #TCQ 1'b0;\n               fine_adj_state_r   <= #TCQ FINE_ADJ_DONE;\n             end\n           end\n           \n        endcase\n      end\n   end",
+        "   always @(posedge clk) begin\n     rst_dqs_find_r1 <= #TCQ rst_dqs_find;\n\t rst_dqs_find_r2 <= #TCQ rst_dqs_find_r1;\n   end",
+        "   assign fine_adjust_done = fine_adjust_done_r;",
+        "  always @(posedge clk) begin\n    if (rst || (detect_rd_cnt == 'd0))\n\t  detect_rd_cnt <= #TCQ NUM_READS;\n\telse if (detect_pi_found_dqs && (detect_rd_cnt > 'd0))\n\t  detect_rd_cnt <= #TCQ detect_rd_cnt - 1;\n  end",
+        "  always @(posedge clk) begin\n    pi_dqs_found_all_bank_r <= #TCQ pi_dqs_found_all_bank;\n    pi_dqs_found_any_bank_r <= #TCQ pi_dqs_found_any_bank;\n  end\n  ",
+        "  always @(posedge clk) begin\n    if (rst) begin\n      for (k = 0; k < HIGHEST_BANK; k = k + 1) begin: rst_pi_dqs_found\n        pi_dqs_found_all_bank[k] <= #TCQ 'b0;\n        pi_dqs_found_any_bank[k] <= #TCQ 'b0;\n      end\n    end else if (pi_dqs_found_start) begin\n      for (p = 0; p < HIGHEST_BANK; p = p +1) begin: assign_pi_dqs_found\n          pi_dqs_found_all_bank[p] <= #TCQ (!DATA_PRESENT[4*p+0] | pi_dqs_found_lanes_int[4*p+0]) &\n                                           (!DATA_PRESENT[4*p+1] | pi_dqs_found_lanes_int[4*p+1]) &\n                                           (!DATA_PRESENT[4*p+2] | pi_dqs_found_lanes_int[4*p+2]) &\n                                           (!DATA_PRESENT[4*p+3] | pi_dqs_found_lanes_int[4*p+3]);\n          pi_dqs_found_any_bank[p] <= #TCQ (DATA_PRESENT[4*p+0] & pi_dqs_found_lanes_int[4*p+0]) |\n                                           (DATA_PRESENT[4*p+1] & pi_dqs_found_lanes_int[4*p+1]) |\n                                           (DATA_PRESENT[4*p+2] & pi_dqs_found_lanes_int[4*p+2]) |\n                                           (DATA_PRESENT[4*p+3] & pi_dqs_found_lanes_int[4*p+3]);\n      end\n    end\n  end",
+        "  generate\n  if ((HIGHEST_LANE == 4) || (HIGHEST_LANE == 8) || (HIGHEST_LANE == 12))\n    assign pi_dqs_found_lanes_int = pi_dqs_found_lanes_r3;\n  else if ((HIGHEST_LANE == 3) || (HIGHEST_LANE == 7) || (HIGHEST_LANE == 11))\n    assign pi_dqs_found_lanes_int = {1'b0, pi_dqs_found_lanes_r3};\n  else if ((HIGHEST_LANE == 6) || (HIGHEST_LANE == 10))\n    assign pi_dqs_found_lanes_int = {2'b00, pi_dqs_found_lanes_r3};\n  else if ((HIGHEST_LANE == 5) || (HIGHEST_LANE == 9))\n    assign pi_dqs_found_lanes_int = {3'b000, pi_dqs_found_lanes_r3};\n  endgenerate",
+        "  assign fine_adjust_lane_cnt    = ctl_lane_cnt;",
+        "  assign rd_data_offset_cal_done = init_dqsfound_done_r;",
+        "  generate\n  if (HIGHEST_BANK == 3) begin \n    assign rd_data_offset_0 = (~init_dqsfound_done_r2) ? rd_byte_data_offset[rnk_cnt_r][0+:6] :\n                               final_data_offset[rnk_cnt_r][0+:6];\n    assign rd_data_offset_1 = (~init_dqsfound_done_r2) ? rd_byte_data_offset[rnk_cnt_r][6+:6] :\n                               final_data_offset[rnk_cnt_r][6+:6];\n    assign rd_data_offset_2 = (~init_dqsfound_done_r2) ? rd_byte_data_offset[rnk_cnt_r][12+:6] :\n                               final_data_offset[rnk_cnt_r][12+:6];\n  end else if (HIGHEST_BANK == 2) begin \n    assign rd_data_offset_0 = (~init_dqsfound_done_r2) ? rd_byte_data_offset[rnk_cnt_r][0+:6] :\n                               final_data_offset[rnk_cnt_r][0+:6];\n    assign rd_data_offset_1 = (~init_dqsfound_done_r2) ? rd_byte_data_offset[rnk_cnt_r][6+:6] :\n                               final_data_offset[rnk_cnt_r][6+:6];\n    assign rd_data_offset_2 = 'd0;\n  end else begin\n    assign rd_data_offset_0 = (~init_dqsfound_done_r2) ? rd_byte_data_offset[rnk_cnt_r][0+:6] :\n                               final_data_offset[rnk_cnt_r][0+:6];\n    assign rd_data_offset_1 = 'd0;\n    assign rd_data_offset_2 = 'd0;\n  end\n  endgenerate",
+        "  generate\n  genvar rnk_cnt;\n    if (HIGHEST_BANK == 3) begin \n      for (rnk_cnt = 0; rnk_cnt < RANKS; rnk_cnt = rnk_cnt + 1) begin: rnk_loop\n        assign rd_data_offset_ranks_0[6*rnk_cnt+:6] = final_data_offset[rnk_cnt][5:0];\n        assign rd_data_offset_ranks_1[6*rnk_cnt+:6] = final_data_offset[rnk_cnt][11:6];\n        assign rd_data_offset_ranks_2[6*rnk_cnt+:6] = final_data_offset[rnk_cnt][17:12];\n        assign rd_data_offset_ranks_mc_0[6*rnk_cnt+:6] = final_data_offset_mc[rnk_cnt][5:0];\n        assign rd_data_offset_ranks_mc_1[6*rnk_cnt+:6] = final_data_offset_mc[rnk_cnt][11:6];\n        assign rd_data_offset_ranks_mc_2[6*rnk_cnt+:6] = final_data_offset_mc[rnk_cnt][17:12];\n      end\n    end else if (HIGHEST_BANK == 2) begin \n      for (rnk_cnt = 0; rnk_cnt < RANKS; rnk_cnt = rnk_cnt + 1) begin: rnk_loop\n        assign rd_data_offset_ranks_0[6*rnk_cnt+:6] = final_data_offset[rnk_cnt][5:0];\n        assign rd_data_offset_ranks_1[6*rnk_cnt+:6] = final_data_offset[rnk_cnt][11:6];\n        assign rd_data_offset_ranks_2[6*rnk_cnt+:6] = 'd0;\n        assign rd_data_offset_ranks_mc_0[6*rnk_cnt+:6] = final_data_offset_mc[rnk_cnt][5:0];\n        assign rd_data_offset_ranks_mc_1[6*rnk_cnt+:6] = final_data_offset_mc[rnk_cnt][11:6];\n        assign rd_data_offset_ranks_mc_2[6*rnk_cnt+:6] = 'd0;\n      end\n    end else begin \n      for (rnk_cnt = 0; rnk_cnt < RANKS; rnk_cnt = rnk_cnt + 1) begin: rnk_loop\n        assign rd_data_offset_ranks_0[6*rnk_cnt+:6] = final_data_offset[rnk_cnt][5:0];\n        assign rd_data_offset_ranks_1[6*rnk_cnt+:6] = 'd0;\n        assign rd_data_offset_ranks_2[6*rnk_cnt+:6] = 'd0;\n        assign rd_data_offset_ranks_mc_0[6*rnk_cnt+:6] = final_data_offset_mc[rnk_cnt][5:0];\n        assign rd_data_offset_ranks_mc_1[6*rnk_cnt+:6] = 'd0;\n        assign rd_data_offset_ranks_mc_2[6*rnk_cnt+:6] = 'd0;\n      end\n    end\n  endgenerate"
+    ]
+}

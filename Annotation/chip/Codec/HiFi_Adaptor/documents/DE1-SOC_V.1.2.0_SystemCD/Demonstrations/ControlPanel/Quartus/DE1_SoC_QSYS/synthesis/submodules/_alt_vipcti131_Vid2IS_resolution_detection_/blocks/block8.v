@@ -1,0 +1,1 @@
+assign field_1 = reset_line_count & f;

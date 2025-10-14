@@ -1,0 +1,1 @@
+  assign samp_cntr = samp_cntr_r;

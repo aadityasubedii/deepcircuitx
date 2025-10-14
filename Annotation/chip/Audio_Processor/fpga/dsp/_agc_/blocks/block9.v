@@ -1,0 +1,1 @@
+    assign shift_by = (SHIFT-1) - gain[GAIN_W-1:GAIN_W-(SHIFT_W+1)];

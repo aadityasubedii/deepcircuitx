@@ -1,0 +1,76 @@
+{
+    "line_num": [
+        [
+            424,
+            424
+        ],
+        [
+            406,
+            421
+        ],
+        [
+            382,
+            400
+        ],
+        [
+            358,
+            376
+        ],
+        [
+            337,
+            352
+        ],
+        [
+            332,
+            332
+        ],
+        [
+            323,
+            326
+        ],
+        [
+            312,
+            321
+        ],
+        [
+            308,
+            308
+        ],
+        [
+            296,
+            306
+        ],
+        [
+            290,
+            293
+        ],
+        [
+            285,
+            288
+        ],
+        [
+            270,
+            279
+        ],
+        [
+            192,
+            265
+        ]
+    ],
+    "blocks": [
+        "endmodule",
+        "assign o_rn = i_rn_sel == 4'd0  ? r0_out  :\n              i_rn_sel == 4'd1  ? r1_out  : \n              i_rn_sel == 4'd2  ? r2_out  : \n              i_rn_sel == 4'd3  ? r3_out  : \n              i_rn_sel == 4'd4  ? r4_out  : \n              i_rn_sel == 4'd5  ? r5_out  : \n              i_rn_sel == 4'd6  ? r6_out  : \n              i_rn_sel == 4'd7  ? r7_out  : \n              i_rn_sel == 4'd8  ? r8_out  : \n              i_rn_sel == 4'd9  ? r9_out  : \n              i_rn_sel == 4'd10 ? r10_out : \n              i_rn_sel == 4'd11 ? r11_out : \n              i_rn_sel == 4'd12 ? r12_out : \n              i_rn_sel == 4'd13 ? r13_out : \n              i_rn_sel == 4'd14 ? r14_out : \n                                  r15_out_rn ; ",
+        "always @*\n    case ( i_rs_sel )\n       4'd0  :  o_rd = r0_out  ;\n       4'd1  :  o_rd = r1_out  ; \n       4'd2  :  o_rd = r2_out  ; \n       4'd3  :  o_rd = r3_out  ; \n       4'd4  :  o_rd = r4_out  ; \n       4'd5  :  o_rd = r5_out  ; \n       4'd6  :  o_rd = r6_out  ; \n       4'd7  :  o_rd = r7_out  ; \n       4'd8  :  o_rd = r8_rds  ; \n       4'd9  :  o_rd = r9_rds  ; \n       4'd10 :  o_rd = r10_rds ; \n       4'd11 :  o_rd = r11_rds ; \n       4'd12 :  o_rd = r12_rds ; \n       4'd13 :  o_rd = r13_rds ; \n       4'd14 :  o_rd = r14_rds ; \n       default: o_rd = r15_out_rm_nxt ; \n    endcase",
+        "always @*\n    case ( i_rs_sel )\n       4'd0  :  o_rs = r0_out  ;\n       4'd1  :  o_rs = r1_out  ; \n       4'd2  :  o_rs = r2_out  ; \n       4'd3  :  o_rs = r3_out  ; \n       4'd4  :  o_rs = r4_out  ; \n       4'd5  :  o_rs = r5_out  ; \n       4'd6  :  o_rs = r6_out  ; \n       4'd7  :  o_rs = r7_out  ; \n       4'd8  :  o_rs = r8_rds  ; \n       4'd9  :  o_rs = r9_rds  ; \n       4'd10 :  o_rs = r10_rds ; \n       4'd11 :  o_rs = r11_rds ; \n       4'd12 :  o_rs = r12_rds ; \n       4'd13 :  o_rs = r13_rds ; \n       4'd14 :  o_rs = r14_rds ; \n       default: o_rs = r15_out_rn ; \n    endcase",
+        "assign o_rm = i_rm_sel == 4'd0  ? r0_out  :\n              i_rm_sel == 4'd1  ? r1_out  : \n              i_rm_sel == 4'd2  ? r2_out  : \n              i_rm_sel == 4'd3  ? r3_out  : \n              i_rm_sel == 4'd4  ? r4_out  : \n              i_rm_sel == 4'd5  ? r5_out  : \n              i_rm_sel == 4'd6  ? r6_out  : \n              i_rm_sel == 4'd7  ? r7_out  : \n              i_rm_sel == 4'd8  ? r8_out  : \n              i_rm_sel == 4'd9  ? r9_out  : \n              i_rm_sel == 4'd10 ? r10_out : \n              i_rm_sel == 4'd11 ? r11_out : \n              i_rm_sel == 4'd12 ? r12_out : \n              i_rm_sel == 4'd13 ? r13_out : \n              i_rm_sel == 4'd14 ? r14_out : \n                                  r15_out_rm ; ",
+        "assign o_pc = r15_out_rn;",
+        "assign r14_rds = i_mode_rds_exec[OH_USR]  ? r14      :\n                 i_mode_rds_exec[OH_SVC]  ? r14_svc  :\n                 i_mode_rds_exec[OH_IRQ]  ? r14_irq  :\n                                            r14_firq ;",
+        "assign r8_rds  = i_mode_rds_exec[OH_FIRQ] ? r8_firq  : r8;\nassign r9_rds  = i_mode_rds_exec[OH_FIRQ] ? r9_firq  : r9;\nassign r10_rds = i_mode_rds_exec[OH_FIRQ] ? r10_firq : r10;\nassign r11_rds = i_mode_rds_exec[OH_FIRQ] ? r11_firq : r11;\nassign r12_rds = i_mode_rds_exec[OH_FIRQ] ? r12_firq : r12;\n\nassign r13_rds = i_mode_rds_exec[OH_USR]  ? r13      :\n                 i_mode_rds_exec[OH_SVC]  ? r13_svc  :\n                 i_mode_rds_exec[OH_IRQ]  ? r13_irq  :\n                                            r13_firq ;",
+        "assign r15_out_rn     = {6'd0, r15, 2'd0};",
+        "assign r15_out_rm     = { i_status_bits_flags, \n                          i_status_bits_irq_mask, \n                          i_status_bits_firq_mask, \n                          r15, \n                          i_mode_exec};\n\nassign r15_out_rm_nxt = { i_status_bits_flags, \n                          i_status_bits_irq_mask, \n                          i_status_bits_firq_mask, \n                          i_pc, \n                          i_mode_exec};",
+        "assign r14_out = usr_exec ? r14      :\n                 svc_exec ? r14_svc  :\n                 irq_exec ? r14_irq  :\n                          r14_firq ;",
+        "assign r13_out = usr_exec ? r13      :\n                 svc_exec ? r13_svc  :\n                 irq_exec ? r13_irq  :\n                          r13_firq ;",
+        "assign r0_out = r0;\nassign r1_out = r1;\nassign r2_out = r2;\nassign r3_out = r3;\nassign r4_out = r4;\nassign r5_out = r5;\nassign r6_out = r6;\nassign r7_out = r7;\n\nassign r8_out  = firq_exec ? r8_firq  : r8;",
+        "always @ ( posedge reset, posedge clk ) begin\n\tif (reset) begin\n\t\tr0  <= 32'hdead_beef;\n\t\tr1  <= 32'hdead_beef;\n\t\tr2  <= 32'hdead_beef;\n\t\tr3  <= 32'hdead_beef;\n\t\tr4  <= 32'hdead_beef;\n\t\tr5  <= 32'hdead_beef;\n\t\tr6  <= 32'hdead_beef;\n\t\tr7  <= 32'hdead_beef;\n\t\tr8  <= 32'hdead_beef;\n\t\tr9  <= 32'hdead_beef;\n\t\tr10 <= 32'hdead_beef;\n\t\tr11 <= 32'hdead_beef;\n\t\tr12 <= 32'hdead_beef;\n\t\tr13 <= 32'hdead_beef;\n\t\tr14 <= 32'hdead_beef;\n\t\tr15 <= 24'hc0_ffee;\n\t\tr13_svc <= 32'hdead_beef;\n\t\tr14_svc <= 32'hdead_beef;\n\t\tr13_irq <= 32'hdead_beef;\n\t\tr14_irq <= 32'hdead_beef;\n\t\tr8_firq <= 32'hdead_beef;\n\t\tr9_firq <= 32'hdead_beef;\n\t\tr10_firq <= 32'hdead_beef;\n\t\tr11_firq <= 32'hdead_beef;\n\t\tr12_firq <= 32'hdead_beef;\n\t\tr13_firq <= 32'hdead_beef;\n\t\tr14_firq <= 32'hdead_beef;\n\tend else begin\n\t    \n\t    r0       <= reg_bank_wen_c[0 ]               ? i_reg : read_data_wen[0 ]                      ? i_wb_read_data       : r0;  \n\t    r1       <= reg_bank_wen_c[1 ]               ? i_reg : read_data_wen[1 ]                      ? i_wb_read_data       : r1;  \n\t    r2       <= reg_bank_wen_c[2 ]               ? i_reg : read_data_wen[2 ]                      ? i_wb_read_data       : r2;  \n\t    r3       <= reg_bank_wen_c[3 ]               ? i_reg : read_data_wen[3 ]                      ? i_wb_read_data       : r3;  \n\t    r4       <= reg_bank_wen_c[4 ]               ? i_reg : read_data_wen[4 ]                      ? i_wb_read_data       : r4;  \n\t    r5       <= reg_bank_wen_c[5 ]               ? i_reg : read_data_wen[5 ]                      ? i_wb_read_data       : r5;  \n\t    r6       <= reg_bank_wen_c[6 ]               ? i_reg : read_data_wen[6 ]                      ? i_wb_read_data       : r6;  \n\t    r7       <= reg_bank_wen_c[7 ]               ? i_reg : read_data_wen[7 ]                      ? i_wb_read_data       : r7;  \n\t    \n\t    \n\t    r8       <= reg_bank_wen_c[8 ] && !firq_idec ? i_reg : read_data_wen[8 ] && i_wb_mode != FIRQ ? i_wb_read_data       : r8;  \n\t    r9       <= reg_bank_wen_c[9 ] && !firq_idec ? i_reg : read_data_wen[9 ] && i_wb_mode != FIRQ ? i_wb_read_data       : r9;  \n\t    r10      <= reg_bank_wen_c[10] && !firq_idec ? i_reg : read_data_wen[10] && i_wb_mode != FIRQ ? i_wb_read_data       : r10; \n\t    r11      <= reg_bank_wen_c[11] && !firq_idec ? i_reg : read_data_wen[11] && i_wb_mode != FIRQ ? i_wb_read_data       : r11; \n\t    r12      <= reg_bank_wen_c[12] && !firq_idec ? i_reg : read_data_wen[12] && i_wb_mode != FIRQ ? i_wb_read_data       : r12; \n\t    \n\t    \n\t    r8_firq  <= reg_bank_wen_c[8 ] &&  firq_idec ? i_reg : read_data_wen[8 ] && i_wb_mode == FIRQ ? i_wb_read_data       : r8_firq;\n\t    r9_firq  <= reg_bank_wen_c[9 ] &&  firq_idec ? i_reg : read_data_wen[9 ] && i_wb_mode == FIRQ ? i_wb_read_data       : r9_firq;\n\t    r10_firq <= reg_bank_wen_c[10] &&  firq_idec ? i_reg : read_data_wen[10] && i_wb_mode == FIRQ ? i_wb_read_data       : r10_firq;\n\t    r11_firq <= reg_bank_wen_c[11] &&  firq_idec ? i_reg : read_data_wen[11] && i_wb_mode == FIRQ ? i_wb_read_data       : r11_firq;\n\t    r12_firq <= reg_bank_wen_c[12] &&  firq_idec ? i_reg : read_data_wen[12] && i_wb_mode == FIRQ ? i_wb_read_data       : r12_firq;\n\n\t    \n\t    r13      <= reg_bank_wen_c[13] &&  usr_idec  ? i_reg : read_data_wen[13] && i_wb_mode == USR ? i_wb_read_data        : r13;         \n\t    r14      <= reg_bank_wen_c[14] &&  usr_idec  ? i_reg : read_data_wen[14] && i_wb_mode == USR ? i_wb_read_data        : r14;         \n\t \n\t    \n\t    r13_svc  <= reg_bank_wen_c[13] &&  svc_idec  ? i_reg : read_data_wen[13] && i_wb_mode == SVC  ? i_wb_read_data       : r13_svc;     \n\t    r14_svc  <= reg_bank_wen_c[14] &&  svc_idec  ? i_reg : read_data_wen[14] && i_wb_mode == SVC  ? i_wb_read_data       : r14_svc;     \n\t   \n\t    \n\t    r13_irq  <= reg_bank_wen_c[13] &&  irq_idec  ? i_reg : read_data_wen[13] && i_wb_mode == IRQ  ? i_wb_read_data       : r13_irq; \n\t    r14_irq  <= (reg_bank_wen_c[14] && irq_idec) ? i_reg : read_data_wen[14] && i_wb_mode == IRQ  ? i_wb_read_data       : r14_irq;      \n\t  \n\t    \n\t    r13_firq <= reg_bank_wen_c[13] &&  firq_idec ? i_reg : read_data_wen[13] && i_wb_mode == FIRQ ? i_wb_read_data       : r13_firq;\n\t    r14_firq <= reg_bank_wen_c[14] &&  firq_idec ? i_reg : read_data_wen[14] && i_wb_mode == FIRQ ? i_wb_read_data       : r14_firq;  \n\t    \n\t    \n\t    r15      <= pc_wen_c                         ?  i_pc : pc_dmem_wen                            ? i_wb_read_data[25:2] : r15;\n\tend\nend    "
+    ]
+}

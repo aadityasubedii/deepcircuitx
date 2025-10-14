@@ -1,0 +1,1 @@
+    always @(cke    ) cke_in     <= #BUS_DELAY cke;

@@ -1,0 +1,1 @@
+else if ( WAYS == 3 ) begin : valid_bits_3ways

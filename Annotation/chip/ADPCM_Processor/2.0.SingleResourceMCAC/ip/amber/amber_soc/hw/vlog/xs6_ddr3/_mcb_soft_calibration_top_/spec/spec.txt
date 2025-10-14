@@ -1,0 +1,11 @@
+Module name: mcb_soft_calibration_top.
+
+Module specification: The 'mcb_soft_calibration_top' is a top-level Verilog module that primarily manages the calibration process for the memory controller block (MCB). Key operations it manages include power-on, reset, UI clock, self-refresh requests, start and calibration flags, and memory controller-related signals. The module permits manipulation through parameters that control the calibration mode, memory type, and options to skip certain calibration stages. 
+
+Its major inputs include UI_CLK (User Interface Clock), RST (Reset Signal), IOCLK (IO Clock), among others, related to the MCB functioning and calibration process. The module's main outputs indicate the calibration status, supply MCB requests, communicate with the MCB and IOBUF. The module also uses InOut ports that are associated with the impedance control interface, and tuning resistor realizing accurate on-die termination.
+
+Internally, the module makes use of a multitude of signals that appear to be leveraged for the purposes of calibration, signal buffering, synchronization, and other functions. These include IODRP_ADD, IODRP_SDI, RZQ_IODRP_SDO, RZQ_IODRP_CS, ZIO_IODRP_SDO, ZIO_IODRP_CS, and several others.
+
+The mcb_soft_calibration_top module seemingly comprises of various functional blocks such as data storage registers, IODRP2 RZQ block, IOBUF RZQ block, and others. It instantiates the `mcb_soft_calibration` and `IOBUF` modules, invoking the former to handle the core soft and hard calibration process and the latter for buffering the input/output operations. Furthermore, based on certain conditions around memory type and calibration mode, it generates additional IOBUF and IODRP2 modules for ZIO handling.
+
+Overall, the specifics of this module's operation are tied to the underlying environment, and it seems highly flexible and configurable to suit diverse applications or design intricacies.

@@ -1,0 +1,1 @@
+  assign o_input_sync = r_input_sync_2;

@@ -1,0 +1,9 @@
+Module name: i2s_rx
+
+Module specification: The 'i2s_rx' is a parametrizable Verilog module implementing an Inter-IC Sound (I2S) receiver. Its function is to read serial data (SD), and output the received data as left and right channel data governed by a clock input (ck) and a validity signal (sample). The module uses a frame position signal (frame_posn) to latch the left and right channels' data at correct timing. Parameterization of BITS and CLOCKS enables configuration for different data formats. 
+
+The module's inputs are the clock (ck), which synchronizes the entire module operations, the 'sample' acting as the data validity signal, the 'frame_posn' used to interpret current I2S frame position, and the serial data (sd) which is the actual data being received. The outputs are the 'left' and 'right', which represent the received data for the left and right channels respectively.
+
+Internally, the 'shift' register accumulates the serial input data. The module also generates signals like 'MASK' to derive the correct I2S frame structure and 'midpoint' to divide the I2S frame into two halves. Conditionally assigned 'EOW_LEFT' and 'EOW_RIGHT' signals indicate the frame positions where the left and right channels data end respectively. The 'frame' signal tracks the current frame position.
+
+The code is divided into sections. Initial block sets up default values for output registers. In generate construct, based on the parameter 'CLOCKS' values, 'MASK' and 'midpoint' are derived. And, using these values, 'EOW_LEFT', 'EOW_RIGHT', and 'frame' signals are assigned. The main functionality resides in always block where the rising edge of clock 'ck' triggers shift operation, data latch into output registers 'left' and 'right' based on frame position, and validity of the data is checked by 'sample' signal.

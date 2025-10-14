@@ -1,0 +1,1 @@
+assign stall = !ready_out;

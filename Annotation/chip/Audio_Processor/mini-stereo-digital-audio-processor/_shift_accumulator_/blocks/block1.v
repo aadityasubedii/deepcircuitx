@@ -1,0 +1,1 @@
+	assign out_bk = shift_reg;

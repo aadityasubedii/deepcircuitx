@@ -1,0 +1,11 @@
+assign opcode      = execute_instruction[24:21];
+assign condition   = execute_instruction[31:28];
+assign s_bit       = execute_instruction[20];
+assign reg_n       = execute_instruction[19:16];
+assign reg_d       = execute_instruction[15:12];
+assign reg_m       = execute_instruction[3:0];
+assign reg_s       = execute_instruction[11:8];
+assign shift_imm   = execute_instruction[11:7];
+assign offset12    = execute_instruction[11:0];
+assign offset8     = {execute_instruction[11:8], execute_instruction[3:0]};
+assign imm8        = execute_instruction[7:0];

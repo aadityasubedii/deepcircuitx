@@ -1,0 +1,1 @@
+   assign fine_adjust_done = fine_adjust_done_r;

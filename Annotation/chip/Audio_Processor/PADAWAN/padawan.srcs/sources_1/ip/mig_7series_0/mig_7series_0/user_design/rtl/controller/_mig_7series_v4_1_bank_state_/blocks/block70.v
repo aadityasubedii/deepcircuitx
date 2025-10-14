@@ -1,0 +1,1 @@
+  always @(posedge clk) col_wait_r <= #TCQ col_wait_ns;

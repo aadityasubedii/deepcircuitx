@@ -1,0 +1,1 @@
+  assign req_rank_r = req_rank_r_lcl;

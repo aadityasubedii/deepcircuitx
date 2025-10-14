@@ -1,0 +1,11 @@
+Module name: audio_codec
+
+Module specification: The `audio_codec` module is a digital controller for an audio codec chip. It facilitates timely receipt and dispatch of audio data in addition to managing sample requests, endings, and audio channels. 
+
+The module has several inputs: `clk` which is the digital clock input for synchronization and timeliness of operations, `reset` to revert module state to its initial condition, `volume_control` (2-bit) to adjust volume levels, `audio_output` (16-bit) representing outgoing audio data, `channel_sel` (2-bit) for selecting specific audio channels, and `AUD_ADCDAT` representing audio input from the ADC of the audio codec chip. 
+
+On the output end, `sample_end` and `sample_req` (both 2-bit) signal the ending of an audio sample or the request for a new one, `audio_input` (16-bit) represents incoming audio data, `AUD_ADCLRCK`, `AUD_DACLRCK` and `AUD_BCLK` manage communication with the audio codec chip via clock signals, and `AUD_DACDAT` sends the audio output data to the DAC. 
+
+Internal signals include `lrck_divider` and `bclk_divider` which act as clock dividers, `shift_out`, `shift_in`, and `shift_temp` — the shift registers for audio data buffer, as well as generated signals like `lrck`, `set_bclk`, `clr_bclk` responsible for clock operation and control as per the count and state of the aforementioned dividers. 
+
+The code's blocks can be divided into the initialization and resetting of states and shift registers and the operational conditions that occur at specific states of the dividers, facilitating audio data exchange, controlling audio sample requests and endings, volume control, channel selection and synchronization between the controller module and the audio codec chip it controls. Each line of code and operation is strategic to ensure seamless and accurate execution of the audio_codec module's functions.

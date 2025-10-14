@@ -1,0 +1,1 @@
+   assign phy_ctl_rdy_dly  = cmd_delay_start_r6;

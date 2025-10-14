@@ -1,0 +1,1 @@
+            assign wrreq_post_swap = wrreq_pre_swap;

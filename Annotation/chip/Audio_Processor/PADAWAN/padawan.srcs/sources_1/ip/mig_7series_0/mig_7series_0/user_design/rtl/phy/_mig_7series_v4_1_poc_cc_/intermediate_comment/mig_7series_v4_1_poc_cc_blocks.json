@@ -1,0 +1,51 @@
+{
+    "line_num": [
+        [
+            188,
+            201
+        ],
+        [
+            186,
+            187
+        ],
+        [
+            158,
+            180
+        ],
+        [
+            140,
+            140
+        ],
+        [
+            132,
+            136
+        ],
+        [
+            125,
+            125
+        ],
+        [
+            123,
+            123
+        ],
+        [
+            119,
+            119
+        ],
+        [
+            113,
+            113
+        ]
+    ],
+    "blocks": [
+        "  always @(*) begin\n    if (rst) dbg_poc_ns = 'b0;\n    else begin\n      dbg_poc_ns = dbg_poc_r[899:100];\n      if (mmcm_edge_detect_rdy && lane < 8) begin\n\tdbg_poc_ns[(lane+1)*100] = poc_backup;\n\tdbg_poc_ns[(lane+1)*100+1] = dbg_poc_ns[(lane+1)*100+1] || run_too_small;\n        dbg_poc_ns[(lane+1)*100+10+:TAPCNTRWIDTH] = left;\n        dbg_poc_ns[(lane+1)*100+20+:TAPCNTRWIDTH] = right;\n\tdbg_poc_ns[(lane+1)*100+30+:TAPCNTRWIDTH+1] = window_center;\n\tdbg_poc_ns[(lane+1)*100+41+:TAPCNTRWIDTH+1] = edge_center;\n      end\n    end\n  end",
+        "  always @(posedge clk) dbg_poc_r[899:100] <= #TCQ dbg_poc_ns;\n",
+        "  always @(*) begin\n    dbg_poc_r[99:0] = 'b0;\n    dbg_poc_r[1023:900] = 'b0;\n    dbg_poc_r[0] = mmcm_edge_detect_rdy;\n    dbg_poc_r[1] = mmcm_edge_detect_done;\n    dbg_poc_r[2] = ktap_at_right_edge;\n    dbg_poc_r[3] = ktap_at_left_edge;\n    dbg_poc_r[4] = mmcm_lbclk_edge_aligned;\n    dbg_poc_r[5] = poc_backup;\n    dbg_poc_r[6+:SMWIDTH] = sm;\n    dbg_poc_r[10+:TAPCNTRWIDTH] = tap;\n    dbg_poc_r[20+:TAPCNTRWIDTH] = run;\n    dbg_poc_r[30] = run_end;\n    dbg_poc_r[31] = run_polarity;\n    dbg_poc_r[32] = run_too_small;\n    dbg_poc_r[33+:SAMPCNTRWIDTH] = samp_cntr;\n    dbg_poc_r[49+:SAMPCNTRWIDTH+1] = samps_hi;\n    dbg_poc_r[66+:SAMPCNTRWIDTH+1] = samps_hi_held;\n    dbg_poc_r[83] = samps_zero;\n    dbg_poc_r[84] = samps_one;\n    dbg_poc_r[86:85] = run_ends;\n    dbg_poc_r[87+:TAPCNTRWIDTH+2] = diff;\n  end ",
+        "  assign dbg_poc = dbg_poc_r;",
+        "  generate if (CCENABLE == 0) begin : no_characterization\n    assign samples = SAMPLES[SAMPCNTRWIDTH:0];\n    assign samps_solid_thresh = SAMPS_SOLID_THRESH[SAMPCNTRWIDTH:0];\n  end else begin : characterization\n  end endgenerate",
+        "  assign poc_error = poc_error_r;",
+        "  always @(posedge clk) poc_error_r <= #TCQ poc_error_ns;",
+        "  always @(posedge clk) aligned_cnt_r <= #TCQ aligned_cnt_ns;",
+        "  always @(posedge clk) mmcm_edge_detect_done_r <= #TCQ mmcm_edge_detect_done;"
+    ]
+}

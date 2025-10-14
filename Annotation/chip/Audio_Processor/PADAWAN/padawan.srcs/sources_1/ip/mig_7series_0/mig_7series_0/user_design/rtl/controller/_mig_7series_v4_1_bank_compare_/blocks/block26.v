@@ -1,0 +1,1 @@
+  always @(posedge clk) rd_wr_r_lcl <= #TCQ rd_wr_ns;

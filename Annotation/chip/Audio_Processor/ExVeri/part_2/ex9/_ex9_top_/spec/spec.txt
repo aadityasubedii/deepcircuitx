@@ -1,0 +1,13 @@
+Module name: ex9_top. 
+
+Module specification: 
+
+The 'ex9_top' is a top-level module responsible for coordinating various submodules in a hardware function that aims to measure reaction time. This module orchestrates modules for timing units, a pseudo-random binary sequence generator, state machine logic, a delay unit, counting logic for measuring reaction time, binary to BCD conversion, and BCD to a 7-segment display conversion unit for displays. 
+
+The module operates synchronously, driven by a CLOCK_50 input. Additionally, it accepts a user's reaction input via a 4-bit KEY input. The KEY[3] input triggers the main functionalities, and the KEY[0] input interacts with the counting logic. 
+
+Outputs from this module include HEX0-HEX4 (7-bit each) connecting to seven-segment displays to visualize the measured reaction time in BCD format, and a 10-bit LEDR output that displays some of the state machine processing results. 
+
+Internally, the module utilizes signals such as TICK_1MS and TICK_500MS, signaling the occurrence of every 1ms and 500ms respectively, time_out to indicate when a predefined delay time of the delay module has been reached, and en_lfsr and start_delay to interact with the FSM and the PRBS generator. It also uses 7-bit prbs from the PRBS generator to set a variable delay time, 4-bit BCD outputs from bin2bcd_16 module for 7-segment display, and handles count-over, start-count and reset-count signals to manage the reaction-time counter. Finally, a 16-bit reaction_time wire connects the counter output to the binary to BCD conversion module.
+
+The module utilizes clk_16_tick and clk500 modules for generating TICK_1MS, TICK_500MS signals,  lfsr_7 module to generate PRBS based on en_lfsr and TICK_1MS, fsm_reaction block that handles state transitions based on various internal and external signals. The delay module is used with a start_delay signal and prbs for generating delay, and the count module performs the function of measuring the reaction time. Conversion from binary to BCD is done by the bin2bcd_16 module, followed by driving HEX outputs by hex_to_7seg module for display.

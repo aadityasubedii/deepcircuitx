@@ -1,0 +1,271 @@
+{
+    "line_num": [
+        [
+            760,
+            760
+        ],
+        [
+            759,
+            759
+        ],
+        [
+            758,
+            758
+        ],
+        [
+            757,
+            757
+        ],
+        [
+            756,
+            761
+        ],
+        [
+            689,
+            689
+        ],
+        [
+            688,
+            688
+        ],
+        [
+            687,
+            687
+        ],
+        [
+            666,
+            690
+        ],
+        [
+            659,
+            762
+        ],
+        [
+            619,
+            655
+        ],
+        [
+            577,
+            577
+        ],
+        [
+            575,
+            575
+        ],
+        [
+            573,
+            573
+        ],
+        [
+            571,
+            579
+        ],
+        [
+            569,
+            569
+        ],
+        [
+            568,
+            568
+        ],
+        [
+            567,
+            567
+        ],
+        [
+            566,
+            566
+        ],
+        [
+            565,
+            565
+        ],
+        [
+            564,
+            564
+        ],
+        [
+            563,
+            563
+        ],
+        [
+            562,
+            562
+        ],
+        [
+            561,
+            561
+        ],
+        [
+            560,
+            560
+        ],
+        [
+            559,
+            559
+        ],
+        [
+            557,
+            557
+        ],
+        [
+            556,
+            556
+        ],
+        [
+            555,
+            555
+        ],
+        [
+            553,
+            553
+        ],
+        [
+            551,
+            551
+        ],
+        [
+            511,
+            549
+        ],
+        [
+            509,
+            509
+        ],
+        [
+            508,
+            508
+        ],
+        [
+            507,
+            507
+        ],
+        [
+            506,
+            506
+        ],
+        [
+            505,
+            505
+        ],
+        [
+            503,
+            504
+        ],
+        [
+            502,
+            502
+        ],
+        [
+            471,
+            500
+        ],
+        [
+            469,
+            469
+        ],
+        [
+            405,
+            456
+        ],
+        [
+            372,
+            394
+        ],
+        [
+            298,
+            298
+        ],
+        [
+            290,
+            300
+        ],
+        [
+            236,
+            279
+        ],
+        [
+            231,
+            231
+        ],
+        [
+            230,
+            230
+        ],
+        [
+            221,
+            229
+        ],
+        [
+            216,
+            216
+        ],
+        [
+            215,
+            215
+        ],
+        [
+            213,
+            220
+        ],
+        [
+            47,
+            57
+        ]
+    ],
+    "blocks": [
+        "        assign is_data = {DATA_WIDTH{1'b0}};",
+        "        assign is_eop = 1'b0;",
+        "        assign is_sop = 1'b0;",
+        "        assign is_valid = 1'b0;",
+        "    end else begin\n        assign is_valid = 1'b0;\n        assign is_sop = 1'b0;\n        assign is_eop = 1'b0;\n        assign is_data = {DATA_WIDTH{1'b0}};\n    end",
+        "            assign packet_post_swap = packet;",
+        "            assign wrreq_post_swap = wrreq_pre_swap;",
+        "            assign data_post_swap = data;",
+        "        if(CONVERT_SEQ_TO_PAR) begin\n            alt_vipcti130_Vid2IS_write_buffer #(\n                    .DATA_WIDTH(DATA_WIDTH),\n                    .NUMBER_OF_COLOUR_PLANES(NUMBER_OF_COLOUR_PLANES),\n                    .BPS(BPS))\n                write_buffer(\n                    .rst(rst_vid_clk),\n                    .clk(vid_clk_int),\n                    \n                    .convert(convert),\n                    .hd_sdn(vid_hd_sdn_input),\n                    .early_eop(early_eop),\n                    \n                    .wrreq_in(wrreq_pre_swap),\n                    .data_in(data),\n                    .packet_in(packet),\n                    \n                    .wrreq_out(wrreq_post_swap),\n                    .data_out(data_post_swap),\n                    .packet_out(packet_post_swap));\n        end else begin\n            assign data_post_swap = data;\n            assign wrreq_post_swap = wrreq_pre_swap;\n            assign packet_post_swap = packet;\n        end",
+        "generate begin : avalon_st_output\n    if(GENERATE_SYNC < 2) begin\n        wire wrreq_post_swap;\n        wire [DATA_WIDTH-1:0] data_post_swap;\n        wire packet_post_swap;\n        \n        \n        if(CONVERT_SEQ_TO_PAR) begin\n            alt_vipcti130_Vid2IS_write_buffer #(\n                    .DATA_WIDTH(DATA_WIDTH),\n                    .NUMBER_OF_COLOUR_PLANES(NUMBER_OF_COLOUR_PLANES),\n                    .BPS(BPS))\n                write_buffer(\n                    .rst(rst_vid_clk),\n                    .clk(vid_clk_int),\n                    \n                    .convert(convert),\n                    .hd_sdn(vid_hd_sdn_input),\n                    .early_eop(early_eop),\n                    \n                    .wrreq_in(wrreq_pre_swap),\n                    .data_in(data),\n                    .packet_in(packet),\n                    \n                    .wrreq_out(wrreq_post_swap),\n                    .data_out(data_post_swap),\n                    .packet_out(packet_post_swap));\n        end else begin\n            assign data_post_swap = data;\n            assign wrreq_post_swap = wrreq_pre_swap;\n            assign packet_post_swap = packet;\n        end\n        \n        wire [FIFO_WIDTH-1:0] q;\n        wire empty;\n        \n        alt_vipcti130_common_fifo #(\n                .DATA_WIDTH(FIFO_WIDTH),\n                .CLOCKS_ARE_SAME(CLOCKS_ARE_SAME),\n                .FIFO_DEPTH(FIFO_DEPTH_INT))\n            input_fifo(\n                .wrclk(vid_clk_int),\n                .rdreq(rdreq),\n                .aclr(rst_vid_clk),\n                .rdclk(is_clk),\n                .wrreq(wrreq_post_swap),\n                .data({data_post_swap, packet_post_swap}),\n                .rdusedw(usedw),\n                .rdempty(empty),\n                .wrfull(full),\n                .q(q));\n         \n        wire enable_resync1;\n        wire is_field_prediction;\n        \n        alt_vipcti130_common_sync #(CLOCKS_ARE_SAME) field_prediction_sync(\n            .rst(rst),\n            .sync_clock(is_clk),\n            .data_in(field_prediction),\n            .data_out(is_field_prediction));\n\n        alt_vipcti130_common_sync #(CLOCKS_ARE_SAME) enable_resync_sync(\n            .rst(rst),\n            .sync_clock(is_clk),\n            .data_in(enable_synced),\n            .data_out(enable_resync1));\n         \n        \n        \n        \n        alt_vipcti130_Vid2IS_av_st_output #(\n                .FIFO_WIDTH(FIFO_WIDTH),\n                .DATA_WIDTH(DATA_WIDTH),\n                .NUMBER_OF_COLOUR_PLANES_IN_PARALLEL(NUMBER_OF_COLOUR_PLANES_IN_PARALLEL),\n                .BPS(BPS))\n            av_st_output(\n                .rst(rst),\n                \n                .enable(enable_resync1),\n                .q(q),\n                .rdreq(rdreq),\n                .empty(empty),\n                .is_interlaced(is_interlaced),\n                .is_sync_to(2'b10),\n                .is_field_prediction(is_field_prediction),\n                .is_active_sample_count(is_active_sample_count),\n                .is_active_line_count_f0(is_active_line_count_f0),\n                .is_active_line_count_f1(is_active_line_count_f1),\n                \n                .is_clk(is_clk),\n                .is_ready(is_ready),\n                .is_valid(is_valid),\n                .is_data(is_data),\n                .is_sop(is_sop),\n                .is_eop(is_eop),\n                \n                .is_output_enable(is_output_enable));\n    end else begin\n        assign is_valid = 1'b0;\n        assign is_sop = 1'b0;\n        assign is_eop = 1'b0;\n        assign is_data = {DATA_WIDTH{1'b0}};\n    end\nend endgenerate",
+        "generate begin : sync_generation_generate\n    if(GENERATE_SYNC > 0) begin\n        alt_vipcti130_common_sync_generation sync_generation(\n            .rst(rst_vid_clk),\n            .clk(vid_clk_int),\n            \n            .clear_enable(1'b0),\n            .enable_count(vid_enable_int),\n            .hd_sdn(vid_hd_sdn_input),\n            .start_of_vsync(start_of_vsync),\n            .field_prediction(field_prediction_nxt),\n            .interlaced(interlaced),\n            .total_sample_count(total_sample_count[14:1]),\n            .total_sample_count_valid(total_sample_count[0]),\n            .total_line_count(total_line_count[13:1]),\n            .total_line_count_valid(total_line_count[0]),\n            .stable(stable),\n            \n            .divider_value(refclk_divider_value_sync1),\n            .sof_sample(sof_sample_sync1),\n            .sof_line(sof_line_sync1),\n            .sof_subsample(sof_subsample_sync1),\n            \n            .output_enable(genlock_enable_sync1),\n            .sof(sof),\n            .sof_locked(sof_locked),\n            .div(refclk_div));\n\n            defparam sync_generation.NUMBER_OF_COLOUR_PLANES = NUMBER_OF_COLOUR_PLANES,\n                     sync_generation.COLOUR_PLANES_ARE_IN_PARALLEL = COLOUR_PLANES_ARE_IN_PARALLEL,\n                     sync_generation.LOG2_NUMBER_OF_COLOUR_PLANES = LOG2_NUMBER_OF_COLOUR_PLANES,\n                     sync_generation.TOTALS_MINUS_ONE = 0;\n    end else begin\n        assign sof = 1'b0;\n        assign sof_locked = 1'b0;\n    end\nend endgenerate",
+        "        assign frame_synch = end_of_vsync;",
+        "        assign frame_synch = end_of_vsync & f;",
+        "        assign frame_synch = end_of_vsync & ~f;",
+        "generate begin : sync_to_generate\n    if(SYNC_TO == 0) begin\n        assign frame_synch = end_of_vsync & ~f;\n    end else if(SYNC_TO == 1) begin\n        assign frame_synch = end_of_vsync & f;\n    end else begin\n        assign frame_synch = end_of_vsync;\n    end\nend endgenerate",
+        "assign locked_next = ~|sync_count_next | locked;",
+        "assign sync_count_next = (start_of_hsync) ? sync_count - 2'b01 : sync_count;",
+        "assign packet = last_sample | early_eop;",
+        "assign eop =  last_sample | early_eop;",
+        "assign early_eop = valid_reg & (lost_vid_locked | overflowed);",
+        "assign start_of_hsync = h_sync & ~h_sync_reg;",
+        "assign start_of_vsync = v_sync & ~v_sync_reg;",
+        "assign end_of_vsync = ~v_sync & v_sync_reg;",
+        "assign start_of_ap = ap & ~ap_reg;",
+        "assign wrreq_pre_swap = wrreq & ~full;",
+        "assign wrreq = wrreq_pre_enable & enable_synced;",
+        "assign overflowed = (~full & overflow_reg);",
+        "assign lost_vid_locked = (~vid_locked & vid_locked_reg);",
+        "assign overflow_nxt = (wrreq | overflow_reg) & full;",
+        "assign overflow = overflow_sticky; ",
+        "assign field_prediction_nxt = (~interlaced | end_of_vsync) ? f_reg : (start_of_vsync) ? ~f_reg : field_prediction;",
+        "always @ (posedge rst_vid_clk or posedge vid_clk_int) begin\n    if(rst_vid_clk) begin\n        sync_count <= 2'b01;\n        locked <= 1'b0;\n\t    enable_synced <= 1'b0;\n        \n        overflow_reg <= 1'b0;\n        overflow_sticky <= 1'b0;\n        vid_locked_reg <= 1'b0;\n        \n        h_sync_reg <= 1'b0;\n        v_sync_reg <= 1'b0;\n        ap_reg <= 1'b0;\n        \n        f_reg <= 1'b0;\n        field_prediction <= 1'b0;\n    end else begin\n        if(~vid_locked | lost_vid_locked | overflowed) begin\n            sync_count <= 2'b01;\n            locked <= 1'b0;\n            enable_synced <= 1'b0;\n        end else begin\n            sync_count <= sync_count_next;\n            locked <= locked_next;\n            enable_synced <= (frame_synch) ? enable_sync1 & locked_next : enable_synced;\n        end\n        \n        h_sync_reg <= h_sync;\n        v_sync_reg <= v_sync;\n        ap_reg <= ap;\n        \n        overflow_reg <= overflow_nxt;\n        overflow_sticky <= (overflow_nxt | overflow_sticky) & ~clear_overflow_sticky_sync1;\n        vid_locked_reg <= vid_locked;\n        \n        f_reg <= f;\n        field_prediction <= field_prediction_nxt;\n    end\nend",
+        "assign last_sample = valid_reg & (start_of_vsync | end_of_vsync);",
+        "assign ap = vid_datavalid_reg;",
+        "assign v_sync = vid_v_sync_reg;",
+        "assign h_sync = vid_h_sync_reg;",
+        "assign f = vid_f_reg;",
+        "assign data = (valid_nxt & ~valid_reg) ? (vid_datavalid_int) ? 0 : 13 : \n                                         data_reg;",
+        "assign wrreq_pre_enable = valid_nxt | eop; ",
+        "always @ (posedge rst_vid_clk or posedge vid_clk_int) begin\n    if(rst_vid_clk) begin\n        valid_reg <= 1'b0;\n        convert <= 1'b0;\n        data_reg <= {DATA_WIDTH{1'b0}};\n        vid_f_reg <= 1'b0;\n        vid_h_sync_reg <= 1'b0;\n        vid_v_sync_reg <= 1'b0;\n        vid_datavalid_reg <= 1'b0;\n        vid_anc_valid_reg <= 1'b0;\n    end else begin\n        if(overflow_nxt) begin \n                               \n            valid_reg <= valid_reg;\n            convert <= convert;\n        end else begin\n            valid_reg <= (valid_nxt | valid_reg) & ~eop;\n            convert <= ((vid_enable_int & vid_datavalid_int) | convert) & ~eop;   \n        end\n        data_reg <= (valid_nxt) ? vid_data_int : data_reg;\n        \n        if(vid_enable_int) begin\n            vid_f_reg <= vid_f_int;\n            vid_h_sync_reg <= vid_h_sync_int;\n            vid_v_sync_reg <= vid_v_sync_int;\n            vid_datavalid_reg <= vid_datavalid_int;\n            vid_anc_valid_reg <= vid_anc_valid_int;\n        end\n    end\nend",
+        "assign valid_nxt = vid_enable_int & (vid_datavalid_int | vid_anc_valid_int); ",
+        "generate begin : use_embedded_syncs_generate\n    if(USE_EMBEDDED_SYNCS) begin\n        assign vid_enable_int = vid_datavalid_input;  \n                                                      \n        \n        alt_vipcti130_Vid2IS_embedded_sync_extractor#(\n                .DATA_WIDTH(DATA_WIDTH),\n                .BPS(BPS),\n                .BASE(BASE),\n                .GENERATE_ANC(GENERATE_ANC))\n            sync_extractor(\n                .rst(rst_vid_clk),\n                .clk(vid_clk_int),\n    \n                \n                .vid_locked(vid_locked),\n                .vid_enable(vid_enable_int),\n                .vid_hd_sdn(vid_hd_sdn_input),\n                .vid_data_in(vid_data_input),\n    \n                \n                .vid_f(vid_f_int),\n                .vid_h_sync(vid_h_sync_int),\n                .vid_v_sync(vid_v_sync_int),\n                .vid_datavalid(vid_datavalid_int),\n                .vid_anc_valid(vid_anc_valid_int),\n                .vid_data_out(vid_data_int));\n    end else begin\n        assign vid_enable_int = (ADD_DATA_ENABLE_SIGNAL==1) ? vid_datavalid : 1'b1;\n    \n        alt_vipcti130_Vid2IS_sync_polarity_convertor hsync_convertor(\n            .rst(rst_vid_clk),\n            .clk(vid_clk_int),\n            \n            .sync_in(vid_h_sync_input),\n            .datavalid(vid_datavalid_input),\n            .sync_out(vid_h_sync_int));\n            \n        alt_vipcti130_Vid2IS_sync_polarity_convertor vsync_convertor(\n            .rst(rst_vid_clk),\n            .clk(vid_clk_int),\n            \n            .sync_in(vid_v_sync_input),\n            .datavalid(vid_datavalid_input),\n            .sync_out(vid_v_sync_int));\n            \n        assign vid_f_int = vid_f_input;\n        assign vid_datavalid_int = vid_datavalid_input;\n        assign vid_anc_valid_int = 1'b0;\n        assign vid_data_int = vid_data_input;\n    end\nend endgenerate",
+        "always @ (posedge rst_vid_clk or posedge vid_clk_int) begin\n    if (rst_vid_clk) begin\n        vid_data_input <= {DATA_WIDTH{1'b0}};\n        vid_datavalid_input <= 1'b0;\n        vid_f_input <= 1'b0;\n        vid_v_sync_input <= 1'b0;\n        vid_h_sync_input <= 1'b0;\n        vid_hd_sdn_input <= 1'b0;\n    end else begin\n        vid_data_input <= vid_data;\n        if (~USE_EMBEDDED_SYNCS && ADD_DATA_ENABLE_SIGNAL)\n            vid_datavalid_input <= vid_de;\n        else\n            vid_datavalid_input <= vid_datavalid;\n        vid_f_input <= vid_f;\n        vid_v_sync_input <= vid_v_sync;\n        vid_h_sync_input <= vid_h_sync;\n        if(CONVERT_SEQ_TO_PAR)\n            vid_hd_sdn_input <= vid_hd_sdn;\n        else\n            vid_hd_sdn_input <= COLOUR_PLANES_ARE_IN_PARALLEL;\n    end\nend",
+        "        assign vid_std_sync1 = {STD_WIDTH{1'b0}};",
+        "generate begin : use_std_generate\n    if(USE_STD) begin\n        alt_vipcti130_common_sync #(CLOCKS_ARE_SAME, STD_WIDTH) vid_std_sync(\n            .rst(rst),\n            .sync_clock(is_clk),\n            .data_in(vid_std),\n            .data_out(vid_std_sync1));\n    end else begin\n        assign vid_std_sync1 = {STD_WIDTH{1'b0}};\n    end\nend endgenerate",
+        "alt_vipcti130_Vid2IS_control control(\n    .rst(rst),\n    .clk(is_clk),\n\n    \n    .usedw(usedw),\n    .overflow_sticky(overflow_sticky_sync1),\n    .is_output_enable(is_output_enable), \n    \n    \n    .update(update_sync1),\n    .resolution_change(resolution_change_sync1),\n    .interlaced(interlaced),\n    .active_sample_count(active_sample_count),\n    .active_line_count_f0(active_line_count_f0),\n    .active_line_count_f1(active_line_count_f1),\n    .total_sample_count(total_sample_count),\n    .total_line_count_f0(total_line_count_f0),\n    .total_line_count_f1(total_line_count_f1),\n    .stable(stable),\n    .resolution_valid(resolution_valid),\n    .vid_std(vid_std_sync1), \n    \n    \n    .enable(enable),\n    .clear_overflow_sticky(clear_overflow_sticky),\n    .is_interlaced(is_interlaced),\n    .is_active_sample_count(is_active_sample_count),\n    .is_active_line_count_f0(is_active_line_count_f0),\n    .is_active_line_count_f1(is_active_line_count_f1),\n    .sof_sample(sof_sample),\n    .sof_line(sof_line),\n    .sof_subsample(sof_subsample),\n    .refclk_divider_value(refclk_divider_value),\n    .genlock_enable(genlock_enable),\n    \n    \n    .av_address(av_address),\n    .av_read(av_read),\n    .av_readdata(av_readdata),\n    .av_write(av_write),\n    .av_writedata(av_writedata),\n    \n    .status_update_int(status_update_int));",
+        "         assign vid_clk_int = vid_clk;",
+        "         assign rst_vid_clk = rst_vid_clk_reg2;",
+        "         always @ (posedge rst or posedge vid_clk_int) begin\n             if(rst) begin\n                rst_vid_clk_reg <= 1'b1;\n                rst_vid_clk_reg2 <= 1'b1;\n             end else begin\n                rst_vid_clk_reg <= 1'b0;\n                rst_vid_clk_reg2 <= rst_vid_clk_reg;\n             end\n         end",
+        "         assign vid_clk_int = is_clk;",
+        "         assign rst_vid_clk = rst;",
+        "generate begin : clocks_are_same_generate\n     if(CLOCKS_ARE_SAME) begin\n         assign rst_vid_clk = rst;\n         assign vid_clk_int = is_clk;\n     end else begin\n         reg rst_vid_clk_reg;\n         reg rst_vid_clk_reg2;\n         ",
+        "function integer alt_clogb2;\n  input [31:0] value;\n  integer i;\n  begin\n    alt_clogb2 = 32;\n    for (i=31; i>0; i=i-1) begin\n      if (2**i>=value)\n        alt_clogb2 = i;\n    end\n  end\nendfunction"
+    ]
+}

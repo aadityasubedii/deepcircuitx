@@ -1,0 +1,1 @@
+  assign prbs_dqs_cnt_timing = {2'd0, prbs_dqs_cnt_r};

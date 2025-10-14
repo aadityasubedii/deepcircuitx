@@ -1,0 +1,1 @@
+    assign d0 = d1;

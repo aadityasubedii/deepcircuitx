@@ -1,0 +1,1 @@
+assign valid_nxt = vid_enable_int & (vid_datavalid_int | vid_anc_valid_int); 

@@ -1,0 +1,1 @@
+  always @(posedge clk) prde_r2 <= #TCQ prde_r1;

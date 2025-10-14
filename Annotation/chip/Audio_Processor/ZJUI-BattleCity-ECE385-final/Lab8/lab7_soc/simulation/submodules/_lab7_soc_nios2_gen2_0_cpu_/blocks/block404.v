@@ -1,0 +1,1 @@
+  assign sync_timer = 7'd1;

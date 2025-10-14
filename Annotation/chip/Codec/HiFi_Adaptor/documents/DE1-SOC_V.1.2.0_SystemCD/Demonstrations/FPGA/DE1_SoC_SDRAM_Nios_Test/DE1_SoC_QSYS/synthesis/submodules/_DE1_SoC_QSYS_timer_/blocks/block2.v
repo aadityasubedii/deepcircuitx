@@ -1,0 +1,1 @@
+  assign control_interrupt_enable = control_register[0];

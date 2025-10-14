@@ -1,0 +1,1 @@
+assign rx_fifo_pop           = wb_start_read && i_wb_adr[15:0] == AMBER_UART_DR;

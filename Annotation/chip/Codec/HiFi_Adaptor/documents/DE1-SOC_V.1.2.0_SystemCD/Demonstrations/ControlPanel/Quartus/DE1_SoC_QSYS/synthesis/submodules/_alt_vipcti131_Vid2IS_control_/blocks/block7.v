@@ -1,0 +1,1 @@
+        assign clear_overflow_sticky = 1'b0;

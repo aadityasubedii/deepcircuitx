@@ -1,0 +1,1 @@
+      assign buf_wr_addr = {{4-DATA_BUF_ADDR_WIDTH{1'b0}},

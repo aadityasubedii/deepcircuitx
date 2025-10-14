@@ -1,0 +1,1 @@
+  assign o_pwm = ({1'b0, r_counter} < r_compare)? 1'b1 : 1'b0;

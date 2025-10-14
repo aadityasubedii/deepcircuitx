@@ -1,0 +1,1 @@
+  output wire [3:0] wr_data_buf_addr;

@@ -1,0 +1,1 @@
+  assign sending_col = grant_col_r_lcl & {nBANK_MACHS{~block_grant_col}};

@@ -1,0 +1,2 @@
+assign fill_state       = c_state == CS_FILL3;
+assign wb_hit           = i_address == wb_address && i_wb_ready && fill_state;

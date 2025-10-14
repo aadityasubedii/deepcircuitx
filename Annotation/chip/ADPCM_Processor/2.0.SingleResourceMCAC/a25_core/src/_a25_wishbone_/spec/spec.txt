@@ -1,0 +1,7 @@
+Module name: a25_wishbone. 
+
+Module specification: The a25_wishbone is a Verilog RTL module designed to function as an interface for the Wishbone bus. The a25_wishbone module has input ports: clk, reset, scan_enable, test_mode, three sets of i_port_req, i_port_write, i_port_wdata, i_port_be, i_port_addr, i_wb_dat, i_wb_ack, i_wb_err and output ports: three sets of o_port_ack, o_port_rdata, and the wishbone bus related o_wb_adr, o_wb_sel, o_wb_we, o_wb_dat, o_wb_cyc, o_wb_stb, serving for timing control, mode control, request acceptance and acknowledging, data writing and reading.
+
+This module utilizes internal signals such as wire arrays for buffer validity, acceptance of data in buffer, write/read operations, data to be written, byte enabling and address for each buffer, while registers are used for determining the port currently being served. Important sections of the code include instantiation of a25_wishbone buffer for each port followed by operations controlled by the "new_access" signal which leads to the serving port determination.
+
+The module coordinates data traffic for multi-port access to a common wishbone bus. Each port request is handled by a respective buffer that deals with accepting new data requests and determining whether data should be read or written. The module ensures that the traffic handling follows a first-come-first-served policy determining which buffer to fetch data from and transferring it to the wishbone bus based on buffer validity and acknowledgment from the bus.

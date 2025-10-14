@@ -1,0 +1,1 @@
+  wire upd_last_master = |end_rtp;  

@@ -1,0 +1,33 @@
+**Module Name**: i2s_dual.
+
+**Module Specification**: The i2s_dual module implements an Inter-IC Sound system (I2S) that can operate based on both local and external sources of clock and word select (ws). The functionality of this module is driven by three interactively designed sub-modules: `i2s_clock`, `i2s_secondary`, and `i2s_detect`.
+
+**Input Ports**:
+
+- `ck`: This is the main system clock which drives the operation of the module.
+- `rst`: This is the system reset signal, used to put the module into initial state.
+- `ext_sck`: This is the I2S bit clock from the external I2S source.
+- `ext_ws`: This is the I2S word select from the external I2S source.
+
+**Output Ports**:
+
+- `sck`: This is the selected clock (either external or local) as determined by 'external' decision signal.
+- `ws`: This is the selected word select signal (either external or local) as determined by 'external'.
+- `en`: This is the enable signal, it is asserted when the module is active.
+- `frame_posn`: This 6-bit register holds the position of the current frame.
+- `external`: This is a decision signal that indicates whether the clock, ws and enable signals are from an external source or not.
+
+**Internal Signals**:
+
+- `local_en`, `local_sck`, `local_ws`, `local_frame_posn`: These signals represent the local I2S options. They are determined by the `i2s_clock` sub-module.
+- `ext_en`, `ext_frame_posn`: These are the signals defined by the `i2s_secondary` sub-module that represent the enable status and frame position of the external I2S source.
+- `external`: This signal is defined by the `i2s_detect` module, it determines whether the frame is from an external source or local source.
+
+**Code Structure**:    
+
+- The `i2s_clock` sub-module: Generates a synthesizable I2S clock, word select, enable signals, and frame position information based on the provided system clock and reset.
+- The `i2s_secondary` sub-module: It manages frame positions and controls the enable state for some I2S related process. It takes as input the system clock, and the external I2S bit clock and word select, and outputs the enable status and frame position.
+- The `i2s_detect` sub-module: It is used to detect valid frames in both the local and external I2S data streams and it outputs a 'valid' signal indicating the completion of this process.
+- The decision block: This is the last part of the code. It uses the 'external' signal to decide whether to use the local or external I2S source data.
+
+This module is a critical element for routing and controlling the operation of I2S audio signals, making decisions based on the status of signals/data streams coming from local and external sources. This design likely contributes to an audio routing/switching unit in a digital audio system.

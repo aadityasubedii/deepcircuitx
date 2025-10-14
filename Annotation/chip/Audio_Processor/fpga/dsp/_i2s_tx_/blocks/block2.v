@@ -1,0 +1,1 @@
+    assign frame = frame_posn & MASK;

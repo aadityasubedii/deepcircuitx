@@ -1,0 +1,1 @@
+assign core_stall = o_fetch_stall || i_mem_stall || i_exec_stall || i_conflict;

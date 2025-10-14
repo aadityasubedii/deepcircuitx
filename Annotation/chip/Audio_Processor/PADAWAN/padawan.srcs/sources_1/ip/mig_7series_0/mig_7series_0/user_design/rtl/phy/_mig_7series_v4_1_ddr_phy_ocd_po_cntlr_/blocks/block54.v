@@ -1,0 +1,1 @@
+  always @(posedge clk) cmplx_samples_done_r <= #TCQ cmplx_samples_done_ns;

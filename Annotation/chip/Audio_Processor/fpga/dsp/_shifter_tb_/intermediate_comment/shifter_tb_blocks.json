@@ -1,0 +1,21 @@
+{
+    "line_num": [
+        [
+            32,
+            48
+        ],
+        [
+            15,
+            15
+        ],
+        [
+            7,
+            11
+        ]
+    ],
+    "blocks": [
+        "    initial begin\n        @(posedge ck);\n        @(posedge ck);\n\n        in <= 40'h00abcd1234;\n        en <= 1;\n\n        for (i = 0; i < 24; i = i + 1) begin\n\n            shift <= i;\n            @(posedge ck);\n            @(posedge ck);\n            tb_assert(out == ((in >> shift) & 16'hFFFF));\n            \n        end\n\n    end",
+        "    always #42 ck <= !ck;",
+        "    initial begin\n        $dumpfile(\"dsp.vcd\");\n        $dumpvars(0, tb);\n        #500000 $finish;\n    end"
+    ]
+}

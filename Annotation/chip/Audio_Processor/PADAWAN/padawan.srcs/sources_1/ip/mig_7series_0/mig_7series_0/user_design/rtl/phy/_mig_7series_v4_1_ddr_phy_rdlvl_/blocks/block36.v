@@ -1,0 +1,1 @@
+      assign pat_data_match_r = pat0_data_match_r | pat1_data_match_r;

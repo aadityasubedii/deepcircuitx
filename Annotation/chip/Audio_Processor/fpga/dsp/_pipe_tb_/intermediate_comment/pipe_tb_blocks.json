@@ -1,0 +1,46 @@
+{
+    "line_num": [
+        [
+            132,
+            155
+        ],
+        [
+            84,
+            122
+        ],
+        [
+            82,
+            82
+        ],
+        [
+            80,
+            80
+        ],
+        [
+            79,
+            79
+        ],
+        [
+            30,
+            75
+        ],
+        [
+            15,
+            15
+        ],
+        [
+            7,
+            11
+        ]
+    ],
+    "blocks": [
+        "    initial begin\n\n        @(posedge ck);\n        wait(!rst);\n        @(posedge ck);\n\n        p1_in <= 1;\n        @(posedge ck);\n        tb_assert(p1_out == 0);\n\n        @(posedge ck);\n        tb_assert(p1_out == 1);\n\n        @(posedge ck);\n        tb_assert(p1_out == 1);\n\n        p1_in <= 0;\n        @(posedge ck);\n        tb_assert(p1_out == 1);\n\n        @(posedge ck);\n        tb_assert(p1_out == 0);\n\n    end",
+        "    initial begin\n\n        @(posedge ck);\n        wait(!rst);\n        @(posedge ck);\n\n        p_in <= 16'h1234;\n        @(posedge ck);\n        tb_assert(p_out == 16'h0);\n\n        p_in <= 16'haaaa;\n        @(posedge ck);\n        tb_assert(p_out == 16'h0);\n        \n        p_in <= 16'h5555;\n        @(posedge ck);\n        tb_assert(p_out == 16'h0);\n        \n        p_in <= 16'h4545;\n        @(posedge ck);\n        tb_assert(p_out == 16'h1234);\n        \n        p_in <= 16'h4321;\n        @(posedge ck);\n        tb_assert(p_out == 16'haaaa);\n        \n        @(posedge ck);\n        tb_assert(p_out == 16'h5555);\n        \n        @(posedge ck);\n        tb_assert(p_out == 16'h4545);\n        \n        @(posedge ck);\n        tb_assert(p_out == 16'h4321);\n        \n        @(posedge ck);\n        tb_assert(p_out == 16'h4321);\n        \n    end",
+        "    pipe #(.LENGTH(3)) pipes [15:0] (.ck(ck), .in(p_in), .out(p_out));",
+        "    wire [15:0] p_out;",
+        "    reg  [15:0] p_in  = 0;",
+        "    initial begin\n        $display(\"test pipe()\");\n        tb_assert(pt_out == 0);\n        @(posedge ck);\n        pt_in <= 1;\n        tb_assert(pt_out == 0);\n\n        for (pt_i = 0; pt_i < 4; pt_i = pt_i + 1) begin\n            @(posedge ck);\n            tb_assert(pt_out == 0);\n        end\n \n        for (pt_i = 0; pt_i < 4; pt_i = pt_i + 1) begin\n            @(posedge ck);\n            tb_assert(pt_out == 1);\n        end\n \n        pt_in <= 0;\n        @(posedge ck);\n        pt_in <= 1;\n\n        @(posedge ck);\n        tb_assert(pt_out == 1);\n        @(posedge ck);\n        tb_assert(pt_out == 1);\n        @(posedge ck);\n        tb_assert(pt_out == 1);\n        @(posedge ck);\n        tb_assert(pt_out == 0);\n        @(posedge ck);\n        tb_assert(pt_out == 1);\n        @(posedge ck);\n        tb_assert(pt_out == 1);\n        @(posedge ck);\n        tb_assert(pt_out == 1);\n\n        pt_in <= 0;\n        for (pt_i = 0; pt_i < 4; pt_i = pt_i + 1) begin\n            @(posedge ck);\n            tb_assert(pt_out == 1);\n        end\n        for (pt_i = 0; pt_i < 4; pt_i = pt_i + 1) begin\n            @(posedge ck);\n            tb_assert(pt_out == 0);\n        end\n    end",
+        "    always #42 ck <= !ck;",
+        "    initial begin\n        $dumpfile(\"dsp.vcd\");\n        $dumpvars(0, tb);\n        #500000 $finish;\n    end"
+    ]
+}

@@ -1,0 +1,1 @@
+assign ByteCntDelayed = ByteCnt + 3'h4;

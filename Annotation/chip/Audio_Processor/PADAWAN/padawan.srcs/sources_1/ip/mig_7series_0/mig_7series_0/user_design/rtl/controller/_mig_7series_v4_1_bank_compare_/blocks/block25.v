@@ -1,0 +1,1 @@
+  assign rd_wr_r = rd_wr_r_lcl;

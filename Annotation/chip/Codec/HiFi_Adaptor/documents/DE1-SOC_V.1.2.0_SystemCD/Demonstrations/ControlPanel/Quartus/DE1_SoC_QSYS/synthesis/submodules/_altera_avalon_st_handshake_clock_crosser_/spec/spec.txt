@@ -1,0 +1,11 @@
+Module name: Altera_Avalon_St_Handshake_Clock_Crosser.
+
+Module specification: 
+
+The Altera_Avalon_St_Handshake_Clock_Crosser is a specialized Verilog module designed to facilitate handshaking and data transfer across multiple clock domains, commonly used with Altera Avalon streaming interfaces. It applies a clock crossing mechanism to ensure data integrity during transfer. The module supports optional features such as channel information, error flags, and packets, and is highly configurable with user-defined parameters including data width, synchronization FIFOs depth, and the optional use of an output pipeline register.
+
+The module has several input and output ports. Input ports include clock signals (in_clk, out_clk), reset signals (in_reset, out_reset), data stream validity (in_valid), input data (in_data), along with optional channel, error, start/end of packet signals, and an 'empty' signal. These inputs are used to provide the necessary information to the module for processing. Also, signals 'out_ready' is used to indicate the module is ready to receive data. As for the output ports, it possesses 'ready' and 'valid' signals to coordinate with other modules and signals indicating data stream status (out_data, out_channel, out_error, out_startofpacket, out_endofpacket, out_empty).
+
+Internally, the module employs several signals and parameters to process the data, such as 'in_payload' and 'out_payload' which bundle up the input data with the optional feature flags into one word for synchronization. Other parameters like 'PACKET_WIDTH', 'PCHANNEL_W', 'PERROR_W', and 'PAYLOAD_WIDTH' define the width of these individual parts of the payload.
+
+The module's code can be divided into mainly three sections: the declaration of parameters and signals, the assignment and processing of payload, and finally the clock crossing using an instantiated 'altera_avalon_st_clock_crosser' and the extraction of final output data. In these sections, the code handles the bundling of input data and feature flags, synchronizes them across the clock domains and considers optional parameters. It also utilizes a log2ceil function to calculate the width of the 'empty' signal.

@@ -1,0 +1,41 @@
+{
+    "line_num": [
+        [
+            254,
+            254
+        ],
+        [
+            206,
+            220
+        ],
+        [
+            182,
+            184
+        ],
+        [
+            158,
+            158
+        ],
+        [
+            156,
+            156
+        ],
+        [
+            154,
+            154
+        ],
+        [
+            135,
+            148
+        ]
+    ],
+    "blocks": [
+        "defparam",
+        ");\ndefparam\n\tAuto_Initialize.MIN_ROM_ADDRESS\t= MIN_ROM_ADDRESS,\n\tAuto_Initialize.MAX_ROM_ADDRESS\t= MAX_ROM_ADDRESS,\n\n\tAuto_Initialize.AUD_LINE_IN_LC\t= AUD_LINE_IN_LC,\n\tAuto_Initialize.AUD_LINE_IN_RC\t= AUD_LINE_IN_RC,\n\tAuto_Initialize.AUD_LINE_OUT_LC\t= AUD_LINE_OUT_LC,\n\tAuto_Initialize.AUD_LINE_OUT_RC\t= AUD_LINE_OUT_RC,\n\tAuto_Initialize.AUD_ADC_PATH\t= AUD_ADC_PATH,\n\tAuto_Initialize.AUD_DAC_PATH\t= AUD_DAC_PATH,\n\tAuto_Initialize.AUD_POWER\t\t= AUD_POWER,\n\tAuto_Initialize.AUD_DATA_FORMAT\t= AUD_DATA_FORMAT,\n\tAuto_Initialize.AUD_SAMPLE_CTRL\t= AUD_SAMPLE_CTRL,\n\tAuto_Initialize.AUD_SET_ACTIVE\t= AUD_SET_ACTIVE;",
+        "defparam\n\tClock_Generator_400KHz.COUNTER_BITS\t= 10, \n\tClock_Generator_400KHz.COUNTER_INC\t= 10'h001; ",
+        "assign send_stop_bit = auto_init_stop_bit;",
+        "assign send_start_bit = auto_init_start_bit;",
+        "assign transfer_data = auto_init_transfer_data;",
+        "always @(posedge CLOCK_50)\nbegin\n\tif (reset)\n\tbegin\n\t\tdata_to_transfer\t\t<= 8'h00;\n\t\tnum_bits_to_transfer\t<= 3'h0;\n\tend\n\telse\n\t\tif (auto_init_complete == 1'b0)\n\t\tbegin\n\t\t\tdata_to_transfer\t\t<= auto_init_data;\n\t\t\tnum_bits_to_transfer\t<= 3'h7;\n\t\tend\nend"
+    ]
+}

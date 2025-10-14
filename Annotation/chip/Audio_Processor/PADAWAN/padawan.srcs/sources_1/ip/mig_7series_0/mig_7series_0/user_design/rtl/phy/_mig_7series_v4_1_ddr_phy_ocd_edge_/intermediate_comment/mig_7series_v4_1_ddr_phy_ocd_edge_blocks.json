@@ -1,0 +1,91 @@
+{
+    "line_num": [
+        [
+            166,
+            229
+        ],
+        [
+            161,
+            164
+        ],
+        [
+            158,
+            158
+        ],
+        [
+            157,
+            157
+        ],
+        [
+            156,
+            156
+        ],
+        [
+            155,
+            155
+        ],
+        [
+            148,
+            151
+        ],
+        [
+            145,
+            145
+        ],
+        [
+            144,
+            144
+        ],
+        [
+            143,
+            143
+        ],
+        [
+            142,
+            142
+        ],
+        [
+            137,
+            137
+        ],
+        [
+            135,
+            135
+        ],
+        [
+            130,
+            132
+        ],
+        [
+            129,
+            129
+        ],
+        [
+            120,
+            124
+        ],
+        [
+            119,
+            119
+        ]
+    ],
+    "blocks": [
+        "  always @(*) begin\n    z2f_ns = z2f_r;\n    f2z_ns = f2z_r;\n    o2f_ns = o2f_r;\n    f2o_ns = f2o_r;\n    zero2fuzz_ns = zero2fuzz_r;\n    fuzz2zero_ns = fuzz2zero_r;\n    oneeighty2fuzz_ns = oneeighty2fuzz_r;\n    fuzz2oneeighty_ns = fuzz2oneeighty_r;\n    scan_right_ns = 1'b0;\n    \n    if (reset_scan) begin\n      z2f_ns = 1'b0;\n      f2z_ns = 1'b0;\n      o2f_ns = 1'b0;\n      f2o_ns = 1'b0;\n    end  \n    else if (samp_valid && prev_samp_valid_r)\n      case (prev_samp_r)\n\tFUZZ :\n\t  if (scanning_right) begin\n            if (samp_result == ZERO) begin\n\t      fuzz2zero_ns = stg3;\n\t      f2z_ns = 1'b1;\n\t    end\n            if (samp_result == ONEEIGHTY) begin\n\t      fuzz2oneeighty_ns = stg3;\n\t      f2o_ns = 1'b1;\n\t    end\n\t  end\n\tZERO : begin\n          if (samp_result == FUZZ || samp_result == ONEEIGHTY) scan_right_ns = !scanning_right;\n          if (scanning_right) begin\n\t    if (samp_result == FUZZ) begin\n\t      zero2fuzz_ns = stg3 - 6'b1;\n\t      z2f_ns = 1'b1;\n\t    end\n\t    if (samp_result == ONEEIGHTY) begin\n\t      zero2fuzz_ns = stg3 - 6'b1;\n\t      z2f_ns = 1'b1;\n\t      fuzz2oneeighty_ns = stg3;\n\t      f2o_ns = 1'b1;\n\t    end\n\t  end\n\tend\n        ONEEIGHTY :\n          if (scanning_right) begin\n\t    if (samp_result == FUZZ) begin\n\t      oneeighty2fuzz_ns = stg3 - 6'b1;\n\t      o2f_ns = 1'b1;\n\t    end \n            if (samp_result == ZERO)\n              if (f2o_r) begin\n\t\toneeighty2fuzz_ns = stg3 - 6'b1;\n\t        o2f_ns = 1'b1;\n              end else begin\n\t        fuzz2zero_ns = stg3;\n\t        f2z_ns = 1'b1;\n\t      end\n\n\t  end \n\n      endcase\t \n  end",
+        "  assign zero2fuzz = zero2fuzz_r;\n  assign fuzz2zero = fuzz2zero_r;\n  assign oneeighty2fuzz = oneeighty2fuzz_r;\n  assign fuzz2oneeighty = fuzz2oneeighty_r;",
+        "  always @(posedge clk) fuzz2oneeighty_r <= #TCQ fuzz2oneeighty_ns;",
+        "  always @(posedge clk) oneeighty2fuzz_r <= #TCQ oneeighty2fuzz_ns;",
+        "  always @(posedge clk) fuzz2zero_r <= #TCQ fuzz2zero_ns;",
+        "  always @(posedge clk) zero2fuzz_r <= #TCQ zero2fuzz_ns;",
+        "  assign z2f = z2f_r;\n  assign f2z = f2z_r;\n  assign o2f = o2f_r;\n  assign f2o = f2o_r;",
+        "  always @(posedge clk) f2o_r <= #TCQ f2o_ns;",
+        "  always @(posedge clk) o2f_r <= #TCQ o2f_ns;",
+        "  always @(posedge clk) f2z_r <= #TCQ f2z_ns;",
+        "  always @(posedge clk) z2f_r <= #TCQ z2f_ns;",
+        "  assign scan_right = scan_right_r;",
+        "  always @(posedge clk) scan_right_r <= #TCQ scan_right_ns;",
+        "  always @(*)\n    if (samp_valid) prev_samp_ns = samp_result;\n    else prev_samp_ns = prev_samp_r;",
+        "  always @(posedge clk) prev_samp_r <= #TCQ prev_samp_ns;",
+        "  always @(*) begin\n    prev_samp_valid_ns = prev_samp_valid_r;\n    if (reset_scan) prev_samp_valid_ns = 1'b0;\n    else if (samp_valid) prev_samp_valid_ns = 1'b1;\n  end",
+        "  always @(posedge clk) prev_samp_valid_r <= #TCQ prev_samp_valid_ns;"
+    ]
+}

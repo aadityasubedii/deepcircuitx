@@ -1,0 +1,31 @@
+{
+    "line_num": [
+        [
+            73,
+            73
+        ],
+        [
+            72,
+            72
+        ],
+        [
+            55,
+            68
+        ],
+        [
+            52,
+            54
+        ],
+        [
+            29,
+            50
+        ]
+    ],
+    "blocks": [
+        "assign enable = master_enable & ~output_switch;",
+        "assign global_synced = &synced;",
+        "        always @ (posedge clk or posedge rst) begin\n            if(rst) begin\n                output_control[i] <= {NO_INPUTS{1'b0}};\n                select[(i*NO_INPUTS)+NO_INPUTS-1:(i*NO_INPUTS)] <= {NO_INPUTS{1'b0}};\n            end else begin\n                if(av_write && av_address == i + 3) begin\n                    output_control[i] <= av_writedata[NO_INPUTS-1:0];\n                end\n                \n                if(global_synced) begin\n                    select[(i*NO_INPUTS)+NO_INPUTS-1:(i*NO_INPUTS)] <= output_control[i];\n                end\n            end\n        end",
+        "generate\n    genvar i;\n    for(i = 0; i < NO_OUTPUTS; i=i+1) begin : control_loop",
+        "always @ (posedge clk or posedge rst) begin\n    if(rst) begin\n        master_enable <= 1'b0;\n        output_switch <= 1'b0;\n        av_readdata <= {AV_DATA_WIDTH{1'b0}};\n    end else begin\n        if(av_write) begin\n            master_enable <= (av_address == 0) ? av_writedata[0] : master_enable;\n        end\n        \n        output_switch <= (av_write && av_address == 2) ? av_writedata[0] : output_switch & ~global_synced;\n        \n        if(av_read) begin\n            case(av_address)\n                0: av_readdata <= {{AV_DATA_WIDTH-1{1'b0}}, master_enable};\n                2: av_readdata <= {{AV_DATA_WIDTH-1{1'b0}}, output_switch};\n                default: av_readdata <= {{AV_DATA_WIDTH-1{1'b0}}, !global_synced};\n            endcase\n        end\n        \n    end\nend"
+    ]
+}

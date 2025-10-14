@@ -1,0 +1,1 @@
+  always @(posedge clk) dec_po_r <= #TCQ dec_po_ns;

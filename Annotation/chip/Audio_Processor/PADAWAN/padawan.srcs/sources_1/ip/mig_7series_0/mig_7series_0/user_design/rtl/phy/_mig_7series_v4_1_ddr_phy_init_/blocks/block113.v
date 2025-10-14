@@ -1,0 +1,1 @@
+  assign phy_cs_n = phy_int_cs_n;

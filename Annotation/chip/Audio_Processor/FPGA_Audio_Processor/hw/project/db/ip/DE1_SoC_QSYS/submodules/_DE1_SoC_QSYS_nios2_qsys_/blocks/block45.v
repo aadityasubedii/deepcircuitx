@@ -1,0 +1,1 @@
+  assign R_ctrl_br_cmp_nxt = D_ctrl_br_cmp;

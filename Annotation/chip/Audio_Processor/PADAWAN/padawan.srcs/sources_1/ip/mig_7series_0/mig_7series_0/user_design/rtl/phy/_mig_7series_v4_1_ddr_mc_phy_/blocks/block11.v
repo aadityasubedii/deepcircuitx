@@ -1,0 +1,1 @@
+       assign pi_dqs_found_lanes[HIGHEST_LANE_B1+4-1:4]  = 4'b1111;

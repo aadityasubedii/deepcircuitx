@@ -1,0 +1,1 @@
+  always @(posedge clk) grant_r <= #TCQ grant_ns;

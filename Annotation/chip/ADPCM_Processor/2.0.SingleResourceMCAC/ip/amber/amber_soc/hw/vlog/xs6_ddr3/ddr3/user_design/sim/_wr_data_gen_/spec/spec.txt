@@ -1,0 +1,10 @@
+Module name: wr_data_gen
+Module specification: The 'wr_data_gen' module is a parametrized Verilog code file used to generate write data. It manages the command readiness, data validity, and data generation as per the input signals and parameters. Moreover, the module is tailored to be adaptable for different FPGA families, namely SPARTAN6 and VIRTEX6.
+
+The module uses several input ports, like clk_i (for synchronization), rst_i (for resetting the process), prbs_fseed_i (acting as the seed for pseudo random bit sequence generation), data_mode_i (used to set data mode), cmd_valid_i, cmd_validB_i, cmd_validC_i (indicating command validity), fixed_data_i (for fixed data input), addr_i (for addressing), bl_i (for the burst length), and data_rdy_i (to indicate data readiness).
+
+There are also several output ports, including cmd_rdy_o (indicating command readiness), last_word_o (indicating that the last word has been processed), data_wr_end_o (indicating completion of a write operation), data_valid_o (indicating data validity), and data_o, which transfers the final output of the model.
+
+Within the module, various internal signals are used. The 'data' signal handles data processing, the 'cmd_rdy' and 'cmd_start' signals manage command readiness and execution, respectively, and 'user_burst_cnt', 'walk_cnt', and 'u_bcount_2' are counters used in various operations. The 'burst_count_reached2', 'data_valid', 'fifo_not_full', ‘w3data, and 'last_word_t' signals handle internal conditions related to burst count, data validity, buffer status, data handling, and data output process.
+
+The 'wr_data_gen' module invokes other sub-modules named "sp6_data_gen" and "v6_data_gen" based on the FPGA family parameter value to offload the data generation task, thereby increasing reusability of the code. This module is a part of a larger design aimed to facilitate efficient and dynamic data handling in FPGA.

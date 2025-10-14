@@ -1,0 +1,1 @@
+  assign curr_pid = 1'b0;

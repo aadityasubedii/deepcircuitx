@@ -1,0 +1,1 @@
+  assign E_lt = E_arith_result[32];

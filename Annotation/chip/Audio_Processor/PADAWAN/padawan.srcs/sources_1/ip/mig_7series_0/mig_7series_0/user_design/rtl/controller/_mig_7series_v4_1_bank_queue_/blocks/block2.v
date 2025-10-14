@@ -1,0 +1,1 @@
+  always @(posedge clk) wait_for_maint_r_lcl <= #TCQ wait_for_maint_ns;

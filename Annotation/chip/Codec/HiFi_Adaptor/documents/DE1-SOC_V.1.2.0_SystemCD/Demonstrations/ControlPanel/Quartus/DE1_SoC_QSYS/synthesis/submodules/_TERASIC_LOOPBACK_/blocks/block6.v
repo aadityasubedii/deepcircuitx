@@ -1,0 +1,1 @@
+assign test_in = (test_value_invert)?(test_dir_invert?~lb_out:~lb_in):(test_dir_invert?lb_out:lb_in);

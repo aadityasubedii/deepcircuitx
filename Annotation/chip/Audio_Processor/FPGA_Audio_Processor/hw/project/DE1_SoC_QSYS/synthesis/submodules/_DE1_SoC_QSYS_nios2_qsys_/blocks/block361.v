@@ -1,0 +1,1 @@
+  assign is_external_interrupt = 1'b0;

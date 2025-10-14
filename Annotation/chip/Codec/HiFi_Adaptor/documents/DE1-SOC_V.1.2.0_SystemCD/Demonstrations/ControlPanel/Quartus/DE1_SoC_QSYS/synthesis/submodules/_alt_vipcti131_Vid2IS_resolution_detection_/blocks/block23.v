@@ -1,0 +1,1 @@
+assign active_line_count_f0_nxt = (reset_f0) ? {active_line_count_f0[13:1], 1'b0} : (update_active_line_f0) ? {next_active_line_count, 1'b1} : active_line_count_f0;

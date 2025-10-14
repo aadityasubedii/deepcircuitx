@@ -1,0 +1,1 @@
+  always @(posedge clk) mmcm_hi0_r <= #TCQ mmcm_hi0_ns;

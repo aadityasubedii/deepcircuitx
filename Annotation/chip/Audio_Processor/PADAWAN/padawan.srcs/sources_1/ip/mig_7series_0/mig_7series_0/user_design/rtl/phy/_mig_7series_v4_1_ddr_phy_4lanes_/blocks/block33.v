@@ -1,0 +1,1 @@
+assign pi_dqs_found_lanes = {D_pi_dqs_found, C_pi_dqs_found, B_pi_dqs_found, A_pi_dqs_found};

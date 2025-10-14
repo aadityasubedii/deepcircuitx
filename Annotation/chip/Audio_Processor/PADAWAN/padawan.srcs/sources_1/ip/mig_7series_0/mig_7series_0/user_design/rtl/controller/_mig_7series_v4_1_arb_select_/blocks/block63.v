@@ -1,0 +1,1 @@
+  assign mc_aux_out1 = 4'b0;

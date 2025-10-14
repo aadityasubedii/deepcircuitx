@@ -1,0 +1,1 @@
+    assign read  = internal_out_ready && internal_out_valid  && ok_to_forward;

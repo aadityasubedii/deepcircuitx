@@ -1,0 +1,1 @@
+assign lb_out = (test_dir_invert)?{PAIR_NUM{1'bz}}:(test_value_invert?~test_out:test_out);

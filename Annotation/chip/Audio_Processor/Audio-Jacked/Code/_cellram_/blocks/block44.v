@@ -1,0 +1,1 @@
+    initial                       par_enabled <= 1'b1; 

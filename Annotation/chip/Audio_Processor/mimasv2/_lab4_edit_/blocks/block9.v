@@ -1,0 +1,1 @@
+  assign command_address = command[23:16];

@@ -1,0 +1,12 @@
+Module name: eth_rxaddrcheck. 
+
+Module specification: The `eth_rxaddrcheck` module is responsible for verifying the destination addresses of incoming Ethernet frames to decide if they should be accepted based on unicast, multicast, and broadcast address checks using a CRC hash technique. This module is equipped with input ports such as `MRxClk` (main clock for synchronization), `Reset` (reset signal), `RxData` (incoming data byte), various control signals (`Broadcast`, `r_Bro`, `r_Pro`, `PassAll`, `ControlFrmAddressOK`), byte count flags (`ByteCntEq2` to `ByteCntEq7`), hash tables (`HASH0`, `HASH1`), and `CrcHash` related signals (`CrcHash`, `CrcHashGood`). It also accepts state and frame end signals (`StateData`, `RxEndFrm`), `Multicast`, and the device's `MAC` address. The output ports include `RxAbort` (signal to abort the frame reception) and `AddressMiss` (flag for address mismatch).
+
+The module employs several internal signals such as `BroadcastOK`, `RxAddressInvalid`, `RxCheckEn`, `HashBit`, `IntHash`, `ByteHash`, `MulticastOK`, and `UnicastOK` to facilitate various checks including unicast, multicast, and broadcast validations based on configurable settings and incoming frame properties. 
+
+The Verilog code includes distinct always blocks and combinatorial logic to handle various functionalities:
+1. Reset conditions and updating the output signals `RxAbort` and `AddressMiss` based on byte count checks and address validation results.
+2. Conditions to update flags `MulticastOK` and `UnicastOK` based on comparisons between the received data and stored addresses, or hash calculations.
+3. Derivation of internal hash values (`HashBit`, `IntHash`, `ByteHash`) for verifying multicast addresses using supplied hash tables.
+
+This structured approach ensures the module reacts appropriately to incoming frames, either accepting them or signaling an abort based on the configured criteria and the nature of the received frames.

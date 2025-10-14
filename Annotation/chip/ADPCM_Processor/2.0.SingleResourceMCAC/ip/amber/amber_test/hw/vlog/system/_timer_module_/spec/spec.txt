@@ -1,0 +1,10 @@
+Module name: timer_module. 
+
+Module specification: The 'timer_module' is a digital logic module implemented in Verilog RTL that is used to control and manage three programmable timers - timer0, timer1, and timer2. These timers can count down from a programmed value to zero and generate interrupts when they reach zero. The module interfaces with a Wishbone bus to enable read/write operations with either a 32-bit or 128-bit data width. 
+
+The module has several input/output ports: (1) i_clk, the clock signal; (2) i_wb_adr, the Wishbone address line; (3) i_wb_sel, a select line for the Wishbone interface; (4) i_wb_we, the write enable signal; (5) i_wb_dat, the data line for the Wishbone interface; (6) i_wb_cyc, signifying initiation of a transaction cycle; (7) i_wb_stb, a strobe signal for data transfer; (8) o_wb_dat, the outgoing data for the Wishbone bus; (9) o_wb_ack, the acknowledgment signal; (10) o_wb_err, an error signal; and (11) o_timer_int, the output signal for the generated interrupts.
+
+Inside the module, several internal signals, like timer_load_regs, timer_value_regs, timer_ctrl_regs, and timer_int_regs, are employed to hold initial count values, current counts, control bits, and interrupt statuses of each timer. Signals like wb_rdata32, wb_start_write, wb_start_read, and wb_wdata32 are used to handle the Wishbone bus operations.
+
+The module is divided into several sections: timer control and update blocks, Wishbone bus read/write initiation blocks, output signal assignments, and conditional blocks (generate/if-else) adjusting codes based on data width. Timer control blocks regulate each timer's operation based on the input parameters and internal control registers. The read/write initiation blocks handle the timing of the start of read or write operations.
+The module also contains debug sections `ifdef AMBER_CT_DEBUG`, which displays debug messages during simulation.

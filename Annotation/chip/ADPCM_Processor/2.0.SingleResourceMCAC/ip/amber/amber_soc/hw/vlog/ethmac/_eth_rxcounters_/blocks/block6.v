@@ -1,0 +1,1 @@
+assign ByteCntOut = DlyCrcEn? ByteCntDelayed : ByteCnt;

@@ -1,0 +1,33 @@
+Module name: read_posted_fifo. 
+
+Module specification: The "read_posted_fifo" module is designed to manage a FIFO buffer for read operations in a hardware system, ensuring efficient data read transactions under various conditions. It supports configurable parameters like delay, burst length, and addresses widths which can be tailored based on the specific requirements of different hardware families such as "SPARTAN6". 
+
+The module has several input ports: 
+- `clk_i` (clock input for synchronization),
+- `rst_i` (reset input to initialize or reset the module), 
+- `cmd_valid_i` (indicating the availability of a new command), 
+- `data_valid_i` (signals data corresponding to a read request is valid),
+- `addr_i` (memory address for the read operation), 
+- `bl_i` (burst length for data chunks reading),
+- `user_bl_cnt_is_1` (indicates the user’s burst length counter equals 1),
+- `cmd_sent` and `bl_sent` (indicate status of commands and bursts sent),
+- `cmd_en_i` (triggers processing a command),
+- `gen_rdy_i` (general readiness indicator from another interacting module), and 
+- `rd_mdata_fifo_empty` (status of metadata FIFO). 
+
+Output ports include: 
+- `cmd_rdy_o` (indicates the readiness to accept a command),
+- `gen_valid_o`, `gen_addr_o`, and `gen_bl_o` (general validation, generated address, and burst length for data reads respectively),
+- `rd_buff_avail_o` (indicates available space in FIFO), and 
+- `rd_mdata_en` (enables the reading of metadata).
+
+Internal signals such as:
+- `empty_r`, `rd_first_data`, `full`, `empty`, `wr_en`, `rd_en`, and `data_valid_r` help manage FIFO states and data flows,
+- `user_bl_cnt_not_1`, `buf_avail_r`, `rd_data_received_counts`, and others are used for dynamic computation regarding data management in the FIFO.
+
+The module encompasses several blocks including:
+- FIFO write and read control logic that determines when to write to or read from the FIFO depending on various conditions,
+- Command and data handling logic which processes the incoming commands and the corresponding data availability and requirement,
+- Delay and wait functionality managed through counters to control the readiness signaling based on system configuration and the specifics of the FIFO state. 
+
+These blocks interact to ensure the FIFO is managed properly, considering all dynamic aspects of the system such as data bursts, command regularization, and synchronization across different module inputs and outputs.

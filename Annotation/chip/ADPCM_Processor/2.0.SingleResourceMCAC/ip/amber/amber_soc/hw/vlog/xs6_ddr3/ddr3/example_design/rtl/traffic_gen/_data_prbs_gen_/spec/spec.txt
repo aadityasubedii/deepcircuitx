@@ -1,0 +1,15 @@
+Module name: data_prbs_gen. 
+
+Module specification: 
+
+The `data_prbs_gen` module is a pseudo-random binary sequence (PRBS) generator primarily used for the production of random sequences of bits in digital communications. The generator's operation is conditioned by several clock signals and parameters. 
+
+The module contains several input ports such as `clk_i` (input clock signal), `clk_en` (clock enable signal), `rst_i` (reset input signal), `prbs_fseed_i` (input variable seed), `prbs_seed_init` (seed initialization input), and `prbs_seed_i` (fixed seed input for the PRBS generator). The 'clk_i' and 'clk_en' are mainly responsible for the synchronization of the module, while 'rst_i' is used to reset the operation of the module. 'prbs_fseed_i' and 'prbs_seed_i' are the seeds used in the module for random bit sequence generation, and 'prbs_seed_init' signifies when to initialize a seed in the module.
+
+The output port for this module is `prbs_o`, which produces the output of the pseudo-random binary sequence.
+
+Internally, the module uses the `prbs` and `lfsr_q` registers. The `prbs` register is used to store the output of the PRBS generator before it is assigned to the `prbs_o` output port, while `lfsr_q` is a LFSR (Linear Feedback Shift Register) used to generate the pseudo-random binary sequences in the PRBS generator. 
+
+The module operates in two main parts. The first part concerns the initialization and sequencing of the LFSR. The module takes an initial seed (`prbs_seed_i` or `prbs_fseed_i`). Based on the conditions fulfilled (reset or clock enable), the LFSR gets re-initialized or updated with a new pseudo-random sequence. The second part involves outputting the pseudo-random bit sequence. The current state or value of the LFSR is assigned to `prbs` which in turn is assigned to `prbs_o`, the ultimate output of the module.
+
+This module offers complexity with its numerous clock signals and parameters, while also providing versatile functionality with its pseudo-random binary sequence generation capability. In all, it's a comprehensive RTL module designed to serve the purpose of generating pseudo-random sequences of bits for digital communications.

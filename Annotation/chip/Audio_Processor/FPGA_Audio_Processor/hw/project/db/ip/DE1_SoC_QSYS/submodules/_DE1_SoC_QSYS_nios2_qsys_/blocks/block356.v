@@ -1,0 +1,1 @@
+  assign eic_addr = 32'b0;

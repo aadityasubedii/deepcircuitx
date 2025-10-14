@@ -1,0 +1,1 @@
+    always #42 ck <= !ck;

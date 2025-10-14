@@ -1,0 +1,1 @@
+assign auto_init_complete = (s_i2c_auto_init == AUTO_STATE_8_DONE);

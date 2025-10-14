@@ -1,0 +1,1 @@
+reg [1:0] control_state = 2'b00;

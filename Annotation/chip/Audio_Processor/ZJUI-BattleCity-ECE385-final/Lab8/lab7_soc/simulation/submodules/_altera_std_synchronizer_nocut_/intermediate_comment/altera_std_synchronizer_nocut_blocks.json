@@ -1,0 +1,101 @@
+{
+    "line_num": [
+        [
+            190,
+            190
+        ],
+        [
+            181,
+            186
+        ],
+        [
+            174,
+            179
+        ],
+        [
+            172,
+            173
+        ],
+        [
+            170,
+            170
+        ],
+        [
+            163,
+            168
+        ],
+        [
+            156,
+            161
+        ],
+        [
+            154,
+            155
+        ],
+        [
+            142,
+            147
+        ],
+        [
+            130,
+            135
+        ],
+        [
+            129,
+            129
+        ],
+        [
+            121,
+            126
+        ],
+        [
+            120,
+            120
+        ],
+        [
+            110,
+            115
+        ],
+        [
+            103,
+            108
+        ],
+        [
+            101,
+            101
+        ],
+        [
+            94,
+            99
+        ],
+        [
+            90,
+            92
+        ],
+        [
+            71,
+            75
+        ]
+    ],
+    "blocks": [
+        "   assign dout = dreg[depth-2];",
+        "         always @(posedge clk or negedge reset_n) begin\n            if (reset_n == 0) \n              dreg <= {depth-1{1'b1}};\n            else\n              dreg <= {dreg[depth-3:0], din_s1};\n         end",
+        "         always @(posedge clk or negedge reset_n) begin\n            if (reset_n == 0) \n              dreg <= {depth-1{1'b1}};            \n            else\n              dreg <= din_s1;\n         end         ",
+        "   generate if (rst_value == 1)\n      if (depth < 3) begin",
+        "   endgenerate",
+        "         always @(posedge clk or negedge reset_n) begin\n            if (reset_n == 0) \n              dreg <= {depth-1{1'b0}};\n            else\n              dreg <= {dreg[depth-3:0], din_s1};\n         end",
+        "         always @(posedge clk or negedge reset_n) begin\n            if (reset_n == 0) \n              dreg <= {depth-1{1'b0}};            \n            else\n              dreg <= din_s1;\n         end         ",
+        "   generate if (rst_value == 0)\n      if (depth < 3) begin",
+        "   always @(*) begin\n      if (reset_n && (din_last != din) && (random != din)) begin\n         $display(\"%m: Verbose Info: metastable event @ time %t\", $time);\n         ->metastable_event;\n      end\n   end      ",
+        "       always @(posedge clk or negedge reset_n) begin\n           if (reset_n == 0) \n             din_s1 <= 1'b1;\n           else\n             din_s1 <= din;\n       end",
+        "   generate if (rst_value == 1)",
+        "       always @(posedge clk or negedge reset_n) begin\n           if (reset_n == 0) \n             din_s1 <= 1'b0;\n           else\n             din_s1 <= din;\n       end",
+        "   generate if (rst_value == 0)",
+        "   always @(posedge clk or negedge reset_n) begin\n       if (reset_n == 0) \n         din_s1 <= (rst_value == 0)? 1'b0 : 1'b1;\n       else\n         din_s1 <= next_din_s1;\n   end",
+        "   always @(posedge clk or negedge reset_n) begin\n       if (reset_n == 0) \n         din_last <= (rst_value == 0)? 1'b0 : 1'b1;\n       else\n         din_last <= din;\n   end",
+        "   assign next_din_s1 = (din_last ^ din) ? random : din;   ",
+        "   always @(posedge clk) begin\n      if (reset_n == 0)\n        random <= $random(RANDOM_SEED);\n      else\n        random <= $random;\n   end",
+        "   initial begin\n      $display(\"%m: Info: Metastable event injection simulation mode enabled\");\n   end",
+        "   initial begin\n      if (depth <2) begin\n         $display(\"%m: Error: synchronizer length: %0d less than 2.\", depth);\n      end\n   end"
+    ]
+}

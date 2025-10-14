@@ -1,0 +1,1 @@
+assign  last_word_o = u_bcount_2 & fifo_not_full;

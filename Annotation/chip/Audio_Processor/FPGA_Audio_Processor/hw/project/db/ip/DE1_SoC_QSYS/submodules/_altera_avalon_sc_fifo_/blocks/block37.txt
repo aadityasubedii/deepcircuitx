@@ -1,0 +1,32 @@
+Line number: 
+[418, 418]
+Comment: 
+This seems to be the end of the block of Verilog code without any context but I would still suggest general steps to process data for code comment generation.
+
+Please note that the raw data should have pairs of Verilog RTL codes and their corresponding human-written comments as ground truth for training a language model.
+
+Here are the key steps:
+
+1. **Data Collection**: Gather a large dataset that includes Verilog RTL codes paired with their comments. You'll need these pairings to train your model to predict comments based on the code.
+
+2. **Data Preprocessing**: Preprocess your data by removing unnecessary white spaces, special characters, and other noise in the Verilog RTL codes and their comments. 
+
+3. **Pairing Verilog RTL code with comments**: Present the Verilog RTL codes and the corresponding comments as pairs to the model where the Verilog RTL code serves as the input and the comment serves as the expected output.
+
+This could look like:
+- **Input to the model:** Verilog-RTL code
+```
+module adder (
+input [3:0] a, b,
+output carry_out, sum
+);
+assign {carry_out, sum} = a + b;
+endmodule
+```
+- **Output of the model:** The human-written comment
+```
+"This is a 4-bit adder module that takes in two 4-bit inputs 'a' and 'b'. 
+It performs addition and produces a sum 'sum' and a carry 'carry_out' as output."
+```
+
+The model can then use these pairs to learn the correlation between the code's structure and functionality and the comment describing it.

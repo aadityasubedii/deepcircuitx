@@ -1,0 +1,1 @@
+  always @(posedge clk) req_bank_rdy_r <= #TCQ req_bank_rdy_ns;

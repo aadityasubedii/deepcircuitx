@@ -1,0 +1,14 @@
+Module name: pwm. 
+
+Module specification: The 'pwm' module is designed to generate a Pulse Width Modulation (PWM) signal, governed by the 10-bit input 'data_in', a clock signal 'clk', and a load signal. The duty cycle of the resultant PWM signal is dictated by 'data_in'. 
+
+The module is equipped with three input ports: 
+1. 'clk' - the clock synchronizing the operations of the module,
+2. 'data_in' - a 10-bit input data that sets the pulse width of the output PWM signal,
+3. 'load' - a signal that, when high, updates the internal 'd' register with the 'data_in' value at the rising edge of the clock.
+
+In terms of output, the module features a 'pwm_out' port, representing the generated PWM signal, which fluctuates between high and low stages depending on the comparative values of the 'count' and 'd' registers.
+
+Within the module, the 'd' and 'count' signals act as internal 10-bit registers. 'd' stores 'data_in' value at the rising edge of the clock when 'load' is high, while 'count' increments at each clock's rising edge and its value is compared with 'd' to establish 'pwm_out'. Another internal signal is 'pwm_out', which also works as a 1-bit register corresponding to the output PWM signal. If 'count' is more than 'd', 'pwm_out' is set low, otherwise it remains high.
+
+The module consists of distinct blocks. The 'initial' block sets the starting value of 'count'. There are also two 'always' blocks. The first updates 'd' with 'data_in' at every rising clock edge when 'load' is high. The next block increments 'count' at every rising clock edge, and then it sets the value of 'pwm_out' based on the comparison of 'count' and 'd'. As such, the 'pwm' module generates PWM signal based on the given 'data_in' according to the mentioned processes.

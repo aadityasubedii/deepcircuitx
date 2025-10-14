@@ -1,0 +1,1 @@
+assign stable_update = stable_next ^ stable;

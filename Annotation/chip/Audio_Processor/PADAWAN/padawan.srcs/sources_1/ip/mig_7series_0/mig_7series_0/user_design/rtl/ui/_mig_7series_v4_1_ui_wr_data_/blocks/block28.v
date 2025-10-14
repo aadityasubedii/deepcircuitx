@@ -1,0 +1,1 @@
+      always @(posedge clk) wb_wr_data_addr_r <= #TCQ wb_wr_data_addr_ns;

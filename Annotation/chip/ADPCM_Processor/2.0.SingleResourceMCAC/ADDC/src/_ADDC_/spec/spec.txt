@@ -1,0 +1,12 @@
+Module Name: ADDC. 
+
+Module Specification: 
+The ADDC (Adder with carry) module performs operations with two inputs DQ and SEZ, which are 16-bit and 15-bit vectors, respectively, to provide two outputs PK0 and SIGPK depending on the conditions. 
+
+The module has specific inputs including reset, and clk serving the reset and clock signal purpose respectively. Test signals such as scan_in0 to scan_in4 and scan_enable are used for testing the module, and test_mode helps in transitioning to test conditions. 
+
+The module outputs consist of PK0, which is determined by the most significant bit from the sum of processed vectors, and SIGPK which is a flag set based on the sum comparison to zero. Scan outputs from scan_out0 to scan_out4 are used for diagnostic and testing. 
+
+Internally, signals like DQS, DQI, SEZS, SEZI, and DQSEZ are used. DQS is used for snagging the last bit of DQ and DQI relies on DQS comparison with zero. Similarly, SEZS gets the last bit of SEZ, and SEZI is determined by the comparison of SEZS with zero. DQSEZ holds the sum of DQI and SEZI. 
+
+The module works in stages, with initial stages for assigning values to internal signals DQS, DQI, SEZS, SEZI based on checks and operations applied to the inputs. The next stage performs the addition operation to yield DQSEZ. The final stage assigns PK0 depending upon the most significant bit from the computed sum (DQSEZ) and compares the computed sum to zero to output SIGPK. Thus, the module works as an organized ADDC processor performing the addition operation with intermediate bitwise manipulations and checks.

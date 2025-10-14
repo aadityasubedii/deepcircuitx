@@ -1,0 +1,1 @@
+  assign data_out_mux = addr_data_sel_n ? memcell_addr_reg : data_reg;

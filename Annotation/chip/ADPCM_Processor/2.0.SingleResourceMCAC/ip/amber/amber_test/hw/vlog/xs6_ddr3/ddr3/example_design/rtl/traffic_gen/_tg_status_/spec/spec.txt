@@ -1,0 +1,9 @@
+Module name: tg_status. 
+
+Module specification: tg_status module is a hardware designed for managing the error status logging in a synchronous system primarily monitoring for a data error signal and capturing the state of the system, including compare data, read data, etc at the instance of the detected error for debugging purposes. The module operates with each rising clock edge and includes a delay (TCQ).
+
+tg_status module has several input and output ports. The input ports include 'clk_i' (the clock input signal), 'rst_i' and 'manual_clear_error' (signals for triggering reset), 'data_error_i' (the data error signal), 'cmp_data_i' and 'rd_data_i' (representing comparison and read data inputs), 'cmp_addr_i' and 'cmp_bl_i' (representing comparison address data and the active byte lanes), and 'mcb_cmd_full_i', 'mcb_wr_full_i', 'mcb_rd_empty_i' (indicating the status of the memory controller buffer's command queue). The output ports include 'error_status' (representing the system state at the error event for debugging) and 'error' (a flag set when a data error is detected).
+
+The module uses two internal signals, 'data_error_r' (a register to latch the data error state) and 'error_set' (a flag indicating that an error has been detected and the error status has been recorded).
+
+The code of the module includes different blocks or sections. The first block initializes the internal signals on each clock's rising edge, whereas the second block is an if-else statement, which is also triggered on each clock's rising edge. It checks if a reset signal is active or if error logging needs to start due to a fresh error occurrence. If a reset signal is active, the error logging is cleared, if not, and there's a fresh data error, the system status is captured as per the error details.

@@ -1,0 +1,1 @@
+assign base_address_update             = !i_core_stall && execute && i_base_address_wen;

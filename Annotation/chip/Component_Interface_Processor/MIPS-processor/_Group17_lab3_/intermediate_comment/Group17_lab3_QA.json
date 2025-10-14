@@ -1,0 +1,43 @@
+{
+    "gpt-message": [
+        {
+            "role": "system",
+            "content": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+        },
+        {
+            "role": "user",
+            "content": "Name of the module and its functionality is as follows: \nModule names: stimulus, KURM_controller.\nExplanation: The 'stimulus' module is designed to apply stimuli to 'KURM_controller' module. Through various tests, it changes the states of input signals s0, s1, s2, s3 and checks the outputs. Each test corresponds to a different operation like ADD, SUB, AND, OR, SLT, LW, SW, BNE, JMP, etc.\n\nThe 'KURM_controller' module is a clocked combinational circuit. This module has several input signals (s0, s1, s2, s3, clock) and several output signals. The task of this module is to assign to each output a specific value (1 or 0), according to the combinational value of s0, s1 s2, s3 given on each clock's positive edge. The functionality of each set of input combinations is not directly clear from the code but can be inferred from the 'stimulus' module tests."
+        },
+        {
+            "role": "user",
+            "content": "Input and output ports and their explanation is as follows: \n1. Input ports: \n\nFor the 'stimulus' module: CLK, s0, s1, s2, s3. \n\nFor the 'KURM_controller' module: s0, s1, s2, s3, clock. \n\nExplanation: CLK in the 'stimulus' module is the testbench clock signal. s0, s1, s2, s3 are control signal inputs to the 'KURM_controller' module and are also used in stimulus generation in the 'stimulus' module. The 'clock' input in the 'KURM_controller' module is used as a timing signal to update output based on s0, s1, s2, s3 on a positive edge of the clock cycle.\n\n2. Output ports: \n\nFor the 'stimulus' module: Out0, Out1, Out2, Out3, Out4, Out5A, Out5B, Out5C, Out5Active, Out6, Out7, Out8. \n\nFor the 'KURM_controller' module: Out0, Out1, Out2, Out3, Out4, Out5A, Out5B, Out5C, Out5Active, Out6, Out7, Out8. \n\nExplanation: The output ports mentioned are used to display the result of the operation performed by the KURM_controller module based on control signals. Out5A, Out5B, Out5C together form the ALU operation. Out0 relates to destination, Out1 to Jump, Out2 to Branch, Out3 to Memory Read, Out4 to Memory Write to Register, Out5Active to ALU Activation, Out6 to Memory Write, Out7 to ALU source and Out8 to Register Write as per the $display strings in the 'stimulus' module. These signals form the key computed result outputs of the 'KURM_controller' subsystem under test."
+        },
+        {
+            "role": "user",
+            "content": "Internal signals and their explanation is as follows: \n1. Internal signals: \n\nIn the 'stimulus' module:  CLK, s0, s1, s2, s3.\n\nIn the 'KURM_controller' module: out0, out1, out2, out3, out4, out5A, out5B, out5C, out5Active, out6, out7, out8.\n\nExplanation:\n\nIn the 'stimulus' module: \n\n- CLK: This internal signal serves as a clock source for generating tests in a timed sequence. It is initiated as 0 and inverts its value every 5 time units.\n- s0, s1, s2, s3: These are the test control signals, generated in the 'stimulus' module to simulate different scenarios.\n\nIn the 'KURM_controller' module:\n\n- out0, out1, out2, out3, out4, out5A, out5B, out5C, out5Active, out6, out7, out8: These are internal outputs computed on the positive edge of the clock in the always block. They are assigned to the corresponding output ports using assign statements. The function of these signals is inferred from the 'stimulus' module as follows: Out0 is the Destination, Out1 is Jump, Out2 is Branch, Out3 is Memory Read, Out4 is Memory Write to Register, Out5Active is ALU Activation, Out5A, Out5B, Out5C collectively specify the ALU operation, Out6 is Memory Write, Out7 is ALU Source, and Out8 is Register Write. The specific configuration of output flags corresponds to different operations being modelled in the KURM_controller."
+        }
+    ],
+    "claude-message": [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+                },
+                {
+                    "type": "text",
+                    "text": "Name of the module and its functionality is as follows: \nModule names: stimulus, KURM_controller.\nExplanation: The 'stimulus' module is designed to apply stimuli to 'KURM_controller' module. Through various tests, it changes the states of input signals s0, s1, s2, s3 and checks the outputs. Each test corresponds to a different operation like ADD, SUB, AND, OR, SLT, LW, SW, BNE, JMP, etc.\n\nThe 'KURM_controller' module is a clocked combinational circuit. This module has several input signals (s0, s1, s2, s3, clock) and several output signals. The task of this module is to assign to each output a specific value (1 or 0), according to the combinational value of s0, s1 s2, s3 given on each clock's positive edge. The functionality of each set of input combinations is not directly clear from the code but can be inferred from the 'stimulus' module tests."
+                },
+                {
+                    "type": "text",
+                    "text": "Input and output ports and their explanation is as follows: \n1. Input ports: \n\nFor the 'stimulus' module: CLK, s0, s1, s2, s3. \n\nFor the 'KURM_controller' module: s0, s1, s2, s3, clock. \n\nExplanation: CLK in the 'stimulus' module is the testbench clock signal. s0, s1, s2, s3 are control signal inputs to the 'KURM_controller' module and are also used in stimulus generation in the 'stimulus' module. The 'clock' input in the 'KURM_controller' module is used as a timing signal to update output based on s0, s1, s2, s3 on a positive edge of the clock cycle.\n\n2. Output ports: \n\nFor the 'stimulus' module: Out0, Out1, Out2, Out3, Out4, Out5A, Out5B, Out5C, Out5Active, Out6, Out7, Out8. \n\nFor the 'KURM_controller' module: Out0, Out1, Out2, Out3, Out4, Out5A, Out5B, Out5C, Out5Active, Out6, Out7, Out8. \n\nExplanation: The output ports mentioned are used to display the result of the operation performed by the KURM_controller module based on control signals. Out5A, Out5B, Out5C together form the ALU operation. Out0 relates to destination, Out1 to Jump, Out2 to Branch, Out3 to Memory Read, Out4 to Memory Write to Register, Out5Active to ALU Activation, Out6 to Memory Write, Out7 to ALU source and Out8 to Register Write as per the $display strings in the 'stimulus' module. These signals form the key computed result outputs of the 'KURM_controller' subsystem under test."
+                },
+                {
+                    "type": "text",
+                    "text": "Internal signals and their explanation is as follows: \n1. Internal signals: \n\nIn the 'stimulus' module:  CLK, s0, s1, s2, s3.\n\nIn the 'KURM_controller' module: out0, out1, out2, out3, out4, out5A, out5B, out5C, out5Active, out6, out7, out8.\n\nExplanation:\n\nIn the 'stimulus' module: \n\n- CLK: This internal signal serves as a clock source for generating tests in a timed sequence. It is initiated as 0 and inverts its value every 5 time units.\n- s0, s1, s2, s3: These are the test control signals, generated in the 'stimulus' module to simulate different scenarios.\n\nIn the 'KURM_controller' module:\n\n- out0, out1, out2, out3, out4, out5A, out5B, out5C, out5Active, out6, out7, out8: These are internal outputs computed on the positive edge of the clock in the always block. They are assigned to the corresponding output ports using assign statements. The function of these signals is inferred from the 'stimulus' module as follows: Out0 is the Destination, Out1 is Jump, Out2 is Branch, Out3 is Memory Read, Out4 is Memory Write to Register, Out5Active is ALU Activation, Out5A, Out5B, Out5C collectively specify the ALU operation, Out6 is Memory Write, Out7 is ALU Source, and Out8 is Register Write. The specific configuration of output flags corresponds to different operations being modelled in the KURM_controller."
+                }
+            ]
+        }
+    ]
+}

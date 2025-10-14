@@ -1,0 +1,1 @@
+  assign ocd_edge_detect_rdy = ocd_edge_detect_rdy_r;

@@ -1,0 +1,1 @@
+  assign sync_code = trc_ctrl[3 : 2];

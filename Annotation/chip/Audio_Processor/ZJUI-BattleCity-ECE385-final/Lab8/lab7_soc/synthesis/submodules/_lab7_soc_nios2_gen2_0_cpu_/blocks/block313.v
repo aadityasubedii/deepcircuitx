@@ -1,0 +1,9 @@
+  assign trc_this = trc_on | (dbrk_traceon & ~dbrk_traceoff) | dbrk_traceme;
+  assign itm_valid = |itm[35 : 32];
+  assign atm_valid = |atm[35 : 32] & trc_this;
+  assign dtm_valid = |dtm[35 : 32] & trc_this;
+  assign ge2_free = ~fifo_cnt[4];
+  assign ge3_free = ge2_free & ~&fifo_cnt[3 : 0];
+  assign empty = ~|fifo_cnt;
+  assign fifo_wrptr_plus1 = fifo_wrptr + 1;
+  assign fifo_wrptr_plus2 = fifo_wrptr + 2;

@@ -1,0 +1,1 @@
+assign LEDR[15:0] = display_data_scaled[15] ? 0 : display_data_scaled;

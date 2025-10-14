@@ -1,0 +1,1 @@
+assign total_sample_count_nxt = (update_total_sample) ? {next_total_sample_count, 1'b1} : total_sample_count;

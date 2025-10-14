@@ -1,0 +1,1 @@
+  always @(posedge clk) lim_start_r <= #TCQ lim_start_ns;

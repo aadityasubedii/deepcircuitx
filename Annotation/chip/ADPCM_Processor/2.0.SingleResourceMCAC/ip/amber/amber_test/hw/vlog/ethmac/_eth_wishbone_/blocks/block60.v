@@ -1,0 +1,1 @@
+assign RxStatus_s = (RxEn & RxEn_q & RxBDRead) ? ram_do[14:13] : RxStatus;

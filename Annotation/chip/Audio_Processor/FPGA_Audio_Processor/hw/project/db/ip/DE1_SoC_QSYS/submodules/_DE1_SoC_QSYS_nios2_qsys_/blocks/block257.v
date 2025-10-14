@@ -1,0 +1,1 @@
+  assign trc_on_chip = ~trc_ctrl[8];

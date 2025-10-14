@@ -1,0 +1,1 @@
+  assign empty = ~|fifo_cnt;

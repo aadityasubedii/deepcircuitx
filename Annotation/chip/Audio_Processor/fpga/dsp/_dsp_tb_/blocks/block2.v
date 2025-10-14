@@ -1,0 +1,1 @@
+    assign ws = 0;

@@ -1,0 +1,1 @@
+always @(posedge clk_i) prbs_ignore_last_bytes_r <= #TCQ mem_out[17];

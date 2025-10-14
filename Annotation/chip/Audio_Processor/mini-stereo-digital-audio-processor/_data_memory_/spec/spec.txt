@@ -1,0 +1,11 @@
+Module name: data_memory.
+
+Module specification: The data_memory module functions as an in-system memory storage implementing write and read functionalities. It also counts continuous input zeros and generates a flag after a specified limit. 
+
+The module includes seven input ports. The write_enable and read_enable signals control the write and read functionalities. The Sclk is the system clock that coordinates the functioning. in_flag initiates the zero-count action. in_data is the 16-bit data to be written into memory. datawrite and dataread are 8-bit addresses used for the memory write and read operations.
+
+The two output ports are input_data, the 16-bit data retrieved from memory, and the flag_zero. The flag_zero signal indicates if a specified number of continuous zeros has been detected in the input.
+
+Internally, the module utilizes a memory array datamem of 256 16-bit memory locations, which stores the incoming data during a write operation. The count_zero is another internal signal, a 12-bit register, which counts the number of continuous zero inputs until a set limit, triggering the flag_zero output.
+
+The module contains two 'always' blocks. The first block writes the data to the memory array if write_enable is asserted while the other block increments count_zero if in_data is zero and sets flag_zero after a specific limit. This block also resets both count_zero and flag_zero if in_data is a non-zero value. The last part of the module assigns the data from memory array to output if read_enable is asserted, or else assigns zero to it.

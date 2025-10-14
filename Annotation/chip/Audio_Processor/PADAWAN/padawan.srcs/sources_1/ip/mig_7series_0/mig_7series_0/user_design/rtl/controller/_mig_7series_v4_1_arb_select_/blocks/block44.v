@@ -1,0 +1,1 @@
+        assign col_wr_data_buf_addr = col_wr_data_buf_addr_ns;

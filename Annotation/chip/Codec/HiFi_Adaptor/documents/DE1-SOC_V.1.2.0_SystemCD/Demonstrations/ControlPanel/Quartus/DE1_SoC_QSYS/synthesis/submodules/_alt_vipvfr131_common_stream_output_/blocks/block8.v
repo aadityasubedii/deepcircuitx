@@ -1,0 +1,1 @@
+assign eop = dout_valid & dout_eop;

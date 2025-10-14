@@ -1,0 +1,36 @@
+{
+    "line_num": [
+        [
+            160,
+            166
+        ],
+        [
+            150,
+            157
+        ],
+        [
+            133,
+            136
+        ],
+        [
+            121,
+            131
+        ],
+        [
+            109,
+            119
+        ],
+        [
+            94,
+            107
+        ]
+    ],
+    "blocks": [
+        "  always @ (posedge clk)\n  begin\n    if(clear)\n      data_out <=#Tp fifo[0];\n    else\n      data_out <=#Tp fifo[read_pointer];\n  end",
+        "  always @ (posedge clk)\n  begin\n    if(write & clear)\n      fifo[0] <=#Tp data_in;\n    else\n   if(write & ~full)\n      fifo[write_pointer] <=#Tp data_in;\n  end",
+        "assign empty = ~(|cnt);\nassign almost_empty = cnt == 1;\nassign full  = cnt == DEPTH;\nassign almost_full  = &cnt[CNT_WIDTH-2:0];",
+        "always @ (posedge clk or posedge reset)\nbegin\n  if(reset)\n    write_pointer <=#Tp 0;\n  else\n  if(clear)\n    write_pointer <=#Tp { {(CNT_WIDTH-2){1'b0}}, write};\n  else\n  if(write & ~full)\n    write_pointer <=#Tp write_pointer + 1'b1;\nend",
+        "always @ (posedge clk or posedge reset)\nbegin\n  if(reset)\n    read_pointer <=#Tp 0;\n  else\n  if(clear)\n    read_pointer <=#Tp { {(CNT_WIDTH-2){1'b0}}, read};\n  else\n  if(read & ~empty)\n    read_pointer <=#Tp read_pointer + 1'b1;\nend",
+        "always @ (posedge clk or posedge reset)\nbegin\n  if(reset)\n    cnt <=#Tp 0;\n  else\n  if(clear)\n    cnt <=#Tp { {(CNT_WIDTH-1){1'b0}}, read^write};\n  else\n  if(read ^ write)\n    if(read)\n      cnt <=#Tp cnt - 1'b1;\n    else\n      cnt <=#Tp cnt + 1'b1;\nend"
+    ]
+}

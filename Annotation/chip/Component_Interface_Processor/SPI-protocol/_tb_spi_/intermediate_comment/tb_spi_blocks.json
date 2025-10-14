@@ -1,0 +1,26 @@
+{
+    "line_num": [
+        [
+            68,
+            82
+        ],
+        [
+            41,
+            66
+        ],
+        [
+            36,
+            39
+        ],
+        [
+            31,
+            34
+        ]
+    ],
+    "blocks": [
+        "task reg_write(input [ADDR_WIDTH-1:0] addr, input [DATA_WIDTH-1:0] data);\nbegin\n\t@(posedge pclk_i);\n\tpaddr_i = addr;\n\tpwdata_i = data;\n\tpwrite_i = 1;\n\tpenable_i = 1;\n\twait (pready_o == 1);\n\t@(posedge pclk_i);\n\tpwrite_i = 0;\n\tpenable_i = 0;\n\tpaddr_i = 0;\n\tpwdata_i = 0;\nend\nendtask",
+        "initial begin\n\tprst_i = 1;\n\tpaddr_i = 0;\n\tpwdata_i = 0;\n\tpwrite_i = 0;\n\tpenable_i = 0;\n\tmiso = 1;\n\trepeat(2) @(posedge pclk_i);\n\tprst_i  = 0;\n\t\n\tfor (i = 0; i < MAX_TXS; i=i+1) begin\n\t\treg_write(i, 8'hD3+i);    \n\tend\n\t\n\tfor (i = 0; i < MAX_TXS; i=i+1) begin\n\t\treg_write(8'h10+i, 8'h46+i);   \n\tend\n\t\n\treg_write(8'h20, {3'h2, 1'b1});   \n\t#300;\n\treg_write(8'h20, {3'h3, 1'b1});   \n\t#300;\n\treg_write(8'h20, {3'h0, 1'b1});    \n\t#1000;\n\t$finish;\nend",
+        "initial begin\n\tsclk_ref_i = 0;\n\tforever #1 sclk_ref_i =  ~sclk_ref_i;\nend",
+        "initial begin\n\tpclk_i = 0;\n\tforever #5 pclk_i =  ~pclk_i;\nend"
+    ]
+}

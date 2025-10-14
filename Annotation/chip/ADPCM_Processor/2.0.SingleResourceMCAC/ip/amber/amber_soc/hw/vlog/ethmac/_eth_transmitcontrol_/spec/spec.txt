@@ -1,0 +1,13 @@
+Module Name: eth_transmitcontrol. 
+
+Module Specification: The eth_transmitcontrol module manages control frame transmission in an Ethernet communication setting. It handles transmission flow regulation, transmission abortion, completion, MAC layer interaction, control frame creation and generation of relevant signals. 
+
+The module’s input ports include MTxClk, TxReset, TxUsedDataIn, TxUsedDataOut, TxDoneIn, TxAbortIn, TxStartFrmIn, TPauseRq, TxUsedDataOutDetected, TxFlow, DlyCrcEn, TxPauseTV, and MAC. These inputs represent master transmit clock, reset signals, transmission data, transmission completion indicators, transmission abort signals, signals indicating the start of a frame, pause requests, detection of transmitted-but-in-use data, transmission flow control signals, CRC delay enabling signals, Time Value for Pause frame and MAC address respectively.
+
+The output ports are TxCtrlStartFrm, TxCtrlEndFrm, SendingCtrlFrm, CtrlMux, ControlData, WillSendControlFrame, and BlockTxDone, indicating control frame start, control frame end, transmission progress, multiplexer control, transmitted control frame data, control frame transmission scheduling and blocking of overall transmission-done signal during control frame transmission.
+
+Internally, the module uses signals such as SendingCtrlFrm, CtrlMux, WillSendControlFrame among others, for control frame sending, multiplexer control, tracking future control frame transmissions, CRC delay count, byte count, control frame end detection, and data multiplexing.
+
+Code blocks in the module determine if a control frame should be sent on clock spike, manage the start and end of control frame transmission, enable control frame transmission, control data input, block overall transmission-done signal during control frame transmission, track previously completed control frames, increment CRC delay count, reset byte count, and increase byte count by various increments depending on condition, deliver control data among multiple operations.
+
+This module is a critical part of the Ethernet transmission control within certain boundary conditions, acting as a master controller and regulating data flow.

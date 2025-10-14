@@ -1,0 +1,1 @@
+  assign instr_retired = 1'b0;

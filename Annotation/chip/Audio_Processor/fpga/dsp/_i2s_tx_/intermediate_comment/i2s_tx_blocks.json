@@ -1,0 +1,21 @@
+{
+    "line_num": [
+        [
+            31,
+            46
+        ],
+        [
+            29,
+            29
+        ],
+        [
+            17,
+            26
+        ]
+    ],
+    "blocks": [
+        "    always @(posedge ck) begin\n\n        if (en) begin\n            sd <= shift[15];\n\n            if (frame == 0) begin\n                shift <= left;\n            end else if (frame == midpoint) begin\n                shift <= right;\n            end else begin\n                shift <= shift << 1;\n            end\n\n        end\n\n    end",
+        "    assign frame = frame_posn & MASK;",
+        "    generate\n        if (CLOCKS==64) begin\n            assign MASK = 6'b111111;\n            assign midpoint = 32;\n        end\n        if (CLOCKS==32) begin\n            assign MASK = 6'b011111;\n            assign midpoint = 16;\n        end\n    endgenerate"
+    ]
+}

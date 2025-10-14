@@ -1,0 +1,1 @@
+  always @(posedge clk) two_r <= #TCQ two_ns;

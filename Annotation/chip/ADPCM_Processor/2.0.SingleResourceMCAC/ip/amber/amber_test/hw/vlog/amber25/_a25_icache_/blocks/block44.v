@@ -1,0 +1,1 @@
+assign invalid_read = address_r != i_address;

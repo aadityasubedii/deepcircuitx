@@ -1,0 +1,11 @@
+{
+    "line_num": [
+        [
+            11,
+            47
+        ]
+    ],
+    "blocks": [
+        "always@(posedge Sclk or clear)\n begin\n  if (clear ==1'b1)\n   begin \n    Output = 1'bx;\n\toutput_ready =0;\n   end\n  else if (p2s_enable == 1'b1)\n   begin\n\ttemp = data_in;\n\tout_rdy = 1'b1;\n\tframe_start = 1'b0;\n   end\n  else if(out_rdy == 1'b1 && frame_start == 1'b0)\n   begin \n\t    bit_count = 4'd15;\n\t\tOutput=temp[bit_count];\n\t\tframe_start=1'b1;\n   end\n  else if(frame_start==1'b1)\n\tbegin \n\t    out_rdy=1'b0;\n\t    bit_count=bit_count-1;\n\t\tOutput=temp[bit_count];\n\t\tif(bit_count ==0)\n\t\t  begin\n\t\t    frame_start=0;\n\t\t    output_ready=1'b1;\n\t\t  end\n\tend\n  else\n\tbegin\n\t\tbit_count = 6'd40;\n\t\tOutput = 1'b0;\n\t\toutput_ready=1'b0;\n\tend\n end"
+    ]
+}

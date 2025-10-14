@@ -1,0 +1,1 @@
+assign GenerateRxStartFrm = StateData[0] & (ByteCntEq1 & ~DlyCrcEn | DlyCrcCnt == 4'h3 & DlyCrcEn);

@@ -1,0 +1,1 @@
+    else if (USE_ALMOST_FULL_IF || USE_ALMOST_EMPTY_IF) begin : gen_blk19_else1

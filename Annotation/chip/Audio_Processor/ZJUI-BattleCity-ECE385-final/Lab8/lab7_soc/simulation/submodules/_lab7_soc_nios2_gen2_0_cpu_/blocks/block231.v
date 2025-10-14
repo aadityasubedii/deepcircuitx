@@ -1,0 +1,1 @@
+  assign E_mem_baddr = E_arith_result[28 : 0];

@@ -1,0 +1,9 @@
+Module name: rd_data_gen.
+
+Module specification: The rd_data_gen module is an RTL hardware design in Verilog used for generating memory read commands. This module, which supports both the SPARTAN6 and VIRTEX6 FPGA families, takes numerous input ports including clock signal (clk_i), reset signal (rst_i), PRBS seed (prbs_fseed_i), data mode (data_mode_i), command validity (cmd_valid_i), fixed data (fixed_data_i), address inputs (addr_i), burst lengths (bl_i), data readiness signal (data_rdy_i), and read multi-data enable command (rd_mdata_en). The outputs from this module include command readiness indication (cmd_rdy_o), last word in the sequence signal (last_word_o), user burst count equals 1 signal (user_bl_cnt_is_1_o), data validity (data_valid_o) and the actual data (data_o). 
+
+Inside the module, wield signals include the PRBS data, command start signal, multiple test data signals (adata, hdata, ndata, w1data, v6_w1data, w0data), a data signal, command ready signal, data valid signal, user burst counter, and several other signals used for checking internal conditions and making the operations synchronous or delayed.
+
+The internal operation is divided mainly into generating command starts signal, defining data readiness, count of user burst length, handling command readiness, generating fixed patterns or pseudo-random binary sequence data, and finally outputting the data signal. Two generate statements are used to instantiate particular modules (sp6_data_gen and v6_data_gen) based on the FAMILY parameter to handle data generating tasks for two FPGA types, SPARTAN6 and VIRTEX6. 
+
+This module works as a data generator unit, taking in program data, validating the commands, and then generating the control and data outputs as per the design.

@@ -1,0 +1,1 @@
+  always @(posedge clk) po_done_r <= #TCQ po_done_ns;

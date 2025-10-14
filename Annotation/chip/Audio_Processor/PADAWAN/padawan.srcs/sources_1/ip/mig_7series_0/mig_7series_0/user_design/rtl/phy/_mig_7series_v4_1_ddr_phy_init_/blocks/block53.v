@@ -1,0 +1,1 @@
+  assign phy_rddata_en = ~phy_if_empty;

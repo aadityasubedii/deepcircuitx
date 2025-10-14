@@ -1,0 +1,1 @@
+assign dout_valid = int_valid_reg & int_ready_reg;

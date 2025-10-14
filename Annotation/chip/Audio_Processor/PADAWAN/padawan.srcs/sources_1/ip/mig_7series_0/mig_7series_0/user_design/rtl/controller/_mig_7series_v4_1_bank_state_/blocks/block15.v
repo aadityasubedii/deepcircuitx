@@ -1,0 +1,1 @@
+  always @(posedge clk) demanded_prior_r <= #TCQ demanded_prior_ns;

@@ -1,0 +1,1 @@
+  assign dbrk_data = cpu_d_write ? cpu_d_writedata : cpu_d_readdata;

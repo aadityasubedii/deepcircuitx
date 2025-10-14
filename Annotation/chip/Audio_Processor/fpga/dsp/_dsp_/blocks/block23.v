@@ -1,0 +1,1 @@
+        assign ck = scale[3];

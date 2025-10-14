@@ -1,0 +1,1 @@
+    always @(dqs or dqs_n) dqs_in <= #BUS_DELAY (dqs_n<<16) | dqs;

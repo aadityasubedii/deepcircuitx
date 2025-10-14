@@ -1,0 +1,1 @@
+        assign mem_rd_ptr = next_rd_ptr;

@@ -1,0 +1,1 @@
+  assign W_valid_from_M = W_valid;

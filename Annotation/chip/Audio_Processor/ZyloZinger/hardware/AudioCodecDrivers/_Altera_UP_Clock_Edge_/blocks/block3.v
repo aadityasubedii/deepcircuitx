@@ -1,0 +1,1 @@
+assign rising_edge	= found_edge & cur_test_clk;

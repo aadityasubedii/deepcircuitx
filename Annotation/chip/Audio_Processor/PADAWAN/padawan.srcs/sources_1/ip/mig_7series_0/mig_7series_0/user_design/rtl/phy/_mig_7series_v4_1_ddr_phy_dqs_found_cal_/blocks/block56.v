@@ -1,0 +1,1 @@
+  assign rd_data_offset_cal_done = init_dqsfound_done_r;

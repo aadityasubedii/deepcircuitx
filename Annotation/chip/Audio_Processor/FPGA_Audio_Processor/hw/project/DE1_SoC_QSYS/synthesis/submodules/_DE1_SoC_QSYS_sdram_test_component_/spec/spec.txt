@@ -1,0 +1,11 @@
+Module name: DE1_SoC_QSYS_sdram_test_component and DE1_SoC_QSYS_sdram_test_component_ram_module.
+
+Module specification: 
+
+The 'DE1_SoC_QSYS_sdram_test_component_ram_module' is used as the memory storage for the tested system. It accepts the 16-bit 'data' input, along with read and write addresses inputs ('rdaddress' and 'wraddress'), and timing control inputs ('rdclken', 'wrclock' and 'wren'). It outputs a 16-bit 'q', representing data read from the memory. Its functionality relies on the internal signal 'mem_array' which acts as an internal memory initialized from the file 'DE1_SoC_QSYS_sdram_test_component.dat'. Other internal signals include 'read_address' used to track the active read memory location. 
+
+The 'DE1_SoC_QSYS_sdram_test_component' is a synthesizable test component consisting of multiple control lines like 'zs_cke' (clock enable), 'zs_cs_n' (chip select), 'zs_ras_n' (row address strobe), 'zs_cas_n' (column address strobe), and 'zs_we_n' (write enable) as input ports. It also has bidirectional data port 'zs_dq', that serves both as data input and data output. This module is designed to simulate accesses to SDRAM, and in its design, it instantiates a sub-component 'DE1_SoC_QSYS_sdram_test_component_ram_module' to handle memory-related operations. 
+
+The internal operations involve handling read/write masking, address translations, simulating latency for memory access, and clock operations. Internally, several registers and wires, like 'mem_array', 'read_address', 'CODE', 'a', 'addr_col', and 'mask' amongst others, are used to perform these operations. Comment generation for Verilog RTL codes facilitates this complex interaction between multiple modules and signals. 
+
+Different blocks of code include the initial code to load the 'mem_array', continuous blocks to update 'read_address' based on changes in 'rdaddress', and 'q' based on 'mem_array' indices, as well as memory write operations conducted at every positive edge of the write clock when 'wren' is high. For 'DE1_SoC_QSYS_sdram_test_component' module, different blocks of code are used for initialization purpose, map latency and addr_crb registers, read and write pipelines, read_mask, and read_valid signals, and for the ultimate data output. Combined, these modules perform complex operations indicative of an SDRAM testing component.

@@ -1,0 +1,4 @@
+Line number: 
+[134, 179]
+Comment: 
+This block of code serves as an UART receiver that uses a state machine to manage the reading of incoming bit sequences. At the reset, all internal variables are initialized to zero before start. When not in reset, on every ascending edge of the UART clock, the code reads in the bit from the UART receiver and shifts it into the RX_TAP register. It then probes for a start condition in which case, it transitions into read mode where each bit is sequentially read into the RX_BYTE variable. The state machine transitions through states 'd0 (idle), 'd1 (receiving), and 'd2 (end of transmission), cycling back to 'd0 upon completion. If the received byte is not an end-of-line or a form feed character, it's written directly to the output.

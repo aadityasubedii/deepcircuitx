@@ -1,0 +1,1 @@
+  assign row_cmd_wr = act_wait_r;

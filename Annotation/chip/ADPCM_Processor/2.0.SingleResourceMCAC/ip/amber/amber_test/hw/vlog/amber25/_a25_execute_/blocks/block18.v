@@ -1,0 +1,1 @@
+assign daddress_update                 = !i_core_stall;

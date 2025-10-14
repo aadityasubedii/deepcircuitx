@@ -1,0 +1,1 @@
+assign read_miss_fill   = c_state == CS_FILL3 && i_wb_ready;

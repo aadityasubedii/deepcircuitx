@@ -1,0 +1,21 @@
+{
+    "line_num": [
+        [
+            74,
+            74
+        ],
+        [
+            62,
+            72
+        ],
+        [
+            37,
+            59
+        ]
+    ],
+    "blocks": [
+        "assign rlrot = {rot_event, rot_left};",
+        "always@(posedge clk)\nbegin\n\tdelay_rot_q1 <= rot_q1;\n\tif((rot_q1 == 1) && (delay_rot_q1 == 0))\n\tbegin\n\t\trot_event <= 1; rot_left <= rot_q2;\n\tend\n\telse begin\n\t\trot_event <= 0; rot_left <= rot_left;\n\tend\nend",
+        "always@(posedge clk)\nbegin\n\trot_A_in <= rot_A;\n\trot_B_in <= rot_B;\n\trot_in <= {rot_B_in, rot_A_in};\n\tcase(rot_in)\n\t\t2'b00: begin\n\t\t\t\t\trot_q1 <= 0; rot_q2 <= rot_q2;\n\t\t\t\t end\n\t\t2'b01: begin\n\t\t\t\t\trot_q1 <= rot_q1; rot_q2 <= 0;\n\t\t\t\t end\n\t\t2'b10: begin\n\t\t\t\t\trot_q1 <= rot_q1; rot_q2 <= 1;\n\t\t\t\t end\n\t\t2'b11: begin\n\t\t\t\t\trot_q1 <= 1; rot_q2 <= rot_q2;\n\t\t\t\t end\n\t\tdefault: begin\n\t\t\t\t\t\trot_q1 <= rot_q1; rot_q2 <= rot_q2;\n\t\t\t\t\tend\n\tendcase\nend"
+    ]
+}

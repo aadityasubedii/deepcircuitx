@@ -1,0 +1,1 @@
+assign sample_end[1] = (lrck_divider == 8'h40);

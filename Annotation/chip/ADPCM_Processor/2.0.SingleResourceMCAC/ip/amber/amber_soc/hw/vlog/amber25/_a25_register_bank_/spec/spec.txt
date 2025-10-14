@@ -1,0 +1,11 @@
+Module name: a25_register_bank
+
+Module specification: The 'a25_register_bank' module is tasked with the implementation of a register bank specifically used for a processing core, whose operations are read and write centric, and also includes handling changes in modes, interrupts, and managing stall conditions arising from core and memory operations. 
+
+The module's input ports primarily include system clock signal (i_clk), stall condition indication for the processing core (i_core_stall) and memory (i_mem_stall), signals indicating current mode of the core for different stages (i_mode_idec, i_mode_exec, i_mode_rds_exec), flag indicating if Fast Interrupt Request (FIQ) is not in user mode (i_firq_not_user_mode), registers (i_rm_sel, i_rs_sel, i_rn_sel, i_pc, i_reg), and an array of signals for handling interrupts and setting flags. 
+
+There are also output ports that give out selected registers' values (o_rm, o_rs, o_rd, o_rn), and the current value of the program counter (o_pc).
+
+The internal signals handle register definitions, management of additional register copies for FIRQ mode, Supervisor (SVC) mode, Interrupt (IRQ) mode, decoded mode values, write enable control signals, and intermediate output assignments. 
+
+The code is logically broken down into several sections. First, parameters and initial conditions are set. Then, mode signals are assigned. Post which, values for the read data write-enable lines, the register bank write-enable lines, and the program counter write-enable lines are assigned. Then we have the main logic of the module running on every clock edge, handling various writes to registers and program counter based on enabling signals and previously assigned mode signals. Then we have the output assignments for the register and program counter values, as well as some additional assignments for read data. Every functional block is meticulously designed to work together for the module to execute its complex operations seamlessly.

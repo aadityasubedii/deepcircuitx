@@ -1,0 +1,9 @@
+Module name: data_prbs_gen.
+
+Module specification:
+
+The data_prbs_gen module generates a pseudo-random binary sequence (PRBS) based on a linear feedback shift register (LFSR) process. The initial seed for this process can be provided through the input ports. The generator's behavior can be controlled by three input ports: a clock signal (clk_i), a clock enable input (clk_en), and a reset signal (rst_i). The module also includes a 32-bit seed input named prbs_fseed_i, an additional seed input named prbs_seed_i with a width defined by PRBS_WIDTH, and a flag that indicates when to reseed the LFSR (prbs_seed_init). If prbs_seed_init is high or rst_i is asserted, the LFSR is reloaded with a new seed value composed of prbs_seed_i, prbs_fseed_i, and a constant value. If clk_en is high and prbs_seed_init is low, the LFSR generates a new PRBS value. The generated PRBS sequence is output through the output port prbs_o. 
+
+Internally, the module uses two registers: one named prbs to store the PRBS output and another name lfsr_q for LFSR operation, which is one bit wider than the PRBS sequence. The lfsr_q register stores the current state of the LFSR, while the prbs register holds the current PRBS value. There is one always block for the clocked process of generating and updating the LFSR value, and another always block to propagate the current PRBS value to the prbs register. 
+
+The module's operation is mainly based on two parametric inputs TCQ and PRBS_WIDTH. TCQ sets a delay in the clocked process for simulation purposes while PRBS_WIDTH defines the width of the PRBS sequence and also indirectly the width of seed inputs. The module is designed to offer flexibility in configuring the PRBS generator by providing dynamic control through input signals and various parameters.

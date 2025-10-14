@@ -1,0 +1,10 @@
+  assign cke = zs_cke;
+  assign cs_n = zs_cs_n;
+  assign ras_n = zs_ras_n;
+  assign cas_n = zs_cas_n;
+  assign we_n = zs_we_n;
+  assign dqm = zs_dqm;
+  assign ba = zs_ba;
+  assign a = zs_addr;
+  assign cmd_code = {ras_n, cas_n, we_n};
+  assign CODE = (&cs_n) ? 24'h494e48 : txt_code;

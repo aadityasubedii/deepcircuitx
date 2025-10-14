@@ -1,0 +1,1 @@
+  wire indicate_alignment = ~rst && centering && done_ns;

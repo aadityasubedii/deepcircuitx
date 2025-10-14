@@ -1,0 +1,11 @@
+Module Name: eth_macstatus
+
+Module Specification: The eth_macstatus module provides functionality for managing the status operations of an Ethernet Medium Access Control (MAC) layer. It processes a multitude of input signals from various components of the MAC layer, including those regarding receive and transmission states, collision detections, carrier sensing, frame length, and more. The module uses these inputs to update and output various status signals covering conditions such as CRC error status, end of reception, packet validity and retry count among others.
+
+Input Ports: The module has a wide collection of input ports including MRxClk and MTxClk (receive and transmit clock signals), Reset (initialization signal), and numerous error and status signals like RxCrcError, MRxErr, MRxDV, Loopback, CarrierSense and more. These inputs help in understanding the details about the packet transmission or reception process required to determine the status flags to set.
+
+Output Ports: The output ports of this module are status flags like ReceivedLengthOK, ReceiveEnd, ReceivedPacketGood, InvalidSymbol, RetryCntLatched etc. These status flags provide critical input to other components about the status of packet transmission/reception and any issues detected in this process.
+
+Internal Signals: The eth_macstatus module uses multiple internal signals, most importantly for sampling, error detection and status control. We have TakeSample (determines when to sample), SetInvalidSymbol (flag for encountering invalid symbol during reception), ReceiveEnd (indicates end of a received data packet), RetryCntLatched (holds retry count till transmission end) among others.
+
+Code Blocks and Functions: The module's Verilog code contains multiple blocks mainly consisting of always blocks and assign statements. The always blocks are used for handling clocked operations and include processes for init/reset, sampling of data, setting and resetting various status flags based on certain conditions. The assign statements are implemented for direct assignments and are not clock dependent. They mainly deal with routing the input and output ports and determining values of system signals based on various input conditions.

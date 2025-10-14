@@ -1,0 +1,1 @@
+      if (CWL == 8) always @(my_rmw_rd_ns) rmw_rd_done = my_rmw_rd_ns;

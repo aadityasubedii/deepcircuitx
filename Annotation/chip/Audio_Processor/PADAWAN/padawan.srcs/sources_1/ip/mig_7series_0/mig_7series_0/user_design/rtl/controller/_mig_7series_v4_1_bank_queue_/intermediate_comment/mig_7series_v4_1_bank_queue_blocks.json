@@ -1,0 +1,241 @@
+{
+    "line_num": [
+        [
+            566,
+            566
+        ],
+        [
+            564,
+            564
+        ],
+        [
+            559,
+            559
+        ],
+        [
+            557,
+            557
+        ],
+        [
+            551,
+            551
+        ],
+        [
+            549,
+            549
+        ],
+        [
+            539,
+            539
+        ],
+        [
+            531,
+            536
+        ],
+        [
+            524,
+            527
+        ],
+        [
+            519,
+            521
+        ],
+        [
+            504,
+            518
+        ],
+        [
+            491,
+            493
+        ],
+        [
+            488,
+            488
+        ],
+        [
+            479,
+            487
+        ],
+        [
+            472,
+            472
+        ],
+        [
+            470,
+            470
+        ],
+        [
+            460,
+            469
+        ],
+        [
+            446,
+            447
+        ],
+        [
+            443,
+            444
+        ],
+        [
+            434,
+            437
+        ],
+        [
+            433,
+            433
+        ],
+        [
+            415,
+            415
+        ],
+        [
+            413,
+            413
+        ],
+        [
+            403,
+            412
+        ],
+        [
+            387,
+            395
+        ],
+        [
+            383,
+            383
+        ],
+        [
+            381,
+            381
+        ],
+        [
+            375,
+            379
+        ],
+        [
+            371,
+            371
+        ],
+        [
+            365,
+            365
+        ],
+        [
+            360,
+            360
+        ],
+        [
+            358,
+            358
+        ],
+        [
+            356,
+            356
+        ],
+        [
+            351,
+            355
+        ],
+        [
+            347,
+            347
+        ],
+        [
+            345,
+            345
+        ],
+        [
+            341,
+            342
+        ],
+        [
+            327,
+            340
+        ],
+        [
+            324,
+            326
+        ],
+        [
+            318,
+            318
+        ],
+        [
+            316,
+            316
+        ],
+        [
+            299,
+            315
+        ],
+        [
+            291,
+            295
+        ],
+        [
+            275,
+            288
+        ],
+        [
+            274,
+            274
+        ],
+        [
+            233,
+            237
+        ],
+        [
+            226,
+            230
+        ]
+    ],
+    "blocks": [
+        "  assign wait_for_maint_r = wait_for_maint_r_lcl;",
+        "  always @(posedge clk) wait_for_maint_r_lcl <= #TCQ wait_for_maint_ns;",
+        "  assign q_has_priority = q_has_priority_r;",
+        "  always @(posedge clk) q_has_priority_r <= #TCQ q_has_priority_ns;",
+        "  assign q_has_rd = q_has_rd_r;",
+        "  always @(posedge clk) q_has_rd_r <= #TCQ q_has_rd_ns;",
+        "  assign rb_hit_busies_r = rb_hit_busies_r_lcl;",
+        "      always @(idle_r_lcl\n               or passing_open_bank_in or q_entry_r\n               or rb_hit_busies_r_lcl) rcv_open_bank =\n    |(rb_hit_busies_r_lcl[`BM_SHARED_BV] & passing_open_bank_in[`BM_SHARED_BV])\n      && (q_entry_r == BM_CNT_ONE) && ~idle_r_lcl;\n    end",
+        "      always @(bm_end_in or rb_hit_busies_r_lcl)\n        adv_queue =\n            |(bm_end_in[`BM_SHARED_BV] & rb_hit_busies_r_lcl[`BM_SHARED_BV]);\n",
+        "      always @(posedge clk) rb_hit_busies_r_lcl[`BM_SHARED_BV] <=\n                             #TCQ rb_hit_busies_ns;\n",
+        "  generate\n    if (nBANK_MACHS > 1) begin : rb_hit_busies\n\n\n\n      wire [nBANK_MACHS-2:0] clear_vector =\n                ({nBANK_MACHS-1{rst}} | bm_end_in[`BM_SHARED_BV]);\n\n\n\n      wire [`BM_SHARED_BV] rb_hit_busies_ns =\n                ~clear_vector &\n                (idle_ns_lcl\n                   ? rb_hit_busy_ns_in[`BM_SHARED_BV]\n                   : rb_hit_busies_r_lcl[`BM_SHARED_BV]);",
+        "  assign order_q_zero = ~|order_q_r ||\n                        (adv_order_q && (order_q_r == BM_CNT_ONE)) ||\n                        ((ORDERING == \"NORM\") && rd_wr_r);",
+        "  always @(posedge clk) order_q_r <= #TCQ order_q_ns;",
+        "  always @(adv_order_q or order_cnt or order_q_r or rst\n           or set_order_q) begin\n    order_q_ns = order_q_r;\n    if (rst) order_q_ns = BM_CNT_ZERO;\n    if (set_order_q)\n      if (adv_order_q) order_q_ns = order_cnt - BM_CNT_ONE;\n      else order_q_ns = order_cnt;\n    if (adv_order_q && |order_q_r) order_q_ns = order_q_r - BM_CNT_ONE;\n  end",
+        "  assign ordered_r = ordered_r_lcl;",
+        "  always @(posedge clk) ordered_r_lcl <= #TCQ ordered_ns;",
+        "  always @(ordered_issued_lcl or ordered_r_lcl or rst\n           or set_order_q) begin\n    if (rst) ordered_ns = 1'b0;\n    else begin\n      ordered_ns = ordered_r_lcl;\n\n      if (set_order_q) ordered_ns = 1'b1;\n      if (ordered_issued_lcl) ordered_ns = 1'b0;\n    end\n  end",
+        "  assign passing_open_bank =\n  pre_passing_open_bank_r || (sending_col_not_rmw_rd && pass_open_bank_r_lcl);",
+        "  always @(posedge clk) pre_passing_open_bank_r <= #TCQ\n                         pre_passing_open_bank_ns;",
+        "  assign bm_end_lcl = \n          pre_bm_end_r || (sending_col_not_rmw_rd && pass_open_bank_r_lcl);\n  output wire bm_end;\n  assign bm_end = bm_end_lcl;",
+        "  always @(posedge clk) pre_bm_end_r <= #TCQ pre_bm_end_ns;",
+        "  assign auto_pre_r = auto_pre_r_lcl;",
+        "  always @(posedge clk) auto_pre_r_lcl <= #TCQ auto_pre_ns;",
+        "  always @(accept_req or allow_auto_pre or auto_pre_r_lcl\n           or clear_req or maint_hit_this_bm or rb_hit_busy_r\n           or row_hit_r or tail_r_lcl or wait_for_maint_r_lcl) begin\n    auto_pre_ns = auto_pre_r_lcl;\n    if (clear_req) auto_pre_ns = 1'b0;\n    else\n      if (accept_req && tail_r_lcl && allow_auto_pre && rb_hit_busy_r &&\n          (~row_hit_r || (maint_hit_this_bm && ~wait_for_maint_r_lcl)))\n        auto_pre_ns = 1'b1;\n  end",
+        "`ifdef MC_SVA\n  pass_open_bank: cover property (@(posedge clk) (~rst && pass_open_bank_ns));\n  pass_open_bank_killed_by_maint: cover property (@(posedge clk)\n     (~rst && accept_req && pass_open_bank_eligible &&\n       maint_hit_this_bm && ~wait_for_maint_r_lcl));\n  pass_open_bank_following_maint: cover property (@(posedge clk)\n     (~rst && accept_req && pass_open_bank_eligible &&\n        maint_hit_this_bm && wait_for_maint_r_lcl));\n`endif",
+        "  assign pass_open_bank_ns = pass_open_bank_ns_lcl;",
+        "  always @(posedge clk) pass_open_bank_r_lcl <= #TCQ pass_open_bank_ns_lcl;",
+        "  reg wait_for_maint_r_lcl;\n  reg pass_open_bank_r_lcl;\n  wire pass_open_bank_ns_lcl = ~clear_req &&\n          (pass_open_bank_r_lcl ||\n           (accept_req && pass_open_bank_eligible &&",
+        "  wire pass_open_bank_eligible =",
+        "  wire maint_hit_this_bm = ~maint_idle && maint_hit;",
+        "  assign idle_r = idle_r_lcl;",
+        "  assign idle_ns = idle_ns_lcl;",
+        "  always @(posedge clk) idle_r_lcl <= #TCQ idle_ns_lcl;",
+        "  always @(accept_this_bm or clear_req or idle_r_lcl) begin\n    idle_ns_lcl = idle_r_lcl;\n    if (accept_this_bm) idle_ns_lcl = 1'b0;\n    if (clear_req) idle_ns_lcl = 1'b1;\n  end",
+        "  wire clear_req = bm_end_lcl || rst;",
+        "  assign tail_r = tail_r_lcl;",
+        "       always @(posedge clk) tail_r_lcl <= #TCQ tail_ns;\n    end ",
+        "      always @(accept_req or accept_this_bm\n               or bm_end_in or bm_end_lcl or idle_r_lcl\n               or idlers_above or rb_hit_busy_r or rst or tail_r_lcl) begin\n        if (rst) tail_ns = (ID == nBANK_MACHS);\n\n\n        else begin\n          tail_ns = tail_r_lcl;\n          if ((accept_req && rb_hit_busy_r) ||\n               (|bm_end_in[`BM_SHARED_BV] && idle_r_lcl))\n            tail_ns = 1'b0;\n          if (accept_this_bm || (bm_end_lcl && ~idlers_above)) tail_ns = 1'b1;\n         end\n       end",
+        "  generate\n    if (nBANK_MACHS > 1) begin : compute_tail\n      reg tail_ns;",
+        "  assign head_r = head_r_lcl;",
+        "  always @(posedge clk) head_r_lcl <= #TCQ head_ns;",
+        "  always @(accept_req or accept_this_bm or adv_queue\n           or bm_end_lcl or head_r_lcl or idle_cnt or idle_r_lcl\n           or idlers_below or q_entry_r or rb_hit_busy_cnt or rst) begin\n    if (rst) head_ns = ~|ID[BM_CNT_WIDTH-1:0];\n    else begin\n      head_ns = head_r_lcl;\n      if (accept_this_bm)\n        head_ns = ~|(rb_hit_busy_cnt - (adv_queue ? BM_CNT_ONE : BM_CNT_ZERO));\n      if ((~idle_r_lcl && adv_queue) ||\n           (idle_r_lcl && accept_req && ~accept_this_bm))\n        head_ns = ~|(q_entry_r - BM_CNT_ONE);\n      if (bm_end_lcl) begin\n        head_ns = ~|(idle_cnt - (accept_req ? BM_CNT_ONE : BM_CNT_ZERO)) &&\n                   ~|idlers_below;\n      end\n    end\n  end",
+        "  always @(posedge clk)\n  if (rst)\n    q_entry_r <= #TCQ ID[BM_CNT_WIDTH-1:0];\n  else\n    q_entry_r <= #TCQ q_entry_ns;",
+        "always @ (*)\nbegin\n  if (accept_req & bm_end_lcl)\n    q_entry_ns  = temp - BM_CNT_ONE;\n  else if (bm_end_lcl)\n    q_entry_ns = temp;\n  else if (accept_this_bm) \n    q_entry_ns = adv_queue ? (rb_hit_busy_cnt - BM_CNT_ONE) :  (rb_hit_busy_cnt -BM_CNT_ZERO);\n  else if ((!idle_r_lcl & adv_queue) |\n          (idle_r_lcl & accept_req & !accept_this_bm))\n    q_entry_ns = q_entry_r - BM_CNT_ONE;\n  else\n  q_entry_ns = q_entry_r;\nend",
+        "assign temp = idle_cnt + idlers_below;",
+        "  always @(bm_end_in) begin\n    idlers_above = 1'b0;\n    for (i=ID+1; i<ID+nBANK_MACHS; i=i+1)\n      idlers_above = idlers_above || bm_end_in[i];\n  end",
+        "  always @(bm_end_in) begin\n    idlers_below = BM_CNT_ZERO;\n    for (i=0; i<ID; i=i+1)\n      idlers_below = idlers_below + bm_end_in[i];\n   end"
+    ]
+}

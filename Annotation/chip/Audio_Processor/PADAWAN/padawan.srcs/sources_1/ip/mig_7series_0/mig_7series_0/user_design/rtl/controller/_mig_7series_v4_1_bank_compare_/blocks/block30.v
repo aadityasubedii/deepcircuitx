@@ -1,0 +1,1 @@
+          assign req_size_r_lcl = req_size;

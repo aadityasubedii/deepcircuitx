@@ -1,0 +1,1 @@
+  assign ocd_ktap_left = ocd_ktap_left_r;

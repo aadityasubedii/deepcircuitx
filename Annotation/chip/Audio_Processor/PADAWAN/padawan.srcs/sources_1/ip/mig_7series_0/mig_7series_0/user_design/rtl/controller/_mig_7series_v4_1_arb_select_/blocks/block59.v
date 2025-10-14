@@ -1,0 +1,1 @@
+  assign mc_cas_slot = col_channel_offset[1:0];

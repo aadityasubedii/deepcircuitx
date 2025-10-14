@@ -1,0 +1,1 @@
+  wire pass_open_bank_eligible =

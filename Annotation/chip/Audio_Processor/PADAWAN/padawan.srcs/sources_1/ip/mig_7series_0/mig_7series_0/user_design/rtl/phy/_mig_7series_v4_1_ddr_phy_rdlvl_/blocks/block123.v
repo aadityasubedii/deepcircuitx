@@ -1,0 +1,11 @@
+  assign dbg_phy_rdlvl[0]      = rdlvl_stg1_start;
+  assign dbg_phy_rdlvl[1]      = pat_data_match_r;
+  assign dbg_phy_rdlvl[2]      = mux_rd_valid_r;
+  assign dbg_phy_rdlvl[3]      = idelay_tap_limit_r;
+  assign dbg_phy_rdlvl[8:4]    = 'b0;
+  assign dbg_phy_rdlvl[14:9]   = cal1_state_r[5:0];
+  assign dbg_phy_rdlvl[20:15]  = cnt_idel_dec_cpt_r;
+  assign dbg_phy_rdlvl[21]     = found_first_edge_r;
+  assign dbg_phy_rdlvl[22]     = found_second_edge_r;
+  assign dbg_phy_rdlvl[23]     = found_edge_r;
+  assign dbg_phy_rdlvl[24]     = store_sr_r;

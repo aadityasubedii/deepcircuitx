@@ -1,0 +1,1 @@
+  always @(posedge clk) po_setup_r <= #TCQ po_setup_ns;

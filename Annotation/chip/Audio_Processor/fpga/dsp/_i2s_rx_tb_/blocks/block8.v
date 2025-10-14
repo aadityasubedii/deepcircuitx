@@ -1,0 +1,1 @@
+    assign sd_32 = tx_shift_32[31];

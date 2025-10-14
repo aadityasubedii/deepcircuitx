@@ -1,0 +1,41 @@
+{
+    "line_num": [
+        [
+            427,
+            429
+        ],
+        [
+            414,
+            425
+        ],
+        [
+            390,
+            412
+        ],
+        [
+            362,
+            387
+        ],
+        [
+            323,
+            348
+        ],
+        [
+            290,
+            309
+        ],
+        [
+            255,
+            274
+        ]
+    ],
+    "blocks": [
+        "  assign la_data_out = 128'b0;\n\n  assign irq = 3'b0;",
+        "  assign io_oeb[5:0] = 6'b0;\n  assign io_oeb[37:6] = gpio_oeb &\n    {\n      ~uart_enabled,\n      1'b1,\n      1'b1,\n      1'b1,\n      1'b1,\n      ~ring0_test_en,\n      ~ring1_test_en,\n      {25{1'b1}}\n    };",
+        "  assign gpio_in = io_in[37:6];\n  assign uart_rx = io_in[35];\n\n  assign io_out[5:0] = 6'b0;\n  assign io_out[37:6] = gpio_out |\n    {\n      uart_tx & uart_enabled,\n      1'b0,\n      1'b0,\n      1'b0,\n      1'b0,\n      ring0_test_out,\n      ring1_test_out,\n      1'b0,\n      pwm_out[0],\n      1'b0,\n      pwm_out[1],\n      1'b0,\n      pwm_out[2],\n      1'b0,\n      pwm_out[3],\n      17'b0\n    };",
+        "  ring_control #(\n    .CLKMUX_BITS(3),\n    .TRIM_BITS(26)\n  ) ring1 (\n    .wb_clk_i(wb_clk_i),\n    .wb_rst_i(wb_rst_i),\n\n    .wb_stb_i(ring1_stb_i),\n    .wb_cyc_i(ring1_cyc_i),\n    .wb_we_i(ring1_we_i),\n    .wb_sel_i(ring1_sel_i),\n    .wb_dat_i(ring1_dat_i),\n    .wb_adr_i(ring1_adr_i),\n\n    .wb_ack_o(ring1_ack_o),\n    .wb_dat_o(ring1_dat_o),\n\n    .ring_clk(ring1_clk),\n    .ring_start(ring1_start),\n    .ring_trim_a(ring1_trim_a),\n    .ring_trim_b(),\n    .ring_clkmux(ring1_clkmux),\n\n    .test_en(ring1_test_en),\n    .test_out(ring1_test_out)\n  );",
+        "  ring_control #(\n    .CLKMUX_BITS(3),\n    .TRIM_BITS(28)\n  ) ring0 (\n    .wb_clk_i(wb_clk_i),\n    .wb_rst_i(wb_rst_i),\n\n    .wb_stb_i(ring0_stb_i),\n    .wb_cyc_i(ring0_cyc_i),\n    .wb_we_i(ring0_we_i),\n    .wb_sel_i(ring0_sel_i),\n    .wb_dat_i(ring0_dat_i),\n    .wb_adr_i(ring0_adr_i),\n\n    .wb_ack_o(ring0_ack_o),\n    .wb_dat_o(ring0_dat_o),\n\n    .ring_clk(ring0_clk),\n    .ring_start(ring0_start),\n    .ring_trim_a(ring0_trim_a),\n    .ring_trim_b(ring0_trim_b),\n    .ring_clkmux(ring0_clkmux),\n\n    .test_en(ring0_test_en),\n    .test_out(ring0_test_out)\n  );",
+        "  simpleuart_div16_wb  #(\n    .BASE_ADR(UART0_BASE_ADDR)\n  ) uart0 (\n    .wb_clk_i(wb_clk_i),\n    .wb_rst_i(wb_rst_i),\n\n    .wb_adr_i(uart_adr_i),\n    .wb_dat_i(uart_dat_i),\n    .wb_sel_i(uart_sel_i),\n    .wb_we_i(uart_we_i),\n    .wb_cyc_i(uart_cyc_i),\n\n    .wb_stb_i(uart_stb_i),\n    .wb_ack_o(uart_ack_o),\n    .wb_dat_o(uart_dat_o),\n\n    .uart_enabled(uart_enabled),\n    .ser_tx(uart_tx),\n    .ser_rx(uart_rx)\n  );",
+        "  generate\n    for (i = 0; i < 4; i = i + 1) begin : pwms\n      pwm_wb pwm (\n        .wb_clk_i(wb_clk_i),\n        .wb_rst_i(wb_rst_i),\n\n        .wb_stb_i(pwm_stb_i[i]),\n        .wb_cyc_i(pwm_cyc_i[i]),\n        .wb_we_i(pwm_we_i[i]),\n        .wb_sel_i(pwm_sel_i[i]),\n        .wb_dat_i(pwm_dat_i[i]),\n        .wb_adr_i(pwm_adr_i[i]),\n\n        .wb_ack_o(pwm_ack_o[i]),\n        .wb_dat_o(pwm_dat_o[i]),\n\n        .pwm_out(pwm_out[i])\n      );\n    end\n  endgenerate"
+    ]
+}

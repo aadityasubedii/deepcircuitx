@@ -1,0 +1,1 @@
+assign        cmp_data_o  = (FAMILY == "SPARTAN6") ? cmp_data_r3 : cmp_data_r2;

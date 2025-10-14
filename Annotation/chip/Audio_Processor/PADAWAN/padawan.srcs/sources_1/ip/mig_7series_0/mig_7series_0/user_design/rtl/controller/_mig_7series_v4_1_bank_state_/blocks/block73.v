@@ -1,0 +1,1 @@
+      always @(rd_wr_r or req_wr_r) rd_half_rmw_lcl = req_wr_r && rd_wr_r;

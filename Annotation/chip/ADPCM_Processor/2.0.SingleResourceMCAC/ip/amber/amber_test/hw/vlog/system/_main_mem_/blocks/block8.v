@@ -1,0 +1,1 @@
+    assign o_wb_dat = wb_rdata128 ;                  

@@ -1,0 +1,9 @@
+Module name: a25_barrel_shift.
+
+Module specification: 
+
+The a25_barrel_shift is a Verilog module that defines a 32-bit barrel shifter with both quick and full modes of operation. It is used when a variation in shift speed is needed based on the shift amount. The module is served by several input ports which include clk for timing, reset for initializing registers, scan_enable and test_mode for testing, i_in as 32-bit input data for shift operation, i_carry_in, i_shift_amount for controlling the shift amount, i_shift_imm_zero, and i_function for indicating the operation to be performed. The module yields outputs through o_out (32-bit shift result), o_carry_out (final carry-out from shift operation), and o_stall (stalls the module in case of an extensive shift amount). 
+
+Internally, the module uses signals like quick_out, quick_carry_out, full_out, full_carry_out, full_out_r, full_carry_out_r, and use_quick_r for handling and controlling various aspects like shift outcomes, carry-outs, and shifter selections between quick and full modes. The module hosts two internal instances of a25_shifter, one for full mode and the other for quick mode, which execute the actual shifting process. 
+
+The module's operation is further enhanced by use_quick_r that determines whether to use quick or full mode for shifting operation. Moreover, the code contains conditions assigned to output signals o_stall, o_out, and o_carry_out to control stalling, shift operation outcome, and carry-out based on whether quick or full shift mode is in use. An always block updates the registered versions of full_out, full_carry_out, and use_quick_r either during reset or at the positive edge of the clock. This ensures synchronization with the clock cycle and facilitates seamless transition between quick and full shift modes.

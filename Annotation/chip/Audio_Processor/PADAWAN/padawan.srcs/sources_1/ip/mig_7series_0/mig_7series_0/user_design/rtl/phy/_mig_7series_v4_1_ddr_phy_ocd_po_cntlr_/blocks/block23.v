@@ -1,0 +1,1 @@
+  always @(posedge clk) ocd_ktap_right_r <= #TCQ ocd_ktap_right_ns;

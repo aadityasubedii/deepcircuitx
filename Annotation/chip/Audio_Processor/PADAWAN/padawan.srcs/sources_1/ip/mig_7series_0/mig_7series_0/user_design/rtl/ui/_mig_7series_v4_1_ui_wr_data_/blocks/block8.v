@@ -1,0 +1,1 @@
+  reg [RAM_WIDTH-1:0] wr_buf_out_data;

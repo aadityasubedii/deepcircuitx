@@ -1,0 +1,1 @@
+  assign req_bank_r = req_bank_r_lcl;

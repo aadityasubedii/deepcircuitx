@@ -1,0 +1,16 @@
+{
+    "line_num": [
+        [
+            100,
+            125
+        ],
+        [
+            97,
+            99
+        ]
+    ],
+    "blocks": [
+        "always @ (posedge clk_i)\nbegin\n\nif (rst_i || manual_clear_error) begin\n   error_status <= #TCQ  'b0;\n   error_set    <= #TCQ  1'b0;\nend\nelse begin\n  \n  if (data_error_i && ~data_error_r && ~error_set ) begin\n     error_status[31:0]  <= #TCQ  cmp_addr_i;\n     error_status[37:32] <= #TCQ  cmp_bl_i;\n     error_status[40] <= #TCQ  mcb_cmd_full_i;\n     error_status[41] <= #TCQ  mcb_wr_full_i;\n     error_status[42] <= #TCQ  mcb_rd_empty_i;\n     error_set <= #TCQ  1'b1;\n     error_status[64 + (DWIDTH - 1)  :64]           <= #TCQ  cmp_data_i;\n     error_status[64 + (2*DWIDTH - 1):64 + DWIDTH]  <= #TCQ  rd_data_i;\n   \n  end\n\n  error_status[39:38]  <= #TCQ  'b0;    \n  error_status[63:43] <= #TCQ  'b0;    \n\n\nend end",
+        "always @ (posedge clk_i)\n    data_error_r <= #TCQ  data_error_i;\n"
+    ]
+}

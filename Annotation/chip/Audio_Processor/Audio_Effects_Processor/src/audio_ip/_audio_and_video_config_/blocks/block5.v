@@ -1,0 +1,1 @@
+assign send_start_bit = auto_init_start_bit;

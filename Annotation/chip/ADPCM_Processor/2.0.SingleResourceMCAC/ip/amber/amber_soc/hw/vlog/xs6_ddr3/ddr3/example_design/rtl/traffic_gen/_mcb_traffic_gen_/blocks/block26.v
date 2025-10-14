@@ -1,0 +1,1 @@
+   assign bram_instr_i = bram_cmd_i[32:30];

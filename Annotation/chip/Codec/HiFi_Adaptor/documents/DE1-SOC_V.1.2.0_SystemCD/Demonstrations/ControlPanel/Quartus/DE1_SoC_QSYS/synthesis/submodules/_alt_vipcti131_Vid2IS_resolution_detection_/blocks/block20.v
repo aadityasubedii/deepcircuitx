@@ -1,0 +1,1 @@
+assign total_line_count_f0_nxt = (reset_total_f0) ? {total_line_count_f0[13:1], 1'b0} : (update_total_line_f0) ? {next_total_line_count, 1'b1} : total_line_count_f0;

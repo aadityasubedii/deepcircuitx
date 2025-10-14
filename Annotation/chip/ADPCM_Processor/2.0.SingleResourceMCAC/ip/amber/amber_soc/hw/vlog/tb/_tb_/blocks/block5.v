@@ -1,0 +1,1 @@
+assign test_status_reg = `U_TEST_MODULE.test_status_reg;

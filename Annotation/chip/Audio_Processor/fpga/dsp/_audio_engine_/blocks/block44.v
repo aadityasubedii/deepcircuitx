@@ -1,0 +1,1 @@
+    assign reset = !((!wb_rst) && (resetx == 2'b10));

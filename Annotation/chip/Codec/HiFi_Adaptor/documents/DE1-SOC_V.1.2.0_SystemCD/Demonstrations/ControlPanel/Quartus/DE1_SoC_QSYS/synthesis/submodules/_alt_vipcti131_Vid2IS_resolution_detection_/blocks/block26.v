@@ -1,0 +1,1 @@
+assign stable_next = vid_locked & first_start_of_line & ((lines_next[0] & lines_next[1]) | (lines_next[0] & lines_next[2]) | (lines_next[1] & lines_next[2]));

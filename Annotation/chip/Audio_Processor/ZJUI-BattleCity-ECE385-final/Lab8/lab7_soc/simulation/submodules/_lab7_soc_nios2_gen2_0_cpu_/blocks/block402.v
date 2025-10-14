@@ -1,0 +1,1 @@
+  assign trc_ctrl = 0;

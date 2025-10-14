@@ -1,0 +1,1 @@
+   assign cal1_cnt_cpt_timing = {2'b00, cal1_cnt_cpt_r};

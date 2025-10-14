@@ -1,0 +1,1 @@
+  always @(posedge clk) reset_scan_r <= #TCQ reset_scan_ns;

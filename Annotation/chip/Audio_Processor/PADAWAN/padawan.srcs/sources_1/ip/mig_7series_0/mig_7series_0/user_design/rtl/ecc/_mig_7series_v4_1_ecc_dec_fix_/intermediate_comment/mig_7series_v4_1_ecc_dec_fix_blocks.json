@@ -1,0 +1,81 @@
+{
+    "line_num": [
+        [
+            173,
+            180
+        ],
+        [
+            166,
+            166
+        ],
+        [
+            162,
+            165
+        ],
+        [
+            159,
+            164
+        ],
+        [
+            158,
+            158
+        ],
+        [
+            157,
+            157
+        ],
+        [
+            147,
+            155
+        ],
+        [
+            134,
+            141
+        ],
+        [
+            122,
+            128
+        ],
+        [
+            119,
+            121
+        ],
+        [
+            115,
+            115
+        ],
+        [
+            114,
+            114
+        ],
+        [
+            108,
+            113
+        ],
+        [
+            103,
+            103
+        ],
+        [
+            94,
+            101
+        ]
+    ],
+    "blocks": [
+        "  generate\n    for (v=0; v<2*nCK_PER_CLK; v=v+1) begin : compute_status\n      wire zero = ~|syndrome_r[v*ECC_WIDTH+:ECC_WIDTH];\n      wire odd = ^syndrome_r[v*ECC_WIDTH+:ECC_WIDTH];\n      assign ecc_single[v] = ecc_status_valid && ~zero && odd;\n      assign ecc_multiple[v] = ecc_status_valid && ~zero && ~odd;\n    end\n  endgenerate",
+        "  endgenerate",
+        "        always @(ecc_rddata_r)\n          rd_data[(t+1)*PAYLOAD_WIDTH-1-:RAW_BIT_WIDTH] =\n            ecc_rddata_r[(t+1)*PAYLOAD_WIDTH-1-:RAW_BIT_WIDTH];\n      end",
+        "  generate\n    if (RAW_BIT_WIDTH > 0)\n      for (t=0; t<2*nCK_PER_CLK; t=t+1) begin : copy_raw_bits\n        always @(ecc_rddata_r)\n          rd_data[(t+1)*PAYLOAD_WIDTH-1-:RAW_BIT_WIDTH] =\n            ecc_rddata_r[(t+1)*PAYLOAD_WIDTH-1-:RAW_BIT_WIDTH];",
+        "  genvar t;",
+        "  localparam RAW_BIT_WIDTH = PAYLOAD_WIDTH - DATA_WIDTH;",
+        "  always @(correct_en or ecc_rddata_r or flip_bits)\n    for (s=0; s<2*nCK_PER_CLK; s=s+1)\n      if (correct_en)\n        rd_data[s*PAYLOAD_WIDTH+:DATA_WIDTH] = \n          ecc_rddata_r[s*PAYLOAD_WIDTH+:DATA_WIDTH] ^ \n              flip_bits[s*DATA_WIDTH+:DATA_WIDTH];\n      else rd_data[s*PAYLOAD_WIDTH+:DATA_WIDTH] = \n           ecc_rddata_r[s*PAYLOAD_WIDTH+:DATA_WIDTH];\n",
+        "  generate\n    for (q=0; q<2*nCK_PER_CLK; q=q+1) begin : flip_word\n      for (r=0; r<DATA_WIDTH; r=r+1) begin : flip_bit\n        assign flip_bits[q*DATA_WIDTH+r] = \n          h_matrix[r] == syndrome_r[q*ECC_WIDTH+:ECC_WIDTH];\n      end\n    end\n  endgenerate",
+        "  generate\n    for (n=0; n<DATA_WIDTH; n=n+1) begin : h_col\n      for (p=0; p<ECC_WIDTH; p=p+1) begin : h_bit\n        assign h_matrix [n][p] = h_rows [p*CODE_WIDTH+n];\n      end\n    end\n  endgenerate             ",
+        "  genvar n;\n  genvar p;\n  wire [ECC_WIDTH-1:0] h_matrix [DATA_WIDTH-1:0];",
+        "  always @(posedge clk) ecc_rddata_r <= #TCQ ecc_rddata_ns;",
+        "  reg [2*nCK_PER_CLK*PAYLOAD_WIDTH-1:0] ecc_rddata_r;",
+        "  generate\n    for (i=0; i<2*nCK_PER_CLK; i=i+1) begin : extract_payload\n      assign ecc_rddata_ns[i*PAYLOAD_WIDTH+:PAYLOAD_WIDTH] =\n               phy_rddata[i*DQ_WIDTH+:PAYLOAD_WIDTH];\n    end\n  endgenerate",
+        "  always @(posedge clk) syndrome_r <= #TCQ syndrome_ns;",
+        "  generate\n    for (k=0; k<2*nCK_PER_CLK; k=k+1) begin : ecc_word\n      for (m=0; m<ECC_WIDTH; m=m+1) begin : ecc_bit\n        assign syndrome_ns[k*ECC_WIDTH+m] =\n   ^(phy_rddata[k*DQ_WIDTH+:CODE_WIDTH] & h_rows[m*CODE_WIDTH+:CODE_WIDTH]);\n      end\n    end\n  endgenerate"
+    ]
+}

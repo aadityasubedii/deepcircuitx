@@ -1,0 +1,1 @@
+assign   read= ( s_read && (s_address == `IR_RX_DATA_REG) ) ?1:0;

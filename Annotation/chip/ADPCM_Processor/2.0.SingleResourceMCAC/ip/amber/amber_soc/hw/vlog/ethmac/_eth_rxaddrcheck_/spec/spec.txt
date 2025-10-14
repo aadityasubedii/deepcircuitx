@@ -1,0 +1,13 @@
+Module name: eth_rxaddrcheck. 
+
+Module specification: The 'eth_rxaddrcheck' is a part of an Ethernet receiver design primarily executing functionalities related to verifying the destination MAC addresses of incoming Ethernet frames. Specifically, it checks whether the frames are of type Unicast, Multicast, or Broadcast and raises flags such as UnicastOK, MulticastOK, BroadCastOK correspondingly. The module can potentially abort a process if the frame's address is invalid and can trigger an address miss signal. 
+
+The inputs to the module include data, control signals, hash outputs and timing signals among others. The 'MRxClk' is the clock signal necessary for synchronizing the design. The 'Reset' signal resets the design registers to their initial states. 'RxData' is an array of 8 bits representing the received data. Control signals like 'r_Bro', 'r_Pro' 'PassAll', 'ControlFrmAddressOK' and 'Broadcast, Multicast' are indicative of the frame type. 'ByteCntEq2' to 'ByteCntEq7' indicate whether the byte count equals 2 to 7. 'HASH0', 'HASH1', 'CrcHash' and 'CrcHashGood' provide necessary information about hash checks. 'MAC' represents the MAC address of the Ethernet frame. 'StateData' represents the state data. 'RxEndFrm' signals the end of the received frame.
+
+The module outputs two signals - 'RxAbort', which will be set to high if the process should abort due to reasons like an invalid address; and 'AddressMiss', which will be set to high if the received address does not align with the expected address.
+
+Internally, the module uses several signals. 'BroadcastOK', 'RxAddressInvalid', 'RxCheckEn', 'HashBit', 'IntHash', 'ByteHash', 'MulticastOK', 'UnicastOK' are some of the signals used for various purposes such as marking the type of frame, validating a frame, controlling the check process, managing hash values and indicating the address checks.
+
+The Verilog RTL code for this module is partitioned into different blocks handling diverse responsibilities essential for the operation of the module. These include immediate value assignments, combinational and sequential logic clusters responding to the positive edges of the clock or reset signals, performing checks, and updating the state of output and internal signals. 
+
+Overall, this module plays a crucial role in the Ethernet frame verification process, focussing on the validity of frame address and type.

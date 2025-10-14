@@ -1,0 +1,1 @@
+  always @(posedge clk) last_master_r <= #TCQ last_master_ns;

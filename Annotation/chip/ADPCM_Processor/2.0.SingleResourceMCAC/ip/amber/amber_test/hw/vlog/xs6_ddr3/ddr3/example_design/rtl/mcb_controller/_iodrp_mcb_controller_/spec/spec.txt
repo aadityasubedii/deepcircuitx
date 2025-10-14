@@ -1,0 +1,11 @@
+Module name: iodrp_mcb_controller.
+
+Module specification: The 'iodrp_mcb_controller' module acts as a Dynamic Reconfigurable Port controller for memory cells, in devices such as FPGAs. Functioning synchronously with a DRP_CLK and a reset, sync_rst, the module handles read/write transactions to/from memory cells using a state-driven operation flow. 
+
+The module has 9 input ports namely, 'memcell_address' (8-bit memory cell address), 'write_data' (8-bit data to be written into the memory), 'rd_not_write' (determines if module will read or write data), 'cmd_valid', 'use_broadcast', 'drp_ioi_addr' (5-bit address for IO interfacing), 'sync_rst', 'DRP_CLK', and 'DRP_SDO' (Data output from DRP). 
+
+The 7 output ports are 'read_data' (8-bit data read from the memory), 'rdy_busy_n' (indicates that the DRP is in the ready state and not busy), 'DRP_CS' (chip select or command strobe signal for the DRP), 'DRP_SDI' (data input to the DRP), 'DRP_ADD' (indicates address phase of the DRP operation), 'DRP_BKST' (control signal for broadcast usage), and 'MCB_UIREAD' (indicates data phase of read operation).
+
+The module employs several internal signals such as 'memcell_addr_reg', 'data_reg', 'rd_not_write_reg', 'load_shift_n', 'addr_data_sel_n', 'bit_cnt', 'AddressPhase', etc., to control the flow of operations, count transmitted bits, and store the state and data required for operations.
+
+The module contains major sections including an always block for the state and next state variables that act as a finite state machine and controls different stages of operation of the module such as address load, data acquisition, and writing. In addition, a task named 'shift_n_expand' provides the ability to shift and manipulate data. A case statement is used for determining the next state of the operation based on the current state and other conditions. The module therefore represents a well-structured framework for controlling memory cell operations within a larger device architecture.

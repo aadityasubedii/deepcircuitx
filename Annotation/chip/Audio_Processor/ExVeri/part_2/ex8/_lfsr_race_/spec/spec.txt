@@ -1,0 +1,11 @@
+Module name: lfsr_race. 
+
+Module specification: The module lfsr_race is designed as a 15-bit linear feedback shift register (LFSR) implemented in Verilog. This register is initialized with a decimal value of 25 and advances its state on every high-edge clock cycle given that the signal 'enable' is high. The progression is done through a feedback function characterized by an XOR of the 14th, 10th, 6th, and 1st bit of the shift register. 
+
+This module has two input ports: 'clock' and 'enable'. 'clock' port is used to time the progression of the shift register – the state advances on its positive edge. 'enable' is a control signal, when high (1), allows the shift register state to update, and when low (0), it stops further updates keeping the state same. 
+
+The module has only one output port: 'out'. It provides the current state of the 15-bit internal signal 'sreg', acting as a window into the module's internal state and useful for other modules within the larger system. 
+
+Internally, a register 'sreg' is used which serves as a state holder for the LFSR. On each positive edge, if 'enable' is high, 'sreg' advances based on the feedback function, the result of which is assigned to the 'out' port. 
+
+In terms of structure, the module encompasses initial block which initializes 'sreg' with 14'd25, a sequential block triggered at every positive edge of the clock signal controlling the updates to 'sreg', and finally a continuous assignment which assigns the state of 'sreg' to the output port 'out'.

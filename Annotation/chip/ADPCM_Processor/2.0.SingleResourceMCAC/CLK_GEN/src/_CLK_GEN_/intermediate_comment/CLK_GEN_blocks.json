@@ -1,0 +1,31 @@
+{
+    "line_num": [
+        [
+            156,
+            207
+        ],
+        [
+            154,
+            154
+        ],
+        [
+            137,
+            152
+        ],
+        [
+            134,
+            134
+        ],
+        [
+            117,
+            132
+        ]
+    ],
+    "blocks": [
+        "always @(posedge mux_serial_clk, posedge reset) begin\n\tif(reset) begin\n\t\tfs_count <= 8'h00;\n\t\tframe_syn <= 1'b0;\n\t\tfirst_fs <= 1'b0;\n\t\tlast_fs <= 1'b0;\n\t\tfirst_pass <= 1'b0;\n\tend\n\telse begin\n\t\tif(first_fs == 0) begin\n\t\t\tframe_syn <= i_frame_syn;\n\t\t\tfs_count <= 8'h01;\n\t\t\tif(i_frame_syn == 1) begin\n\t\t\t\tfirst_fs <= 1'b1;\n\t\t\tend\n\t\t\telse begin\n\t\t\t\tfirst_fs <= 1'b0;\n\t\t\tend\n\t\t\tlast_fs <= 1'b0;\n\t\t\tfirst_pass <= 1'b1;\n\t\tend\n\t\telse if (last_fs == 0 && i_frame_syn == 1 && first_pass == 0) begin\n\t\t\tfirst_fs <= first_fs;\n\t\t\tframe_syn <= 1'b1;\n\t\t\tfs_count <= 8'h01;\n\t\t\tlast_fs <= i_frame_syn;\n\t\t\tfirst_pass <= first_pass;\n\t\tend\n\t\telse if (fs_count < 8'h07 || fs_count == 8'hFF) begin\n\t\t\tfirst_fs <= first_fs;\n\t\t\tframe_syn <= 1'b1;\n\t\t\tfs_count <= fs_count + 1'b1;\n\t\t\tlast_fs <= i_frame_syn;\n\t\t\tfirst_pass <= first_pass;\n\t\tend\n\t\telse if (first_pass == 1 && fs_count == 8'h07) begin\n\t\t\tfirst_fs <= first_fs;\n\t\t\tframe_syn <= 1'b1;\n\t\t\tfs_count <= fs_count + 1'b1;\n\t\t\tlast_fs <= i_frame_syn;\n\t\t\tfirst_pass <= first_pass;\n\t\tend\n\t\telse begin\n\t\t\tfirst_fs <= first_fs;\n\t\t\tframe_syn <= 1'b0;\n\t\t\tfs_count <= fs_count + 1'b1;\n\t\t\tlast_fs <= i_frame_syn;\n\t\t\tif(first_pass == 1) first_pass <= 1'b0;\n\t\t\telse first_pass <= first_pass;\n\t\tend\n\tend\nend",
+        "assign mux_co_proc_clk = test_mode ? clk : co_proc_clk;",
+        "always @ (posedge clk, posedge reset) begin\n\tif(reset) begin\n\t\tco_proc_clk <= 1'b0;\n\t\tco_count    <= 4'h0;\n\tend \n\telse begin\n\t\tif (co_count != 4'h2) begin\n\t\t\tco_count    <= co_count + 1'b1 ;\n\t\t\tco_proc_clk <= co_proc_clk;\n\t\tend\n\t\telse begin\n\t\t\tco_count    <= 4'h0;\n\t\t\tco_proc_clk <= ~ co_proc_clk;\n\t\tend\n\tend\nend",
+        "assign mux_serial_clk = test_mode ? clk : ser_clk;",
+        "always @ (posedge clk, posedge reset) begin\n\tif(reset) begin\n\t\tser_clk   <= 1'b0;\n\t\tser_count <= 8'h00;\n\tend \n\telse begin\n\t\tif (ser_count != 8'h3B) begin\n\t\t\tser_count <= ser_count + 1'b1;\n\t\t\tser_clk   <= ser_clk;\n\t\tend\n\t\telse begin\n\t\t\tser_count <= 8'h00;\n\t\t\tser_clk   <= ~ ser_clk;\n\t\tend\n\tend\nend"
+    ]
+}

@@ -1,0 +1,9 @@
+Module name: accumulator
+
+Module specification: The accumulator is an RTL module that performs arithmetic operations on the input data based on certain conditions. The operations are synchronized with a clock input (ck), enabled using the enable input (en), and either addition or subtraction is decided based on the 'add' signal. If 'add' is high, addition is performed, otherwise subtraction. The result of the operation is stored in the output 'out', which can be reset using the reset input (rst). The 'in' is a 32-bit input data that will be added to or subtracted from 'out'. The operation result, held by 'out', is defined by the parameter OUT_W and is signed. 
+
+Module's internal signals include 'zeros', 'to_add' and 'prev'. The 'zeros' is used to equalize the width of 'in' to OUT_W by concatenating with 'in' to form the 'to_add'. The 'to_add' holds the value which will be added or subtracted to/from 'out'. The 'prev' holds the value of 'out' from the previous clock cycle, and it is reset to zero when 'rst' is high.
+
+The code comprises several blocks. Initialization of 'out' to zero, assigns blocks that define 'zeros', 'to_add', and 'prev', and an always block that performs arithmetic operations on 'out'. The always block, only activated with a positive edge of the clock, and when 'en' is high, adds or subtracts 'to_add' to/from 'prev' and assigns the result to 'out'. 
+
+This module is essentially an arithmetic unit, controlled by a clock, that can either add or subtract an incoming signal to/from a stored value, based on control inputs.

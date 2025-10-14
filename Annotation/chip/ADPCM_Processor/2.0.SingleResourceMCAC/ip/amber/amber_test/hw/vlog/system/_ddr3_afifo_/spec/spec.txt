@@ -1,0 +1,11 @@
+Module name: ddr3_afifo.
+
+Module specification: 
+
+The ddr3_afifo module is designed as an Asynchronous FIFO interface for DDR3 memory that incorporates separate input and output signals for command, write, and read data operations across two different clock domains - system and DDR. The input ports include i_sys_clk, i_ddr_clk, i_cmd_en, i_cmd_instr, i_cmd_byte_addr, i_wr_en, i_wr_mask, i_wr_data, i_wr_addr_32, i_ddr_cmd_full, i_ddr_wr_full, i_ddr_rd_data, and i_ddr_rd_valid. 
+
+These provide the system clock, DDR clock, command operations enable, command instructions, byte address for the command, write enable, byte update markers during write, write data, write address, flags to indicate if DDR command or write FIFOs are full, read data from DDR memory, and marker to indicate valid data available on DDR read respectively. 
+
+The output ports are o_cmd_full, o_wr_full, o_rd_data, o_rd_valid, o_ddr_cmd_en, o_ddr_cmd_instr, o_ddr_cmd_byte_addr, o_ddr_wr_en, o_ddr_wr_mask, o_ddr_wr_data, and o_ddr_wr_addr_32. They signify if the command or write FIFO is full, read data from DDR memory, marker if valid data has been read from DDR memory, enable command operations in DDR domain, provide command instructions in DDR domain, provide command byte address in DDR domain, enable write operations in DDR domain, determine which bytes to update during write in DDR domain, provide data to write into DDR memory in DDR domain, and specify write address in DDR domain respectively. 
+
+The module uses three internal signals: cmd_empty, wr_empty, and rd_empty, acting as flags to control the command, read and write operations based on the emptiness of FIFOs. The module contains three distinct blocks, each relating to a different operation (command, write, and read) with respective afifo instances. This segregated structure enables a smooth data flow and operations management across the two different clock domains.

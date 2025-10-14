@@ -1,0 +1,1 @@
+assign TxLengthLt4 = TxLength < 4;

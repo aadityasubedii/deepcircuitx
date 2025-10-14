@@ -1,0 +1,71 @@
+{
+    "line_num": [
+        [
+            316,
+            341
+        ],
+        [
+            314,
+            314
+        ],
+        [
+            312,
+            312
+        ],
+        [
+            308,
+            308
+        ],
+        [
+            296,
+            302
+        ],
+        [
+            285,
+            293
+        ],
+        [
+            275,
+            283
+        ],
+        [
+            265,
+            273
+        ],
+        [
+            253,
+            263
+        ],
+        [
+            243,
+            251
+        ],
+        [
+            233,
+            241
+        ],
+        [
+            165,
+            226
+        ],
+        [
+            157,
+            163
+        ]
+    ],
+    "blocks": [
+        "always @(*)\nbegin\n\tcase (rom_address_counter)\n\t0\t\t:\trom_data\t<=\t{6'h02, LCM_INPUT_FORMAT_UB};\n\t1\t\t:\trom_data\t<=\t{6'h03, LCM_INPUT_FORMAT_LB};\n\t2\t\t:\trom_data\t<=\t{6'h04, LCM_POWER};\n\t3\t\t:\trom_data\t<=\t{6'h05, LCM_DIRECTION_AND_PHASE};\n\t4\t\t:\trom_data\t<=\t{6'h06, LCM_HORIZONTAL_START_POSITION};\n\t5\t\t:\trom_data\t<=\t{6'h07, LCM_VERTICAL_START_POSITION};\n\t6\t\t:\trom_data\t<=\t{6'h08, LCM_ENB_NEGATIVE_POSITION};\n\t7\t\t:\trom_data\t<=\t{6'h09, LCM_GAIN_OF_CONTRAST};\n\t8\t\t:\trom_data\t<=\t{6'h0A, LCM_R_GAIN_OF_SUB_CONTRAST};\n\t9\t\t:\trom_data\t<=\t{6'h0B, LCM_B_GAIN_OF_SUB_CONTRAST};\n\t10\t\t:\trom_data\t<=\t{6'h0C, LCM_OFFSET_OF_BRIGHTNESS};\n\t11\t\t:\trom_data\t<=\t{6'h10, LCM_VCOM_HIGH_LEVEL};\n\t12\t\t:\trom_data\t<=\t{6'h11, LCM_VCOM_LOW_LEVEL};\n\t13\t\t:\trom_data\t<=\t{6'h12, LCM_PCD_HIGH_LEVEL};\n\t14\t\t:\trom_data\t<=\t{6'h13, LCM_PCD_LOW_LEVEL};\n\t15\t\t:\trom_data\t<=\t{6'h14, LCM_GAMMA_CORRECTION_0};\n\t16\t\t:\trom_data\t<=\t{6'h15, LCM_GAMMA_CORRECTION_1};\n\t17\t\t:\trom_data\t<=\t{6'h16, LCM_GAMMA_CORRECTION_2};\n\t18\t\t:\trom_data\t<=\t{6'h17, LCM_GAMMA_CORRECTION_3};\n\t19\t\t:\trom_data\t<=\t{6'h18, LCM_GAMMA_CORRECTION_4};\n\tdefault\t:\trom_data\t<=\t14'h0000;\n\tendcase\nend",
+        "assign finished_auto_init = (rom_address_counter == MAX_ROM_ADDRESS);",
+        "assign change_state\t= transfer_complete & transfer_data;",
+        "assign auto_init_complete = (s_i2c_auto_init == AUTO_STATE_7_DONE);",
+        "always @(posedge clk)\nbegin\n\tif (reset == 1'b1)\n\t\trom_address_counter <= MIN_ROM_ADDRESS;\n\telse if (s_i2c_auto_init == AUTO_STATE_6_INCREASE_COUNTER)\n\t\trom_address_counter <= rom_address_counter + 5'h01;\nend",
+        "always @(posedge clk)\nbegin\n\tif (reset == 1'b1)\n\t\tauto_init_error <= 1'b0;\n\telse if (clear_error == 1'b1)\n\t\tauto_init_error <= 1'b0;\n\telse if ((s_i2c_auto_init == AUTO_STATE_6_INCREASE_COUNTER) & ack)\n\t\tauto_init_error <= 1'b1;\nend",
+        "always @(posedge clk)\nbegin\n\tif (reset == 1'b1)\n\t\tsend_stop_bit <= 1'b0;\n\telse if (transfer_complete == 1'b1)\n\t\tsend_stop_bit <= 1'b0;\n\telse if (s_i2c_auto_init == AUTO_STATE_5_SEND_STOP_BIT)\n\t\tsend_stop_bit <= 1'b1;\nend",
+        "always @(posedge clk)\nbegin\n\tif (reset == 1'b1)\n\t\tsend_start_bit <= 1'b0;\n\telse if (transfer_complete == 1'b1)\n\t\tsend_start_bit <= 1'b0;\n\telse if (s_i2c_auto_init == AUTO_STATE_1_SEND_START_BIT)\n\t\tsend_start_bit <= 1'b1;\nend",
+        "always @(posedge clk)\nbegin\n\tif (reset == 1'b1) \n\t\ttransfer_data <= 1'b0;\n\telse if (transfer_complete == 1'b1)\n\t\ttransfer_data <= 1'b0;\n\telse if (s_i2c_auto_init == AUTO_STATE_2_TRANSFER_BYTE_0)\n\t\ttransfer_data <= 1'b1;\n\telse if (s_i2c_auto_init == AUTO_STATE_3_TRANSFER_BYTE_1)\n\t\ttransfer_data <= 1'b1;\nend",
+        "always @(posedge clk)\nbegin\n\tif (reset == 1'b1)\n\t\tdata_size <= 3'h0;\n\telse if (s_i2c_auto_init == AUTO_STATE_1_SEND_START_BIT)\n\t\tdata_size <= 3'h6;\n\telse if (s_i2c_auto_init == AUTO_STATE_3_TRANSFER_BYTE_1)\n\t\tdata_size <= 3'h7;\nend",
+        "always @(posedge clk)\nbegin\n\tif (reset == 1'b1)\n\t\tdata_out <= 8'h00;\n\telse if (s_i2c_auto_init == AUTO_STATE_1_SEND_START_BIT)\n\t\tdata_out <= {1'b0, rom_data[13: 8], 1'b0};\n\telse if (s_i2c_auto_init == AUTO_STATE_3_TRANSFER_BYTE_1)\n\t\tdata_out <= rom_data[ 7: 0];\nend",
+        "always @(*)\nbegin\n\t\n\tns_i2c_auto_init = AUTO_STATE_0_CHECK_STATUS;\n\n    case (s_i2c_auto_init)\n\tAUTO_STATE_0_CHECK_STATUS:\n\t\tbegin\n\t\t\tif (finished_auto_init == 1'b1)\n\t\t\t\tns_i2c_auto_init = AUTO_STATE_7_DONE;\n\t\t\telse\n\t\t\t\tns_i2c_auto_init = AUTO_STATE_1_SEND_START_BIT;\n\t\tend\n\tAUTO_STATE_1_SEND_START_BIT:\n\t\tbegin\n\t\t\tif (transfer_complete == 1'b1)\n\t\t\t\tns_i2c_auto_init = AUTO_STATE_2_TRANSFER_BYTE_0;\n\t\t\telse\n\t\t\t\tns_i2c_auto_init = AUTO_STATE_1_SEND_START_BIT;\n\t\tend\n\tAUTO_STATE_2_TRANSFER_BYTE_0:\n\t\tbegin\n\t\t\tif (change_state == 1'b1)\n\t\t\t\tns_i2c_auto_init = AUTO_STATE_3_TRANSFER_BYTE_1;\n\t\t\telse\n\t\t\t\tns_i2c_auto_init = AUTO_STATE_2_TRANSFER_BYTE_0;\n\t\tend\n\tAUTO_STATE_3_TRANSFER_BYTE_1:\n\t\tbegin\n\t\t\tif (change_state == 1'b1)\n\t\t\t\tns_i2c_auto_init = AUTO_STATE_4_WAIT;\n\t\t\telse\n\t\t\t\tns_i2c_auto_init = AUTO_STATE_3_TRANSFER_BYTE_1;\n\t\tend\n\tAUTO_STATE_4_WAIT:\n\t\tbegin\n\t\t\tif (transfer_complete == 1'b0)\n\t\t\t\tns_i2c_auto_init = AUTO_STATE_5_SEND_STOP_BIT;\n\t\t\telse\n\t\t\t\tns_i2c_auto_init = AUTO_STATE_4_WAIT;\n\t\tend\n\tAUTO_STATE_5_SEND_STOP_BIT:\n\t\tbegin\n\t\t\tif (transfer_complete == 1'b1)\n\t\t\t\tns_i2c_auto_init = AUTO_STATE_6_INCREASE_COUNTER;\n\t\t\telse\n\t\t\t\tns_i2c_auto_init = AUTO_STATE_5_SEND_STOP_BIT;\n\t\tend\n\tAUTO_STATE_6_INCREASE_COUNTER:\n\t\tbegin\n\t\t\tns_i2c_auto_init = AUTO_STATE_0_CHECK_STATUS;\n\t\tend\n\tAUTO_STATE_7_DONE:\n\t\tbegin\n\t\t\tns_i2c_auto_init = AUTO_STATE_7_DONE;\n\t\tend\n\tdefault:\n\t\tbegin\n\t\t\tns_i2c_auto_init = AUTO_STATE_0_CHECK_STATUS;\n\t\tend\n\tendcase\nend",
+        "always @(posedge clk)\nbegin\n\tif (reset == 1'b1)\n\t\ts_i2c_auto_init <= AUTO_STATE_0_CHECK_STATUS;\n\telse\n\t\ts_i2c_auto_init <= ns_i2c_auto_init;\nend"
+    ]
+}

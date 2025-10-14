@@ -1,0 +1,43 @@
+{
+    "gpt-message": [
+        {
+            "role": "system",
+            "content": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+        },
+        {
+            "role": "user",
+            "content": "Name of the module and its functionality is as follows: \nModule name: intra_inputTrafo.\nExplanation: The module carries out coordinate and size transformations for a transformation unit (TU) in video encoding. It computes the absolute coordinates `(xTb, yTb)` and the TU size `tuSize` based on the coding tree block (CTB) coordinates `(xCtb, yCtb)`, relative coordinates within the CTB `(xTb_rela, yTb_rela)`, and the input transformation unit size `i_tuSize`. If the encoding is for chroma components (`isChroma=1`), additional adjustments are made based on the transformation unit size to handle different chroma formats properly. The operations involve shifts and conditional logic to handle size adjustments and alignment specific to luma and chroma components."
+        },
+        {
+            "role": "user",
+            "content": "Input and output ports and their explanation is as follows: \nInput ports: `xCtb`, `yCtb`, `xTb_rela`, `yTb_rela`, `i_tuSize`.\nExplanation: \n- `xCtb`, `yCtb`: These are the inputs specifying the X and Y coordinates of the Coding Tree Block (CTB) respectively. They determine the base absolute position of the transformation unit.\n- `xTb_rela`, `yTb_rela`: These inputs provide the relative X and Y coordinates within the CTB for the top-left corner of the Transformation Unit (TU). They are used to compute the absolute position of the TU.\n- `i_tuSize`: This input specifies the initial size category of the transformation unit, which is adjusted within the module based on chroma component considerations.\n\nOutput ports: `xTb`, `yTb`, `tuSize`.\nExplanation:\n- `xTb`, `yTb`: These outputs represent the absolute X and Y coordinates of the transformation unit after adjustments for both chroma and luma components. The computation adjusts based on input relative positions and possible chroma-specific shifts.\n- `tuSize`: This output represents the adjusted size of the transformation unit. It might be modified from the input size `i_tuSize` depending on whether the operations are being performed on chroma components and the specific chroma conditions described in the code."
+        },
+        {
+            "role": "user",
+            "content": "Internal signals and their explanation is as follows: \nInternal signals: `xTb_`, `yTb_`.\nExplanation:\n- `xTb_`: This is an intermediate signal used to compute the preliminary absolute X coordinate of the transformation unit before potential chroma-specific adjustments. The computation combines the base X coordinate of the CTB (`xCtb`) shifted left by 4 places (equivalent to multiplying by 16) and the relative X position within the CTB (`xTb_rela`) shifted left by 2 places (equivalent to multiplying by 4).\n- `yTb_`: Similar to `xTb_`, this signal computes the preliminary absolute Y coordinate of the transformation unit using the same logic \u2014 combining the Y coordinate of the CTB (`yCtb`) and the relative Y position inside the CTB (`yTb_rela`). These values are adjusted for further alignment specificities when working with chroma components."
+        }
+    ],
+    "claude-message": [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+                },
+                {
+                    "type": "text",
+                    "text": "Name of the module and its functionality is as follows: \nModule name: intra_inputTrafo.\nExplanation: The module carries out coordinate and size transformations for a transformation unit (TU) in video encoding. It computes the absolute coordinates `(xTb, yTb)` and the TU size `tuSize` based on the coding tree block (CTB) coordinates `(xCtb, yCtb)`, relative coordinates within the CTB `(xTb_rela, yTb_rela)`, and the input transformation unit size `i_tuSize`. If the encoding is for chroma components (`isChroma=1`), additional adjustments are made based on the transformation unit size to handle different chroma formats properly. The operations involve shifts and conditional logic to handle size adjustments and alignment specific to luma and chroma components."
+                },
+                {
+                    "type": "text",
+                    "text": "Input and output ports and their explanation is as follows: \nInput ports: `xCtb`, `yCtb`, `xTb_rela`, `yTb_rela`, `i_tuSize`.\nExplanation: \n- `xCtb`, `yCtb`: These are the inputs specifying the X and Y coordinates of the Coding Tree Block (CTB) respectively. They determine the base absolute position of the transformation unit.\n- `xTb_rela`, `yTb_rela`: These inputs provide the relative X and Y coordinates within the CTB for the top-left corner of the Transformation Unit (TU). They are used to compute the absolute position of the TU.\n- `i_tuSize`: This input specifies the initial size category of the transformation unit, which is adjusted within the module based on chroma component considerations.\n\nOutput ports: `xTb`, `yTb`, `tuSize`.\nExplanation:\n- `xTb`, `yTb`: These outputs represent the absolute X and Y coordinates of the transformation unit after adjustments for both chroma and luma components. The computation adjusts based on input relative positions and possible chroma-specific shifts.\n- `tuSize`: This output represents the adjusted size of the transformation unit. It might be modified from the input size `i_tuSize` depending on whether the operations are being performed on chroma components and the specific chroma conditions described in the code."
+                },
+                {
+                    "type": "text",
+                    "text": "Internal signals and their explanation is as follows: \nInternal signals: `xTb_`, `yTb_`.\nExplanation:\n- `xTb_`: This is an intermediate signal used to compute the preliminary absolute X coordinate of the transformation unit before potential chroma-specific adjustments. The computation combines the base X coordinate of the CTB (`xCtb`) shifted left by 4 places (equivalent to multiplying by 16) and the relative X position within the CTB (`xTb_rela`) shifted left by 2 places (equivalent to multiplying by 4).\n- `yTb_`: Similar to `xTb_`, this signal computes the preliminary absolute Y coordinate of the transformation unit using the same logic \u2014 combining the Y coordinate of the CTB (`yCtb`) and the relative Y position inside the CTB (`yTb_rela`). These values are adjusted for further alignment specificities when working with chroma components."
+                }
+            ]
+        }
+    ]
+}

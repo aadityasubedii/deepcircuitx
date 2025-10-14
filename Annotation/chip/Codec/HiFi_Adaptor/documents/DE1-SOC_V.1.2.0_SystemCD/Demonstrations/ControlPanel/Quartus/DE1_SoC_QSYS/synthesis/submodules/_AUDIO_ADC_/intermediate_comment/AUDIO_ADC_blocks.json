@@ -1,0 +1,16 @@
+{
+    "line_num": [
+        [
+            122,
+            134
+        ],
+        [
+            69,
+            110
+        ]
+    ],
+    "blocks": [
+        "audio_fifo adc_fifo(\n\t\n\t.wrclk(bclk),\n\t.wrreq(adcfifo_write),\n\t.data(adcfifo_writedata),\n\t.wrfull(adcfifo_full),\n\t.aclr(clear),  \n\t\n\t.rdclk(clk),\n\t.rdreq(read),\n\t.q(readdata),\n\t.rdempty(empty)\n);\t",
+        "always @ (posedge bclk) \nbegin\n\tif (reset || clear)\n\tbegin\n\t\tbit_index = DATA_WIDTH;\n\t\treg_adc_left = is_left_ch;\n\t\tadcfifo_write = 1'b0;\n\t\tvalid_bit = 0;\n\tend\n\telse\n\tbegin\n\t\tif (adcfifo_write)\n\t\t\tadcfifo_write = 1'b0;  \n\n\t\tif (reg_adc_left ^ is_left_ch)\n\t\tbegin\t\t\n\t\t\treg_adc_left = is_left_ch;\n\t\t\tvalid_bit = 1'b1;\n\t\t\twait_one_clk = 1'b1;\n\t\t\tif (reg_adc_left)\n\t\t\t\tbit_index = DATA_WIDTH;\n\t\tend\n\n\t\t\n\t\tif (valid_bit && wait_one_clk)  \n\t\t\t\twait_one_clk = 1'b0;\n\t\telse if (valid_bit && !wait_one_clk)  \t\t\n\t\tbegin\n\t\t\tbit_index = bit_index - 1'b1;\n\t\t\treg_adc_serial_data[bit_index] = adcdat;\n\t\t\tif ((bit_index == 0) || (bit_index == (DATA_WIDTH/2)))\n\t\t\tbegin\t\n\t\t\t\tif (bit_index == 0 && !adcfifo_full)\n\t\t\t\tbegin  \n\t\t\t\t\tadcfifo_writedata = reg_adc_serial_data;\n\t\t\t\t\tadcfifo_write = 1'b1;  \n\t\t\t\tend\n\t\t\t\tvalid_bit = 0;\n\t\t\tend\n\t\tend\t\t\t\n\tend\nend"
+    ]
+}

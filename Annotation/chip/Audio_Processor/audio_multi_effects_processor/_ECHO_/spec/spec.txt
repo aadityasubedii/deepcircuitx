@@ -1,0 +1,18 @@
+Module name: ECHO. 
+
+Module specification: The ECHO module is a digital echo implementation that mimics a simple form of a reverb/delay effect, mainly used in sound processing. Its main function is to output the input data along with scaled versions of the 41st previous input (40 clock cycles ago) divided by 2 and 4 respectively. 
+
+Inputs Ports: The module has two input ports:
+1. clk: This is the clock signal that controls the shifting of data in the register array.
+2. DATA_IN: This is a 12-bit input data that gets stored in the register array and used for echo computation.
+
+Output Port: The module has one output port:
+DATA_OUT: This is a 12-bit output that is computed by summing the input data with scaled versions (divided by 2 and 4) of the 41st previous input. This value changes whenever the input data changes.
+
+Internal Signals: The module has a register array named IN[40:0] that acts as a buffer keeping track of past inputs for echo computation. The data moves from IN[0] to IN[40] with each clock cycle.
+
+The ECHO module comprises of two major blocks of code:
+1. Initialization block: This section handles the initial state of the registers, setting DATA_OUT and all elements of the IN array to zero at the start.
+2. Sequential logic blocks: The first logic block computes the output value (DATA_OUT) whenever the input data (DATA_IN) changes. The second logic block deals with shifting the data in the IN array by one place at each positive edge of the clock signal.
+
+In a nutshell, this module retains a record of the previous inputs and uses this information to create an "echo" effect with the current input data.

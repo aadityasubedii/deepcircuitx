@@ -1,0 +1,1 @@
+    assign shift_in = busy_start ? in_data : 0;

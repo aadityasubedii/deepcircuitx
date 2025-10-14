@@ -1,0 +1,24 @@
+    dma #(.ADDR(8'h65), .WIDTH(8), .XFER_ADDR_W(16)) 
+    dma(
+        .wb_clk(wb_clk),
+        .wb_rst(wb_rst),
+        .wb_dbus_cyc(wb_dbus_cyc),
+        .wb_dbus_we(wb_dbus_we),
+        .wb_dbus_adr(wb_dbus_adr),
+        .wb_dbus_dat(wb_dbus_dat),
+        .dbus_rdt(dbus_rdt),
+        .dbus_ack(dbus_ack),
+        .xfer_block(xfer_block),
+        .xfer_adr(xfer_adr),
+        .xfer_dat(xfer_dat),
+        .xfer_re(xfer_re),
+        .block_done(block_done),
+        .xfer_done(xfer_done),
+        .dma_cyc(dma_cyc),
+        .dma_we(dma_we),
+        .dma_sel(dma_sel),
+        .dma_adr(dma_adr),
+        .dma_dat(dma_dat),
+        .dma_ack(dma_ack),
+        .dma_rdt(dma_rdt)
+    );

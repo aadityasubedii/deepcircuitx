@@ -1,0 +1,1 @@
+  assign {ra1, mc_bank[2*BANK_WIDTH-1:BANK_WIDTH], mc_address[2*ROW_WIDTH-1:ROW_WIDTH], mc_ras_n[1], mc_cas_n[1], mc_we_n[1]} = cmd1;

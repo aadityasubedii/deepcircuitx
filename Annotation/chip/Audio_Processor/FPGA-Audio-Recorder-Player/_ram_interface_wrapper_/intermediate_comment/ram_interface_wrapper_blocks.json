@@ -1,0 +1,21 @@
+{
+    "line_num": [
+        [
+            207,
+            209
+        ],
+        [
+            114,
+            205
+        ],
+        [
+            89,
+            110
+        ]
+    ],
+    "blocks": [
+        "assign rd_data_pres = (c3_p0_rd_count > 7'h00);\nassign rdy = c3_calib_done;\nassign STATLED4 = c3_p0_rd_empty;",
+        "ram_interface # (\n    .C3_P0_MASK_SIZE(4),\n    .C3_P0_DATA_PORT_SIZE(32),\n    .C3_P1_MASK_SIZE(4),\n    .C3_P1_DATA_PORT_SIZE(32),\n    .DEBUG_EN(0),\n    .C3_MEMCLK_PERIOD(3333),\n    .C3_CALIB_SOFT_IP(\"TRUE\"),\n    .C3_SIMULATION(\"FALSE\"),\n    .C3_RST_ACT_LOW(0),\n    .C3_INPUT_CLK_TYPE(\"SINGLE_ENDED\"),\n    .C3_MEM_ADDR_ORDER(\"ROW_BANK_COLUMN\"),\n    .C3_NUM_DQ_PINS(16),\n    .C3_MEM_ADDR_WIDTH(13),\n    .C3_MEM_BANKADDR_WIDTH(3)\n)\nu_memory_interface (\n\n\t\n\t.mcb3_dram_ras_n(hw_ram_rasn),\n\t.mcb3_dram_cas_n(hw_ram_casn),\n\t.mcb3_dram_we_n(hw_ram_wen),\n\t.mcb3_dram_ba(hw_ram_ba),\t\t\n\t.mcb3_dram_udqs(hw_ram_udqs_p),\n\t.mcb3_dram_udqs_n(hw_ram_udqs_n),\n\t.mcb3_dram_dqs(hw_ram_ldqs_p),\n\t.mcb3_dram_dqs_n(hw_ram_ldqs_n),\n\t.mcb3_dram_udm(hw_ram_udm),\n\t.mcb3_dram_dm(hw_ram_ldm),\n\t.mcb3_dram_ck(hw_ram_ck),\n\t.mcb3_dram_ck_n(hw_ram_ckn),\n\t.mcb3_dram_cke(hw_ram_cke),\n\t.mcb3_dram_odt(hw_ram_odt),\n\t.mcb3_dram_a(hw_ram_ad),\t\t\n\t.mcb3_dram_dq(hw_ram_dq),\t\t\n\t\n\t.mcb3_rzq(hw_rzq_pin),\n\t.mcb3_zio(hw_zio_pin),\n\t\n\n\t\n\t\n\t\n\t.c3_clk0\t\t        (clkout),\n\t.c3_rst0\t\t        (),\n\t\n\t\n   .c3_sys_clk           (clk),\n   .c3_sys_rst_i           (reset),                        \n\n \n  \t.c3_calib_done          (c3_calib_done),\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n\t\n   .c3_p0_cmd_clk                          (sys_clk),\n   .c3_p0_cmd_en                           (read_request | write_enable),\n   .c3_p0_cmd_instr                        ({2'b00,read_request}),\t\n   .c3_p0_cmd_bl                           (6'b00_0000),\t\t\n   .c3_p0_cmd_byte_addr                    ({4'h0,ram_cmd_byte_addr}), \n   .c3_p0_cmd_empty                        (c3_p0_cmd_empty), \n   .c3_p0_cmd_full                         (c3_p0_cmd_full), \n\n\t\n\t\n   .c3_p0_wr_clk                           (sys_clk),\n   .c3_p0_wr_en                            (write_enable),\n   .c3_p0_wr_mask                          (write_mask),\t\n   .c3_p0_wr_data                          (wr_data_in),\t\n   .c3_p0_wr_full                          (c3_p0_wr_full), \n   .c3_p0_wr_empty                         (c3_p0_wr_empty), \n   .c3_p0_wr_count                         (c3_p0_wr_count), \n   .c3_p0_wr_underrun                      (c3_p0_wr_underrun), \n   .c3_p0_wr_error                         (c3_p0_wr_error), \n\t\n\t\n   .c3_p0_rd_clk                           (sys_clk),\n   .c3_p0_rd_en                            (read_ack),\n   .c3_p0_rd_data                          (ram_rd_bus),\t\n   .c3_p0_rd_full                          (c3_p0_rd_full),\t\n   .c3_p0_rd_empty                         (c3_p0_rd_empty), \n   .c3_p0_rd_count                         (c3_p0_rd_count),\n   .c3_p0_rd_overflow                      (c3_p0_rd_overflow),\n   .c3_p0_rd_error                         (c3_p0_rd_error)\n);",
+        "\tgenerate\n\t\tif( DATA_BYTE_WIDTH == 1 ) begin\n\t\t\tassign wr_data_in = {data_in,data_in,data_in,data_in};\n\t\t\t\n\t\t\tassign write_mask = (address[0])?((address[1])?4'b1110:4'b1011):((address[1])?4'b1101:4'b0111);\n\t\t\tassign data_out = (address[0])?((address[1])?ram_rd_bus[7:0]:ram_rd_bus[23:16]):((address[1])?ram_rd_bus[15:8]:ram_rd_bus[31:24]);\n\t\t\tassign max_ram_address = 26'h1FFFFFF;\n\t\t\tassign ram_cmd_byte_addr = {address[25:2],2'b00};\n\t\tend else if( DATA_BYTE_WIDTH == 2 ) begin\n\t\t\tassign wr_data_in = {data_in,data_in};\n\t\t\tassign write_mask = (address[0])?4'b1100:4'b0011;\n\t\t\tassign data_out = (address[0])?ram_rd_bus[15:0]:ram_rd_bus[31:16];\n\t\t\tassign max_ram_address = 26'h0FFFFFF;\n\t\t\tassign ram_cmd_byte_addr = {address[24:1],2'b00};\n\t\tend else if ( DATA_BYTE_WIDTH == 4 ) begin\n\t\t\tassign wr_data_in = data_in;\n\t\t\tassign write_mask = 4'b0000;\n\t\t\tassign data_out = ram_rd_bus;\n\t\t\tassign max_ram_address = 26'h07FFFFF;\n\t\t\tassign ram_cmd_byte_addr = {address[23:0],2'b00};\n\t\tend\n\tendgenerate"
+    ]
+}

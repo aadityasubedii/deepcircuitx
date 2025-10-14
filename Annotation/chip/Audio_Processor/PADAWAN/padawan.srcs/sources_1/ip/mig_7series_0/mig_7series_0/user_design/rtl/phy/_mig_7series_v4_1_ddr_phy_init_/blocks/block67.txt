@@ -1,0 +1,4 @@
+Line number: 
+[3583, 3591]
+Comment: 
+This block of code manages the read counter (`num_reads`) in a DDR memory controller under various control conditions. A reset (`rst`) or a specific initial stage (`init_state_r == INIT_RDLVL_STG2_READ_WAIT`) will set `num_reads` to zero. If not reset and the PHY is not full (`~(phy_ctl_full || phy_cmd_full`), the number of reads is decremented by 1. In case the controller is in another specific initial read state (`init_state_r == INIT_RDLVL_STG2_READ`) or either of the physical controls are full with a new burst flag (`phy_ctl_full || phy_cmd_full && new_burst_r`), `num_reads` is set to 3. The `else` clause indicates a different control flow set for when `nCK_PER_CLK` equals 2. The `#TCQ` represents delay cycle parameter.

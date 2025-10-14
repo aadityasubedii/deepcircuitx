@@ -1,0 +1,26 @@
+{
+    "line_num": [
+        [
+            138,
+            155
+        ],
+        [
+            100,
+            136
+        ],
+        [
+            86,
+            98
+        ],
+        [
+            82,
+            84
+        ]
+    ],
+    "blocks": [
+        "\talways @(posedge Sclk)\n\tbegin\n\t\tif (OutReady)\n\t\tbegin\n\t\t\twriteL[i] = OutputL_beh ^ OutputL_rtl;\n\t\t\twriteR[i] = OutputR_beh ^ OutputR_rtl;\n\t\t\tOutputL = OutputL_beh ^ OutputL_rtl;\n\t\t\tOutputR = OutputR_beh ^ OutputR_rtl;\n\t\t\ti = i - 1;\n\t\t\tif (i < 0)\n\t\t\tbegin\n\t\t\t\t$fmonitor(fp, \"%H\\t %H\\n\", writeL, writeR);\n\t\t\t\ti = 39;\n\t\t\t\tif (!(writeL == 40'd0 && writeR == 40'd0))\n\t\t\t\t\tmismatches = mismatches + 1'b1;\n\t\t\tend\n\t\tend\n\tend",
+        "\talways @(posedge Dclk)\n\tbegin\n\t\tif ((((j == 9458) || (j == 13058)) && reset_flag == 1'b0))\n\t\tbegin\n\t\t\tReset_n = 1'b0;\n\t\t\treset_flag = 1'b1;\n\t\t\t\n\n\n\n\t\tend\n\t\telse if (InReady || reset_flag)\n\t\tbegin\n\t\t\tif (j < 15056)\n\t\t\tbegin\n\t\t\t\tReset_n = 1'b1;\n\t\t\t\tif (k == 15)\n\t\t\t\t\tFrame = 1'b1;\n\t\t\t\telse\n\t\t\t\t\tFrame = 1'b0;\n\t\t\t\tif (k >= 0)\n\t\t\t\tbegin\n\t\t\t\t\tInputL = data[j][k];\n\t\t\t\t\tInputR = data[j+1][k];\n\t\t\t\t\t\n\t\t\t\t\tk = k - 1;\n\t\t\t\tend\n\t\t\t\tif (k == -1)\n\t\t\t\tbegin\n\t\t\t\t\tk = 15;\n\t\t\t\t\tj = j + 2;\n\t\t\t\t\tif (reset_flag)\n\t\t\t\t\t\treset_flag = 1'b0;\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend",
+        "\tinitial begin\n\t\tDclk = 1;\n\t\tSclk = 1;\n\t\tFrame = 0;\n\t\tInputL = 0;\n\t\tInputR = 0;\n\t\tReset_n = 1;\n\t\tmismatches = 0;\n\t\t$readmemh (\"data1.in\", data);\n\t\t$display (\"Read data: \");\n    \tStart = 1'b1;\n\t\t#2; Start = 1'b0;\n\tend",
+        "\tinitial begin\n\t\tfp = $fopen (\"output.txt\", \"w+\");\n\tend"
+    ]
+}

@@ -1,0 +1,22 @@
+Module name: I2S_master
+
+Module specification: The I2S_master module functions as the master node of an Inter-IC Sound (I2S) protocol responsible for generating timing signals and managing data transitions for an I2S data line. 
+
+Input Ports: 
+1. clk: The master clock driving the transitions of signals and states within the module. 
+2. rst: The reset signal returning the module states to their initial values when it is high. 
+3. data_in: The digital audio data input, which influences the module's generated output according to the I2S protocol.
+
+Output Ports: 
+1. m_clk: The master clock output, oscillating at each clk input clock edge.
+2. LR_clk: The Left/Right clock of the I2S protocol, toggling at every complete stereo data transmission.
+3. s_clk: The serial clock of the I2S protocol, controlling bit shifting and reading in the data stream.
+4. DONE: The signal indicating the completion of one I2S data stream passing process.
+5. data_out: The I2S protocol-compliant output data stream.
+
+Internal Signals: 
+1. LR_count, s_count, s_max, shift_count_0, shift_count_1: These counters and control signals coordinate and manage the timing and indexing of broadcasted data.
+2. NS and PS: These state signals control the transitions between different operational states that the module can exist in.
+
+States: 
+The module operates in one of three states (IDLE, CHAN_0, CHAN_1). In the IDLE state, no active transmission takes place. In the CHAN_0 and CHAN_1 states, corresponding Channels 0 and 1 data is respectively transmitted. How each state functions is defined by several blocks of code. Constant parameters determine the data frame width, the base clock frequency, the sample rate, and the type of output signal channel. The states change based on the state transition block controlled by the master clock and the reset signal. The reset signal forces the system to transition to the IDLE state. Data output generation and handshaking signals are managed by another block, with the state being updated at each negative edge of the serial clock to toggle the DONE signal and broadcast data from the data_in input to the data_out output. A final block updates the values of m_clk, LR_clk, and s_clk with the positive edge of the primary clock, and the state of s_clk further influences the values of LR_clk and LR_count.

@@ -1,0 +1,1 @@
+assign lost_vid_locked = (~vid_locked & vid_locked_reg);

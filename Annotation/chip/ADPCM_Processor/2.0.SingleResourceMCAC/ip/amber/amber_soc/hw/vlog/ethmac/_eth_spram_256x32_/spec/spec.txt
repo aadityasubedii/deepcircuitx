@@ -1,0 +1,11 @@
+Module name: eth_spram_256x32. 
+
+Module specification: 
+
+The eth_spram_256x32 is a synchronous single-port RAM module built for various types of Xilinx FPGAs (Spartan 6 or Virtex 6) or a generic FPGA type. Its primary functionality is to carry out read or write operations in an organized, byte-wise manner, into memory addresses of width 32-bits and depth 256. 
+
+The module has a number of input ports including 'clk' (provides the clock input), 'rst' (for resetting the memory), 'ce' (chip enable), 'we' (controls byte-wise write operations), 'oe' (output enable), 'addr' (byte address input) and 'di' (32-bit data input). The data read from one of the 256 memory addresses is outputted through the 'do' port. 
+
+Internally, a 'write_enable' signal is generated. This takes the logical AND of the chip enable signal (ce) and the bitwise OR of the write enable (we) signal, going high only when the chip is enabled and at least one bit in 'we' is active. This internal signal aids in controlling the write operations of the RAM block. 
+
+The RTL code for the module specifies different SRAM modules for different FPGA types, identified by preprocessor directives. Each of these SRAM modules is driven by input signals, including the internally generated 'write_enable', to enable the intended write operations into the memory block. Depending on the given commands, availability of 'ce', state of 'write_enable', and the 'oe', the module either allows data to be written into the memory location denoted by 'addr', or allows for reading the data from the already written memory location. All operations are synchronized using the rising edge of the 'clk' signal.

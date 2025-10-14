@@ -1,0 +1,7 @@
+Module name: sp_ram. 
+
+Module specification: The sp_ram is a simple single port Random Access Memory (RAM) module with a capacity of 8*1024 32-bit words. It operates with a clock signal ('ck') and performs read or write operations based on other various input signals. It uses a Write Enable signal ('we') to dictate when a write operation should occur. A 4-bit 'sel' signal determines which byte in the selected 32-bit word needs to be written to the memory. The location for read or write operations in RAM is given by a 32-bit 'addr' input, and the data to be written ('wdata') is also a 32-bit input. The output from the read operation is thrown onto a 32-bit signal named 'rdata.'
+
+Internally, the module uses a 32-bit memory array ('mem') of size 8*1024 to store the data involved in read or write operations. The 'addr' and 'sel' signals determine the exact location within this memory array for operations.
+
+In terms of the code's structure, it's made up of an initial parameter setting (WORDS=8*1024), followed by an always block. Inside the always block, triggered by a positive edge of the clock, a conditional statement handles write operations depending upon the status of 'we'. If 'we' is asserted, the module writes the 'wdata' into 'mem' at the 'addr', with byte steering controlled by 'sel'. Regardless of whether a write occurs, 'rdata' is always updated with the value stored at 'addr' in 'mem' at every positive edge of the clock.

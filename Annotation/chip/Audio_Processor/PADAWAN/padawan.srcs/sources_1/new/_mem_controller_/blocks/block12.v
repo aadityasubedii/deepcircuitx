@@ -1,0 +1,1 @@
+    initial write_zero = 0;    

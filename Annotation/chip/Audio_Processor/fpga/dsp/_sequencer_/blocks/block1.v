@@ -1,0 +1,1 @@
+    assign done = done_delay & done_req;

@@ -1,0 +1,1 @@
+assign next_bank_FROM_slave_TO_controller = registers[0];

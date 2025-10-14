@@ -1,0 +1,1 @@
+  wire maint_hit_this_bm = ~maint_idle && maint_hit;

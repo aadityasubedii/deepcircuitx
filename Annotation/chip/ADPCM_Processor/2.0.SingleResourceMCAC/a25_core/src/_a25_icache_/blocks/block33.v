@@ -1,0 +1,1 @@
+assign idle_hit         = |data_hit_way;

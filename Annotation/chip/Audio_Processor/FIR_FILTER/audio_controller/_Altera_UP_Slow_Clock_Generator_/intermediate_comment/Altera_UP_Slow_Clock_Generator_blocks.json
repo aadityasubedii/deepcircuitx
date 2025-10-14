@@ -1,0 +1,36 @@
+{
+    "line_num": [
+        [
+            129,
+            138
+        ],
+        [
+            118,
+            127
+        ],
+        [
+            110,
+            116
+        ],
+        [
+            102,
+            108
+        ],
+        [
+            94,
+            100
+        ],
+        [
+            86,
+            92
+        ]
+    ],
+    "blocks": [
+        "always @(posedge clk)\nbegin\n\tif (reset == 1'b1)\n\t\tmiddle_of_low_level <= 1'b0;\n\telse\n\t\tmiddle_of_low_level <= \n\t\t\t~clk_counter[COUNTER_BITS] & \n\t\t\t~clk_counter[(COUNTER_BITS - 1)] &\n\t\t\t(&(clk_counter[(COUNTER_BITS - 2):1]));\nend",
+        "always @(posedge clk)\nbegin\n\tif (reset == 1'b1)\n\t\tmiddle_of_high_level <= 1'b0;\n\telse\n\t\tmiddle_of_high_level <= \n\t\t\tclk_counter[COUNTER_BITS] & \n\t\t\t~clk_counter[(COUNTER_BITS - 1)] &\n\t\t\t(&(clk_counter[(COUNTER_BITS - 2):1]));\nend",
+        "always @(posedge clk)\nbegin\n\tif (reset == 1'b1)\n\t\tfalling_edge <= 1'b0;\n\telse\n\t\tfalling_edge <= (clk_counter[COUNTER_BITS] ^ new_clk) & new_clk;\nend",
+        "always @(posedge clk)\nbegin\n\tif (reset == 1'b1)\n\t\trising_edge\t<= 1'b0;\n\telse\n\t\trising_edge\t<= (clk_counter[COUNTER_BITS] ^ new_clk) & ~new_clk;\nend",
+        "always @(posedge clk)\nbegin\n\tif (reset == 1'b1)\n\t\tnew_clk\t<= 1'b0;\n\telse\n\t\tnew_clk\t<= clk_counter[COUNTER_BITS];\nend",
+        "always @(posedge clk)\nbegin\n\tif (reset == 1'b1)\n\t\tclk_counter\t<= {COUNTER_BITS{1'b0}};\n\telse if (enable_clk == 1'b1)\n\t\tclk_counter\t<= clk_counter + COUNTER_INC;\nend"
+    ]
+}

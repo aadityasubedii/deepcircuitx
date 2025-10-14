@@ -1,0 +1,56 @@
+{
+    "line_num": [
+        [
+            154,
+            156
+        ],
+        [
+            149,
+            153
+        ],
+        [
+            144,
+            147
+        ],
+        [
+            139,
+            142
+        ],
+        [
+            103,
+            135
+        ],
+        [
+            98,
+            101
+        ],
+        [
+            72,
+            88
+        ],
+        [
+            67,
+            70
+        ],
+        [
+            47,
+            57
+        ],
+        [
+            41,
+            45
+        ]
+    ],
+    "blocks": [
+        "\t\tassign adc_sck = !clk_1MHz & !adc_cs;\n\t\tassign sdata_to_adc = adc_din;\n\t\tassign data_valid = adc_cs;",
+        "\talways @(posedge sysclk)\n\t\tif(adc_done) \t\t\t\t\t\n\t\t\t\tdata_from_adc = shift_reg;\n\n\t",
+        "\talways @(negedge sysclk)\n\t\tif((adc_cs==1'b0)&&(shift_ena==1'b1)&&(tick==1'b1))\t\t\n\t\t\t\tshift_reg <= {shift_reg[8:0],sdata_from_adc};\n\t",
+        "\tinitial\tbegin\n\t\t\tshift_reg = 10'b0;\n\t\t\tdata_from_adc = 10'b0;\n\t\t\tend",
+        "\talways @(posedge sysclk)  \n\t\tif (tick==1'b1)  begin\n\t\n\t\n\t\tadc_cs <= 1'b0;  adc_done <= 1'b0;  adc_din <= 1'b0; shift_ena <= 1'b0;\n\t\tstate <= state + 1'b1;\n\t\tcase (state)\n\t\t\t5'd0:\tbegin\n\t\t\t\t\t\tif (adc_start==1'b0) begin\n\t\t\t\t\t\t\tstate <= 5'd0;\t\t\t\n\t\t\t\t\t\t\tadc_cs <= 1'b1;\t\t\n\t\t\t\t\t\t\tend\n\t\t\t\t\t\telse begin\n\t\t\t\t\t\t\tstate <= 5'd1;\t\t\t\n\t\t\t\t\t\t\tadc_din <= 1'b1;\t\t\n\t\t\t\t\t\t\tend\n\t\t\t\t\tend\n\t\t\t5'd1:\tadc_din <= SGL;\t\t\t\t\n\t\t\t5'd2:\tadc_din <= channel;\t\t\t\n\t\t\t5'd3:\tadc_din <= MSBF;\t\t\t\t\n\t\t\t5'd4: shift_ena <= 1'b1;  \t\t\t\n\t\t\t5'd15: begin\n\t\t\t\t\t\tshift_ena <= 1'b0;\n\t\t\t\t\t\tadc_done <= 1'b1;\n\t\t\t\t\t end\n\t\t\t5'd16: begin  \n\t\t\t\t\t\tadc_cs <= 1'b1;\t\t\n\t\t\t\t\t\tstate <= 5'd0;  \t\t\n\t\t\t\t\t end\n\t\t\tdefault: \t\t\t\t\n\t\t\t\t\t\tshift_ena <= 1'b1;\t\n\t\t\tendcase\n\t\tend\t",
+        "\tinitial\tbegin\t\n\t\tstate = 5'b0; adc_cs = 1'b1; adc_done = 1'b0; \n\t\tadc_din = 1'b0; shift_ena <= 1'b0;\n\t\tend",
+        "\talways @ (posedge sysclk)\n\t\tcase (sr_state)\n\t\t\tIDLE:\tif (start==1'b0) sr_state <= IDLE;\n\t\t\t\t\telse\tbegin\n\t\t\t\t\t\tsr_state <= WAIT_CSB_FALL;\n\t\t\t\t\t\tadc_start <= 1'b1;\n\t\t\t\t\t\tend  \t\t\t\t\n\t\t\tWAIT_CSB_FALL: if (adc_cs==1'b1) sr_state <= WAIT_CSB_FALL;\n\t\t\t\t\telse sr_state <= WAIT_CSB_HIGH;\n\t\t\t\t\t\n\t\t\tWAIT_CSB_HIGH: if (adc_cs==1'b0) sr_state <= WAIT_CSB_HIGH;\n\t\t\t\t\telse begin\n\t\t\t\t\t\tsr_state <= IDLE;\n\t\t\t\t\t\tadc_start <= 1'b0;\n\t\t\t\t\t\tend\t\n\t\t\tdefault: sr_state <= IDLE;\n\t\tendcase",
+        "\tinitial begin\n\t\tsr_state = IDLE;\n\t\tadc_start = 1'b0;\t\n\t\tend",
+        "\talways @ (posedge sysclk)   \n\t  if (ctr==0) begin\n\t\t  ctr <= TIME_CONSTANT;\n\t\t  if (clk_1MHz==1'b0)\n\t\t\t\ttick <= 1'b1;\n\t\t  clk_1MHz <= ~clk_1MHz; \n\t\tend\n\t  else  begin\n\t\t  ctr <= ctr - 1'b1;\n\t\t  tick <= 1'b0;\n\t\tend",
+        "\tinitial begin\n\t\tclk_1MHz = 0;\t\t\t\n\t\tctr = 5'b0;\t\t\t\t\n\t\ttick = 1'b0;\t\t\n\tend"
+    ]
+}

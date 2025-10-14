@@ -1,0 +1,1 @@
+        assign rd_rmw = 1'b0;

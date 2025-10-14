@@ -1,0 +1,1 @@
+  assign D_ctrl_wrctl_inst = D_op_wrctl;

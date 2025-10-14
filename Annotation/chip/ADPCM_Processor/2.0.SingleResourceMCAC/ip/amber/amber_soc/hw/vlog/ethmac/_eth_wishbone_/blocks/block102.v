@@ -1,0 +1,1 @@
+assign RxBDDataIn = {LatchedRxLength, 1'b0, RxStatus_s, 4'h0, RxStatusInLatched};

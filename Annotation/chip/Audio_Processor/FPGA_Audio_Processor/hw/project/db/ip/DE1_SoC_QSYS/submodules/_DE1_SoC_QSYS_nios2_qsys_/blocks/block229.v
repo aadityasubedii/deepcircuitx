@@ -1,0 +1,1 @@
+  assign intr_req = W_status_reg_pie & (W_ipending_reg != 0);

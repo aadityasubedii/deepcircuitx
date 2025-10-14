@@ -1,0 +1,231 @@
+{
+    "line_num": [
+        [
+            539,
+            541
+        ],
+        [
+            531,
+            543
+        ],
+        [
+            522,
+            522
+        ],
+        [
+            509,
+            521
+        ],
+        [
+            499,
+            502
+        ],
+        [
+            494,
+            498
+        ],
+        [
+            487,
+            487
+        ],
+        [
+            486,
+            486
+        ],
+        [
+            477,
+            482
+        ],
+        [
+            474,
+            476
+        ],
+        [
+            467,
+            467
+        ],
+        [
+            462,
+            464
+        ],
+        [
+            447,
+            466
+        ],
+        [
+            431,
+            446
+        ],
+        [
+            425,
+            427
+        ],
+        [
+            419,
+            423
+        ],
+        [
+            417,
+            418
+        ],
+        [
+            402,
+            402
+        ],
+        [
+            399,
+            401
+        ],
+        [
+            398,
+            398
+        ],
+        [
+            387,
+            394
+        ],
+        [
+            377,
+            382
+        ],
+        [
+            373,
+            376
+        ],
+        [
+            355,
+            355
+        ],
+        [
+            352,
+            354
+        ],
+        [
+            351,
+            351
+        ],
+        [
+            340,
+            347
+        ],
+        [
+            330,
+            335
+        ],
+        [
+            326,
+            328
+        ],
+        [
+            302,
+            302
+        ],
+        [
+            300,
+            301
+        ],
+        [
+            299,
+            299
+        ],
+        [
+            289,
+            298
+        ],
+        [
+            272,
+            288
+        ],
+        [
+            252,
+            252
+        ],
+        [
+            250,
+            251
+        ],
+        [
+            249,
+            249
+        ],
+        [
+            240,
+            248
+        ],
+        [
+            237,
+            239
+        ],
+        [
+            235,
+            236
+        ],
+        [
+            234,
+            234
+        ],
+        [
+            225,
+            233
+        ],
+        [
+            221,
+            224
+        ],
+        [
+            208,
+            216
+        ],
+        [
+            189,
+            199
+        ]
+    ],
+    "blocks": [
+        "      assign periodic_rd_request = init_calib_complete && periodic_rd_request_r;\n    end else\n      assign periodic_rd_request = 1'b0; ",
+        "      always @(posedge clk) periodic_rd_request_r <=\n                              #TCQ periodic_rd_request_ns;\n\n   `ifdef MC_SVA\n      read_clears_periodic_rd_request: cover property (@(posedge clk)\n               (rst && (periodic_rd_request_r && read_this_rank)));\n   `endif\n\n      assign periodic_rd_request = init_calib_complete && periodic_rd_request_r;\n    end else\n      assign periodic_rd_request = 1'b0; \n\n  end",
+        "      always @(posedge clk) periodic_rd_timer_r <= #TCQ periodic_rd_timer_ns;",
+        "      always @(init_calib_complete or maint_prescaler_tick_r\n               or periodic_rd_timer_r or int_read_this_rank) begin\n        periodic_rd_timer_ns = periodic_rd_timer_r;\n        if (~init_calib_complete)\n          periodic_rd_timer_ns = PERIODIC_RD_TIMER_DIV[0+:PERIODIC_RD_TIMER_WIDTH];\n          \n        else if (int_read_this_rank || periodic_rd_timer_one)\n                periodic_rd_timer_ns =\n                   PERIODIC_RD_TIMER_DIV[0+:PERIODIC_RD_TIMER_WIDTH];\n             else if (|periodic_rd_timer_r && maint_prescaler_tick_r)\n                 periodic_rd_timer_ns =\n                   periodic_rd_timer_r - ONE[0+:PERIODIC_RD_TIMER_WIDTH];\n      end",
+        "      always @(posedge clk) begin\n        if (rst) periodic_rd_cntr1_r <= #TCQ 1'b0;\n        else     periodic_rd_cntr1_r <= #TCQ periodic_rd_cntr1_ns;\n      end",
+        "      always @(clear_periodic_rd_request or periodic_rd_cntr1_r) begin\n        periodic_rd_cntr1_ns = periodic_rd_cntr1_r;\n        if (clear_periodic_rd_request)\n          periodic_rd_cntr1_ns = periodic_rd_cntr1_r + 1'b1;\n      end",
+        "      always @(posedge clk) read_this_rank_r1 <= #TCQ read_this_rank_r;",
+        "      always @(posedge clk) read_this_rank_r  <= #TCQ read_this_rank;",
+        "      always @(rd_this_rank_r or sending_col) begin\n        read_this_rank = 1'b0;\n        for (i = 0; i < nBANK_MACHS; i = i + 1)\n        read_this_rank =\n           read_this_rank || (sending_col[i] && rd_this_rank_r[(i*RANKS)+ID]);\n      end",
+        "  generate begin : periodic_rd_generation\n    if ( PERIODIC_RD_TIMER_DIV != 0 ) begin  \n      reg read_this_rank;",
+        "  endgenerate",
+        "      assign refresh_request = init_calib_complete &&\n              (~|refresh_bank_r ||\n  ((refresh_bank_r != nREFRESH_BANK[0+:REFRESH_BANK_WIDTH]) && ~my_rank_busy));",
+        "      always @(posedge clk) refresh_bank_r <= #TCQ refresh_bank_ns;\n\n   `ifdef MC_SVA\n      refresh_bank_overflow: assert property (@(posedge clk)\n               (rst || (refresh_bank_r <= nREFRESH_BANK)));\n      refresh_bank_underflow: assert property (@(posedge clk)\n               (rst || ~(~|refresh_bank_r && ~my_refresh && refresh_tick)));\n      refresh_hi_priority: cover property (@(posedge clk)\n               (rst && ~|refresh_bank_ns && (refresh_bank_r ==\n                       ONE[0+:REFRESH_BANK_WIDTH])));\n      refresh_bank_full: cover property (@(posedge clk)\n               (rst && (refresh_bank_r ==\n                        nREFRESH_BANK[0+:REFRESH_BANK_WIDTH])));\n   `endif\n\n      assign refresh_request = init_calib_complete &&\n              (~|refresh_bank_r ||\n  ((refresh_bank_r != nREFRESH_BANK[0+:REFRESH_BANK_WIDTH]) && ~my_rank_busy));\n\n    end",
+        "      always @(app_ref_req or init_calib_complete or my_refresh\n               or refresh_bank_r or refresh_tick)\n        if (~init_calib_complete)\n          if (REFRESH_TIMER_DIV == 0)\n                refresh_bank_ns = nREFRESH_BANK[0+:REFRESH_BANK_WIDTH];\n          else refresh_bank_ns = {REFRESH_BANK_WIDTH{1'b0}};\n        else\n          case ({my_refresh, refresh_tick, app_ref_req})\n            3'b000, 3'b110, 3'b101, 3'b111 : refresh_bank_ns = refresh_bank_r;\n            3'b010, 3'b001, 3'b011 : refresh_bank_ns =\n                                          (|refresh_bank_r)?\n                                          refresh_bank_r - ONE[0+:REFRESH_BANK_WIDTH]:\n                                          refresh_bank_r;\n            3'b100                 : refresh_bank_ns =\n                                   refresh_bank_r + ONE[0+:REFRESH_BANK_WIDTH];\n          endcase ",
+        "      wire my_refresh =\n        insert_maint_r1 && ~maint_zq_r && ~maint_sre_r && ~maint_srx_r &&\n        (maint_rank_r == ID[RANK_WIDTH-1:0]);",
+        "      always @(rank_busy_r) begin\n        my_rank_busy = 1'b0;\n        for (i=0; i < nBANK_MACHS; i=i+1)\n          my_rank_busy = my_rank_busy || rank_busy_r[(i*RANKS)+ID];\n      end",
+        "  generate begin : refresh_generation\n      reg my_rank_busy;",
+        "  endgenerate",
+        "      always @(inhbt_wr_ns) inhbt_wr = inhbt_wr_ns;\n\n    end",
+        "      always @(posedge clk) rtw_cnt_r <= #TCQ rtw_cnt_ns;",
+        "      always @(rst or col_rd_wr or sending_col or rtw_cnt_r)\n        if (rst) rtw_cnt_ns = {RTW_CNT_WIDTH{1'b0}};\n        else begin\n          rtw_cnt_ns = rtw_cnt_r;\n          if (col_rd_wr && |sending_col) rtw_cnt_ns =\n                 CASRD2CASWR_CLKS[RTW_CNT_WIDTH-1:0] - ONE[RTW_CNT_WIDTH-1:0];\n          else if (|rtw_cnt_r) rtw_cnt_ns = rtw_cnt_r - ONE[RTW_CNT_WIDTH-1:0];\n        end",
+        "      always @(sending_col or rd_this_rank_r) begin\n        read_this_rank = 1'b0;\n        for (i = 0; i < nBANK_MACHS; i = i + 1)\n        read_this_rank =\n           read_this_rank || (sending_col[i] && rd_this_rank_r[(i*RANKS)+ID]);\n      end",
+        "  generate\n    begin : rtw_timer\n\n      reg read_this_rank;",
+        "  endgenerate",
+        "      always @(inhbt_rd_ns) inhbt_rd = inhbt_rd_ns;\n\n    end",
+        "      always @(posedge clk) wtr_cnt_r <= #TCQ wtr_cnt_ns;",
+        "      always @(rst or write_this_rank or wtr_cnt_r)\n        if (rst) wtr_cnt_ns = {WTR_CNT_WIDTH{1'b0}};\n        else begin\n          wtr_cnt_ns = wtr_cnt_r;\n          if (write_this_rank) wtr_cnt_ns =\n                 CASWR2CASRD_CLKS[WTR_CNT_WIDTH-1:0] - ONE[WTR_CNT_WIDTH-1:0];\n          else if (|wtr_cnt_r) wtr_cnt_ns = wtr_cnt_r - ONE[WTR_CNT_WIDTH-1:0];\n        end",
+        "      always @(sending_col or wr_this_rank_r) begin\n        write_this_rank = 1'b0;\n        for (i = 0; i < nBANK_MACHS; i = i + 1)\n        write_this_rank =\n           write_this_rank || (sending_col[i] && wr_this_rank_r[(i*RANKS)+ID]);\n      end",
+        "  generate\n    begin : wtr_timer\n",
+        "  endgenerate",
+        "      always @(posedge clk) inhbt_act_faw_r <= #TCQ inhbt_act_faw_ns;\n    end ",
+        "      always @(posedge clk) faw_cnt_r <= #TCQ faw_cnt_ns;",
+        "      always @(act_delayed or act_this_rank or add_rrd_inhbt\n               or faw_cnt_r or rst) begin\n        if (rst) faw_cnt_ns = 3'b0;\n        else begin\n          faw_cnt_ns = faw_cnt_r;\n          if (act_this_rank) faw_cnt_ns = faw_cnt_r + 3'b1;\n          if (act_delayed) faw_cnt_ns = faw_cnt_ns - 3'b1;\n        end\n        inhbt_act_faw_ns = (faw_cnt_ns == 3'h4) || add_rrd_inhbt;\n      end",
+        "  generate\n    begin : inhbt_act_faw\n      wire act_delayed;\n      wire [4:0] shift_depth = nFAW_CLKS[4:0] - 5'd3;\n\n      SRLC32E #(.INIT(32'h00000000) ) SRLC32E0\n        (.Q(act_delayed), \n         .Q31(), \n         .A(shift_depth), \n         .CE(1'b1), \n         .CLK(clk), \n         .D(act_this_rank) \n        );\n\n      reg [2:0] faw_cnt_ns;\n      reg [2:0] faw_cnt_r;\n      reg inhbt_act_faw_ns;",
+        "  endgenerate",
+        "      always @(add_rrd_ns) add_rrd_inhbt = |add_rrd_ns;\n    end ",
+        "      always @(posedge clk) add_rrd_r <= #TCQ add_rrd_ns;",
+        "      always @(act_this_rank or add_rrd_r or rst) begin\n        add_rrd_ns = add_rrd_r;\n        if (rst) add_rrd_ns = {ADD_RRD_CNTR_WIDTH{1'b0}};\n        else\n          if (act_this_rank)\n            add_rrd_ns = nRRD_CLKS[0+:ADD_RRD_CNTR_WIDTH];\n          else if (|add_rrd_r) add_rrd_ns =\n                            add_rrd_r - {1'b1};\n      end",
+        "    else if (nADD_RRD > 0) begin :add_rdd0\n      reg[ADD_RRD_CNTR_WIDTH-1:0] add_rrd_ns;\n      reg[ADD_RRD_CNTR_WIDTH-1:0] add_rrd_r;",
+        "      always @(add_rrd_ns) add_rrd_inhbt = |add_rrd_ns;\n    end ",
+        "      always @(posedge clk) add_rrd_r <= #TCQ add_rrd_ns;",
+        "      always @(act_this_rank or add_rrd_r or rst) begin\n        add_rrd_ns = add_rrd_r;\n        if (rst) add_rrd_ns = {ADD_RRD_CNTR_WIDTH{1'b0}};\n        else\n          if (act_this_rank)\n            add_rrd_ns = nRRD_CLKS[0+:ADD_RRD_CNTR_WIDTH];\n          else if (|add_rrd_r) add_rrd_ns =\n                            add_rrd_r - {{ADD_RRD_CNTR_WIDTH-1{1'b0}}, 1'b1};\n      end",
+        "  generate\n    if (nADD_RRD > 0 && ADD_RRD_CNTR_WIDTH > 1) begin :add_rdd1\n      reg[ADD_RRD_CNTR_WIDTH-1:0] add_rrd_ns;\n      reg[ADD_RRD_CNTR_WIDTH-1:0] add_rrd_r;",
+        "  always @(act_this_rank_r or sending_row) begin\n    \n    act_this_rank = 1'b0;\n    \n    for (i = 0; i < nBANK_MACHS; i = i + 1)\n      act_this_rank =\n         act_this_rank || (sending_row[i] && act_this_rank_r[(i*RANKS)+ID]);\n  \n  end",
+        "  function integer clogb2 (input integer size);\n    begin\n    \n    size = size - 1;\n\n    \n    for (clogb2 = 1; size > 1; clogb2 = clogb2 + 1)\n      size = size >> 1;\n\n    end\n  endfunction "
+    ]
+}

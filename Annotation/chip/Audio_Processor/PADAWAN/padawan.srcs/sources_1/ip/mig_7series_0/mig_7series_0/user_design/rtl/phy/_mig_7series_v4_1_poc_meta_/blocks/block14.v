@@ -1,0 +1,1 @@
+  assign window_center = window_center_r;

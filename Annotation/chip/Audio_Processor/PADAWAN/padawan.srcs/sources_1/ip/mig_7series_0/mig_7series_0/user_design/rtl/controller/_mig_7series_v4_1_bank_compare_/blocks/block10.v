@@ -1,0 +1,1 @@
+  always @(posedge clk) rb_hit_busy_r <= #TCQ rb_hit_busy_ns_lcl;

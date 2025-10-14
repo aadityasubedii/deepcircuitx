@@ -1,0 +1,1 @@
+localparam NO_REGISTERS = 18;

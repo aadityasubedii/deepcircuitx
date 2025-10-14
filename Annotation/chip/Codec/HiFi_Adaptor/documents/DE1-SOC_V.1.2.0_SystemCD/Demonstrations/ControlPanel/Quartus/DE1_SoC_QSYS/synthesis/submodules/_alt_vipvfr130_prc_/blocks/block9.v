@@ -1,0 +1,1 @@
+assign master_reset = (CLOCKS_ARE_SEPARATE) ? master_av_reset : reset;

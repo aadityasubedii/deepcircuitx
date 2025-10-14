@@ -1,0 +1,1 @@
+      assign buf_wr_addr = {rd_data_addr[3:0], rd_data_offset};

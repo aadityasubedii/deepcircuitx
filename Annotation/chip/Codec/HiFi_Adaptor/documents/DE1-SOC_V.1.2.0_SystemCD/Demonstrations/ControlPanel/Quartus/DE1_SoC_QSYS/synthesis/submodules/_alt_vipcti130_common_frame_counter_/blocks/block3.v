@@ -1,0 +1,1 @@
+        assign v_total_int = v_total - 13'd1;

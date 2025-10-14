@@ -1,0 +1,11 @@
+Module name: test. 
+
+Module specification: The test module serves to test the functionality of another module, "TDMO". The test module uses an initial begin block to run multiple test cases, assess the module's responses and compare the output with the expected values. 
+
+The input ports for the test module include reset, ser_clk, frame_sync_in, scan inputs (scan_in0 to scan_in4), scan_enable, test_mode, i_wb_adr, i_wb_sel, i_wb_we, i_wb_dat, i_wb_cyc, i_wb_stb, and clk. These inputs serve a range of functions from initializing data, controlling scan testing operations, dictating the timing of data transmission with clock signals, operating mode selection, to driving reading and writing operations via the Wishbone bus interface.
+
+The output ports comprise scan_out (0-4), frame_sync_out, data_out, ser_clk_out, o_wb_dat, o_wb_ack and o_wb_err. These outputs correspond to the outcomes of scan testing, frame data operations, serial clock signals, and outputs from the Wishbone bus interface that indicate successful data transfer or reflect error conditions.
+
+Internally, the module uses a number of signals, such as scan_in and scan_out, reset, ser_clk, frame_sync_in and frame_sync_out, data_in_vec and data_out_reg, clk, Wishbone-specific signals like i_wb_adr, i_wb_sel, i_wb_we, o_wb_dat, i_wb_dat, i_wb_cyc, i_wb_stb, o_wb_ack and o_wb_err, along with rand_bit, rand_ch, trigger and prev_ch0. All of them collaborate to allow the test module to both simulate and monitor the functioning of the module under test.
+
+The code is primarily divided into tasks for testing, auxiliary tasks for writing and reading data via Wishbone, an 'always' block for clock signal generation, and an 'initial' block for initiating tests. The 'initial' block begins with resetting the test conditions, followed by serial initiation of comprehensive test cases and data validation after each testing operation. Failures are recorded and displayed for further debugging, while successful completion results in the module indicating the end of the test.

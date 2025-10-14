@@ -1,0 +1,1 @@
+  always @(posedge clk) oclk_center_write_resume_r <= #TCQ oclk_center_write_resume_ns;

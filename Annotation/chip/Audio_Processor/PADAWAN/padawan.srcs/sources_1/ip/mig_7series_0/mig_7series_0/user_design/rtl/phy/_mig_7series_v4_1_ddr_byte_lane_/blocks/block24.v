@@ -1,0 +1,1 @@
+assign #(25) phy_rd_en_ = 1'b1;

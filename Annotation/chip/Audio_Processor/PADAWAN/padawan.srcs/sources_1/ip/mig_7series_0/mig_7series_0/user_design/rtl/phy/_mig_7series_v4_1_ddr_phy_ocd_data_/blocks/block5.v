@@ -1,0 +1,1 @@
+  always @(posedge clk) last_byte_r <= #TCQ last_byte_ns;

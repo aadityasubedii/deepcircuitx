@@ -1,0 +1,1 @@
+assign crc_dinx = {crc_din[0], crc_din[1], crc_din[2], crc_din[3]};

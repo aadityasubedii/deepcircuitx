@@ -1,0 +1,1 @@
+   assign next_din_s1 = (din_last ^ din) ? random : din;   

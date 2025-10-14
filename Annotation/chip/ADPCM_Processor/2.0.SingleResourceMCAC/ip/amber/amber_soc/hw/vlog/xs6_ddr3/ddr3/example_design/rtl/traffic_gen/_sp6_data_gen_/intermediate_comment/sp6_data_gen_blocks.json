@@ -1,0 +1,136 @@
+{
+    "line_num": [
+        [
+            749,
+            778
+        ],
+        [
+            741,
+            742
+        ],
+        [
+            729,
+            740
+        ],
+        [
+            723,
+            728
+        ],
+        [
+            701,
+            706
+        ],
+        [
+            684,
+            696
+        ],
+        [
+            682,
+            684
+        ],
+        [
+            665,
+            678
+        ],
+        [
+            663,
+            665
+        ],
+        [
+            646,
+            658
+        ],
+        [
+            644,
+            646
+        ],
+        [
+            518,
+            638
+        ],
+        [
+            514,
+            517
+        ],
+        [
+            381,
+            510
+        ],
+        [
+            377,
+            380
+        ],
+        [
+            315,
+            374
+        ],
+        [
+            311,
+            314
+        ],
+        [
+            266,
+            302
+        ],
+        [
+            212,
+            262
+        ],
+        [
+            209,
+            211
+        ],
+        [
+            189,
+            202
+        ],
+        [
+            187,
+            188
+        ],
+        [
+            170,
+            183
+        ],
+        [
+            168,
+            169
+        ],
+        [
+            150,
+            163
+        ],
+        [
+            147,
+            149
+        ]
+    ],
+    "blocks": [
+        "generate\nif (DATA_PATTERN == \"DGEN_PRBS\"  || DATA_PATTERN == \"DGEN_ALL\")  begin : PRBS_PATTERN\n       \n\n\n\n\n\nassign data_clk_en = fifo_rdy_i && data_rdy_i && user_burst_cnt > 6'd1;\n\n\ndata_prbs_gen #\n  (\n    .TCQ        (TCQ),\n    .PRBS_WIDTH (32),  \n    .SEED_WIDTH (32)\n   )\n   data_prbs_gen\n  (\n   .clk_i            (clk_i),\n   .clk_en           (data_clk_en),\n   .rst_i            (rst_i),\n   .prbs_fseed_i     (prbs_fseed_i),\n   .prbs_seed_init   (cmd_startE),\n   .prbs_seed_i      (addr_i[31:0]),\n   .prbs_o           (prbs_data)\n\n  );       \nend        \nendgenerate",
+        "end\nendgenerate",
+        "always @ (posedge clk_i)\nbegin\n  if (cmd_startD) \n    adata <= #TCQ    addr_i;\n  else if(fifo_rdy_i && data_rdy_i && user_burst_cnt > 6'd1) \n         if (DWIDTH == 128)\n                 adata <= #TCQ    adata + 16;\n         else if (DWIDTH == 64)\n                 adata <= #TCQ    adata + 8;\n         else     \n                 adata <= #TCQ    adata + 4;\nend",
+        "generate\n\n\n\nif (DATA_PATTERN == \"DGEN_ADDR\"  || DATA_PATTERN == \"DGEN_ALL\")  begin : ADDRESS_PATTERN\n",
+        "always @ (w1data,hdata)\nbegin\nfor (i=0; i <= DWIDTH - 1; i= i+1)\n   ndata[i] = hdata[i] ^ w1data[i];\n   \n         end",
+        "  always @ (posedge clk_i)\n  begin\n    if (rst_i)  \n      hdata <= #TCQ    'd0;\n    else if((fifo_rdy_i && user_burst_cnt != 6'd0) || cmd_startC )\n      if (NUM_DQ_PINS == 16)\n           hdata <= #TCQ    128'h0000FFFF_0000FFFF_0000FFFF_0000FFFF;\n      else if (NUM_DQ_PINS == 8)\n           hdata <= #TCQ    128'h00FF00FF_00FF00FF_00FF00FF_00FF00FF;        \n      else if (NUM_DQ_PINS == 4)     \n           hdata <= #TCQ    128'h0F0F_0F0F_0F0F_0F0F_0F0F_0F0F_0F0F_0F0F;        \n    \n  end",
+        "generate\nif ( DWIDTH == 128 && (DATA_PATTERN == \"DGEN_HAMMER\" || DATA_PATTERN == \"DGEN_ALL\"))  begin : HAMMER_PATTERN_128\n  always @ (posedge clk_i)",
+        "  always @ (posedge clk_i)\n  begin\n    if (rst_i)  \n      hdata <= #TCQ    'd0;\n    else if((fifo_rdy_i && user_burst_cnt != 6'd0) || cmd_startC )\n      if (NUM_DQ_PINS == 16)\n           hdata <= #TCQ    64'h0000FFFF_0000FFFF;\n      else if (NUM_DQ_PINS == 8)\n           hdata <= #TCQ    64'h00FF00FF_00FF00FF;\n      else if (NUM_DQ_PINS == 4)     \n           hdata <= #TCQ    64'h0F0F_0F0F_0F0F_0F0F;\n    \n  end\nend",
+        "generate\nif ( DWIDTH == 64 && (DATA_PATTERN == \"DGEN_HAMMER\" || DATA_PATTERN == \"DGEN_ALL\"))  begin : HAMMER_PATTERN_64\n  always @ (posedge clk_i)",
+        "  always @ (posedge clk_i)\n  begin\n    if (rst_i)  \n      hdata <= #TCQ    'd0;\n    else if((fifo_rdy_i && user_burst_cnt != 6'd0) || cmd_startC ) begin\n      if (NUM_DQ_PINS == 16)\n           hdata <= #TCQ    32'h0000_FFFF;\n      else if (NUM_DQ_PINS == 8)\n           hdata <= #TCQ    32'h00FF_00FF;\n      else if (NUM_DQ_PINS == 4)     \n           hdata <= #TCQ    32'h0F0F_0F0F;\n    end\n  end",
+        "generate\nif ( DWIDTH == 32 &&( DATA_PATTERN == \"DGEN_HAMMER\" || DATA_PATTERN == \"DGEN_ALL\"))  begin : HAMMER_PATTERN_32\n  always @ (posedge clk_i)",
+        "  always @ (posedge clk_i)\n  begin\n   if (rst_i)\n        w1data <= #TCQ  'b0;\n   \n   else if((fifo_rdy_i && user_burst_cnt != 6'd0) || cmd_startC )\n\n    \n    \n      if (NUM_DQ_PINS == 16) \n      begin\n         if(cmd_startC)\n           begin\n             case (addr_i[4])\n\n             \n                 0: begin \n                    \n                    w1data[1*DWIDTH/4-1:0*DWIDTH/4]    <= #TCQ  SHIFTB_0;\n                    w1data[2*DWIDTH/4-1:1*DWIDTH/4]    <= #TCQ  SHIFTB_1;   \n                    w1data[3*DWIDTH/4-1:2*DWIDTH/4]    <= #TCQ  SHIFTB_2;                    \n                    w1data[4*DWIDTH/4-1:3*DWIDTH/4]    <= #TCQ  SHIFTB_3;\n                    \n                    \n                    end\n                 1:  begin \n                 \n                    w1data[1*DWIDTH/4-1:0*DWIDTH/4]    <= #TCQ  SHIFTB_4;\n                    w1data[2*DWIDTH/4-1:1*DWIDTH/4]    <= #TCQ  SHIFTB_5;   \n                    w1data[3*DWIDTH/4-1:2*DWIDTH/4]    <= #TCQ  SHIFTB_6;                    \n                    w1data[4*DWIDTH/4-1:3*DWIDTH/4]    <= #TCQ  SHIFTB_7;\n                 \n                    end\n \n              default :begin\n                    w1data <= #TCQ  BLANK;    \n                    \n                    end\n                    \n             endcase         \n                      \n           end  \n         else begin  \n              if (data_mode_i == 3'b100) \n               begin\n                 w1data[127:112] <= #TCQ    {16'h0000};\n                 w1data[111:96] <= #TCQ    {w1data[107:96],w1data[111:108]};\n                 w1data[95:80] <= #TCQ    {16'h0000};\n                 w1data[79:64] <= #TCQ    {w1data[75:64],w1data[79:76]};\n\n\n                 w1data[63:48] <= #TCQ    {16'h0000};\n                 w1data[47:32] <= #TCQ    {w1data[43:32],w1data[47:44]};\n                 w1data[31:16] <= #TCQ    {16'h0000};\n                 w1data[15:0] <= #TCQ    {w1data[11:0],w1data[15:12]};\n                 \n               end\n              else begin\n              w1data[DWIDTH - 1:0]             <= #TCQ  {\n                                                    w1data[4*DWIDTH/4 - 9:4*DWIDTH/4 - 16],\n                                                    w1data[4*DWIDTH/4 - 1 :4*DWIDTH/4 - 8],                                                    \n                                                    w1data[4*DWIDTH/4 - 25:4*DWIDTH/4 -32],\n                                                    w1data[4*DWIDTH/4 - 17:4*DWIDTH/4 -24], \n                                                    \n                                                    w1data[3*DWIDTH/4 - 9:3*DWIDTH/4 - 16],\n                                                    w1data[3*DWIDTH/4 - 1 :3*DWIDTH/4 - 8],                                                                                                        \n                                                    w1data[3*DWIDTH/4 - 25:3*DWIDTH/4 - 32],\n                                                    w1data[3*DWIDTH/4 - 17:3*DWIDTH/4 - 24],\n\n                                                    w1data[2*DWIDTH/4 - 9:2*DWIDTH/4 - 16],\n                                                    w1data[2*DWIDTH/4 - 1 :2*DWIDTH/4 - 8],                                                                                                        \n                                                    w1data[2*DWIDTH/4 - 25:2*DWIDTH/4 - 32],\n                                                    w1data[2*DWIDTH/4 - 17:2*DWIDTH/4 - 24],\n\n\n                                                    w1data[1*DWIDTH/4 - 9:1*DWIDTH/4 - 16],\n                                                    w1data[1*DWIDTH/4 - 1 :1*DWIDTH/4 - 8],                                                    \n                                                    w1data[1*DWIDTH/4 - 25:1*DWIDTH/4 - 32],\n                                                    w1data[1*DWIDTH/4 - 17 :1*DWIDTH/4 - 24]\n                                                    };\n             end\n            \n         end    \n              \n      end  \n      else if (NUM_DQ_PINS == 8) begin\n         if(cmd_startC)  \n            begin\n                        if (data_mode_i == 3'b100)  \n                         w1data <= #TCQ    {\n                                          BLANK,SHIFT_7,BLANK,SHIFT_6,\n                                          BLANK,SHIFT_5,BLANK,SHIFT_4,\n                                          BLANK,SHIFT_3,BLANK,SHIFT_2,\n                                          BLANK,SHIFT_1,BLANK,SHIFT_0\n                                          };                        \n                        else\n                       \n                         w1data <= #TCQ    {\n                                          SHIFT_7,SHIFT_6,SHIFT_5,SHIFT_4,\n                                          SHIFT_3,SHIFT_2,SHIFT_1,SHIFT_0,\n                                          SHIFT_7,SHIFT_6,SHIFT_5,SHIFT_4,\n                                          SHIFT_3,SHIFT_2,SHIFT_1,SHIFT_0\n                                          };\n                                          \n                                          \n            end \n        else  \n         \n                 begin\n               \n                      w1data <= #TCQ    w1data;\n                 end \n      end \n      else  \n         if (data_mode_i == 3'b100)  \n          w1data <= #TCQ    128'h0804_0201_0804_0201_0804_0201_0804_0201;       \n         else\n          w1data <= #TCQ    128'h8421_8421_8421_8421_8421_8421_8421_8421; \n           \n  end\nend",
+        "generate\n\nif (DWIDTH == 128 && (DATA_PATTERN == \"DGEN_WALKING0\" || DATA_PATTERN == \"DGEN_WALKING1\" || DATA_PATTERN == \"DGEN_ALL\"))  begin : WALKING_ONE_128_PATTERN\n",
+        "  always @ (posedge clk_i)\n  begin\n   if (rst_i)\n        w1data <= #TCQ  'b0;\n   \n   else if((fifo_rdy_i && user_burst_cnt != 6'd0) || cmd_startC )\n\n    \n    \n      if (NUM_DQ_PINS == 16) \n      begin\n         if(cmd_startC)\n           begin\n\n             case (addr_i[4:3])\n\n             \n                 0: begin \n                    \n                    w1data[2*DWIDTH/4-1:0*DWIDTH/4]    <= #TCQ    SHIFTB_0; \n                    w1data[4*DWIDTH/4-1:2*DWIDTH/4]    <= #TCQ    SHIFTB_1;\n \n                    end\n                 1:  begin \n                    w1data[2*DWIDTH/4-1:0*DWIDTH/4]    <= #TCQ    SHIFTB_2; \n                    w1data[4*DWIDTH/4-1:2*DWIDTH/4]    <= #TCQ    SHIFTB_3;\n                    end\n                    \n                 2: begin \n                    w1data[2*DWIDTH/4-1:0*DWIDTH/4]    <= #TCQ    SHIFTB_4; \n                    w1data[4*DWIDTH/4-1:2*DWIDTH/4]    <= #TCQ    SHIFTB_5;\n                    end\n                 3:  begin \n                    w1data[2*DWIDTH/4-1:0*DWIDTH/4]    <= #TCQ    SHIFTB_6; \n                    w1data[4*DWIDTH/4-1:2*DWIDTH/4]    <= #TCQ    SHIFTB_7;\n                    \n                    end\n                     \n                    \n               default :begin\n                    w1data <= #TCQ  BLANK;    \n                    end\n                    \n             endcase         \n\n                      \n           end  \n         else begin  \n             if (data_mode_i == 3'b100) \n               begin\n                 w1data[63:48] <= #TCQ    {16'h0000};\n                 w1data[47:32] <= #TCQ    {w1data[45:32],w1data[47:46]};\n                 w1data[31:16] <= #TCQ    {16'h0000};\n                 w1data[15:0]  <= #TCQ    {w1data[13:0],w1data[15:14]};\n                 \n               end\n            else\n\n              w1data[DWIDTH - 1:0] <= #TCQ    {\n                                          w1data[4*DWIDTH/4 - 5:4*DWIDTH/4 - 16],\n                                          w1data[4*DWIDTH/4 - 1 :4*DWIDTH/4 - 4],                                                    \n                                                        \n                                          w1data[3*DWIDTH/4 - 5:3*DWIDTH/4 - 16],\n                                          w1data[3*DWIDTH/4 - 1 :3*DWIDTH/4 - 4],                                                                                                        \n\n                                          w1data[2*DWIDTH/4 - 5:2*DWIDTH/4 - 16],\n                                          w1data[2*DWIDTH/4 - 1 :2*DWIDTH/4 - 4],\n \n                                          w1data[1*DWIDTH/4 - 5:1*DWIDTH/4 - 16],\n                                          w1data[1*DWIDTH/4 - 1 :1*DWIDTH/4 - 4]                                                    \n                                          \n                                          };   \n                                                    \n              \n         end    \n              \n      end  \n      else if (NUM_DQ_PINS == 8) begin\n         if(cmd_startC)  \n\n                 if (data_mode_i == 3'b100)  \n                 \n                   case (addr_i[3])\n                 \n                   \n                       0:  w1data <= #TCQ    {\n                                   BLANK,SHIFT_3,BLANK,SHIFT_2,\n                                   BLANK,SHIFT_1,BLANK,SHIFT_0\n                                   };                        \n                         \n                       1:  w1data <= #TCQ    {\n                                   BLANK,SHIFT_7,BLANK,SHIFT_6,\n                                   BLANK,SHIFT_5,BLANK,SHIFT_4\n                                   };                        \n                    \n                       default :begin\n                         w1data <= #TCQ    'b0;    \n                    end\n                    \n                    endcase         \n\n                  else\n                  w1data <= #TCQ    {32'h8040_2010,32'h0804_0201};  \n         else  \n                 if (data_mode_i == 3'b100)  \n         \n               begin\n                 w1data[63:56] <= #TCQ    {8'h00};\n                 w1data[55:48] <= #TCQ    {w1data[51:48],w1data[55:52]};\n                 \n                 w1data[47:40] <= #TCQ    {8'h00};                 \n                 w1data[39:32] <= #TCQ    {w1data[35:32],w1data[39:36]};\n                 \n                 w1data[31:24] <= #TCQ    {8'h00};\n                 w1data[23:16] <= #TCQ    {w1data[19:16],w1data[23:20]};\n                 \n                 w1data[15:8]  <= #TCQ    {8'h00};\n                 w1data[7:0]  <= #TCQ    {w1data[3:0],w1data[7:4]};\n                 \n               end\n                 else\n                      w1data <= #TCQ    w1data; \n      end \n      else if (NUM_DQ_PINS == 4) \n            if (data_mode_i == 3'b100)  \n               w1data <= #TCQ    64'h0804_0201_0804_0201;\n            else\n               w1data <= #TCQ    64'h8421_8421_8421_8421; \n           \n  end",
+        "generate\nif (DWIDTH == 64 && (DATA_PATTERN == \"DGEN_WALKING0\" || DATA_PATTERN == \"DGEN_WALKING1\"\n    || DATA_PATTERN == \"DGEN_ALL\"))  begin : WALKING_ONE_64_PATTERN\n",
+        "  always @ (posedge clk_i)\n  begin\n   if (rst_i) begin\n        w1data <= #TCQ  'b0;\n        ndata_rising <= #TCQ  1'b1;\n        shift_en <= #TCQ  1'b0;\n        end\n   else if((fifo_rdy_i && user_burst_cnt != 6'd0) || cmd_startC )\n      if (NUM_DQ_PINS == 16) \n      begin\n         if(cmd_startC) \n           begin\n                      case (addr_i[4:2])\n                      0: w1data <= #TCQ    SHIFTB_0;\n                      1: w1data <= #TCQ    SHIFTB_1;\n                      2: w1data <= #TCQ    SHIFTB_2;\n                      3: w1data <= #TCQ    SHIFTB_3;\n                      4: w1data <= #TCQ    SHIFTB_4;\n                      5: w1data <= #TCQ    SHIFTB_5;\n                      6: w1data <= #TCQ    SHIFTB_6;\n                      7: w1data <= #TCQ    SHIFTB_7;\n                      \n                      default :w1data <= #TCQ    SHIFTB_0;\n                      endcase   \n                      \n                      ndata_rising <= #TCQ  1'b0;\n           end  \n         else \n            if (data_mode_i == 3'b100) \n              w1data <= #TCQ    {16'h0000,w1data[14:0],w1data[15]};\n            else\n              w1data <= #TCQ    {w1data[29:16],w1data[31:30],w1data[13:0],w1data[15:14]}; \n              \n              \n      end  \n      else if (NUM_DQ_PINS == 8) begin\n         if(cmd_startC)  \n            begin\n                       case (addr_i[2])\n                        0: w1data <= #TCQ    SHIFTB_0;\n                        1: w1data <= #TCQ    SHIFTB_1;\n                        default :w1data <= #TCQ    SHIFTB_0;\n                       endcase \n            end \n        else  \n          \n                w1data <= #TCQ    {w1data[27:24],w1data[31:28],w1data[19:16],w1data[23:20],\n                                w1data[11:8] ,w1data[15:12],w1data[3:0]  ,w1data[7:4]}; \n                      \n      end \n      else if (NUM_DQ_PINS == 4) begin   \n          \n             if (data_mode_i == 3'b100) \n               w1data <= #TCQ    32'h0804_0201;\n             else\n               w1data <= #TCQ    32'h8421_8421;\n      end \n           \n  end\nend",
+        "generate\nif (DWIDTH == 32 && (DATA_PATTERN == \"DGEN_WALKING0\" || DATA_PATTERN == \"DGEN_WALKING1\" ||\n    DATA_PATTERN == \"DGEN_ALL\"))  begin : WALKING_ONE_32_PATTERN\n",
+        "always @ (data_mode_i) begin\n\nif (data_mode_i == 3'b101 ) begin \n   \n    SHIFTB_0 = 32'h0002_0001;\n    SHIFTB_1 = 32'h0008_0004;    \n    SHIFTB_2 = 32'h0020_0010;    \n    SHIFTB_3 = 32'h0080_0040;    \n    SHIFTB_4 = 32'h0200_0100;    \n    SHIFTB_5 = 32'h0800_0400;    \n    SHIFTB_6 = 32'h2000_1000;    \n    SHIFTB_7 = 32'h8000_4000;    \n    end\nelse if (data_mode_i == 3'b100)begin \n   \n    SHIFTB_0 = 32'h0000_0001;\n    SHIFTB_1 = 32'h0000_0002;    \n    SHIFTB_2 = 32'h0000_0004;    \n    SHIFTB_3 = 32'h0000_0008;    \n    SHIFTB_4 = 32'h0000_0010;    \n    SHIFTB_5 = 32'h0000_0020;    \n    SHIFTB_6 = 32'h0000_0040;    \n    SHIFTB_7 = 32'h0000_0080;    \n    end    \n    \nelse begin  \n    SHIFTB_0 = 32'hfffd_fffe;\n    SHIFTB_1 = 32'hfff7_fffb;    \n    SHIFTB_2 = 32'hffdf_ffef;    \n    SHIFTB_3 = 32'hff7f_ffbf;    \n    SHIFTB_4 = 32'hfdff_feff;    \n    SHIFTB_5 = 32'hf7ff_fbff;    \n    SHIFTB_6 = 32'hdfff_efff;    \n    SHIFTB_7 = 32'h7fff_bfff;    \n    end\n\nend",
+        "always @ (data_mode_i) begin\n  if (data_mode_i == 3'b101 || data_mode_i == 3'b100) begin \n    BLANK   = 8'h00;\n    SHIFT_0 = 8'h01;\n    SHIFT_1 = 8'h02;    \n    SHIFT_2 = 8'h04;    \n    SHIFT_3 = 8'h08;    \n    SHIFT_4 = 8'h10;    \n    SHIFT_5 = 8'h20;    \n    SHIFT_6 = 8'h40;    \n    SHIFT_7 = 8'h80;    \n    \n    end\n    else if (data_mode_i == 3'b100)begin \n    BLANK   = 8'h00;\n    SHIFT_0 = 8'h01;\n    SHIFT_1 = 8'h02;    \n    SHIFT_2 = 8'h04;    \n    SHIFT_3 = 8'h08;    \n    SHIFT_4 = 8'h10;    \n    SHIFT_5 = 8'h20;    \n    SHIFT_6 = 8'h40;    \n    SHIFT_7 = 8'h80;    \n    end       \n    \n\n\n    else if (data_mode_i == 3'b110) begin  \n    BLANK   = 8'hff;\n    SHIFT_0 = 8'hfe;\n    SHIFT_1 = 8'hfd;    \n    SHIFT_2 = 8'hfb;    \n    SHIFT_3 = 8'hf7;    \n    SHIFT_4 = 8'hef;    \n    SHIFT_5 = 8'hdf;    \n    SHIFT_6 = 8'hbf;    \n    SHIFT_7 = 8'h7f;    \n    end   \n    else begin\n    BLANK   = 8'hff;\n    SHIFT_0 = 8'hfe;\n    SHIFT_1 = 8'hfd;    \n    SHIFT_2 = 8'hfb;    \n    SHIFT_3 = 8'hf7;    \n    SHIFT_4 = 8'hef;    \n    SHIFT_5 = 8'hdf;    \n    SHIFT_6 = 8'hbf;    \n    SHIFT_7 = 8'h7f;    \n    end   \n\nend",
+        "generate\nif ((DWIDTH == 64) ||(DWIDTH == 128))  begin: SHIFT_VALUE\n   ",
+        "always @ (adata,hdata,ndata,w1data,prbs_data,data_mode_i,fixed_data_i)\nbegin\n   case(data_mode_i)\n         4'b0000: data = 'b0;       \n         4'b0001: data = fixed_data_i;       \n         4'b0010: data = {adata,adata,adata,adata};       \n         4'b0011: data = hdata;       \n         4'b0100: data = ndata;       \n         4'b0101: data = w1data;   \n         4'b0110: data = w1data;   \n         4'b0111: data = {prbs_data,prbs_data,prbs_data,prbs_data};\n         default : data = 'b0;\n   endcase\nend        ",
+        "generate \nif (DWIDTH==128) begin: data_out128",
+        "always @ (adata,hdata,ndata,w1data,prbs_data,data_mode_i,fixed_data_i)\nbegin\n   case(data_mode_i) \n         4'b0000: data = 'b0;                 \n         4'b0001: data = fixed_data_i;                 \n         4'b0010: data = {adata,adata};       \n         4'b0011: data = hdata;       \n         4'b0100: data = ndata;       \n         4'b0101: data = w1data;     \n         4'b0110: data = w1data;     \n         4'b0111: data = {prbs_data,prbs_data};\n         default : data = 'b0;\n   endcase\nend        ",
+        "generate \nif (DWIDTH==64) begin: data_out64",
+        "always @ (adata,hdata,ndata,w1data,prbs_data,data_mode_i,fixed_data_i)\nbegin\n   case(data_mode_i)\n       \n         4'b0001: data = fixed_data_i;       \n         4'b0010: data = adata;  \n         4'b0011: data = hdata;  \n         4'b0100: data = ndata;  \n         4'b0101: data = w1data; \n         4'b0110: data = w1data; \n         4'b0111: data = prbs_data;\n         default : data = 'b0;\n   endcase\nend        ",
+        "generate \n\nif (DWIDTH==32) begin: data_out32"
+    ]
+}

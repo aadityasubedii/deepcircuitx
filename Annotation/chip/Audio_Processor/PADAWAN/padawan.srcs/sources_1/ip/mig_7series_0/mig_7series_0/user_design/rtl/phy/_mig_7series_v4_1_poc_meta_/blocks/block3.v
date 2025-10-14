@@ -1,0 +1,1 @@
+  always @(posedge clk) poc_backup_r <= #TCQ poc_backup_ns;

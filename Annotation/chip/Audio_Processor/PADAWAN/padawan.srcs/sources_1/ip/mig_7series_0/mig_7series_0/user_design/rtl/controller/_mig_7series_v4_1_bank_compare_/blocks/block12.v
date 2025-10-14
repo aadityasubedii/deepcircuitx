@@ -1,0 +1,1 @@
+  always @(posedge clk) req_priority_r <= #TCQ req_priority_ns;

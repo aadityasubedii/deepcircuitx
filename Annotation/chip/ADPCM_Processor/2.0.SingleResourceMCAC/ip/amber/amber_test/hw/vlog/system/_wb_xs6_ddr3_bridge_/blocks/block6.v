@@ -1,0 +1,1 @@
+assign o_wr_en = wr_en_r && !i_cmd_full;

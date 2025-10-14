@@ -1,0 +1,1 @@
+assign update_sample = update_active_sample & update_total_sample;

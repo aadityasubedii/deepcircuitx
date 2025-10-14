@@ -1,0 +1,11 @@
+Module name: main_mem. 
+
+Module specification: The 'main_mem' module is designed to represent a memory component in a data processing system. It has parameters for data width (WB_DWIDTH) and select width (WB_SWIDTH), both of which impact the memory access processes. The module has input ports for clock signal (i_clk), memory control signal (i_mem_ctrl), Wishbone (WB) interface signals (i_wb_adr, i_wb_sel, i_wb_we, i_wb_dat, i_wb_cyc, and i_wb_stb), and output ports for WB data (o_wb_dat), acknowledgment (o_wb_ack), and error (o_wb_err). 
+
+Important internal signals correspond to memory (ram), write and read initiation signals (start_write, start_read), data signals (rd_data, masked_wdata), write-enable, masking, and data signals (wr_en, wr_mask, wr_data), and busy signal (busy). 
+
+In essence, this module performs two main functions: writing data into the memory and reading data from it. For data writing, it uses the input WB data and a mask. The mask allows for selective byte updates and is generated based on the input address (i_wb_adr) and select (i_wb_sel) signals. For data reading, it fetches data from the internal memory (ram). 
+
+In both 32-bit and 128-bit modes, processes are initiated at every positive clock edge, handling WB data, and address inputs, masking, and invoking data writing into the memory. Debug facilities trace memory write events. Reading from memory is carried out in two cycles post read initiation. 
+
+The memory block prevents simultaneous read and write operations and confirms the validity of read/write operations with acknowledgment signals. The code is well-structured with clear segregation of write, mask, and read operations across the main 'generate' statement.

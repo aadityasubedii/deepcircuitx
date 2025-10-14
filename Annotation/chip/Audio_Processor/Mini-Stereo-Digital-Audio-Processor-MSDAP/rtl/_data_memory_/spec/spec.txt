@@ -1,0 +1,10 @@
+Module name: data_memory
+Module specification: The data_memory module provides write and read functionality in a memory unit. It uses a memory array 'datamem' (with 256 16-bit locations), and control signals ('read_enable', 'write_enable') to perform memory operations. If 'write_enable' is high, 'in_data' is written at the 'datawrite' location in 'datamem'. Similarly, if 'read_enable' is high, the data from 'dataread' location in 'datamem' is delivered as 'input_data'. The module also counts zero inputs with a maximum limit of 800, and sets a flag 'flag_zero' when the count reaches this threshold.
+
+Its input ports are 'write_enable', 'read_enable', 'Sclk', 'in_flag', 'in_data', 'datawrite', and 'dataread'. 'write_enable' and 'read_enable' enable or disable memory read/write. 'Sclk' provides system clock synchronization. A rising edge on 'in_flag' triggers counting of zeroes in 'in_data'. 'in_data' is the write data, 'datawrite' specifies write location, and 'dataread' specifies read location.
+
+Output ports are 'input_data' and 'flag_zero'. 'input_data' represents data read from memory. 'flag_zero' is set when 800 zeroes are inputted.
+
+Internal signals 'datamem' and 'count_zero' hold the memory data and count of zero inputs, respectively. 'datamem' holds 16-bit data at 256 locations. 'count_zero', a 12-bit register, counts the instances of zero inputs and helps set 'flag_zero'.
+
+The module includes two main blocks: writing to memory and counting zero inputs. The first block, activated on 'Sclk' rising edge, writes 'in_data' into 'datamem' when 'write_enable' is high. The second block, activated on 'in_flag' rising edge, increments 'count_zero' and sets 'flag_zero' if 800 instances of zero input are counted. An assignment operation maps 'datamem' to 'input_data', making read data available outside the module when 'read_enable' is high.

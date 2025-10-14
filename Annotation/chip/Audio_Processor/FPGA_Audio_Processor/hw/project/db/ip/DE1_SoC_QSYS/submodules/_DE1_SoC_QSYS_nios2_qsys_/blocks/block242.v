@@ -1,0 +1,1 @@
+  assign clkx2 = 0;

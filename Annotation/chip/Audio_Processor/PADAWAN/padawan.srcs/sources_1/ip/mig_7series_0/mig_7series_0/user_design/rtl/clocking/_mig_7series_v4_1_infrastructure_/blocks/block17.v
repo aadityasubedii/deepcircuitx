@@ -1,0 +1,1 @@
+  always @(*) poc_sample_pd_ns = inv_poc_sample_ns ^ mmcm_hi0_r;

@@ -1,0 +1,1 @@
+assign TxStatusWrite = (TxDonePacket_NotCleared | TxAbortPacket_NotCleared) & TxEn & TxEn_q & ~BlockingTxStatusWrite;

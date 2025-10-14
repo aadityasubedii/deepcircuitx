@@ -1,0 +1,1 @@
+  wire [TAPCNTRWIDTH-1:0] center_diff_ns = mod_sub(right, left, TAPSPERKCLK);

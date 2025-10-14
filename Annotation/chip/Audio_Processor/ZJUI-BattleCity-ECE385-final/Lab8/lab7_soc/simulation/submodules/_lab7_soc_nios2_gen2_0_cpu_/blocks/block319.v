@@ -1,0 +1,1 @@
+  assign write_strobe = write & debugaccess;

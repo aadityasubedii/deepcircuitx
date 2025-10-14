@@ -1,0 +1,1 @@
+  assign  sys_rst_act_hi = RST_ACT_LOW ? ~sys_rst_i: sys_rst_i;

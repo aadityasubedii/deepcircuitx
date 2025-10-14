@@ -1,0 +1,121 @@
+{
+    "line_num": [
+        [
+            425,
+            435
+        ],
+        [
+            420,
+            420
+        ],
+        [
+            407,
+            417
+        ],
+        [
+            403,
+            403
+        ],
+        [
+            402,
+            402
+        ],
+        [
+            390,
+            399
+        ],
+        [
+            379,
+            386
+        ],
+        [
+            363,
+            375
+        ],
+        [
+            358,
+            358
+        ],
+        [
+            346,
+            356
+        ],
+        [
+            341,
+            342
+        ],
+        [
+            326,
+            336
+        ],
+        [
+            313,
+            323
+        ],
+        [
+            309,
+            309
+        ],
+        [
+            308,
+            308
+        ],
+        [
+            295,
+            305
+        ],
+        [
+            280,
+            290
+        ],
+        [
+            265,
+            275
+        ],
+        [
+            247,
+            261
+        ],
+        [
+            232,
+            242
+        ],
+        [
+            213,
+            228
+        ],
+        [
+            195,
+            208
+        ],
+        [
+            165,
+            190
+        ]
+    ],
+    "blocks": [
+        "always @ (posedge MRxClk or posedge RxReset)\nbegin\n  if(RxReset)\n    ReceivedPauseFrm <=#Tp 1'b0;\n  else\n  if(RxStatusWriteLatched_sync2 & r_PassAll | ReceivedPauseFrm & (~r_PassAll))\n    ReceivedPauseFrm <=#Tp 1'b0;\n  else\n  if(ByteCntEq16 & TypeLengthOK & OpCodeOK)\n    ReceivedPauseFrm <=#Tp 1'b1;        \nend",
+        "assign SlotFinished = &SlotTimer[5:0] & IncrementSlotTimer;  ",
+        "always @ (posedge MRxClk or posedge RxReset)\nbegin\n  if(RxReset)\n    SlotTimer[5:0] <= #Tp 6'h0;\n  else\n  if(ResetSlotTimer)\n    SlotTimer[5:0] <= #Tp 6'h0;\n  else\n  if(IncrementSlotTimer)\n    SlotTimer[5:0] <= #Tp SlotTimer[5:0] + 1'b1;\nend",
+        "assign IncrementSlotTimer =  Pause & RxFlow & Divider2;",
+        "assign ResetSlotTimer = RxReset;",
+        "always @ (posedge MRxClk or posedge RxReset)\nbegin\n  if(RxReset)\n    Divider2 <= #Tp 1'b0;\n  else\n  if(|PauseTimer[15:0] & RxFlow)\n    Divider2 <= #Tp ~Divider2;\n  else\n    Divider2 <= #Tp 1'b0;\nend",
+        "always @ (posedge MTxClk or posedge TxReset)\nbegin\n  if(TxReset)\n    Pause <= #Tp 1'b0;\n  else\n  if((TxDoneIn | TxAbortIn | ~TxUsedDataOutDetected) & ~TxStartFrmOut)\n    Pause <= #Tp RxFlow & ~PauseTimerEq0_sync2;\nend",
+        "always @ (posedge MTxClk or posedge TxReset)\nbegin\n  if(TxReset)\n    begin\n      PauseTimerEq0_sync1 <= #Tp 1'b1;\n      PauseTimerEq0_sync2 <= #Tp 1'b1;\n    end\n  else\n    begin\n      PauseTimerEq0_sync1 <= #Tp PauseTimerEq0;\n      PauseTimerEq0_sync2 <= #Tp PauseTimerEq0_sync1;\n    end\nend",
+        "assign PauseTimerEq0 = ~(|PauseTimer[15:0]);",
+        "always @ (posedge MRxClk or posedge RxReset)\nbegin\n  if(RxReset)\n    PauseTimer[15:0] <= #Tp 16'h0;\n  else\n  if(SetPauseTimer)\n    PauseTimer[15:0] <= #Tp LatchedTimerValue[15:0];\n  else\n  if(DecrementPauseTimer)\n    PauseTimer[15:0] <= #Tp PauseTimer[15:0] - 1'b1;\nend",
+        "assign SetPauseTimer = ReceiveEnd & ReceivedPauseFrmWAddr & ReceivedPacketGood & ReceivedLengthOK & RxFlow;\nassign DecrementPauseTimer = SlotFinished & |PauseTimer;",
+        "assign ByteCntEq0 = RxValid & ByteCnt[4:0] == 5'h0;\nassign ByteCntEq1 = RxValid & ByteCnt[4:0] == 5'h1;\nassign ByteCntEq2 = RxValid & ByteCnt[4:0] == 5'h2;\nassign ByteCntEq3 = RxValid & ByteCnt[4:0] == 5'h3;\nassign ByteCntEq4 = RxValid & ByteCnt[4:0] == 5'h4;\nassign ByteCntEq5 = RxValid & ByteCnt[4:0] == 5'h5;\nassign ByteCntEq12 = RxValid & ByteCnt[4:0] == 5'h0C;\nassign ByteCntEq13 = RxValid & ByteCnt[4:0] == 5'h0D;\nassign ByteCntEq14 = RxValid & ByteCnt[4:0] == 5'h0E;\nassign ByteCntEq15 = RxValid & ByteCnt[4:0] == 5'h0F;\nassign ByteCntEq16 = RxValid & ByteCnt[4:0] == 5'h10;",
+        "always @ (posedge MRxClk or posedge RxReset)\nbegin\n  if(RxReset)\n    ByteCnt[4:0] <= #Tp 5'h0;\n  else\n  if(ResetByteCnt)\n    ByteCnt[4:0] <= #Tp 5'h0;\n  else\n  if(IncrementByteCnt)\n    ByteCnt[4:0] <= #Tp ByteCnt[4:0] + 1'b1;\nend",
+        "assign IncrementByteCnt = RxValid & DetectionWindow & ~ByteCntEq18 & (~DlyCrcEn | DlyCrcEn & DlyCrcCnt[2]);",
+        "assign ResetByteCnt = RxEndFrm;",
+        "always @ (posedge MRxClk or posedge RxReset)\nbegin\n  if(RxReset)\n    DlyCrcCnt <= #Tp 3'h0;\n  else\n  if(RxValid & RxEndFrm)\n    DlyCrcCnt <= #Tp 3'h0;\n  else\n  if(RxValid & ~RxEndFrm & ~DlyCrcCnt[2])\n    DlyCrcCnt <= #Tp DlyCrcCnt + 1'b1;\nend",
+        "always @ (posedge MRxClk or posedge RxReset )\nbegin\n  if(RxReset)\n    LatchedTimerValue[15:0] <= #Tp 16'h0;\n  else\n  if(DetectionWindow &  ReceivedPauseFrmWAddr &  ByteCntEq18)\n    LatchedTimerValue[15:0] <= #Tp AssembledTimerValue[15:0];\n  else\n  if(ReceiveEnd)\n    LatchedTimerValue[15:0] <= #Tp 16'h0;\nend",
+        "always @ (posedge MRxClk or posedge RxReset )\nbegin\n  if(RxReset)\n    DetectionWindow <= #Tp 1'b1;\n  else\n  if(ByteCntEq18)\n    DetectionWindow <= #Tp 1'b0;\n  else\n  if(ReceiveEnd)\n    DetectionWindow <= #Tp 1'b1;\nend",
+        "always @ (posedge MRxClk or posedge RxReset )\nbegin\n  if(RxReset)\n    AssembledTimerValue[15:0] <= #Tp 16'h0;\n  else\n  if(RxStartFrm)\n    AssembledTimerValue[15:0] <= #Tp 16'h0;\n  else\n    begin\n      if(DetectionWindow & ByteCntEq16)\n        AssembledTimerValue[15:8] <= #Tp RxData[7:0];\n      if(DetectionWindow & ByteCntEq17)\n        AssembledTimerValue[7:0] <= #Tp RxData[7:0];\n    end\nend",
+        "always @ (posedge MRxClk or posedge RxReset )\nbegin\n  if(RxReset)\n    ReceivedPauseFrmWAddr <= #Tp 1'b0;\n  else\n  if(ReceiveEnd)\n    ReceivedPauseFrmWAddr <= #Tp 1'b0;\n  else\n  if(ByteCntEq16 & TypeLengthOK & OpCodeOK & AddressOK)\n    ReceivedPauseFrmWAddr <= #Tp 1'b1;        \nend",
+        "always @ (posedge MRxClk or posedge RxReset )\nbegin\n  if(RxReset)\n    OpCodeOK <= #Tp 1'b0;\n  else\n  if(ByteCntEq16)\n    OpCodeOK <= #Tp 1'b0;\n  else\n    begin\n      if(DetectionWindow & ByteCntEq14)\n        OpCodeOK <= #Tp ByteCntEq14 & RxData[7:0] == 8'h00;\n    \n      if(DetectionWindow & ByteCntEq15)\n        OpCodeOK <= #Tp ByteCntEq15 & RxData[7:0] == 8'h01 & OpCodeOK;\n    end\nend",
+        "always @ (posedge MRxClk or posedge RxReset )\nbegin\n  if(RxReset)\n    TypeLengthOK <= #Tp 1'b0;\n  else\n  if(DetectionWindow & ByteCntEq12)\n    TypeLengthOK <= #Tp ByteCntEq12 & (RxData[7:0] == TypeLength[15:8]);\n  else\n  if(DetectionWindow & ByteCntEq13)\n    TypeLengthOK <= #Tp ByteCntEq13 & (RxData[7:0] == TypeLength[7:0]) & TypeLengthOK;\n  else\n  if(ReceiveEnd)\n    TypeLengthOK <= #Tp 1'b0;\nend",
+        "always @ (posedge MRxClk or posedge RxReset)\nbegin\n  if(RxReset)\n    AddressOK <= #Tp 1'b0;\n  else\n  if(DetectionWindow & ByteCntEq0)\n    AddressOK <= #Tp  RxData[7:0] == ReservedMulticast[47:40] | RxData[7:0] == MAC[47:40];\n  else\n  if(DetectionWindow & ByteCntEq1)\n    AddressOK <= #Tp (RxData[7:0] == ReservedMulticast[39:32] | RxData[7:0] == MAC[39:32]) & AddressOK;\n  else\n  if(DetectionWindow & ByteCntEq2)\n    AddressOK <= #Tp (RxData[7:0] == ReservedMulticast[31:24] | RxData[7:0] == MAC[31:24]) & AddressOK;\n  else\n  if(DetectionWindow & ByteCntEq3)\n    AddressOK <= #Tp (RxData[7:0] == ReservedMulticast[23:16] | RxData[7:0] == MAC[23:16]) & AddressOK;\n  else\n  if(DetectionWindow & ByteCntEq4)\n    AddressOK <= #Tp (RxData[7:0] == ReservedMulticast[15:8]  | RxData[7:0] == MAC[15:8])  & AddressOK;\n  else\n  if(DetectionWindow & ByteCntEq5)\n    AddressOK <= #Tp (RxData[7:0] == ReservedMulticast[7:0]   | RxData[7:0] == MAC[7:0])   & AddressOK;\n  else\n  if(ReceiveEnd)\n    AddressOK <= #Tp 1'b0;\nend"
+    ]
+}

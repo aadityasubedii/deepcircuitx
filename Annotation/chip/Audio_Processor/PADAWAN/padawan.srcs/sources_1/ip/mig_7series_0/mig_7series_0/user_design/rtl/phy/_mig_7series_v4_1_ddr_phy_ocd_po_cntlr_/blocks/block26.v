@@ -1,0 +1,1 @@
+  always @(posedge clk) scanning_right_r <= #TCQ scanning_right_ns;

@@ -1,0 +1,206 @@
+{
+    "line_num": [
+        [
+            769,
+            1209
+        ],
+        [
+            751,
+            760
+        ],
+        [
+            749,
+            749
+        ],
+        [
+            747,
+            747
+        ],
+        [
+            741,
+            743
+        ],
+        [
+            721,
+            736
+        ],
+        [
+            712,
+            718
+        ],
+        [
+            697,
+            709
+        ],
+        [
+            667,
+            681
+        ],
+        [
+            655,
+            664
+        ],
+        [
+            651,
+            651
+        ],
+        [
+            647,
+            650
+        ],
+        [
+            645,
+            648
+        ],
+        [
+            644,
+            644
+        ],
+        [
+            622,
+            637
+        ],
+        [
+            597,
+            618
+        ],
+        [
+            556,
+            576
+        ],
+        [
+            554,
+            556
+        ],
+        [
+            544,
+            547
+        ],
+        [
+            528,
+            549
+        ],
+        [
+            520,
+            521
+        ],
+        [
+            512,
+            519
+        ],
+        [
+            453,
+            508
+        ],
+        [
+            449,
+            455
+        ],
+        [
+            419,
+            440
+        ],
+        [
+            412,
+            417
+        ],
+        [
+            400,
+            408
+        ],
+        [
+            390,
+            398
+        ],
+        [
+            388,
+            389
+        ],
+        [
+            372,
+            386
+        ],
+        [
+            362,
+            369
+        ],
+        [
+            353,
+            360
+        ],
+        [
+            338,
+            351
+        ],
+        [
+            331,
+            336
+        ],
+        [
+            319,
+            329
+        ],
+        [
+            301,
+            315
+        ],
+        [
+            293,
+            300
+        ],
+        [
+            282,
+            286
+        ],
+        [
+            273,
+            280
+        ],
+        [
+            268,
+            272
+        ]
+    ],
+    "blocks": [
+        "   always @(posedge clk) begin\n      if(rst)begin\n         wrlvl_err              <= #TCQ 1'b0;\n         wr_level_done_r        <= #TCQ 1'b0;\n         wrlvl_rank_done_r      <= #TCQ 1'b0;\n         dqs_count_r            <= #TCQ {DQS_CNT_WIDTH+1{1'b0}};\n         dq_cnt_inc             <= #TCQ 1'b1;\n         rank_cnt_r             <= #TCQ 2'b00;\n         wl_state_r             <= #TCQ WL_IDLE;\n         wl_state_r1            <= #TCQ WL_IDLE;\n         inhibit_edge_detect_r  <= #TCQ 1'b1;\n         wl_edge_detect_valid_r <= #TCQ 1'b0;\n         wl_tap_count_r         <= #TCQ 6'd0;\n         fine_dec_cnt           <= #TCQ 6'd0;\n         for (r = 0; r < DQS_WIDTH; r = r + 1) begin\n           fine_inc[r]          <= #TCQ 6'b0;\n           corse_dec[r]         <= #TCQ 3'b0;\n           corse_inc[r]         <= #TCQ 3'b0;\n           corse_cnt[r]         <= #TCQ 3'b0;\n         end\n         dual_rnk_dec           <= #TCQ 1'b0;\n         fast_cal_fine_cnt      <= #TCQ FAST_CAL_FINE;\n         fast_cal_coarse_cnt    <= #TCQ FAST_CAL_COARSE;\n         final_corse_dec        <= #TCQ 1'b0;\n         \n         wrlvl_redo_corse_inc   <= #TCQ 'd0;\n      end else begin\n         wl_state_r1            <= #TCQ wl_state_r;\n         case (wl_state_r)\n           \n           WL_IDLE: begin\n              wrlvl_rank_done_r      <= #TCQ 1'd0;\n              inhibit_edge_detect_r  <= #TCQ 1'b1;\n              if (wrlvl_byte_redo && ~wrlvl_byte_redo_r) begin\n                wr_level_done_r      <= #TCQ 1'b0;\n                dqs_count_r          <= #TCQ wrcal_cnt;\n                corse_cnt[wrcal_cnt] <= #TCQ final_coarse_tap[wrcal_cnt];\n                wl_tap_count_r       <= #TCQ smallest[wrcal_cnt];\n                if (early1_data && \n                    (((final_coarse_tap[wrcal_cnt] < 'd6) && (CLK_PERIOD/nCK_PER_CLK <= 2500)) ||\n                    ((final_coarse_tap[wrcal_cnt] < 'd3) && (CLK_PERIOD/nCK_PER_CLK > 2500))))\n                  wrlvl_redo_corse_inc <= #TCQ REDO_COARSE;\n                else if (early2_data && (final_coarse_tap[wrcal_cnt] < 'd2))\n                  wrlvl_redo_corse_inc <= #TCQ 3'd6;\n                else begin\n                  wl_state_r   <= #TCQ WL_IDLE;\n                  wrlvl_err    <= #TCQ 1'b1;\n                end\n              end else if (wrlvl_final && ~wrlvl_final_r) begin\n                wr_level_done_r <= #TCQ 1'b0;\n                dqs_count_r     <= #TCQ 'd0;\n              end\n\t\t\t\t\t\t\t\n              if(!wr_level_done_r & wr_level_start_r & wl_sm_start) begin\n                if (SIM_CAL_OPTION == \"FAST_CAL\")\n                  wl_state_r <= #TCQ WL_FINE_INC;\n                else\n                  wl_state_r <= #TCQ WL_INIT;\n              end\n           end\n           \n           WL_INIT: begin\n              wl_edge_detect_valid_r <= #TCQ 1'b0;\n              inhibit_edge_detect_r  <= #TCQ 1'b1;\n              wrlvl_rank_done_r      <= #TCQ 1'd0;\n              \n              if (wrlvl_final)\n                corse_cnt[dqs_count_w ]  <= #TCQ final_coarse_tap[dqs_count_w ]; \n              if (wrlvl_byte_redo) begin\n                if (|wl_tap_count_r) begin\n                  wl_state_r   <= #TCQ WL_FINE_DEC;\n                  fine_dec_cnt <= #TCQ wl_tap_count_r;\n                end else if ((corse_cnt[dqs_count_w] + wrlvl_redo_corse_inc) <= 'd7)\n                  wl_state_r   <= #TCQ WL_CORSE_INC;\n                else begin\n                  wl_state_r   <= #TCQ WL_IDLE;\n                  wrlvl_err    <= #TCQ 1'b1;\n                end\n              end else if(wl_sm_start)\n                wl_state_r <= #TCQ WL_INIT_FINE_INC;\n           end\n           \n           \n           \n           \n           \n           \n           \n           WL_INIT_FINE_INC: begin\n              wl_state_r   <= #TCQ WL_INIT_FINE_INC_WAIT1;\n              wl_tap_count_r <= #TCQ wl_tap_count_r + 1'b1;\n              final_corse_dec <= #TCQ 1'b0;\n           end\n\n           WL_INIT_FINE_INC_WAIT1: begin\n              if (wl_sm_start)\n                wl_state_r <= #TCQ WL_INIT_FINE_INC_WAIT;\n           end\n\n           \n           \n           \n           \n           \n           \n           \n           WL_INIT_FINE_INC_WAIT: begin\n              if (wl_sm_start) begin\n                if (stable_cnt < 'd14)\n                  wl_state_r   <= #TCQ WL_INIT_FINE_INC;\n                else if (~rd_data_previous_r[dqs_count_r]) begin\n                  wl_state_r             <= #TCQ WL_WAIT;\n                  inhibit_edge_detect_r  <= #TCQ 1'b0;\n                end else begin\n                  wl_state_r   <= #TCQ WL_INIT_FINE_DEC;\n                  fine_dec_cnt <= #TCQ wl_tap_count_r;\n                end\n              end\n           end\n\n           \n           \n           \n           \n           \n           WL_INIT_FINE_DEC: begin\n              wl_tap_count_r <= #TCQ 'd0;\n              wl_state_r   <= #TCQ WL_INIT_FINE_DEC_WAIT1;\n              if (fine_dec_cnt > 6'd0)\n                fine_dec_cnt <= #TCQ fine_dec_cnt - 1;\n              else\n                fine_dec_cnt <= #TCQ fine_dec_cnt;\n           end\n           \n           WL_INIT_FINE_DEC_WAIT1: begin\n             if (incdec_wait_cnt == 'd8)\n               wl_state_r   <= #TCQ WL_INIT_FINE_DEC_WAIT;\n           end\n           \n           WL_INIT_FINE_DEC_WAIT: begin\n              if (fine_dec_cnt > 6'd0) begin\n                wl_state_r             <= #TCQ WL_INIT_FINE_DEC;\n                inhibit_edge_detect_r  <= #TCQ 1'b1;\n              end else begin\n                wl_state_r             <= #TCQ WL_WAIT;\n                inhibit_edge_detect_r  <= #TCQ 1'b0;\n              end\n           end\n           \n           \n           WL_FINE_INC: begin\n              wl_edge_detect_valid_r <= #TCQ 1'b0;\n              if (SIM_CAL_OPTION == \"FAST_CAL\") begin\n                wl_state_r <= #TCQ WL_FINE_INC_WAIT;\n                if (fast_cal_fine_cnt > 'd0)\n                  fast_cal_fine_cnt <= #TCQ fast_cal_fine_cnt - 1;\n                else\n                  fast_cal_fine_cnt <= #TCQ fast_cal_fine_cnt;\n              end else if (wr_level_done_r5) begin\n                wl_tap_count_r <= #TCQ 'd0;\n                wl_state_r <= #TCQ WL_FINE_INC_WAIT;\n                if (|fine_inc[dqs_count_w])\n                      fine_inc[dqs_count_w] <= #TCQ fine_inc[dqs_count_w] - 1;\n              end else begin\n                wl_state_r <= #TCQ WL_WAIT;\n                wl_tap_count_r <= #TCQ wl_tap_count_r + 1'b1;\n              end\n           end\n           \n           WL_FINE_INC_WAIT: begin\n              if (SIM_CAL_OPTION == \"FAST_CAL\") begin\n                if (fast_cal_fine_cnt > 'd0)\n                  wl_state_r <= #TCQ WL_FINE_INC;\n                else if (fast_cal_coarse_cnt > 'd0)\n                  wl_state_r <= #TCQ WL_CORSE_INC;\n                else\n                  wl_state_r <= #TCQ WL_DQS_CNT;\n              end else if (|fine_inc[dqs_count_w])\n                wl_state_r   <= #TCQ WL_FINE_INC;\n              else if (dqs_count_r == (DQS_WIDTH-1))\n                wl_state_r   <= #TCQ WL_IDLE;\n              else begin\n                wl_state_r   <= #TCQ WL_2RANK_FINAL_TAP;\n                dqs_count_r  <= #TCQ dqs_count_r + 1;\n              end\n           end\n           \n           WL_FINE_DEC: begin\n              wl_edge_detect_valid_r <= #TCQ 1'b0;\n              wl_tap_count_r <= #TCQ 'd0;\n              wl_state_r   <= #TCQ WL_FINE_DEC_WAIT1;\n              if (fine_dec_cnt > 6'd0)\n                fine_dec_cnt <= #TCQ fine_dec_cnt - 1;\n              else\n                fine_dec_cnt <= #TCQ fine_dec_cnt;\n           end\n           \n           WL_FINE_DEC_WAIT1: begin\n             if (incdec_wait_cnt == 'd8)\n               wl_state_r   <= #TCQ WL_FINE_DEC_WAIT;\n           end\n           \n           WL_FINE_DEC_WAIT: begin\n              if (fine_dec_cnt > 6'd0)\n                wl_state_r   <= #TCQ WL_FINE_DEC;\n              \n              \n              else if (dual_rnk_dec) begin \n                if (|corse_dec[dqs_count_r])\n                  wl_state_r <= #TCQ WL_CORSE_DEC;\n                else\n                  wl_state_r <= #TCQ WL_2RANK_DQS_CNT;\n              end else if (wrlvl_byte_redo) begin\n                if ((corse_cnt[dqs_count_w] + wrlvl_redo_corse_inc) <= 'd7)\n                  wl_state_r <= #TCQ WL_CORSE_INC;\n                else begin\n                  wl_state_r <= #TCQ WL_IDLE;\n                  wrlvl_err  <= #TCQ 1'b1;\n                end\n              end else\n                wl_state_r <= #TCQ WL_CORSE_INC;\n           end\n           \n           WL_CORSE_DEC: begin\n              wl_state_r   <= #TCQ WL_CORSE_DEC_WAIT;\n              dual_rnk_dec <= #TCQ 1'b0;\n              if (|corse_dec[dqs_count_r])\n                corse_dec[dqs_count_r] <= #TCQ corse_dec[dqs_count_r] - 1;\n              else\n                corse_dec[dqs_count_r]  <= #TCQ corse_dec[dqs_count_r];\n           end\n           \n           WL_CORSE_DEC_WAIT: begin\n              if (wl_sm_start) begin\n              \n              \n              if (|corse_dec[dqs_count_r])\n                wl_state_r <= #TCQ WL_CORSE_DEC_WAIT1;\n                else\n                wl_state_r <= #TCQ WL_2RANK_DQS_CNT;\n              end\n           end\n           \n           WL_CORSE_DEC_WAIT1: begin\n              if (wl_sm_start)\n                wl_state_r <= #TCQ WL_CORSE_DEC;\n           end\n           \n           WL_CORSE_INC: begin\n              wl_state_r <= #TCQ WL_CORSE_INC_WAIT_TMP;\n              if (SIM_CAL_OPTION == \"FAST_CAL\") begin\n                if (fast_cal_coarse_cnt > 'd0)\n                  fast_cal_coarse_cnt <= #TCQ fast_cal_coarse_cnt - 1;\n                else\n                  fast_cal_coarse_cnt <= #TCQ fast_cal_coarse_cnt;\n              end else if (wrlvl_byte_redo) begin\n                corse_cnt[dqs_count_w] <= #TCQ corse_cnt[dqs_count_w] + 1;\n                if (|wrlvl_redo_corse_inc)                             \n                  wrlvl_redo_corse_inc <= #TCQ wrlvl_redo_corse_inc - 1;\n              end else if (~wr_level_done_r5)\n                corse_cnt[dqs_count_r] <= #TCQ corse_cnt[dqs_count_r] + 1;\n              else if (|corse_inc[dqs_count_w])                             \n                corse_inc[dqs_count_w] <= #TCQ corse_inc[dqs_count_w] - 1;\n           end\n\n           WL_CORSE_INC_WAIT_TMP: begin\n             if (incdec_wait_cnt == 'd8)\n             wl_state_r <= #TCQ WL_CORSE_INC_WAIT;\n           end\n           \n           WL_CORSE_INC_WAIT: begin\n              if (SIM_CAL_OPTION == \"FAST_CAL\") begin\n                if (fast_cal_coarse_cnt > 'd0)\n                  wl_state_r   <= #TCQ WL_CORSE_INC;\n                else\n                  wl_state_r <= #TCQ WL_DQS_CNT;\n              end else if (wrlvl_byte_redo) begin\n                if (|wrlvl_redo_corse_inc)\n                  wl_state_r   <= #TCQ WL_CORSE_INC;\n                else begin\n                  wl_state_r            <= #TCQ WL_INIT_FINE_INC;\n                  inhibit_edge_detect_r <= #TCQ 1'b1;\n                end\n              end else if (~wr_level_done_r5 && wl_sm_start)\n                wl_state_r <= #TCQ WL_CORSE_INC_WAIT1;\n              else if (wr_level_done_r5) begin\n                if (|corse_inc[dqs_count_r])\n                  wl_state_r   <= #TCQ WL_CORSE_INC;\n                else if (|fine_inc[dqs_count_w]) \n                  wl_state_r   <= #TCQ WL_FINE_INC;\n                else if (dqs_count_r == (DQS_WIDTH-1))\n                  wl_state_r   <= #TCQ WL_IDLE;\n                else begin\n                  wl_state_r   <= #TCQ WL_2RANK_FINAL_TAP;\n                  dqs_count_r  <= #TCQ dqs_count_r + 1;\n                end\n              end\n           end\n           \n           WL_CORSE_INC_WAIT1: begin\n              if (wl_sm_start)\n                wl_state_r <= #TCQ WL_CORSE_INC_WAIT2;\n           end\n\n           WL_CORSE_INC_WAIT2: begin\n             if (wl_sm_start)\n                wl_state_r <= #TCQ WL_WAIT;\n           end\n           \n           WL_WAIT: begin\n              if (wl_sm_start)\n              wl_state_r <= #TCQ WL_EDGE_CHECK;\n           end\n           \n           WL_EDGE_CHECK: begin \n              if (wl_edge_detect_valid_r == 1'b0) begin\n                wl_state_r <= #TCQ WL_WAIT;\n                wl_edge_detect_valid_r <= #TCQ 1'b1;\n              end\n              \n              else if(rd_data_edge_detect_r[dqs_count_r] &&\n                      wl_edge_detect_valid_r)\n                begin\n                  wl_tap_count_r <= #TCQ wl_tap_count_r;\n                  if ((SIM_CAL_OPTION == \"FAST_CAL\") || (RANKS < 2) ||\n                      ~oclkdelay_calib_done)\n                    wl_state_r <= #TCQ WL_DQS_CNT;\n                  else\n                    wl_state_r <= #TCQ WL_2RANK_TAP_DEC;\n                end\n              \n              \n              else if((~wrlvl_tap_done_r) && (wl_tap_count_r > 6'd55)) begin\n                if (corse_cnt[dqs_count_r] < COARSE_TAPS) begin\n                  wl_state_r   <= #TCQ WL_FINE_DEC;\n                  fine_dec_cnt <= #TCQ wl_tap_count_r;\n                end  else begin\n                  wrlvl_err <= #TCQ 1'b1;\n                  wl_state_r   <= #TCQ WL_IDLE;\n                end\n\t      end else begin\n\t          if (wl_tap_count_r < 6'd56)  \n                    wl_state_r <= #TCQ WL_FINE_INC;\n\t          else if (corse_cnt[dqs_count_r] < COARSE_TAPS) begin\n                    wl_state_r   <= #TCQ WL_FINE_DEC;\n                    fine_dec_cnt <= #TCQ wl_tap_count_r;\n                  end else begin\n                   wrlvl_err <= #TCQ 1'b1;\n                   wl_state_r   <= #TCQ WL_IDLE;\n                  end\n\t      end\n           end\n\n           WL_2RANK_TAP_DEC: begin\n              wl_state_r    <= #TCQ WL_FINE_DEC;\n              fine_dec_cnt  <= #TCQ wl_tap_count_r;\n              for (m = 0; m < DQS_WIDTH; m = m + 1)\n                corse_dec[m] <= #TCQ corse_cnt[m];\n              wl_edge_detect_valid_r <= #TCQ 1'b0;\n              dual_rnk_dec <= #TCQ 1'b1;\n           end\n           \n           WL_DQS_CNT: begin\n              if ((SIM_CAL_OPTION == \"FAST_CAL\") ||\n                  (dqs_count_r == (DQS_WIDTH-1)) ||\n                  wrlvl_byte_redo) begin\n                dqs_count_r <= #TCQ dqs_count_r;\n                dq_cnt_inc  <= #TCQ 1'b0;\n              end else begin\n                dqs_count_r <= #TCQ dqs_count_r + 1'b1;\n                dq_cnt_inc  <= #TCQ 1'b1;\n              end\n              wl_state_r <= #TCQ WL_DQS_CHECK;\n              wl_edge_detect_valid_r <= #TCQ 1'b0;\n           end\n           \n           WL_2RANK_DQS_CNT: begin\n              if ((SIM_CAL_OPTION == \"FAST_CAL\") ||\n                 (dqs_count_r == (DQS_WIDTH-1))) begin\n                dqs_count_r <= #TCQ dqs_count_r;\n                dq_cnt_inc  <= #TCQ 1'b0;\n              end else begin\n                dqs_count_r <= #TCQ dqs_count_r + 1'b1;\n                dq_cnt_inc  <= #TCQ 1'b1;\n              end\n              wl_state_r <= #TCQ WL_DQS_CHECK;\n              wl_edge_detect_valid_r <= #TCQ 1'b0;\n              dual_rnk_dec <= #TCQ 1'b0;\n           end   \n           \n           WL_DQS_CHECK: begin \n              wl_tap_count_r <= #TCQ 'd0;\n              if (dq_cnt_inc == 1'b0)begin\n                wrlvl_rank_done_r <= #TCQ 1'd1;\n                for (t = 0; t < DQS_WIDTH; t = t + 1)\n                  corse_cnt[t] <= #TCQ 3'b0;\n                if ((SIM_CAL_OPTION == \"FAST_CAL\") || (RANKS < 2) || ~oclkdelay_calib_done) begin\n                  wl_state_r  <= #TCQ WL_IDLE;\n                  if (wrlvl_byte_redo)\n                    dqs_count_r <= #TCQ dqs_count_r;\n                  else \n                  dqs_count_r <= #TCQ 'd0;\n                end else if (rank_cnt_r == RANKS-1) begin\n                  dqs_count_r <= #TCQ dqs_count_r;\n                  if (RANKS > 1)\n                    wl_state_r  <= #TCQ WL_2RANK_FINAL_TAP;\n                  else\n                    wl_state_r  <= #TCQ WL_IDLE;\n                end else begin\n                  wl_state_r  <= #TCQ WL_INIT;\n                  dqs_count_r <= #TCQ 'd0;\n                end\n                if ((SIM_CAL_OPTION == \"FAST_CAL\") ||\n                    (rank_cnt_r == RANKS-1)) begin\n                  wr_level_done_r <= #TCQ 1'd1;\n                  rank_cnt_r      <= #TCQ 2'b00;\n                end else begin\n                  wr_level_done_r <= #TCQ 1'd0;\n                  rank_cnt_r      <= #TCQ rank_cnt_r + 1'b1;\n                end\n              end else\n                wl_state_r  <= #TCQ WL_INIT;\n           end\n           \n           WL_2RANK_FINAL_TAP: begin\n              if (wr_level_done_r4 && ~wr_level_done_r5) begin\n                for(u = 0; u < DQS_WIDTH; u = u + 1) begin\n                  corse_inc[u] <= #TCQ final_coarse_tap[u];\n                  fine_inc[u]  <= #TCQ final_val[u];\n                end\n                dqs_count_r    <= #TCQ 'd0;\n              end else if (wr_level_done_r5) begin\n                if (|corse_inc[dqs_count_r])\n                  wl_state_r   <= #TCQ WL_CORSE_INC;\n                else if (|fine_inc[dqs_count_w])\n                  wl_state_r   <= #TCQ WL_FINE_INC;\n              end  \n           end\n        endcase\n     end\n   end ",
+        "   always @(posedge clk) begin\n     if (rst)\n       incdec_wait_cnt <= #TCQ 'd0;\n     else if ((wl_state_r == WL_FINE_DEC_WAIT1) ||\n             (wl_state_r == WL_INIT_FINE_DEC_WAIT1) ||\n             (wl_state_r == WL_CORSE_INC_WAIT_TMP))\n       incdec_wait_cnt <= #TCQ incdec_wait_cnt + 1;\n     else\n       incdec_wait_cnt <= #TCQ 'd0;\n   end",
+        "   assign oclk_count_w = {2'b00, oclkdelay_calib_cnt};",
+        "   assign dqs_count_w = {2'b00, dqs_count_r};",
+        "   always@(posedge clk) begin\n     wr_level_start_r <= #TCQ wr_level_start;\n   end",
+        "   always @(posedge clk)begin\n     if (rst | flag_ck_negedge | flag_init | (wl_tap_count_r < 'd1) |\n         inhibit_edge_detect_r)\n       rd_data_edge_detect_r     <= #TCQ {DQS_WIDTH{1'b0}};\n     else if (rd_data_edge_detect_r[dqs_count_r] == 1'b1) begin\n       if ((wl_state_r == WL_FINE_DEC) || (wl_state_r == WL_FINE_DEC_WAIT) || (wl_state_r == WL_FINE_DEC_WAIT1) ||\n           (wl_state_r == WL_CORSE_INC) || (wl_state_r == WL_CORSE_INC_WAIT) || (wl_state_r == WL_CORSE_INC_WAIT_TMP) ||\n           (wl_state_r == WL_CORSE_INC_WAIT1) || (wl_state_r == WL_CORSE_INC_WAIT2))\n         rd_data_edge_detect_r <= #TCQ {DQS_WIDTH{1'b0}};\n       else\n         rd_data_edge_detect_r <= #TCQ rd_data_edge_detect_r;\n     end else if (rd_data_previous_r[dqs_count_r] && (stable_cnt < 'd14))\n       rd_data_edge_detect_r     <= #TCQ {DQS_WIDTH{1'b0}};\n     else\n       rd_data_edge_detect_r <= #TCQ (~rd_data_previous_r & rd_data_rise_wl_r);\n   end",
+        "   always @(posedge clk) begin\n     if (rst)\n       flag_init <= #TCQ 1'b1;\n     else if ((wl_state_r == WL_WAIT) && ((wl_state_r1 == WL_INIT_FINE_INC_WAIT) ||\n              (wl_state_r1 == WL_INIT_FINE_DEC_WAIT)))\n       flag_init <= #TCQ 1'b0;\n   end",
+        "   always @(posedge clk)begin\n      if (rst | (wl_state_r == WL_DQS_CNT) |\n         (wl_state_r == WL_DQS_CHECK) | wr_level_done_r |\n         (wl_state_r1 == WL_INIT_FINE_DEC))\n        flag_ck_negedge <= #TCQ 1'd0;\n      else if ((rd_data_previous_r[dqs_count_r] && ((stable_cnt > 'd0) |\n              (wl_state_r == WL_FINE_DEC) | (wl_state_r == WL_FINE_DEC_WAIT) | (wl_state_r == WL_FINE_DEC_WAIT1))) |\n\t\t\t  (wl_state_r == WL_CORSE_INC)) \n        flag_ck_negedge <= #TCQ 1'd1;\n      else if (~rd_data_previous_r[dqs_count_r] && (stable_cnt == 'd14))\n               \n        flag_ck_negedge <= #TCQ 1'd0;\n   end",
+        "   always @(posedge clk)begin\n      if (rst | (wl_state_r == WL_DQS_CNT) |\n         (wl_state_r == WL_2RANK_TAP_DEC) |\n         (wl_state_r == WL_FINE_DEC) |\n         (rd_data_previous_r[dqs_count_r] != rd_data_rise_wl_r[dqs_count_r]) |\n         (wl_state_r1 == WL_INIT_FINE_DEC))\n        stable_cnt <= #TCQ 'd0;\n      else if ((wl_tap_count_r > 6'd0) & \n         (((wl_state_r == WL_EDGE_CHECK) & (wl_edge_detect_valid_r)) |\n         ((wl_state_r1 == WL_INIT_FINE_INC_WAIT) & (wl_state_r == WL_INIT_FINE_INC)))) begin\n        if ((rd_data_previous_r[dqs_count_r] == rd_data_rise_wl_r[dqs_count_r])\n           & (stable_cnt < 'd14))\n          stable_cnt <= #TCQ stable_cnt + 1;\n      end\n   end",
+        "   always @(posedge clk)begin\n     if ((wl_state_r == WL_INIT) || \n         \n\t\t ((wl_state_r1 == WL_INIT_FINE_INC_WAIT) & (wl_state_r == WL_INIT_FINE_INC)) ||\n         (wl_state_r == WL_FINE_DEC) || (wl_state_r == WL_FINE_DEC_WAIT1) || (wl_state_r == WL_FINE_DEC_WAIT) ||\n         (wl_state_r == WL_CORSE_INC) || (wl_state_r == WL_CORSE_INC_WAIT) || (wl_state_r == WL_CORSE_INC_WAIT_TMP) || \n         (wl_state_r == WL_CORSE_INC_WAIT1) || (wl_state_r == WL_CORSE_INC_WAIT2) ||\n         ((wl_state_r == WL_EDGE_CHECK) & (wl_edge_detect_valid_r)))\n       rd_data_previous_r         <= #TCQ rd_data_rise_wl_r;\n   end",
+        "endgenerate",
+        "   always @(posedge clk)\n     rd_data_rise_wl_r[rd_i] <=\n     #TCQ |rd_data_rise0[(rd_i*DRAM_WIDTH)+DRAM_WIDTH-1:rd_i*DRAM_WIDTH];\n  end",
+        "generate\n  for(rd_i = 0; rd_i < DQS_WIDTH; rd_i = rd_i +1)begin: gen_rd\n   always @(posedge clk)\n     rd_data_rise_wl_r[rd_i] <=",
+        "genvar rd_i;",
+        "   always @(posedge clk) begin\n     if (rst) begin\n     \n     \n     \n       dqs_wl_po_stg2_c_incdec   <= #TCQ 1'b0;\n       dqs_wl_po_en_stg2_c       <= #TCQ 1'b0;\n     end else if (wl_state_r == WL_CORSE_INC) begin\n     \n       dqs_wl_po_stg2_c_incdec <= #TCQ 1'b1;\n       dqs_wl_po_en_stg2_c     <= #TCQ 1'b1;\n     end else begin\n       dqs_wl_po_stg2_c_incdec <= #TCQ 1'b0;\n       dqs_wl_po_en_stg2_c     <= #TCQ 1'b0; \n     end\n   end",
+        "   always @(posedge clk) begin\n     if (rst) begin\n     \n       dqs_po_stg2_f_incdec   <= #TCQ 1'b0;\n       dqs_po_en_stg2_f       <= #TCQ 1'b0;\n     \n     \n     \n     end else if (po_cnt_dec || (wl_state_r == WL_INIT_FINE_DEC) ||\n                  (wl_state_r == WL_FINE_DEC)) begin\n       dqs_po_stg2_f_incdec <= #TCQ 1'b0;\n       dqs_po_en_stg2_f     <= #TCQ 1'b1;\n     \n     end else if ((wl_state_r == WL_INIT_FINE_INC) ||\n                  (wl_state_r == WL_FINE_INC)) begin\n       dqs_po_stg2_f_incdec <= #TCQ 1'b1;\n       dqs_po_en_stg2_f     <= #TCQ 1'b1;\n     end else begin\n       dqs_po_stg2_f_incdec <= #TCQ 1'b0;\n       dqs_po_en_stg2_f     <= #TCQ 1'b0; \n     end\n   end",
+        "      always @(posedge clk) begin\n        if (rst)\n          final_val[wr_i] <= #TCQ 'b0;\n        else if (wr_level_done_r2 && ~wr_level_done_r3) begin\n          if (~oclkdelay_calib_done)\n            final_val[wr_i] <= #TCQ (smallest[wr_i] + add_smallest[wr_i]); \n          else if ((smallest[wr_i] + add_smallest[wr_i]) < \n                   (largest[wr_i] + add_largest[wr_i]))\n            final_val[wr_i] <= #TCQ ((smallest[wr_i] + add_smallest[wr_i]) +\n                                     (((largest[wr_i] + add_largest[wr_i]) -\n                                     (smallest[wr_i] + add_smallest[wr_i]))/2));\n          else if ((smallest[wr_i] + add_smallest[wr_i]) >\n                   (largest[wr_i] + add_largest[wr_i]))\n            final_val[wr_i] <= #TCQ ((largest[wr_i] + add_largest[wr_i]) +\n                                     (((smallest[wr_i] + add_smallest[wr_i]) -\n                                     (largest[wr_i] + add_largest[wr_i]))/2));\n          else if ((smallest[wr_i] + add_smallest[wr_i]) ==\n                   (largest[wr_i] + add_largest[wr_i]))\n            final_val[wr_i] <= #TCQ (largest[wr_i] + add_largest[wr_i]);\n        end\n      end",
+        "   generate\n     for (wr_i = 0; wr_i < DQS_WIDTH; wr_i = wr_i +1) begin: gen_final_tap\n      always @(posedge clk) begin",
+        "       for(i = 0; i < DQS_WIDTH; i = i +1) begin: smallest_dqs\n         smallest[i] <= #TCQ wl_dqs_tap_count_r[0][i];\n         largest[i]  <= #TCQ wl_dqs_tap_count_r[0][i];\n       end",
+        "   always @(posedge clk) begin\n     if (rst) begin\n       for(x = 0; x < DQS_WIDTH; x = x +1) begin\n         smallest[x] <= #TCQ 'b0;\n         largest[x]  <= #TCQ 'b0;\n       end\n     end else if ((wl_state_r == WL_DQS_CNT) & wrlvl_byte_redo) begin\n       smallest[dqs_count_r] <= #TCQ wl_dqs_tap_count_r[0][dqs_count_r];\n       largest[dqs_count_r]  <= #TCQ wl_dqs_tap_count_r[0][dqs_count_r];\n     end else if ((wl_state_r == WL_DQS_CNT) | \n                  (wl_state_r == WL_2RANK_TAP_DEC)) begin\n       smallest[dqs_count_r] <= #TCQ wl_dqs_tap_count_r[0][dqs_count_r];\n       largest[dqs_count_r]  <= #TCQ wl_dqs_tap_count_r[RANKS-1][dqs_count_r];\n     end else if (((SIM_CAL_OPTION == \"FAST_CAL\") | \n                   (~oclkdelay_calib_done & ~wrlvl_byte_redo)) & \n                  wr_level_done_r1 & ~wr_level_done_r2) begin\n       for(i = 0; i < DQS_WIDTH; i = i +1) begin: smallest_dqs\n         smallest[i] <= #TCQ wl_dqs_tap_count_r[0][i];\n         largest[i]  <= #TCQ wl_dqs_tap_count_r[0][i];\n       end\n     end\n   end",
+        "   end\n   endgenerate",
+        "     always @(posedge clk) begin\n       \n       for(w = 0; w < DQS_WIDTH; w = w + 1) begin\n         final_coarse_tap[w] <= #TCQ wl_corse_cnt[0][w];\n         add_smallest[w]     <= #TCQ 'd0;\n         add_largest[w]      <= #TCQ 'd0;\n       end\n     end",
+        "       always @(posedge clk) begin\n         if (rst) begin\n           \n           add_smallest[cnt]         <= #TCQ 'd0;\n           add_largest[cnt]          <= #TCQ 'd0;\n           final_coarse_tap[cnt]     <= #TCQ 'd0;\n         end else if (wr_level_done_r1 & ~wr_level_done_r2) begin\n           if (~oclkdelay_calib_done) begin\n\t    for(y = 0 ; y < DQS_WIDTH; y = y+1) begin\n              final_coarse_tap[y] <= #TCQ wl_corse_cnt[0][y]; \n              add_smallest[y]     <= #TCQ 'd0;\n              add_largest[y]      <= #TCQ 'd0;\n\t     end\n           end else \n\t   if (wl_corse_cnt[0][cnt] == wl_corse_cnt[1][cnt]) begin\n           \n           \n             \n             final_coarse_tap[cnt]     <= #TCQ wl_corse_cnt[1][cnt];\n             add_smallest[cnt]         <= #TCQ 'd0;\n             add_largest[cnt]          <= #TCQ 'd0;\n           end else if (wl_corse_cnt[0][cnt] < wl_corse_cnt[1][cnt]) begin\n           \n           \n           \n             \n             final_coarse_tap[cnt]     <= #TCQ wl_corse_cnt[1][cnt] - 1;\n             if (|wl_corse_cnt[0][cnt])\n               \n               \n               \n               add_largest[cnt] <= #TCQ 'd38;\n             else\n               \n               \n               \n               add_largest[cnt] <= #TCQ 'd34;\n           end else if (wl_corse_cnt[0][cnt] > wl_corse_cnt[1][cnt]) begin\n           \n           \n           \n             \n             final_coarse_tap[cnt]   <= #TCQ wl_corse_cnt[1][cnt];\n             if (|wl_corse_cnt[1][cnt])\n               \n               \n               \n               add_smallest[cnt] <= #TCQ 'd38;\n             else\n               \n               \n               \n               add_smallest[cnt] <= #TCQ 'd34;\n           end\n         end\n       end",
+        "   generate\n   genvar cnt;\n   if (RANKS == 2) begin \n     for(cnt = 0; cnt < DQS_WIDTH; cnt = cnt +1) begin: coarse_dqs_cnt\n       always @(posedge clk) begin\n         if (rst) begin\n           ",
+        "   always @(posedge clk) begin\n     if (rst) begin\n       for (k = 0; k < RANKS; k = k + 1) begin: rst_wl_dqs_tap_count_loop\n         for (n = 0; n < DQS_WIDTH; n = n + 1) begin\n           wl_corse_cnt[k][n]       <= #TCQ 'b0;\n           wl_dqs_tap_count_r[k][n] <= #TCQ 'b0;\n         end\n       end\n     end else if ((wl_state_r == WL_DQS_CNT) | (wl_state_r == WL_WAIT) | \n                  (wl_state_r == WL_FINE_DEC_WAIT1) |\n                  (wl_state_r == WL_2RANK_TAP_DEC)) begin\n         wl_dqs_tap_count_r[rank_cnt_r][dqs_count_r] <= #TCQ wl_tap_count_r;\n         wl_corse_cnt[rank_cnt_r][dqs_count_r]       <= #TCQ corse_cnt[dqs_count_r];\n     end else if ((SIM_CAL_OPTION == \"FAST_CAL\") & (wl_state_r == WL_DQS_CHECK)) begin\n       for (p = 0; p < RANKS; p = p +1) begin: dqs_tap_rank_cnt   \n         for(q = 0; q < DQS_WIDTH; q = q +1) begin: dqs_tap_dqs_cnt\n           wl_dqs_tap_count_r[p][q] <= #TCQ wl_tap_count_r;\n           wl_corse_cnt[p][q]       <= #TCQ corse_cnt[0];\n         end\n       end\n     end\n   end",
+        "   always @(posedge clk)\n     if (rst || (wrlvl_byte_redo && ~wrlvl_byte_redo_r))\n       wrlvl_byte_done <= #TCQ 1'b0;\n     else if (wrlvl_byte_redo && wr_level_done_r3 && ~wr_level_done_r4)\n       wrlvl_byte_done <= #TCQ 1'b1;\n  ",
+        "     always @(posedge clk) begin\n       if (rst || (wrlvl_byte_redo && ~wrlvl_byte_redo_r) ||\n         (wrlvl_final && ~wrlvl_final_r))\n         done_dqs_dec <= #TCQ 1'b0;\n       else if (~oclkdelay_calib_done)\n         done_dqs_dec <= #TCQ wr_level_done_r;\n       else if (wr_level_done_r3 && ~wr_level_done_r4)\n         done_dqs_dec <= #TCQ 1'b1;\n     end",
+        "     always @(posedge clk) begin\n       if (rst || (wrlvl_byte_redo && ~wrlvl_byte_redo_r) ||\n         (wrlvl_final && ~wrlvl_final_r))\n         done_dqs_dec <= #TCQ 1'b0;\n       else if ((SIM_CAL_OPTION == \"FAST_CAL\") || ~oclkdelay_calib_done)\n         done_dqs_dec <= #TCQ wr_level_done_r;\n       else if (wr_level_done_r5 && (wl_state_r == WL_IDLE))\n         done_dqs_dec <= #TCQ 1'b1;\n     end",
+        "   generate\n   if (RANKS == 2) begin: dual_rank",
+        "   always @(posedge clk) begin\n     dqs_po_dec_done  <= #TCQ po_dec_done;\n     wr_level_done_r1 <= #TCQ wr_level_done_r;\n     wr_level_done_r2 <= #TCQ wr_level_done_r1;\n     wr_level_done_r3 <= #TCQ wr_level_done_r2;\n     wr_level_done_r4 <= #TCQ wr_level_done_r3;\n     wr_level_done_r5 <= #TCQ wr_level_done_r4;\n     for (l = 0; l < DQS_WIDTH; l = l + 1) begin \n       wl_po_coarse_cnt[3*l+:3] <= #TCQ final_coarse_tap[l];\n       if ((RANKS == 1) || ~oclkdelay_calib_done)\n         wl_po_fine_cnt[6*l+:6] <= #TCQ smallest[l];\n       else \n         wl_po_fine_cnt[6*l+:6] <= #TCQ final_val[l];\n     end\n   end",
+        "   always @(posedge clk) begin\n     if (rst)\n       po_dec_done <= #TCQ 1'b0;\n     else if (((po_cnt_dec == 'd1) && (po_rdval_cnt == 'd1)) || \n              (phy_ctl_ready_r6 && (po_rdval_cnt == 'd0))) begin\n       po_dec_done <= #TCQ 1'b1;\n     end\n   end",
+        "   always @(posedge clk) begin\n     if (rst || (po_rdval_cnt == 'd0))\n       po_cnt_dec      <= #TCQ 1'b0;\n     else if (phy_ctl_ready_r6 && (po_rdval_cnt > 'd0) && (wait_cnt == 'd1))\n       po_cnt_dec      <= #TCQ 1'b1;\n     else\n       po_cnt_dec      <= #TCQ 1'b0;\n     end",
+        "   always @(posedge clk) begin\n     if (rst) begin\n       po_rdval_cnt    <= #TCQ 'd0;\n     end else if (phy_ctl_ready_r5 && ~phy_ctl_ready_r6) begin\n       po_rdval_cnt    <= #TCQ po_counter_read_val;\n     end else if (po_rdval_cnt > 'd0) begin\n       if (po_cnt_dec)\n         po_rdval_cnt  <= #TCQ po_rdval_cnt - 1;\n       else            \n         po_rdval_cnt  <= #TCQ po_rdval_cnt;\n     end else if (po_rdval_cnt == 'd0) begin\n       po_rdval_cnt    <= #TCQ po_rdval_cnt;\n     end\n   end",
+        "   always @(posedge clk) begin\n     if (rst || po_cnt_dec)\n       wait_cnt <= #TCQ 'd8;\n     else if (phy_ctl_ready_r6 && (wait_cnt > 'd0))\n       wait_cnt <= #TCQ wait_cnt - 1;\n   end",
+        "   always @(posedge clk) begin\n     if(rst) begin\n       wrlvl_tap_done_r <= #TCQ 1'b0 ;\n     end else begin\n       if(wrlvl_tap_done_r == 1'b0) begin\n         if(oclkdelay_calib_done) begin\n\t   wrlvl_tap_done_r <= #TCQ 1'b1 ;\n\t end\n       end\n     end\n   end",
+        "   always @(posedge clk) begin\n     phy_ctl_ready_r1  <= #TCQ phy_ctl_ready;\n     phy_ctl_ready_r2  <= #TCQ phy_ctl_ready_r1;\n     phy_ctl_ready_r3  <= #TCQ phy_ctl_ready_r2;\n     phy_ctl_ready_r4  <= #TCQ phy_ctl_ready_r3;\n     phy_ctl_ready_r5  <= #TCQ phy_ctl_ready_r4;\n     phy_ctl_ready_r6  <= #TCQ phy_ctl_ready_r5;\n     wrlvl_byte_redo_r <= #TCQ wrlvl_byte_redo;\n     wrlvl_final_r     <= #TCQ wrlvl_final;\n     if ((wrlvl_byte_redo && ~wrlvl_byte_redo_r) ||\n         (wrlvl_final && ~wrlvl_final_r))\n       wr_level_done  <= #TCQ 1'b0;\n     else\n       wr_level_done  <= #TCQ done_dqs_dec;\n   end",
+        "   assign po_stg2_wl_cnt = dqs_count_r;\n\n   assign wrlvl_rank_done = wrlvl_rank_done_r;\n   \n   assign done_dqs_tap_inc = done_dqs_dec;\n   \n   assign phy_ctl_rdy_dly = phy_ctl_ready_r6;\n   ",
+        "   assign dbg_phy_wrlvl [60]    = wl_edge_detect_valid_r;\n   assign dbg_phy_wrlvl [61+:6] = wl_tap_count_r;\n   assign dbg_phy_wrlvl [67+:9] = rd_data_edge_detect_r;\n   assign dbg_phy_wrlvl [76+:54]  = wl_po_fine_cnt;\n   assign dbg_phy_wrlvl [130+:27] = wl_po_coarse_cnt;",
+        "   assign dbg_phy_wrlvl[0+:27]  = corse_cnt_dbg;\n   assign dbg_phy_wrlvl[27+:5]  = wl_state_r;\n   assign dbg_phy_wrlvl[32+:4]  = dqs_count_r;\n   assign dbg_phy_wrlvl[36+:9]  = rd_data_rise_wl_r;\n   assign dbg_phy_wrlvl[45+:9]  = rd_data_previous_r;\n   assign dbg_phy_wrlvl[54+:4]  = stable_cnt;\n   assign dbg_phy_wrlvl[58]     = 'd0;\n   assign dbg_phy_wrlvl[59]     = flag_ck_negedge;",
+        "   always @(*) begin\n     for (v = 0; v < DQS_WIDTH; v = v + 1)\n       corse_cnt_dbg[3*v+:3] = corse_cnt[v];\n   end\n  "
+    ]
+}

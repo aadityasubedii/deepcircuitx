@@ -1,0 +1,1 @@
+assign CountEq0 = Counter == 8'h0;

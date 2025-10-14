@@ -1,0 +1,1 @@
+  assign cpu_d_writedata_0_padded = cpu_d_writedata | 32'b0;

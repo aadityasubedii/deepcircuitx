@@ -1,0 +1,1 @@
+  always @(posedge clk) edge_aligned_r <= #TCQ edge_aligned_ns;

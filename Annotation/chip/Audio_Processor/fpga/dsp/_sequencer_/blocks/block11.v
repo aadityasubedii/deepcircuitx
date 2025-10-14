@@ -1,0 +1,1 @@
+    assign neg_audio = audio_in[15];

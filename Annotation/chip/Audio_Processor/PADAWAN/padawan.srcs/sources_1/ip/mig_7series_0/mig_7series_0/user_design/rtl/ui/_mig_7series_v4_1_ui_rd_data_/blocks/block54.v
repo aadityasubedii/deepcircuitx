@@ -1,0 +1,1 @@
+      always @(posedge clk) ram_init_done_r_lcl <= #TCQ ram_init_done_ns;

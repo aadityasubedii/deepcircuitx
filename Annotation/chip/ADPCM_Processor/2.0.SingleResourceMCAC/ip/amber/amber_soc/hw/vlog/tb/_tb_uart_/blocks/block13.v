@@ -1,0 +1,1 @@
+assign tx_start     = `U_TEST_MODULE.tb_uart_control_reg[0];

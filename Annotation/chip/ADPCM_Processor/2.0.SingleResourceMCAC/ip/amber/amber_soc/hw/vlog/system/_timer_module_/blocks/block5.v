@@ -1,0 +1,1 @@
+assign o_timer_int = { timer2_int_reg,

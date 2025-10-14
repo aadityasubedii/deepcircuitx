@@ -1,0 +1,336 @@
+{
+    "line_num": [
+        [
+            692,
+            692
+        ],
+        [
+            691,
+            691
+        ],
+        [
+            689,
+            689
+        ],
+        [
+            688,
+            688
+        ],
+        [
+            686,
+            686
+        ],
+        [
+            685,
+            685
+        ],
+        [
+            684,
+            694
+        ],
+        [
+            677,
+            682
+        ],
+        [
+            671,
+            676
+        ],
+        [
+            644,
+            668
+        ],
+        [
+            641,
+            642
+        ],
+        [
+            632,
+            638
+        ],
+        [
+            611,
+            611
+        ],
+        [
+            610,
+            610
+        ],
+        [
+            599,
+            608
+        ],
+        [
+            589,
+            591
+        ],
+        [
+            586,
+            588
+        ],
+        [
+            583,
+            593
+        ],
+        [
+            580,
+            581
+        ],
+        [
+            579,
+            579
+        ],
+        [
+            578,
+            578
+        ],
+        [
+            561,
+            570
+        ],
+        [
+            554,
+            555
+        ],
+        [
+            549,
+            549
+        ],
+        [
+            544,
+            558
+        ],
+        [
+            540,
+            540
+        ],
+        [
+            534,
+            534
+        ],
+        [
+            520,
+            527
+        ],
+        [
+            518,
+            520
+        ],
+        [
+            509,
+            513
+        ],
+        [
+            507,
+            509
+        ],
+        [
+            496,
+            504
+        ],
+        [
+            494,
+            494
+        ],
+        [
+            492,
+            492
+        ],
+        [
+            477,
+            489
+        ],
+        [
+            465,
+            475
+        ],
+        [
+            461,
+            491
+        ],
+        [
+            458,
+            459
+        ],
+        [
+            457,
+            457
+        ],
+        [
+            453,
+            456
+        ],
+        [
+            452,
+            452
+        ],
+        [
+            451,
+            451
+        ],
+        [
+            450,
+            450
+        ],
+        [
+            447,
+            447
+        ],
+        [
+            445,
+            448
+        ],
+        [
+            437,
+            444
+        ],
+        [
+            434,
+            436
+        ],
+        [
+            431,
+            433
+        ],
+        [
+            394,
+            429
+        ],
+        [
+            381,
+            392
+        ],
+        [
+            361,
+            375
+        ],
+        [
+            358,
+            360
+        ],
+        [
+            355,
+            355
+        ],
+        [
+            352,
+            354
+        ],
+        [
+            332,
+            349
+        ],
+        [
+            321,
+            331
+        ],
+        [
+            320,
+            320
+        ],
+        [
+            319,
+            319
+        ],
+        [
+            315,
+            315
+        ],
+        [
+            260,
+            313
+        ],
+        [
+            253,
+            257
+        ],
+        [
+            246,
+            250
+        ],
+        [
+            243,
+            243
+        ],
+        [
+            226,
+            238
+        ],
+        [
+            218,
+            224
+        ],
+        [
+            216,
+            218
+        ]
+    ],
+    "blocks": [
+        "    assign mc_odt[1] = mc_aux_out0[3] | mc_aux_out_r[1] | mc_aux_out_r_1[1] | mc_aux_out_r_2[1] ;",
+        "    assign mc_odt[0] = mc_aux_out0[1] | mc_aux_out_r[0] | mc_aux_out_r_1[0] | mc_aux_out_r_2[0] ;",
+        "    assign mc_odt[1] = mc_aux_out0[3] | mc_aux_out_r[1] ;",
+        "    assign mc_odt[0] = mc_aux_out0[1] | mc_aux_out_r[0] ;",
+        "    assign mc_odt[1] = mc_aux_out0[3] | mc_aux_out_r[1] | mc_aux_out_r_1[1];",
+        "    assign mc_odt[0] = mc_aux_out0[1] | mc_aux_out_r[0] | mc_aux_out_r_1[0];",
+        "   if((nCK_PER_CLK == 4) && (nSLOTS > 1 )) begin:odt_high_time_4_1_dslot\n    assign mc_odt[0] = mc_aux_out0[1] | mc_aux_out_r[0] | mc_aux_out_r_1[0];\n    assign mc_odt[1] = mc_aux_out0[3] | mc_aux_out_r[1] | mc_aux_out_r_1[1];\n   end else if(nCK_PER_CLK == 4) begin:odt_high_time_4_1\n    assign mc_odt[0] = mc_aux_out0[1] | mc_aux_out_r[0] ;\n    assign mc_odt[1] = mc_aux_out0[3] | mc_aux_out_r[1] ;\n   end else if(nCK_PER_CLK == 2) begin:odt_high_time_2_1\n    assign mc_odt[0] = mc_aux_out0[1] | mc_aux_out_r[0] | mc_aux_out_r_1[0] | mc_aux_out_r_2[0] ;\n    assign mc_odt[1] = mc_aux_out0[3] | mc_aux_out_r[1] | mc_aux_out_r_1[1] | mc_aux_out_r_2[1] ;\n   end \n end",
+        "   always@(posedge clk) begin\n      mc_aux_out_r[0] <= #TCQ mc_aux_out0[1] ;\n      mc_aux_out_r[1] <= #TCQ mc_aux_out0[3] ;\n      mc_aux_out_r_1 <= #TCQ mc_aux_out_r ;\n      mc_aux_out_r_2 <= #TCQ mc_aux_out_r_1 ;\n   end ",
+        " generate\n if(CKE_ODT_AUX == \"FALSE\")begin\n   reg[1:0] mc_aux_out_r ;\n   reg[1:0] mc_aux_out_r_1 ;\n   reg[1:0] mc_aux_out_r_2 ;\n",
+        "  generate\n    if (nSLOTS > 1) begin : slot_1_configured\n      wire slot_1_select = (slot_1_present[3] & slot_1_present[1])? \n            |({col_ra_one_hot[slot_0_population+1],\n            col_ra_one_hot[slot_0_population]}) :\n\t   (slot_1_present[1]) ? col_ra_one_hot[slot_0_population] :1'b0;\n      wire slot_1_read = EVEN_CWL_2T_MODE == \"ON\" ?\n                          slot_1_select && col_rd_wr_r :\n                          slot_1_select && col_rd_wr_ns;\n      wire slot_1_write = EVEN_CWL_2T_MODE == \"ON\" ?\n                            slot_1_select && ~col_rd_wr_r :\n                            slot_1_select && ~col_rd_wr_ns;\n\n      \n      wire slot_1_odt = (DRAM_TYPE == \"DDR3\") ? ~slot_1_read : slot_1_write;\n      assign mc_aux_out0[3] = slot_1_odt & sent_col;  \n\n    end \n    else begin\n      \n      \n      assign mc_aux_out0[3] = 1'b0;\n\n    end \n  endgenerate",
+        "  wire slot_0_odt = (DRAM_TYPE == \"DDR3\") ? ~slot_0_read : slot_0_write;\n  assign mc_aux_out0[1] = slot_0_odt & sent_col;  ",
+        "  always @(slot_0_present) begin\n    slot_0_population = 2'b0;\n    for (i=0; i<8; i=i+1)\n      if (~slot_0_population[1])\n        if (slot_0_present[i] == 1'b1) slot_0_population =\n                                         slot_0_population + 2'b1;\n  end",
+        "  assign rnk_config = rnk_config_ns;",
+        "  always @(posedge clk) rnk_config_r <= #TCQ rnk_config_ns;",
+        "  always @(grant_config_r\n           or rnk_config_r or rnk_config_strobe or req_rank_r or rst) begin\n    if (rst) rnk_config_ns = {RANK_WIDTH{1'b0}};\n    else begin\n      rnk_config_ns = rnk_config_r;\n      if (rnk_config_strobe)\n        for (i=0; i<nBANK_MACHS; i=i+1)\n          if (grant_config_r[i]) rnk_config_ns = req_rank_r[(RANK_WIDTH*i)+:RANK_WIDTH];\n    end\n  end",
+        "      assign mc_cs_n[4*CS_WIDTH*nCS_PER_RANK -1  :3*CS_WIDTH*nCS_PER_RANK ] =\n        {(~(cs_one_hot << (nCS_PER_RANK*ra3)) | {CS_WIDTH*nCS_PER_RANK{~cs_en3}})};\n",
+        "      assign mc_cs_n[3*CS_WIDTH*nCS_PER_RANK -1  :2*CS_WIDTH*nCS_PER_RANK ] =\n        {(~(cs_one_hot << (nCS_PER_RANK*ra2)) | {CS_WIDTH*nCS_PER_RANK{~cs_en2}})};\n",
+        "  generate\n    if(nCK_PER_CLK  == 4) begin\n\n      assign mc_cs_n[3*CS_WIDTH*nCS_PER_RANK -1  :2*CS_WIDTH*nCS_PER_RANK ] =\n        {(~(cs_one_hot << (nCS_PER_RANK*ra2)) | {CS_WIDTH*nCS_PER_RANK{~cs_en2}})};\n\n      assign mc_cs_n[4*CS_WIDTH*nCS_PER_RANK -1  :3*CS_WIDTH*nCS_PER_RANK ] =\n        {(~(cs_one_hot << (nCS_PER_RANK*ra3)) | {CS_WIDTH*nCS_PER_RANK{~cs_en3}})};\n\n    end\n  endgenerate",
+        "  assign mc_cs_n[2*CS_WIDTH*nCS_PER_RANK -1  : CS_WIDTH*nCS_PER_RANK ] =\n     {(~(cs_one_hot << (nCS_PER_RANK*ra1)) | {CS_WIDTH*nCS_PER_RANK{~cs_en1}})};",
+        "     {(~(cs_one_hot << (nCS_PER_RANK*ra0)) | {CS_WIDTH*nCS_PER_RANK{~cs_en0}})};",
+        "  assign mc_cs_n[CS_WIDTH*nCS_PER_RANK -1  :0 ] =",
+        "generate\n  if(CKE_ODT_AUX == \"FALSE\")begin\n    assign mc_cke[0] = cke0;\n    assign mc_cke[1] = cke_ns;\n    if(nCK_PER_CLK == 4) begin\n      assign mc_cke[2] = cke_ns;\n      assign mc_cke[3] = cke_ns;\n    end\n  end\nendgenerate",
+        "   assign {ra3, mc_bank[4*BANK_WIDTH-1:3*BANK_WIDTH], mc_address[4*ROW_WIDTH-1:3*ROW_WIDTH], mc_ras_n[3], mc_cas_n[3], mc_we_n[3]} =\n     cmd3;",
+        "   assign {ra2, mc_bank[3*BANK_WIDTH-1:2*BANK_WIDTH], mc_address[3*ROW_WIDTH-1:2*ROW_WIDTH], mc_ras_n[2], mc_cas_n[2], mc_we_n[2]} = cmd2;",
+        "generate \nif(nCK_PER_CLK == 4) begin\n  \n\n   \n   assign {ra2, mc_bank[3*BANK_WIDTH-1:2*BANK_WIDTH], mc_address[3*ROW_WIDTH-1:2*ROW_WIDTH], mc_ras_n[2], mc_cas_n[2], mc_we_n[2]} = cmd2;\n   \n  \n\n   \n   assign {ra3, mc_bank[4*BANK_WIDTH-1:3*BANK_WIDTH], mc_address[4*ROW_WIDTH-1:3*ROW_WIDTH], mc_ras_n[3], mc_cas_n[3], mc_we_n[3]} =\n     cmd3;\n     \nend\nendgenerate",
+        "  assign {ra1, mc_bank[2*BANK_WIDTH-1:BANK_WIDTH], mc_address[2*ROW_WIDTH-1:ROW_WIDTH], mc_ras_n[1], mc_cas_n[1], mc_we_n[1]} = cmd1;",
+        "  assign {ra0, mc_bank[BANK_WIDTH-1:0], mc_address[ROW_WIDTH-1:0], mc_ras_n[0], mc_cas_n[0], mc_we_n[0]} = cmd0;",
+        "      always @(send_cmd2_row or send_cmd2_col or send_cmd2_pre or send_cmd3_col or row_cmd_ns or col_cmd_ns or pre_cmd_ns) begin\n        cmd2 = {OUT_CMD_WIDTH{1'b1}};\n        cmd3 = {OUT_CMD_WIDTH{1'b1}};\n        if (send_cmd2_row) cmd2 = row_cmd_ns;\n        if (send_cmd2_col) cmd2 = col_cmd_ns;\n        if (send_cmd2_pre) cmd2 = pre_cmd_ns;\n        if (send_cmd3_col) cmd3 = col_cmd_ns;\n      end",
+        "  generate\n    if (nCK_PER_CLK == 4)\n      always @(send_cmd2_row or send_cmd2_col or send_cmd2_pre or send_cmd3_col or row_cmd_ns or col_cmd_ns or pre_cmd_ns) begin",
+        "      always @(send_cmd1_row or send_cmd1_col or row_cmd_ns or col_cmd_ns or pre_cmd_ns) begin\n        cmd1 = {OUT_CMD_WIDTH{1'b1}};\n        if (send_cmd1_row) cmd1 = row_cmd_ns;\n        if (send_cmd1_col) cmd1 = col_cmd_ns;\n      end",
+        "  generate\n    if ((nCK_PER_CLK == 2) || (nCK_PER_CLK == 4))\n      always @(send_cmd1_row or send_cmd1_col or row_cmd_ns or col_cmd_ns or pre_cmd_ns) begin",
+        "  always @(send_cmd0_row or send_cmd0_col or row_cmd_ns or row_cmd_r or col_cmd_ns or col_cmd_r or cke_ns or cke_r ) begin\n    cmd0 = {OUT_CMD_WIDTH{1'b1}};\n    if (send_cmd0_row) cmd0 = row_cmd_ns;\n    if (send_cmd0_row && EVEN_CWL_2T_MODE == \"ON\" && nCK_PER_CLK == 2) cmd0 = row_cmd_r;\n    if (send_cmd0_col) cmd0 = col_cmd_ns;\n    if (send_cmd0_col && EVEN_CWL_2T_MODE == \"ON\") cmd0 = col_cmd_r;\n    if (send_cmd0_row) cke0 = cke_ns;\n    else cke0 =  cke_r ;\n  end",
+        "  reg [OUT_CMD_WIDTH-1:0] cmd0 = {OUT_CMD_WIDTH{1'b1}};",
+        "  endgenerate",
+        "      else begin\n      \n        assign col_periodic_rd = col_periodic_rd_ns;\n        assign col_ra = col_cmd_ns[3+ROW_WIDTH+BANK_WIDTH+:RANK_WIDTH];\n        assign col_ba = col_cmd_ns[3+ROW_WIDTH+:BANK_WIDTH];\n        assign col_a = col_cmd_ns[3+:ROW_WIDTH];\n        assign col_rmw = col_rmw_ns;\n        assign col_rd_wr = col_rd_wr_ns;\n        assign col_size = col_size_ns;\n        assign col_row = col_row_ns;\n        assign col_data_buf_addr = col_data_buf_addr_ns;\n        \n      end",
+        "        assign col_periodic_rd = col_periodic_rd_r;\n        assign col_ra = col_cmd_r[3+ROW_WIDTH+BANK_WIDTH+:RANK_WIDTH];\n        assign col_ba = col_cmd_r[3+ROW_WIDTH+:BANK_WIDTH];\n        assign col_a = col_cmd_r[3+:ROW_WIDTH];\n        assign col_rmw = col_rmw_r;\n        assign col_rd_wr = col_rd_wr_r;\n        assign col_size = col_size_r;\n        assign col_row = col_row_r;\n        assign col_data_buf_addr = col_data_buf_addr_r;\n      \n      end",
+        "      always @(posedge clk) col_rd_wr_r <= #TCQ col_rd_wr_ns;\n\n      if(EVEN_CWL_2T_MODE == \"ON\") begin\n\n        assign col_periodic_rd = col_periodic_rd_r;\n        assign col_ra = col_cmd_r[3+ROW_WIDTH+BANK_WIDTH+:RANK_WIDTH];\n        assign col_ba = col_cmd_r[3+ROW_WIDTH+:BANK_WIDTH];\n        assign col_a = col_cmd_r[3+:ROW_WIDTH];\n        assign col_rmw = col_rmw_r;\n        assign col_rd_wr = col_rd_wr_r;\n        assign col_size = col_size_r;\n        assign col_row = col_row_r;\n        assign col_data_buf_addr = col_data_buf_addr_r;\n      \n      end\n\n      else begin\n      \n        assign col_periodic_rd = col_periodic_rd_ns;\n        assign col_ra = col_cmd_ns[3+ROW_WIDTH+BANK_WIDTH+:RANK_WIDTH];\n        assign col_ba = col_cmd_ns[3+ROW_WIDTH+:BANK_WIDTH];\n        assign col_a = col_cmd_ns[3+:ROW_WIDTH];\n        assign col_rmw = col_rmw_ns;\n        assign col_rd_wr = col_rd_wr_ns;\n        assign col_size = col_size_ns;\n        assign col_row = col_row_ns;\n        assign col_data_buf_addr = col_data_buf_addr_ns;\n        \n      end\n        \n     end ",
+        "        always @(posedge clk) col_row_r <= #TCQ col_row_ns;\n      end",
+        "        always @(posedge clk) col_cmd_r <= #TCQ col_cmd_ns;",
+        "      always @(posedge clk) col_data_buf_addr_r <=\n                              #TCQ col_data_buf_addr_ns;\n\n      if (ECC != \"OFF\" || EVEN_CWL_2T_MODE == \"ON\") begin",
+        "      always @(posedge clk) col_size_r <= #TCQ col_size_ns;",
+        "      always @(posedge clk) col_rmw_r <= #TCQ col_rmw_ns;",
+        "      always @(posedge clk) col_periodic_rd_r <= #TCQ col_periodic_rd_ns;",
+        "        assign col_wr_data_buf_addr = col_wr_data_buf_addr_ns;",
+        "        always @(posedge clk) col_wr_data_buf_addr_r <= \n                                #TCQ col_wr_data_buf_addr_ns;\n        assign col_wr_data_buf_addr = col_wr_data_buf_addr_ns;\n      end",
+        "        always @(col_wr_data_buf_addr_r or grant_col_wr\n                 or req_data_buf_addr_r) begin\n          col_wr_data_buf_addr_ns = col_wr_data_buf_addr_r;\n          for (i=0; i<nBANK_MACHS; i=i+1)\n            if (grant_col_wr[i])\n              col_wr_data_buf_addr_ns =\n           req_data_buf_addr_r[(DATA_BUF_ADDR_WIDTH*i)+:DATA_BUF_ADDR_WIDTH];\n        end",
+        "      else begin : early_wr_data_addr_on\n        reg [DATA_BUF_ADDR_WIDTH-1:0] col_wr_data_buf_addr_ns;\n        reg [DATA_BUF_ADDR_WIDTH-1:0] col_wr_data_buf_addr_r;",
+        "      if (EARLY_WR_DATA_ADDR == \"OFF\") begin : early_wr_data_addr_off\n        assign col_wr_data_buf_addr = col_data_buf_addr_ns;\n      end",
+        "      always @(col_addr or col_cmd_r or col_data_buf_addr_r\n               or col_periodic_rd_r or col_rmw_r or col_row_r\n               or col_size_r or grant_col_r or rd_wr_r or req_bank_r\n               or req_data_buf_addr_r or req_periodic_rd_r\n               or req_rank_r or req_row_r or req_size_r or req_wr_r\n               or rst or col_rd_wr_r)\n        begin\n          col_periodic_rd_ns = ~rst && col_periodic_rd_r;\n          col_cmd_ns = {(rst ? {RANK_WIDTH{1'b0}}\n                             : col_cmd_r[(OUT_CMD_WIDTH-1)-:RANK_WIDTH]),\n                        ((rst && ECC != \"OFF\")\n                           ? {OUT_CMD_WIDTH-3-RANK_WIDTH{1'b0}}\n                           : col_cmd_r[3+:(OUT_CMD_WIDTH-3-RANK_WIDTH)]),\n                        (rst ? 3'b0 : col_cmd_r[2:0])};\n          col_rmw_ns = col_rmw_r;\n          col_size_ns = rst ? 1'b0 : col_size_r;\n          col_row_ns = col_row_r;\n          col_rd_wr_ns = col_rd_wr_r;\n          col_data_buf_addr_ns = col_data_buf_addr_r;\n          for (i=0; i<nBANK_MACHS; i=i+1)\n            if (grant_col_r[i]) begin\n              col_periodic_rd_ns = req_periodic_rd_r[i];\n              col_cmd_ns = {req_rank_r[(RANK_WIDTH*i)+:RANK_WIDTH],\n                            req_bank_r[(BANK_WIDTH*i)+:BANK_WIDTH],\n                            col_addr[(ROW_WIDTH*i)+:ROW_WIDTH],\n                            1'b1,\n                            1'b0,\n                            rd_wr_r[i]};\n              col_rmw_ns = req_wr_r[i] && rd_wr_r[i];\n              col_size_ns = req_size_r[i];\n              col_row_ns = req_row_r[(ROW_WIDTH*i)+:ROW_WIDTH];\n              col_rd_wr_ns = rd_wr_r[i];\n              col_data_buf_addr_ns =\n           req_data_buf_addr_r[(DATA_BUF_ADDR_WIDTH*i)+:DATA_BUF_ADDR_WIDTH];\n            end\n        end ",
+        "  generate\n    begin : col_mux\n      reg col_periodic_rd_ns;\n      reg col_periodic_rd_r;\n      reg col_rmw_ns;\n      reg col_rmw_r;\n      reg col_size_ns;\n      reg col_size_r;\n      reg [ROW_WIDTH-1:0] col_row_ns;\n      reg [ROW_WIDTH-1:0] col_row_r;\n      reg [DATA_BUF_ADDR_WIDTH-1:0] col_data_buf_addr_ns;\n      reg [DATA_BUF_ADDR_WIDTH-1:0] col_data_buf_addr_r;",
+        "      always @(grant_pre_r or req_bank_r or req_cas or req_rank_r or req_ras\n               or row_addr or pre_cmd_r or row_cmd_wr or rst)\n        begin\n          pre_cmd_ns = rst\n                         ? {RANK_WIDTH{1'b0}}\n                         : pre_cmd_r;\n          for (i=0; i<nBANK_MACHS; i=i+1)\n            if (grant_pre_r[i])\n               pre_cmd_ns = {req_rank_r[(RANK_WIDTH*i)+:RANK_WIDTH],\n                             req_bank_r[(BANK_WIDTH*i)+:BANK_WIDTH],\n                             row_addr[(ROW_WIDTH*i)+:ROW_WIDTH],\n                             req_ras[i],\n                             req_cas[i],\n                             row_cmd_wr[i]};\n        end",
+        "  generate\n    if((nCK_PER_CLK == 4) && (ADDR_CMD_MODE != \"2T\")) begin : pre_mux\n      reg [OUT_CMD_WIDTH-1:0] pre_cmd_r = {OUT_CMD_WIDTH {1'b0}};",
+        "  endgenerate",
+        "        always @(posedge clk) row_cmd_r <= #TCQ row_cmd_ns;\n\n    end  ",
+        "      always @(grant_row_r or insert_maint_r1 or maint_cmd\n               or req_bank_r or req_cas or req_rank_r or req_ras\n               or row_addr or row_cmd_r or row_cmd_wr or rst)\n        begin\n          row_cmd_ns = rst\n                         ? {RANK_WIDTH{1'b0}}\n                         : insert_maint_r1\n                            ? maint_cmd\n                            : row_cmd_r;\n          for (i=0; i<nBANK_MACHS; i=i+1)\n            if (grant_row_r[i])\n               row_cmd_ns = {req_rank_r[(RANK_WIDTH*i)+:RANK_WIDTH],\n                             req_bank_r[(BANK_WIDTH*i)+:BANK_WIDTH],\n                             row_addr[(ROW_WIDTH*i)+:ROW_WIDTH],\n                             req_ras[i],\n                             req_cas[i],\n                             row_cmd_wr[i]};\n        end",
+        "  generate\n    begin : row_mux\n      wire [OUT_CMD_WIDTH-1:0] maint_cmd =\n                     {maint_rank_r,                     \n                      row_cmd_r[15+:(BANK_WIDTH+ROW_WIDTH-11)],\n                                              \n                      1'b0,                            \n                      row_cmd_r[3+:10],                \n                      \n                      (maint_zq_r ? 3'b110 : maint_srx_r ? 3'b111 : 3'b001)\n                     };",
+        "  reg [OUT_CMD_WIDTH-1:0] row_cmd_ns;",
+        "  integer    i;",
+        "  assign mc_cas_slot = col_channel_offset[1:0];",
+        "  generate\n    if(EVEN_CWL_2T_MODE == \"ON\") begin : gen_mc_data_offset_even_cwl_2t\n      assign mc_data_offset =   ~sent_col ?\n                                  6'b0 :\n                                col_rd_wr_r ?\n                                    rank_rddata_offset_0 + col_channel_offset :\n                                nCK_PER_CLK == 2 ? \n                                  CWL - 2 + col_channel_offset :\n                            \n                                  CWL + 2 + col_channel_offset;\n      assign mc_data_offset_1 = ~sent_col ?\n                                  6'b0 :\n                                col_rd_wr_r ?\n                                    rank_rddata_offset_1 + col_channel_offset :\n                                nCK_PER_CLK == 2 ? \n                                  CWL - 2 + col_channel_offset :\n                            \n                                  CWL + 2 + col_channel_offset;\n      assign mc_data_offset_2 = ~sent_col ?\n                                  6'b0 :\n                                col_rd_wr_r ?\n                                    rank_rddata_offset_2 + col_channel_offset :\n                                nCK_PER_CLK == 2 ? \n                                  CWL - 2 + col_channel_offset :\n                            \n                                  CWL + 2 + col_channel_offset;\n    end\n    else begin : gen_mc_data_offset_not_even_cwl_2t\n      assign mc_data_offset   = ~sent_col ?\n                                  6'b0 :\n                                col_rd_wr_ns ?\n                                    rank_rddata_offset_0 + col_channel_offset :\n                                nCK_PER_CLK == 2 ? \n                                  CWL - 2 + col_channel_offset :\n                            \n                                  CWL + 2 + col_channel_offset;\n      assign mc_data_offset_1 = ~sent_col ?\n                                  6'b0 :\n                                col_rd_wr_ns ?\n                                    rank_rddata_offset_1 + col_channel_offset :\n                                nCK_PER_CLK == 2 ? \n                                  CWL - 2 + col_channel_offset :\n                            \n                                  CWL + 2 + col_channel_offset;\n      assign mc_data_offset_2 = ~sent_col ?\n                                  6'b0 :\n                                col_rd_wr_ns ?\n                                    rank_rddata_offset_2 + col_channel_offset :\n                                nCK_PER_CLK == 2 ? \n                                  CWL - 2 + col_channel_offset :\n                            \n                                  CWL + 2 + col_channel_offset;\n    end\n  endgenerate",
+        "  always @(calib_rddata_offset or calib_rddata_offset_1 or calib_rddata_offset_2) begin\n    rank_rddata_offset_0 = calib_rddata_offset[5:0];\n    rank_rddata_offset_1 = calib_rddata_offset_1[5:0];\n    rank_rddata_offset_2 = calib_rddata_offset_2[5:0];\n  end",
+        "  assign mc_cmd[0] = sent_col;\n  assign mc_cmd[1] = EVEN_CWL_2T_MODE == \"ON\" ?\n                        sent_col && col_rd_wr_r :\n                        sent_col && col_rd_wr_ns;\n  assign mc_cmd[2] = ~sent_col;",
+        "  assign mc_aux_out1 = 4'b0;",
+        "    always @(*) \n    begin\n      cke_ns = 1'b1;\n      if (maint_sre_r & insert_maint_r1)\n         cke_ns = 1'b0;\n      else if (cke_r==1'b0)\n      begin\n         if (maint_srx_r & insert_maint_r1)\n           cke_ns = 1'b1;\n         else\n           cke_ns = 1'b0;\n      end\n    end",
+        "    always @(posedge clk) \n    begin\n      if (rst)\n         cke_r = 1'b1;\n      else\n         cke_r = cke_ns;\n    end",
+        "  generate\n  if(CKE_ODT_AUX == \"FALSE\")begin\n    always @(posedge clk) "
+    ]
+}

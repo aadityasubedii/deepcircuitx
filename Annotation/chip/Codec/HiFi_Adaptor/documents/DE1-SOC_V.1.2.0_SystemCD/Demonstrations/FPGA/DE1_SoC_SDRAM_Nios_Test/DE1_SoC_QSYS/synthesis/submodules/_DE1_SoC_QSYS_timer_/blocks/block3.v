@@ -1,0 +1,1 @@
+  assign control_continuous = control_register[1];

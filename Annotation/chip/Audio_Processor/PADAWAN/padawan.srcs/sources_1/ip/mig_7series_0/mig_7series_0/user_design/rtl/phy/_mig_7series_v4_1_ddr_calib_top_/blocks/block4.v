@@ -1,0 +1,13 @@
+  end else begin: skip_calib_tap_off
+    assign calib_po_f_en          = 1'b0;
+    assign calib_po_f_incdec      = 1'b0;
+    assign calib_po_sel_stg2stg3  = 1'b0;
+    assign calib_po_c_en          = 1'b0;
+    assign calib_po_c_inc         = 1'b0;
+    assign calib_pi_f_en          = 1'b0;
+    assign calib_pi_f_incdec      = 1'b0;
+    assign calib_idelay_ce        = 1'b0;
+    assign calib_idelay_inc       = 1'b0;
+    assign calib_tap_inc_done     = 1'b0;
+    assign calib_tap_inc_byte_cnt = 'd0;
+    assign skip_cal_po_pi_dec_done = 1'b1;

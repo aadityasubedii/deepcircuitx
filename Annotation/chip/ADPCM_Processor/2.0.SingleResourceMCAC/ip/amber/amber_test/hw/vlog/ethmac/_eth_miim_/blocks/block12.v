@@ -1,0 +1,1 @@
+assign ReadStatusOp = RStatStart_q1     & ~RStatStart_q2;

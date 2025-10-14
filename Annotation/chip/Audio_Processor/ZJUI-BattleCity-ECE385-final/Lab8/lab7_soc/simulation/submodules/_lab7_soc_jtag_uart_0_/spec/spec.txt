@@ -1,0 +1,9 @@
+Module name: lab7_soc_jtag_uart_0. 
+
+Module specification: This module is a JTAG UART system, primarily built to handle data input and output operations, managing an interface for reading and writing to FIFO (First-In-First-Out) queues. The system is designed with separate subsections (submodules) for Write-FIFO and Read-FIFO operations. It operates synchronously, driven by an input clock and it can be reset to its initial state via a reset signal.
+
+Inputs to the module include control signals for read/write operations (av_read_n, av_write_n), an address signal for these operations (av_address), a select line (av_chipselect), write data input (av_writedata), and system clock and reset signals (clk, rst_n). The outputs from the module include interrupt signal (av_irq), read data output (av_readdata), a request signal denoting if the module is ready for a new request (av_waitrequest), and two flags indicating if data is available for reading or if the module is ready for more data input (dataavailable, readyfordata). 
+
+The module uses several internal signals, each representing a specific aspect of the system. Some of these include: fifo_AE, fifo_AF which are flags representing the state of the Write FIFO and Read FIFO, ac and activity representing current system activity, pause_irq flag set when pause condition happens, and many other signals controlling or indicating data flow, interrupt management and operations. 
+
+The module contains several sections: the Write-FIFO module section which handles all write operations to the FIFO, the Read-FIFO module section which processes read operations from the FIFO, and the main section that coordinates the two other blocks and performs operations based on the system control signals, such as dispatching interrupts, creating read/write requests, and maintaining FIFO levels. All these sections function synchronously under the control of system clock and reset signals.

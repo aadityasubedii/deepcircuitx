@@ -1,0 +1,1 @@
+assign status = lut_index;

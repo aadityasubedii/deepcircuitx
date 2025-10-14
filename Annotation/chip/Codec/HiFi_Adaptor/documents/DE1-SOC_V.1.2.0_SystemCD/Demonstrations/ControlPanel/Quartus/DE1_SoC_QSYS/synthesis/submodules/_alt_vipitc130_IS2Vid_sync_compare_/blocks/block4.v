@@ -1,0 +1,1 @@
+assign syncing_lines = sync_compare_v_reset_next > 13'd0;

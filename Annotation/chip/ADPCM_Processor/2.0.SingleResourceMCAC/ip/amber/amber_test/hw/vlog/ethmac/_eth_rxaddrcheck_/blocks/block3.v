@@ -1,0 +1,1 @@
+assign IntHash = (CrcHash[5])? HASH1 : HASH0;

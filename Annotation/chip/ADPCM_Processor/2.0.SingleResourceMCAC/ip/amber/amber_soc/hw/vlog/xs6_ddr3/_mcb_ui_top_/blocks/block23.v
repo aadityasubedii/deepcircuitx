@@ -1,0 +1,99 @@
+    else begin : P0_UI_AXI
+      assign  p0_arb_en_i        =  p0_arb_en;
+      assign  s0_axi_araddr_i    = s0_axi_araddr & P_S0_AXI_ADDRMASK;
+      assign  s0_axi_awaddr_i    = s0_axi_awaddr & P_S0_AXI_ADDRMASK;
+      wire                     calib_done_synch;
+
+      mcb_ui_top_synch #(
+        .C_SYNCH_WIDTH          ( 1 )
+      )
+      axi_mcb_synch
+      (
+        .clk       ( s0_axi_aclk      ) ,
+        .synch_in  ( uo_done_cal      ) ,
+        .synch_out ( calib_done_synch )
+      );
+      axi_mcb #
+        (
+        .C_FAMILY                ( "spartan6"               ) ,
+        .C_S_AXI_ID_WIDTH        ( C_S0_AXI_ID_WIDTH        ) ,
+        .C_S_AXI_ADDR_WIDTH      ( C_S0_AXI_ADDR_WIDTH      ) ,
+        .C_S_AXI_DATA_WIDTH      ( C_S0_AXI_DATA_WIDTH      ) ,
+        .C_S_AXI_SUPPORTS_READ   ( C_S0_AXI_SUPPORTS_READ   ) ,
+        .C_S_AXI_SUPPORTS_WRITE  ( C_S0_AXI_SUPPORTS_WRITE  ) ,
+        .C_S_AXI_REG_EN0         ( C_S0_AXI_REG_EN0         ) ,
+        .C_S_AXI_REG_EN1         ( C_S0_AXI_REG_EN1         ) ,
+        .C_S_AXI_SUPPORTS_NARROW_BURST ( C_S0_AXI_SUPPORTS_NARROW_BURST ) ,
+        .C_MCB_ADDR_WIDTH        ( 30                       ) ,
+        .C_MCB_DATA_WIDTH        ( C_P0_DATA_PORT_SIZE      ) ,
+        .C_STRICT_COHERENCY      ( C_S0_AXI_STRICT_COHERENCY    ) ,
+        .C_ENABLE_AP             ( C_S0_AXI_ENABLE_AP           )
+        )
+        p0_axi_mcb
+        (
+        .aclk              ( s0_axi_aclk        ),
+        .aresetn           ( s0_axi_aresetn     ),
+        .s_axi_awid        ( s0_axi_awid        ),
+        .s_axi_awaddr      ( s0_axi_awaddr_i    ),
+        .s_axi_awlen       ( s0_axi_awlen       ),
+        .s_axi_awsize      ( s0_axi_awsize      ),
+        .s_axi_awburst     ( s0_axi_awburst     ),
+        .s_axi_awlock      ( s0_axi_awlock      ),
+        .s_axi_awcache     ( s0_axi_awcache     ),
+        .s_axi_awprot      ( s0_axi_awprot      ),
+        .s_axi_awqos       ( s0_axi_awqos       ),
+        .s_axi_awvalid     ( s0_axi_awvalid     ),
+        .s_axi_awready     ( s0_axi_awready     ),
+        .s_axi_wdata       ( s0_axi_wdata       ),
+        .s_axi_wstrb       ( s0_axi_wstrb       ),
+        .s_axi_wlast       ( s0_axi_wlast       ),
+        .s_axi_wvalid      ( s0_axi_wvalid      ),
+        .s_axi_wready      ( s0_axi_wready      ),
+        .s_axi_bid         ( s0_axi_bid         ),
+        .s_axi_bresp       ( s0_axi_bresp       ),
+        .s_axi_bvalid      ( s0_axi_bvalid      ),
+        .s_axi_bready      ( s0_axi_bready      ),
+        .s_axi_arid        ( s0_axi_arid        ),
+        .s_axi_araddr      ( s0_axi_araddr_i    ),
+        .s_axi_arlen       ( s0_axi_arlen       ),
+        .s_axi_arsize      ( s0_axi_arsize      ),
+        .s_axi_arburst     ( s0_axi_arburst     ),
+        .s_axi_arlock      ( s0_axi_arlock      ),
+        .s_axi_arcache     ( s0_axi_arcache     ),
+        .s_axi_arprot      ( s0_axi_arprot      ),
+        .s_axi_arqos       ( s0_axi_arqos       ),
+        .s_axi_arvalid     ( s0_axi_arvalid     ),
+        .s_axi_arready     ( s0_axi_arready     ),
+        .s_axi_rid         ( s0_axi_rid         ),
+        .s_axi_rdata       ( s0_axi_rdata       ),
+        .s_axi_rresp       ( s0_axi_rresp       ),
+        .s_axi_rlast       ( s0_axi_rlast       ),
+        .s_axi_rvalid      ( s0_axi_rvalid      ),
+        .s_axi_rready      ( s0_axi_rready      ),
+        .mcb_cmd_clk       ( p0_cmd_clk_i       ),
+        .mcb_cmd_en        ( p0_cmd_en_i        ),
+        .mcb_cmd_instr     ( p0_cmd_instr_i     ),
+        .mcb_cmd_bl        ( p0_cmd_bl_i        ),
+        .mcb_cmd_byte_addr ( p0_cmd_byte_addr_i ),
+        .mcb_cmd_empty     ( p0_cmd_empty_i     ),
+        .mcb_cmd_full      ( p0_cmd_full_i      ),
+        .mcb_wr_clk        ( p0_wr_clk_i        ),
+        .mcb_wr_en         ( p0_wr_en_i         ),
+        .mcb_wr_mask       ( p0_wr_mask_i       ),
+        .mcb_wr_data       ( p0_wr_data_i       ),
+        .mcb_wr_full       ( p0_wr_full_i       ),
+        .mcb_wr_empty      ( p0_wr_empty_i      ),
+        .mcb_wr_count      ( p0_wr_count_i      ),
+        .mcb_wr_underrun   ( p0_wr_underrun_i   ),
+        .mcb_wr_error      ( p0_wr_error_i      ),
+        .mcb_rd_clk        ( p0_rd_clk_i        ),
+        .mcb_rd_en         ( p0_rd_en_i         ),
+        .mcb_rd_data       ( p0_rd_data_i       ),
+        .mcb_rd_full       ( p0_rd_full_i       ),
+        .mcb_rd_empty      ( p0_rd_empty_i      ),
+        .mcb_rd_count      ( p0_rd_count_i      ),
+        .mcb_rd_overflow   ( p0_rd_overflow_i   ),
+        .mcb_rd_error      ( p0_rd_error_i      ),
+        .mcb_calib_done    ( calib_done_synch   )
+        );
+    end

@@ -1,0 +1,1 @@
+      always @(posedge clk) end_rcd = end_rcd_ns;

@@ -1,0 +1,1 @@
+    parameter CK_HZ = 32000000;

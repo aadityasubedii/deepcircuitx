@@ -1,0 +1,1 @@
+assign RxStatusWrite = ShiftEnded & RxEn & RxEn_q;

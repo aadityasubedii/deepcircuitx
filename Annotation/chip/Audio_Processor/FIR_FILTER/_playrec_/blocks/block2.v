@@ -1,0 +1,1 @@
+assign ram_write = (streg == st_rc_ram_wait);

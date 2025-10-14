@@ -1,0 +1,1 @@
+assign Transmitting = ~r_FullD & WillTransmit_q2;

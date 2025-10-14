@@ -1,0 +1,41 @@
+{
+    "line_num": [
+        [
+            290,
+            290
+        ],
+        [
+            282,
+            287
+        ],
+        [
+            280,
+            280
+        ],
+        [
+            278,
+            278
+        ],
+        [
+            253,
+            259
+        ],
+        [
+            245,
+            252
+        ],
+        [
+            132,
+            162
+        ]
+    ],
+    "blocks": [
+        "  assign rst0    = rst0_sync_r[RST_SYNC_NUM-1];",
+        "  always @(posedge clk0_bufg or posedge rst_tmp)\n    if (rst_tmp)\n      rst0_sync_r <= {RST_SYNC_NUM{1'b1}};\n    else\n      \n      rst0_sync_r <= rst0_sync_r << 1;",
+        "  assign rst_tmp = sys_rst | ~syn_clk0_powerup_pll_locked;",
+        "  assign async_rst = sys_rst | ~powerup_pll_locked;",
+        "  always @(posedge clk0_bufg , posedge sys_rst)\n      if(sys_rst)\n         syn_clk0_powerup_pll_locked <= 1'b0;\n       \n      else if (bufpll_mcb_locked)\n         syn_clk0_powerup_pll_locked <= 1'b1;\n         ",
+        "  always @(posedge mcb_drp_clk , posedge sys_rst)\n      if(sys_rst)\n         powerup_pll_locked <= 1'b0;\n       \n      else if (bufpll_mcb_locked)\n         powerup_pll_locked <= 1'b1;\n         \n",
+        "  generate\n    if (C_INPUT_CLK_TYPE == \"DIFFERENTIAL\") begin: diff_input_clk\n\n      \n      \n      \n\n      IBUFGDS #\n        (\n         .DIFF_TERM    (\"TRUE\")\n         )\n        u_ibufg_sys_clk\n          (\n           .I  (sys_clk_p),\n           .IB (sys_clk_n),\n           .O  (sys_clk_ibufg)\n           );\n\n    end else if (C_INPUT_CLK_TYPE == \"SINGLE_ENDED\") begin: se_input_clk\n\n      \n      \n      \n\n      IBUFG  u_ibufg_sys_clk\n          (\n           .I  (sys_clk),\n           .O  (sys_clk_ibufg)\n           );\n   end\n  endgenerate"
+    ]
+}

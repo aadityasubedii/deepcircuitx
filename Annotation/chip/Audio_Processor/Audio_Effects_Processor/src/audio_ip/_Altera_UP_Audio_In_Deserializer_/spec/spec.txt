@@ -1,0 +1,9 @@
+Module name: Altera_UP_Audio_In_Deserializer. 
+
+Module specification: The Altera_UP_Audio_In_Deserializer module is primarily designed for deserializing the incoming audio data from Altera University Program Audio cores. The module takes in several inputs including 'clk' (basic clock signal), 'reset' (used for resetting the module), trigger control inputs 'bit_clk_rising_edge', 'bit_clk_falling_edge', 'left_right_clk_rising_edge', and 'left_right_clk_falling_edge', 'done_channel_sync' (indicates whether channel synchronization is complete), 'serial_audio_in_data' (raw audio data), and 'read_left_audio_data_en', 'read_right_audio_data_en' (control if data is to be read from respective FIFO buffers). 
+
+The module produces outputs 'left_audio_fifo_read_space' and 'right_audio_fifo_read_space' (indicating the amount of data in respective FIFO buffers), and 'left_channel_data', 'right_channel_data' (processed audio data for both channels). 
+
+Internally, the module uses signals like 'valid_audio_input' (validates incoming audio data), FIFO full/empty indicators 'left_channel_fifo_is_full', 'right_channel_fifo_is_empty', 'right_channel_fifo_is_full', 'left_channel_fifo_is_empty', FIFO used indicators 'left_channel_fifo_used', 'right_channel_fifo_used', and 'data_in_shift_reg' (holds incoming serial audio data). 
+
+The module consists of several blocks. An 'always' block updates the FIFO read space based on the available data, and another one shifts validated audio data into a register. The code also integrates two other sub-modules: 'Altera_UP_Audio_Bit_Counter' controls the timing of audio data deserialization, and 'Altera_UP_SYNC_FIFO' temporarily stores the deserialized data in FIFO buffers.  The composed operation provides deserialized, processed audio data for both left and right channels.

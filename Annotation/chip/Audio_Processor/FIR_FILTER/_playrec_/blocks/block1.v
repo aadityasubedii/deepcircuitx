@@ -1,0 +1,1 @@
+assign ram_read = (streg == st_pl_ram_rd);

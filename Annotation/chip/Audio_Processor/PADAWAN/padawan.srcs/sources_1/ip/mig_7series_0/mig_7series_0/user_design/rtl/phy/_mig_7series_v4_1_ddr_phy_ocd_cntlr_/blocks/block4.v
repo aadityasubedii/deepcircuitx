@@ -1,0 +1,1 @@
+  assign reset_scan = reset_scan_r;

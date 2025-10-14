@@ -1,0 +1,2 @@
+  assign D_ctrl_ld_non_io = D_op_ldbu|D_op_ldhu|D_op_ldb|D_op_ldh|D_op_ldw;
+  assign R_ctrl_ld_non_io_nxt = D_ctrl_ld_non_io;

@@ -1,0 +1,1 @@
+      always @(posedge clk) add_rrd_r <= #TCQ add_rrd_ns;

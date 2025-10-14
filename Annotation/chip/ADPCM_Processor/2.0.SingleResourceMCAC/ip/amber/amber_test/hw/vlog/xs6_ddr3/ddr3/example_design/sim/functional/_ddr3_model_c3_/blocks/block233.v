@@ -1,0 +1,1 @@
+    always @(posedge ck_in) diff_ck <= ck_in;

@@ -1,0 +1,1 @@
+  always @(posedge clk) mc_ref_zq_wip_r <= mc_ref_zq_wip_ns;

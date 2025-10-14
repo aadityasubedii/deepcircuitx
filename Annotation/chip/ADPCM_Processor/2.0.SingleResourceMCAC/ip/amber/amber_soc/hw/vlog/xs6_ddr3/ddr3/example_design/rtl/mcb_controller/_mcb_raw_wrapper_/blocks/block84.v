@@ -1,0 +1,1 @@
+end else if(C_NUM_DQ_PINS == 8) begin : x8_Addr

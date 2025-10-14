@@ -1,0 +1,111 @@
+{
+    "line_num": [
+        [
+            204,
+            205
+        ],
+        [
+            199,
+            200
+        ],
+        [
+            197,
+            198
+        ],
+        [
+            193,
+            194
+        ],
+        [
+            190,
+            191
+        ],
+        [
+            181,
+            186
+        ],
+        [
+            180,
+            180
+        ],
+        [
+            177,
+            177
+        ],
+        [
+            175,
+            175
+        ],
+        [
+            169,
+            169
+        ],
+        [
+            167,
+            167
+        ],
+        [
+            154,
+            154
+        ],
+        [
+            152,
+            152
+        ],
+        [
+            143,
+            148
+        ],
+        [
+            124,
+            124
+        ],
+        [
+            120,
+            120
+        ],
+        [
+            119,
+            119
+        ],
+        [
+            114,
+            114
+        ],
+        [
+            109,
+            109
+        ],
+        [
+            108,
+            108
+        ],
+        [
+            89,
+            95
+        ]
+    ],
+    "blocks": [
+        "  assign oclk_prech_req = ocd_prech_req || lim2init_prech_req;\n\t",
+        "  assign wl_po_fine_cnt_sel = wl_po_fine_shifted[5:0];\n",
+        "  wire [6*DQS_WIDTH-1:0] wl_po_fine_shifted = wl_po_fine_cnt >> oclkdelay_calib_cnt*6;\n  output [5:0] wl_po_fine_cnt_sel;",
+        "  assign po_rdy = po_rdy_r;\n",
+        "  always @(posedge clk) po_rdy_r <= #TCQ po_rdy_ns;\n  ",
+        "  always @(*) begin\n    po_wait_ns = po_wait_r;\n    if (rst) po_wait_ns = {POW_WIDTH{1'b0}};\n    else if (po_en_stg23_r) po_wait_ns = PO_WAIT[POW_WIDTH-1:0] - ONE[POW_WIDTH-1:0];\n    else if (po_wait_r != {POW_WIDTH{1'b0}}) po_wait_ns = po_wait_r - ONE[POW_WIDTH-1:0];\t   \n  end",
+        "  always @(posedge clk) po_wait_r <= #TCQ po_wait_ns;",
+        "  assign po_stg23_incdec = po_stg23_incdec_r;",
+        "  always @(posedge clk) po_stg23_incdec_r <= #TCQ po_stg23_incdec_ns;",
+        "  assign po_stg23_sel = po_stg23_sel_r;",
+        "  always @(posedge clk) po_stg23_sel_r <= #TCQ po_stg23_sel_ns;",
+        "  assign po_en_stg23 = po_en_stg23_r; ",
+        "  always @(posedge clk) po_en_stg23_r <= #TCQ po_en_stg23_ns;",
+        "  always @(*) begin\n    po_setup_ns = po_setup_r;\n    if (rst) po_setup_ns = 2'b00;\n    else if (setup_po) po_setup_ns = 2'b11;\n    else if (|po_setup_r) po_setup_ns = po_setup_r - 2'b01;\n  end",
+        "  always @(posedge clk) po_setup_r <= #TCQ po_setup_ns;",
+        "  assign po_en_stg3 = 1'b0;",
+        "  assign po_stg3_incdec = 1'b0;",
+        "  assign mmcm_edge_detect_rdy = lim2poc_rdy || ocd_edge_detect_rdy;",
+        "  assign ktap_at_right_edge = lim2poc_ktap_right || ocd_ktap_right;",
+        "  assign ktap_at_left_edge = ocd_ktap_left;",
+        "  function integer clogb2 (input integer size); \n    begin\n      size = size - 1;\n      for (clogb2=1; size>1; clogb2=clogb2+1)\n            size = size >> 1;\n    end\n  endfunction "
+    ]
+}

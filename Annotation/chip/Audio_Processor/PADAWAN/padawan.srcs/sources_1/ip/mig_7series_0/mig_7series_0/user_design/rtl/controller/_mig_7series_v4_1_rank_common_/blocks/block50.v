@@ -1,0 +1,1 @@
+        always @(posedge clk) zq_request_r <= #TCQ zq_request_ns;

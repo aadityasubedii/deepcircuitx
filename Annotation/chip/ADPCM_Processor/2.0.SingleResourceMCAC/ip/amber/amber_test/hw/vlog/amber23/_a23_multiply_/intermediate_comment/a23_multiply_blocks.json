@@ -1,0 +1,21 @@
+{
+    "line_num": [
+        [
+            195,
+            195
+        ],
+        [
+            186,
+            192
+        ],
+        [
+            151,
+            183
+        ]
+    ],
+    "blocks": [
+        "assign o_out   = product[32:1]; ",
+        "always @ ( posedge i_clk )\n    if ( !i_fetch_stall )\n        begin\n        count           <= i_execute ? count_nxt          : count;           \n        product         <= i_execute ? product_nxt        : product;        \n        o_done          <= i_execute ? count == 6'd31     : o_done;          \n        end",
+        "always @*\n    begin\n    \n    count_nxt           = count;\n    product_nxt         = product;\n    \n    \n    \n    \n    \n    flags_nxt   = { product[32], product[32:1] == 32'd0 }; \n    \n\n    if ( count == 6'd0 )\n        product_nxt = {33'd0, 1'd0, i_b_in, 1'd0 } ;\n    else if ( count <= 6'd33 )\n        product_nxt = { sum[33], sum, product[33:1]} ;\n    else if ( count == 6'd34 && accumulate )\n        begin\n        \n        \n        product_nxt         = { product[64:33], sum_acc1[31:0], 1'd0}; \n        end\n        \n    \n    if (count == 6'd0)  \n        count_nxt   = enable ? 6'd1 : 6'd0;\n    else if ((count == 6'd34 && !accumulate) ||  \n             (count == 6'd35 &&  accumulate)  )  \n        count_nxt   = 6'd0;\n    else\n        count_nxt   = count + 1'd1;\n    end"
+    ]
+}

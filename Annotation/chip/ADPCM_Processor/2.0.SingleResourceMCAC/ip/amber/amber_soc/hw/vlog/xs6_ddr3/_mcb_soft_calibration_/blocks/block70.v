@@ -1,0 +1,1 @@
+assign MCB_SYSRST = (Pre_SYSRST );

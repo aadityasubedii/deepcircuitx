@@ -1,0 +1,1 @@
+  assign dummy_tie_off = cpu_d_wait|cpu_d_read|cpu_d_write;

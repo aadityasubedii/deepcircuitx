@@ -1,0 +1,9 @@
+Module name: rot_enc.
+
+Module specification: The module 'rot_enc' is a Verilog implementation of a Rotary Encoder, a device that translates the motion of a rotary input into coded output signals. It operates by accepting two rotary-encoded signals 'rot_A' and 'rot_B' (inputs), along with 'clk' for synchronization. The module processes these inputs to produce a two-bit output signal 'rlrot', comprising the detection of a rotation event and the direction of the rotation.
+
+The input modules 'clk', 'rot_A', and 'rot_B' are the clock signal, and the rotary-encoded signals A and B, respectively. The output module 'rlrot' is a 2-bit wide output port which provides the rotation event (whether a rotation has occurred) and the direction (left or right) of the rotation.
+
+The module employs various internal signals for its operation. 'rot_A_in' and 'rot_B_in' are utilized to capture the current state of the rotary encoded signals; 'rot_in' aggregates these two signals for decision making in the state machine; 'rot_q1' and 'rot_q2' act as state variables for the state machine; 'delay_rot_q1' is an internally delayed version of 'rot_q1' to identify a transition in 'rot_q1' from 0 to 1; 'rot_event' is used to indicate when a rotation event has occurred; and 'rot_left' stores the direction of rotation when an event is flagged.
+
+The code structure primarily consists of two 'always' blocks. The first 'always' block contains a finite state machine that utilizes case statements to determine the states based on the combination of 'rot_A' and 'rot_B'. The second 'always' block captures the rotor movement event and the rotation direction, updating 'rot_event' and 'rot_left'. The 'assign' statement at the end assigns the concatenated 'rot_event' and 'rot_left' to the output 'rlrot'. This design offers performant handling of rotary signals, transforming them accurately into meaningful codings of rotation events and directions.

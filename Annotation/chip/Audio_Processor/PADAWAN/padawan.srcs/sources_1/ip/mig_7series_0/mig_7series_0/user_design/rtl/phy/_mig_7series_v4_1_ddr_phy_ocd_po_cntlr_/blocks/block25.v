@@ -1,0 +1,1 @@
+  assign scanning_right = scanning_right_r;

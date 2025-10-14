@@ -1,0 +1,1 @@
+assign CrcEnOut = CrcEnIn | SendingCtrlFrm;

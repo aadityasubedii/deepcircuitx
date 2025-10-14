@@ -1,0 +1,1 @@
+   assign oclk_count_w = {2'b00, oclkdelay_calib_cnt};

@@ -1,0 +1,1 @@
+  assign cmd_code = m_cmd[2 : 0];

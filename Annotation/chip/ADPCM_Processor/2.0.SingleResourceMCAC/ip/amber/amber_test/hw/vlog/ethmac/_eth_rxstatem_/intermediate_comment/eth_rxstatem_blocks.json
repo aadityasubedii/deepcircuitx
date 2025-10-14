@@ -1,0 +1,16 @@
+{
+    "line_num": [
+        [
+            194,
+            194
+        ],
+        [
+            143,
+            192
+        ]
+    ],
+    "blocks": [
+        "assign StateData[1:0] = {StateData1, StateData0};",
+        "always @ (posedge MRxClk or posedge Reset)\nbegin\n  if(Reset)\n    begin\n      StateIdle     <= #Tp 1'b0;\n      StateDrop     <= #Tp 1'b1;\n      StatePreamble <= #Tp 1'b0;\n      StateSFD      <= #Tp 1'b0;\n      StateData0    <= #Tp 1'b0;\n      StateData1    <= #Tp 1'b0;\n    end\n  else\n    begin\n      if(StartPreamble | StartSFD | StartDrop)\n        StateIdle <= #Tp 1'b0;\n      else\n      if(StartIdle)\n        StateIdle <= #Tp 1'b1;\n\n      if(StartIdle)\n        StateDrop <= #Tp 1'b0;\n      else\n      if(StartDrop)\n        StateDrop <= #Tp 1'b1;\n\n      if(StartSFD | StartIdle | StartDrop)\n        StatePreamble <= #Tp 1'b0;\n      else\n      if(StartPreamble)\n        StatePreamble <= #Tp 1'b1;\n\n      if(StartPreamble | StartIdle | StartData0 | StartDrop)\n        StateSFD <= #Tp 1'b0;\n      else\n      if(StartSFD)\n        StateSFD <= #Tp 1'b1;\n\n      if(StartIdle | StartData1 | StartDrop)\n        StateData0 <= #Tp 1'b0;\n      else\n      if(StartData0)\n        StateData0 <= #Tp 1'b1;\n\n      if(StartIdle | StartData0 | StartDrop)\n        StateData1 <= #Tp 1'b0;\n      else\n      if(StartData1)\n        StateData1 <= #Tp 1'b1;\n    end\nend"
+    ]
+}

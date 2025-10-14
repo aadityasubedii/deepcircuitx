@@ -1,0 +1,1 @@
+  always @(posedge clk or negedge reset_n)

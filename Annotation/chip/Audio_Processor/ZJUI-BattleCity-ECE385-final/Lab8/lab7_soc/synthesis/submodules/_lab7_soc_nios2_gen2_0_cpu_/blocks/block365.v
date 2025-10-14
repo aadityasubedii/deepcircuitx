@@ -1,0 +1,13 @@
+  input            clk;
+  input            dbrk_break;
+  input            dbrk_goto0;
+  input            dbrk_goto1;
+  input   [ 37: 0] jdo;
+  input            jrst_n;
+  input            take_action_break_a;
+  input            take_action_break_b;
+  input            take_action_break_c;
+  input            take_no_action_break_a;
+  input            take_no_action_break_b;
+  input            take_no_action_break_c;
+  input            xbrk_goto0;

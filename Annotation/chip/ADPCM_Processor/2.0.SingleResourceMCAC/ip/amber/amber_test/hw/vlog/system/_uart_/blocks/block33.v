@@ -1,0 +1,1 @@
+assign rx_fifo_push_not_full = rx_fifo_push && !rx_fifo_full;

@@ -1,0 +1,1 @@
+        (* keep = "true" *) reg [4:0] rd_buf_indx_copy_r ;

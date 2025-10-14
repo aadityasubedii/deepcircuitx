@@ -1,0 +1,1 @@
+  assign d_read_nxt = (R_ctrl_ld & E_new_inst & ~E_rf_ecc_valid_any) | (d_read & d_waitrequest);

@@ -1,0 +1,46 @@
+{
+    "line_num": [
+        [
+            112,
+            112
+        ],
+        [
+            97,
+            109
+        ],
+        [
+            85,
+            94
+        ],
+        [
+            84,
+            84
+        ],
+        [
+            83,
+            83
+        ],
+        [
+            74,
+            80
+        ],
+        [
+            73,
+            73
+        ],
+        [
+            64,
+            70
+        ]
+    ],
+    "blocks": [
+        "  assign edge_detect = d1_data_in & ~d2_data_in;",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n        begin\n          d1_data_in <= 0;\n          d2_data_in <= 0;\n        end\n      else if (clk_en)\n        begin\n          d1_data_in <= data_in;\n          d2_data_in <= d1_data_in;\n        end\n    end",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n          edge_capture <= 0;\n      else if (clk_en)\n          if (edge_capture_wr_strobe)\n              edge_capture <= 0;\n          else if (edge_detect)\n              edge_capture <= -1;\n    end",
+        "  assign edge_capture_wr_strobe = chipselect && ~write_n && (address == 3);",
+        "  assign irq = |(edge_capture & irq_mask);",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n          irq_mask <= 0;\n      else if (chipselect && ~write_n && (address == 2))\n          irq_mask <= writedata;\n    end",
+        "  assign data_in = in_port;",
+        "  always @(posedge clk or negedge reset_n)\n    begin\n      if (reset_n == 0)\n          readdata <= 0;\n      else if (clk_en)\n          readdata <= {32'b0 | read_mux_out};\n    end"
+    ]
+}

@@ -1,0 +1,1 @@
+      always @(posedge clk) op_wait_r <= #TCQ op_wait_ns;

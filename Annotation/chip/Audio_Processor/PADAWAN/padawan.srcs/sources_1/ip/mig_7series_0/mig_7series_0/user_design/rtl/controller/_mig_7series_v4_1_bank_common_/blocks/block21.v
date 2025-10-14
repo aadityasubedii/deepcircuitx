@@ -1,0 +1,1 @@
+  assign maint_idle = maint_idle_lcl;

@@ -1,0 +1,1 @@
+  assign break_a_wpr_low_bits = break_a_wpr[1 : 0];

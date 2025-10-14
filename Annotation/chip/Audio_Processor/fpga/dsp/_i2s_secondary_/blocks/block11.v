@@ -1,0 +1,1 @@
+    assign ck_in = prev_sck && !sck0;

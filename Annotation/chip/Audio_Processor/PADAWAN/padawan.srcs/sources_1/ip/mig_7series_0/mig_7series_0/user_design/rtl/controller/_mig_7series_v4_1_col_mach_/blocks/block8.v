@@ -1,0 +1,1 @@
+        always @(posedge clk) rd_data_end <= #TCQ rd_data_end_ns;

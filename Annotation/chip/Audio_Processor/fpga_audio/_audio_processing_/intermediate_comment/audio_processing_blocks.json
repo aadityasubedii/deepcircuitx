@@ -1,0 +1,21 @@
+{
+    "line_num": [
+        [
+            32,
+            62
+        ],
+        [
+            25,
+            30
+        ],
+        [
+            19,
+            23
+        ]
+    ],
+    "blocks": [
+        "always @(posedge clk)begin\n\tcase(state)\n\t\tST_IDLE : begin\n\t\t\t\n\t\tend\n\t\tST_CLIP_L : begin\n\t\t\tif(ch1_in > $signed(16'h1FFF))begin\n\t\t\t\tch1_buf <= 16'h1FFF;\n\t\t\tend\n\t\t\telse if(ch1_in < $signed(16'hE000))begin\n\t\t\t\tch1_buf <= 16'hE000;\n\t\t\tend\n\t\t\telse begin\n\t\t\t\tch1_buf <= ch1_in;\n\t\t\tend\n\t\t\tstate <= ST_CLIP_R;\n\t\tend\n\t\tST_CLIP_R : begin\n\t\t\tif(ch2_in > $signed(16'h1FFF))begin\n\t\t\t\tch2_buf <= 16'h1FFF;\n\t\t\tend\n\t\t\telse if(ch2_in < $signed(16'hE000))begin\n\t\t\t\tch2_buf <= 16'hE000;\n\t\t\tend\n\t\t\telse begin\n\t\t\t\tch2_buf <= ch2_in;\n\t\t\tend\n\t\t\tstate <= ST_IDLE;\n\t\tend\n\tendcase\nend",
+        "always @(posedge clk)begin\n\tif(cnt256_n == 8'd1)begin\n\t\tch1_out <= ch1_buf;\n\t\tch2_out <= ch2_buf;\n\tend\nend",
+        "always @(posedge clk)begin\n    if(cnt256_n == 8'd0)begin\n        state <= ST_CLIP_L;\n    end\nend"
+    ]
+}

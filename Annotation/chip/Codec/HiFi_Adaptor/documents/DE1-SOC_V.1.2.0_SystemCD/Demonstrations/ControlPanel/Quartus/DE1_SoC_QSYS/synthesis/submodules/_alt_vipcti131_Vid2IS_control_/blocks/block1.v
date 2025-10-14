@@ -1,0 +1,1 @@
+    	assign is_std = {{16-STD_WIDTH{1'b0}}, vid_std};

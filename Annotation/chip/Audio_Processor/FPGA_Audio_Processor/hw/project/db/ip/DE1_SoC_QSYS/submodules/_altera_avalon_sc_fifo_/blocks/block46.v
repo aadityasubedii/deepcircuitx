@@ -1,0 +1,1 @@
+    assign write = in_ready && in_valid;

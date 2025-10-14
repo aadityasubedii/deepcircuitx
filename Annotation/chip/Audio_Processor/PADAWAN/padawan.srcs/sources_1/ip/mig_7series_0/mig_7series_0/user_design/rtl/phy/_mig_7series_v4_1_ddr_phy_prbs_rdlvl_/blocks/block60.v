@@ -1,0 +1,1 @@
+    end else if (nCK_PER_CLK == 2) begin: gen_mux_div2

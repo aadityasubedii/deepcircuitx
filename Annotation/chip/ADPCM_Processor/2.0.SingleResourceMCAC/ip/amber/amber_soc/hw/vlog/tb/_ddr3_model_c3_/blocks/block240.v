@@ -1,0 +1,1 @@
+    always @(dm_tdqs) dm_in      <= #BUS_DELAY dm_tdqs;

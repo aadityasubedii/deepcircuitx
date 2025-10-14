@@ -1,0 +1,1 @@
+assign lines_next = (~vid_locked) ? 3'b000 : (start_new_line) ? {lines[1:0], ~update_sample} : lines;

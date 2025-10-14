@@ -1,0 +1,41 @@
+{
+    "line_num": [
+        [
+            192,
+            206
+        ],
+        [
+            163,
+            184
+        ],
+        [
+            152,
+            155
+        ],
+        [
+            99,
+            137
+        ],
+        [
+            81,
+            93
+        ],
+        [
+            72,
+            75
+        ],
+        [
+            59,
+            61
+        ]
+    ],
+    "blocks": [
+        "\talways @ (posedge clk) begin\n\t\tif (rst) begin\n\t\t\ts_count <= 0;\n\t\t\ts_clk <= 0;\n\t\tend\n\t\telse begin \n\t\t\tif (s_count < s_max) begin\n\t\t\t\ts_count <= s_count + 1;\n\t\t\tend\n\t\t\telse begin\n\t\t\t\ts_count <= 0;\n\t\t\t\ts_clk <= ~s_clk;\n\t\t\tend\n\t\tend\n\tend",
+        "\talways @ (s_clk) begin\n\t\tif (rst) begin\n\t\t\tLR_count <= 0;\n\t\t\tLR_clk <= 0;\n\t\tend\n\t\telse if (s_clk == 0) begin      \n\t\t\n\t\t\n\t\t\tif (LR_count < (DIN_W-1) * LR_SAM) begin\n\t\t\t\tLR_count <= LR_count + 1;\n\t\t\tend\n\t\t\telse begin\n\t\t\t\tLR_count <= 0;\n\t\t\t\tLR_clk <= ~LR_clk;\n\t\t\tend\n\t\tend\n\t\telse\n\t\t\tbegin\n\t\t\tLR_count <= LR_count;\n\t\t\tLR_clk <= LR_clk;\n\t\t\tend\n\tend",
+        "\talways @ (posedge clk) begin\n\t\tif (rst) m_clk <= 0;\n\t\telse m_clk <= ~m_clk;\n\tend\t",
+        "always @ (negedge s_clk) begin\n\tcase (PS) \n\t\tIDLE:   begin\n\t\t\tDONE <= 0;\n\t\t\tshift_count_0 <= 0;\n\t\t\tshift_count_1 <= 0;\n\t\t\tdata_out <= 0;\n\t\tend\n\t\tCHAN_0:  begin\n\t\t\t\t\n\t\t\tif (shift_count_0 < DIN_W-1) begin\n\t\t\t\tshift_count_0 <= shift_count_0 + 1;\n\t\t\t\tdata_out <= data_in[shift_count_0];\n\t\t\tend\n\t\t\telse begin\n\t\t\t\tshift_count_0 <= 0;\n\t\t\t\tdata_out <= data_in[shift_count_0];\n\t\t\tend\n\t\t\t\n\t\t\tif (shift_count_0 == 15) DONE <= 1;\n\t\t\telse DONE <= 0;\n\t\tend\n\t\t\n\t\tCHAN_1: begin\n\t\t\t\n\t\t\tif (shift_count_1 < DIN_W-1) begin\n\t\t\t\tshift_count_1 <= shift_count_1 + 1;\n\t\t\t\tdata_out <= data_in[shift_count_1];\n\t\t\tend\n\t\t\telse begin\n\t\t\t\tshift_count_1 <= 0;\n\t\t\t\tdata_out <= data_in[shift_count_1];\n\t\t\tend\n\t\t\t\n\t\t\tif (shift_count_1 == 15) DONE <= 1;\n\t\t\telse DONE <= 0;\n\t\tend\n\tendcase\nend",
+        "always @ (posedge clk) begin\n\tcase (PS) \n\t\tIDLE:   begin\n\t\t\tNS <= CHAN_0;\n\t\tend\n\t\tCHAN_0:  begin\n\t\t\tNS <= (shift_count_0 == 15) ? CHAN_1 : CHAN_0;\n\t\tend\n\t\tCHAN_1: begin\n\t\t\tNS <= (shift_count_1 == 15) ? CHAN_0 : CHAN_1;\n\t\tend\n\tendcase\nend",
+        "always @ (posedge clk) begin\n\tif (rst) PS <= IDLE;\n\telse PS <= NS;\nend",
+        "always @ (posedge clk) begin\n\t\ts_max <= (FPGA_CLK*LR_SAM)/(2*Fs*DIN_W); \n\tend"
+    ]
+}

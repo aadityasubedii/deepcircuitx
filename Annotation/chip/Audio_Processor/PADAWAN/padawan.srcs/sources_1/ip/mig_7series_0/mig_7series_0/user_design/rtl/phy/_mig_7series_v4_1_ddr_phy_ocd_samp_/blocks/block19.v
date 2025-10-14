@@ -1,0 +1,1 @@
+  always @(posedge clk) oclk_calib_resume_r <= #TCQ oclk_calib_resume_ns;

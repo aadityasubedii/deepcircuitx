@@ -1,0 +1,1 @@
+  always @(posedge clk) edge_diff_r <= #TCQ edge_diff_ns;

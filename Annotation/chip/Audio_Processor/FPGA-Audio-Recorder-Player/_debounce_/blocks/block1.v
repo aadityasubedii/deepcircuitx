@@ -1,0 +1,1 @@
+    assign o_onup = ~idle & max & o_state;

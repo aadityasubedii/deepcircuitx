@@ -1,0 +1,1 @@
+   assign dqs_count_w = {2'b00, dqs_count_r};

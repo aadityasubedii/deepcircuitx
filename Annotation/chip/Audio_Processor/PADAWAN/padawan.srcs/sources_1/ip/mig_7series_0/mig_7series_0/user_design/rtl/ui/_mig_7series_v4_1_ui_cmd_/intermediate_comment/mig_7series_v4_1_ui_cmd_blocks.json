@@ -1,0 +1,36 @@
+{
+    "line_num": [
+        [
+            262,
+            286
+        ],
+        [
+            164,
+            255
+        ],
+        [
+            151,
+            151
+        ],
+        [
+            131,
+            147
+        ],
+        [
+            101,
+            101
+        ],
+        [
+            99,
+            99
+        ]
+    ],
+    "blocks": [
+        "  assign size = app_rdy_r\n                  ? app_sz_r1\n                  : app_sz_r2;\n  assign cmd = app_rdy_r\n                 ? app_cmd_r1\n                 : app_cmd_r2;\n  assign hi_priority = app_rdy_r\n                         ? app_hi_pri_r1\n                         : app_hi_pri_r2;\n\n  wire request_accepted = use_addr_lcl && app_rdy_r;\n  wire rd = app_cmd_r2[1:0] == 2'b01;\n  wire wr = app_cmd_r2[1:0] == 2'b00;\n  wire wr_bytes = app_cmd_r2[1:0] == 2'b11;\n  wire write = wr || wr_bytes;\n  output wire rd_accepted;\n  assign rd_accepted = request_accepted && rd;\n  output wire wr_accepted;\n  assign wr_accepted = request_accepted && write;\n\n  input [DATA_BUF_ADDR_WIDTH-1:0] wr_data_buf_addr;\n  input [DATA_BUF_ADDR_WIDTH-1:0] rd_data_buf_addr_r;\n  output wire [DATA_BUF_ADDR_WIDTH-1:0] data_buf_addr;\n\n  assign data_buf_addr = ~write ? rd_data_buf_addr_r : wr_data_buf_addr;",
+        "  generate\n    begin\n      if (MEM_ADDR_ORDER == \"TG_TEST\")\n      begin\n        assign col[4:0] = app_rdy_r\n                      ? app_addr_r1[0+:5]\n                      : app_addr_r2[0+:5];\n\n        if (RANKS==1)\n        begin\n          assign col[COL_WIDTH-1:COL_WIDTH-2] = app_rdy_r\n                        ? app_addr_r1[5+3+BANK_WIDTH+:2]\n                        : app_addr_r2[5+3+BANK_WIDTH+:2];\n          assign col[COL_WIDTH-3:5] = app_rdy_r\n                        ? app_addr_r1[5+3+BANK_WIDTH+2+2+:COL_WIDTH-7]\n                        : app_addr_r2[5+3+BANK_WIDTH+2+2+:COL_WIDTH-7];\n        end\n        else\n        begin\n          assign col[COL_WIDTH-1:COL_WIDTH-2] = app_rdy_r\n                        ? app_addr_r1[5+3+BANK_WIDTH+RANK_WIDTH+:2]\n                        : app_addr_r2[5+3+BANK_WIDTH+RANK_WIDTH+:2];\n          assign col[COL_WIDTH-3:5] = app_rdy_r\n                        ? app_addr_r1[5+3+BANK_WIDTH+RANK_WIDTH+2+2+:COL_WIDTH-7]\n                        : app_addr_r2[5+3+BANK_WIDTH+RANK_WIDTH+2+2+:COL_WIDTH-7];\n        end\n        assign row[2:0] = app_rdy_r\n                       ? app_addr_r1[5+:3]\n                       : app_addr_r2[5+:3];\n        if (RANKS==1)  \n        begin\n          assign row[ROW_WIDTH-1:ROW_WIDTH-2] = app_rdy_r\n                        ? app_addr_r1[5+3+BANK_WIDTH+2+:2]\n                         : app_addr_r2[5+3+BANK_WIDTH+2+:2];\n          assign row[ROW_WIDTH-3:3] = app_rdy_r\n                         ? app_addr_r1[5+3+BANK_WIDTH+2+2+COL_WIDTH-7+:ROW_WIDTH-5]\n                         : app_addr_r2[5+3+BANK_WIDTH+2+2+COL_WIDTH-7+:ROW_WIDTH-5];\n        end\n        else\n        begin\n          assign row[ROW_WIDTH-1:ROW_WIDTH-2] = app_rdy_r\n                        ? app_addr_r1[5+3+BANK_WIDTH+RANK_WIDTH+2+:2]\n                         : app_addr_r2[5+3+BANK_WIDTH+RANK_WIDTH+2+:2];\n          assign row[ROW_WIDTH-3:3] = app_rdy_r\n                         ? app_addr_r1[5+3+BANK_WIDTH+RANK_WIDTH+2+2+COL_WIDTH-7+:ROW_WIDTH-5]\n                         : app_addr_r2[5+3+BANK_WIDTH+RANK_WIDTH+2+2+COL_WIDTH-7+:ROW_WIDTH-5];\n        end\n        assign bank = app_rdy_r\n                       ? app_addr_r1[5+3+:BANK_WIDTH]\n                       : app_addr_r2[5+3+:BANK_WIDTH];\n        assign rank = (RANKS == 1)\n                        ? 1'b0\n                        : app_rdy_r\n                          ? app_addr_r1[5+3+BANK_WIDTH+:RANK_WIDTH]\n                          : app_addr_r2[5+3+BANK_WIDTH+:RANK_WIDTH];\n      end\n      else if (MEM_ADDR_ORDER == \"ROW_BANK_COLUMN\")\n      begin\n        assign col = app_rdy_r\n                      ? app_addr_r1[0+:COL_WIDTH]\n                      : app_addr_r2[0+:COL_WIDTH];\n        assign row = app_rdy_r\n                       ? app_addr_r1[COL_WIDTH+BANK_WIDTH+:ROW_WIDTH]\n                       : app_addr_r2[COL_WIDTH+BANK_WIDTH+:ROW_WIDTH];\n        assign bank = app_rdy_r\n                        ? app_addr_r1[COL_WIDTH+:BANK_WIDTH]\n                        : app_addr_r2[COL_WIDTH+:BANK_WIDTH];\n        assign rank = (RANKS == 1)\n                        ? 1'b0\n                        : app_rdy_r\n                          ? app_addr_r1[COL_WIDTH+ROW_WIDTH+BANK_WIDTH+:RANK_WIDTH]\n                          : app_addr_r2[COL_WIDTH+ROW_WIDTH+BANK_WIDTH+:RANK_WIDTH];\n      end\n      else\n      begin\n        assign col = app_rdy_r\n                      ? app_addr_r1[0+:COL_WIDTH]\n                      : app_addr_r2[0+:COL_WIDTH];\n        assign row = app_rdy_r\n                       ? app_addr_r1[COL_WIDTH+:ROW_WIDTH]\n                       : app_addr_r2[COL_WIDTH+:ROW_WIDTH];\n        assign bank = app_rdy_r\n                        ? app_addr_r1[COL_WIDTH+ROW_WIDTH+:BANK_WIDTH]\n                        : app_addr_r2[COL_WIDTH+ROW_WIDTH+:BANK_WIDTH];\n        assign rank = (RANKS == 1)\n                        ? 1'b0\n                        : app_rdy_r\n                          ? app_addr_r1[COL_WIDTH+ROW_WIDTH+BANK_WIDTH+:RANK_WIDTH]\n                          : app_addr_r2[COL_WIDTH+ROW_WIDTH+BANK_WIDTH+:RANK_WIDTH];\n      end\n     end\n  endgenerate",
+        "  assign use_addr = use_addr_lcl;",
+        "  always @(posedge clk) begin\n    if (rst) begin\n      app_addr_r1 <= #TCQ {ADDR_WIDTH{1'b0}};\n      app_addr_r2 <= #TCQ {ADDR_WIDTH{1'b0}};\n    end else begin\n      app_addr_r1 <= #TCQ app_addr_ns1;\n      app_addr_r2 <= #TCQ app_addr_ns2;\n    end \n    app_cmd_r1 <= #TCQ app_cmd_ns1;\n    app_cmd_r2 <= #TCQ app_cmd_ns2;\n    app_sz_r1 <= #TCQ app_sz_ns1;\n    app_sz_r2 <= #TCQ app_sz_ns2;\n    app_hi_pri_r1 <= #TCQ app_hi_pri_ns1;\n    app_hi_pri_r2 <= #TCQ app_hi_pri_ns2;\n    app_en_r1 <= #TCQ app_en_ns1;\n    app_en_r2 <= #TCQ app_en_ns2;\n  end ",
+        "  assign app_rdy = app_rdy_r;",
+        "  always @(posedge clk) app_rdy_r <= #TCQ app_rdy_ns;"
+    ]
+}

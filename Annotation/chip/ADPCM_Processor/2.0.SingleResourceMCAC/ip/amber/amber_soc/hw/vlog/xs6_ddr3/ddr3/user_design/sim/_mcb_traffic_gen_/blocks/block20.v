@@ -1,0 +1,2 @@
+wire cmd_fifo_empty;
+assign cmd_fifo_rd = mcb_cmd_en_o & ~mcb_cmd_full_i & ~cmd_fifo_empty;

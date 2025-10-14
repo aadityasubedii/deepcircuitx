@@ -1,0 +1,12 @@
+Module name: eth_fifo.
+Module specification:
+
+The eth_fifo module provides a first-in, first-out (FIFO) data buffer designed for Ethernet data communications. The FIFO buffer is parameterized for data width and depth, and can be implemented for a variety of FPGA platforms, including Xilinx Spartan 6 FPGA and others. It utilizes a number of input and output ports alongside internal signals to orchestrate data storage and retrieval operations.
+
+The input ports for this module are clk (clock signal), reset (system reset signal), write (trigger write operations), read (trigger read operations), clear (reset the FIFO system), and data_in (incoming data). 
+
+The output ports are data_out (data retrieved from the FIFO), almost_full (indicates FIFO is almost full), full (indicates FIFO is full), almost_empty (indicates FIFO is almost empty), empty (indicates FIFO is empty), and cnt (current data elements in the FIFO).
+
+Internally, the module utilizes signals and registers such as fifo (storage array), cnt (counter for data elements), read_pointer (indicates current read position), and write_pointer (indicates current write position). 
+
+The eth_fifo operates through various distinct blocks of Verilog code. The blocks define and manage the internal FIFO by initializing signals, maintaining counters, handling read and write pointers and defining the state of the FIFO. Depending on whether the system is implemented for a Xilinx or other FPGA platform, the module either uses the pre-designed 'xilinx_dist_ram_16x32' module or an array of registers to store the incoming data. The Verilog code also includes conditional compilation (`ifdef and `else compiler directives) to define the FIFO behavior depending on the target FPGA platform. The generated signals and statuses enable accurate control and handling of data within the FIFO module, facilitating effective data communication.

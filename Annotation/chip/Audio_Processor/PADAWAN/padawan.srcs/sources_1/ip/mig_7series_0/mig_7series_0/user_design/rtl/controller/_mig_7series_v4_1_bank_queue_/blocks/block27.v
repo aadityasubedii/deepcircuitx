@@ -1,0 +1,1 @@
+  always @(posedge clk) pass_open_bank_r_lcl <= #TCQ pass_open_bank_ns_lcl;

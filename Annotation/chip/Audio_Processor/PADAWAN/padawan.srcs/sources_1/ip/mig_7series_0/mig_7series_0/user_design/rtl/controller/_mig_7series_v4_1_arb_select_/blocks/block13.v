@@ -1,0 +1,1 @@
+  assign rnk_config = rnk_config_ns;

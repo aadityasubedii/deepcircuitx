@@ -1,0 +1,1 @@
+    assign result_rdt = (result_cyc & !wb_dbus_we) ? { 16'h0, result_out } : 0;

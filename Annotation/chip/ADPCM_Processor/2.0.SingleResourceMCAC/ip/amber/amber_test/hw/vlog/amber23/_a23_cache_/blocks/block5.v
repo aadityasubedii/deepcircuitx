@@ -1,0 +1,1 @@
+else if ( WAYS == 4 ) begin : check_hit_4ways

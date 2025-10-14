@@ -1,0 +1,1 @@
+  assign R_ctrl_src_imm5_shift_rot_nxt = D_ctrl_src_imm5_shift_rot;

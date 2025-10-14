@@ -1,0 +1,13 @@
+Module name: intr_capturer.
+
+Module specification: The intr_capturer, is a module that is designed to capture and store interrupt signals in a system. This module's functionality is geared towards reading the interrupt signals with certain wait states depending upon the system's requirements. The operations in this module are synchronous, changing state with the rising edge of the system clock. The system can be reset asynchronously via an active-low reset signal. 
+
+The module has five input ports: clk, rst_n, interrupt_in, addr and read. The clk port serves as the system clock signal, responsible for synchronizing the operations within the module. The rst_n port is an active-low reset signal, responsible for resetting the module whenever needed. The interrupt_in port represents the array of incoming interrupt signals. The addr port is the flag used to read data from the correct register when the number of interrupt signals (NUM_INTR) exceeds 32. The read port is a flag signal indicating a read operation should take place.
+
+The module has a single output port, rddata. The rddata port outputs the interrupt data that has been read, making it available for use within the rest of the system.
+
+Internally, this module uses several signals. interrupt_reg, capture interrupt signal; readdata_with_waitstate, holds read data for synchronization; act_readdata, carries the actual read interrupt data, readdata_lower_intr and readdata_higher_intr, carry data from lower or higher interrupt registers; access_lower_32 and access_higher_32, serve as masks to access lower and higher 32-bits of the interrupted register respectively.
+
+Code is organized into blocks: register declaration and usage, address determination logic for reading interrupt signals, generation of read data and syncing it with system clock. 
+
+Finally, the module is designed to be flexible to accommodate both more than 32 and less or equal to 32 interrupt signals by dynamically generating relevant registers and logic. This flexibility is handled within the generate/endgenerate block, which toggles between two different inputs and outputs based on the NUM_INTR parameter.

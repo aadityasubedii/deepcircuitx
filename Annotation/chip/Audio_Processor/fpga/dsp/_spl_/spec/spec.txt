@@ -1,0 +1,13 @@
+Module Name: spl. 
+
+Module Specification: The 'spl' module calculates the maximum value of a two's complement integer input 'in' whenever 'peak_en' signal is asserted, and reduces the calculated maximum value by one when the 'decay_en' signal is high. The calculation begins from scratch each time 'rst' signal is asserted. The final calculated maximum value is the 'out' signal. The module's input ports include 'ck' (the clock signal), 'rst' (the reset signal which resets the 'max' register to 0), 'peak_en' (the signal that activates maximum value update logic), 'decay_en' (the signal which enables decrement logic of 'max' value) and 'in' (the input data in two’s complement format). It has one output port: 'out' (the maximum value calculated). 
+
+Internally, the module uses signals like 'uint' (the positive integer representation of the input) and 'max' (the variable holding the maximum buffered value). The code contains blocks for handling reset condition, for updating the 'max' value by comparing with 'uint' (if 'peak_en' is high), and for decrementing the 'max' value (when 'decay_en' is high).
+
+---
+
+Module Name: level.
+
+Module Specification: The 'level' module calculates the level of the input ('in') based on the state of the enable signal ('en'). When enabled, the input is shifted, leading to an increased level. If the enable state is off, but the module is 'busy', shifting of the input continues as per binary rule and the level calculation continues. The 'busy' state of the module is released once the two most significant bits of the shifted input are unequal. The inputs of this module are: 'ck' (the clock signal), 'en' (the enable signal that initializes level calculation), and 'in' (input data). The output ports include 'level' (which is the calculated level of the input signal) and 'ready' (indicating the readiness of the module for another level calculation).
+
+Internally, the module uses 'shift' (holding shifted version of input), 'bits' (holding calculated level), and 'busy' (indicating whether level calculation is ongoing or not). The code has different blocks for level calculation initialization, level calculation continuation when the module is 'busy' but not 'en'-abled, and output assignment. These modules work together to compute, continue and output the level of the input signal depending on the state of controls.

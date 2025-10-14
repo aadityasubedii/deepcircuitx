@@ -1,0 +1,1 @@
+assign TxUsedDataOut  = ~CtrlMux & TxUsedDataIn;

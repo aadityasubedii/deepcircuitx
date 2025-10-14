@@ -1,0 +1,10 @@
+Module name: rd_data_gen.
+Module specification: The rd_data_gen module generates read data for digital systems, specifically tailored for SPARTAN6 or VIRTEX6 families based on the FAMILY parameter. 
+
+The module accepts the following inputs: the clock signal (clk_i), system reset signal (rst_i), a 32-bit pseudo-random binary sequence initial seed (prbs_fseed_i), a 4-bit data mode identifier (data_mode_i), a signal for valid command (cmd_valid_i), a 32-bit fixed data input (fixed_data_i), address input (addr_i), burst length input (bl_i), data ready signal (data_rdy_i), and memory data read enable signal (rd_mdata_en).
+
+The outputs of the module are: ready signal for command (cmd_rdy_o), indicator for the last word in a data transmission (last_word_o), indicator if user burst count equals 1 (user_bl_cnt_is_1_o), data valid signal (data_valid_o), and the generated read data itself (data_o).
+
+Internally, the module uses signals like cmd_start, cmd_rdy, data_valid, user_burst_cnt, data_rdy_r1, data_rdy_r2, next_count_is_one, cmd_valid_r1, user_bl_cnt_is_1, and u_bcount_2 to control command initialization, command readiness, data validity, burst count tracking, and other control mechanics. 
+
+The main blocks of the module code are clock-triggered process blocks that control how data is ready for transmission, how the command is commenced, and how bursts are tracked. The module also includes instantiation blocks (SP6_DGEN/V6_DGEN not presented in this code) commanding the utilization of either the SPARTAN6 or the VIRTEX6 data generation modules. In its entirety, the rd_data_gen module can generate read data for digital systems based on a series of parameters and commands, making it a versatile component in SPARTAN6 or VIRTEX6 family digital designs.

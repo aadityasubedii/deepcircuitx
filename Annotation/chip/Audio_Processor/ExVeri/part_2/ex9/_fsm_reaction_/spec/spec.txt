@@ -1,0 +1,11 @@
+Module name: fsm_reaction.
+
+Module specification: The fsm_reaction module is a Finite State Machine (FSM) that controls ten LEDs and a Linear Feedback Shift Register (LFSR) based on several timed inputs. It implements eleven states, from IDLE to ten LIGHT states (LIGHT0 to LIGHT9), and a REACTION state. The transitions between these states depend on the tick, trigger, time_out, and count_over signals.
+
+The module has five input ports: clk, tick, trigger, time_out, and count_over. The clk signal is the timing base for all operations. The tick signal triggers transitions between different states. The trigger signal initiates the state machine from IDLE state. The time_out signal moves the state machine from LIGHT9 to REACTION, and the count_over signal brings it back to IDLE from REACTION.
+
+Meanwhile, the output ports include en_lfsr, start_delay, start_count, reset_count, and ledr. The en_lfsr signal indicates the status of LFSR, start_delay signals the beginning of a delay, start_count indicates the start of a count, reset_count resets the count, and ledr is a 10-bit array controlling each LED.
+
+Internally, the module utilizes a 12-bit register (state) to hold the current FSM state and 1-bit registers for en_lfsr, start_delay, start_count, and reset_count. IDLE, LIGHT0 to LIGHT9, and REACTION are parameters representing the different FSM states. A 10-bit register (ledr) holds the LED values for different patterns.
+
+The code comprises mainly two always blocks. The first always block, triggered at the positive edge of tick, determines which state the FSM should transition to based on the current state and the input conditions. The second always block, sensitive to any change in state, defines the necessary output values corresponding to that state.

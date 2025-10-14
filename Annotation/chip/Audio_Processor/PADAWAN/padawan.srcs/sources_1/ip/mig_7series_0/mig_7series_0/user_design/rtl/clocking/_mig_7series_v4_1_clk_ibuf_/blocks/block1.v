@@ -1,0 +1,1 @@
+  assign mmcm_clk = sys_clk_ibufg;

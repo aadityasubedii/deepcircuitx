@@ -1,0 +1,1 @@
+assign o_clk_200        = i_brd_clk_p;

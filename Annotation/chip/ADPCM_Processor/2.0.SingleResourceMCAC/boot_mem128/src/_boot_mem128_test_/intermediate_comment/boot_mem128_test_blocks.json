@@ -1,0 +1,21 @@
+{
+    "line_num": [
+        [
+            121,
+            152
+        ],
+        [
+            98,
+            119
+        ],
+        [
+            54,
+            96
+        ]
+    ],
+    "blocks": [
+        "task wb_read_strobe;\n\t\n\tinput [31:0] wb_address_test;\t\t\t\t\n\tinput\t\t check_for_truth;\n\tinput [31:0] truth_data_test;\n\n\tbegin\n\t\t@(posedge clk) begin\n\t\t\ti_wb_adr <= wb_address_test;\t\n\t\t\ti_wb_cyc <= 1'b1;\t\t\t\n\t\t\ti_wb_stb <= 1'b1;\t\t\t\n\t\t\ti_wb_we  <= 1'b0;\t\t\t\n\t\tend\n\n\t\t@(posedge clk);\n\n\t\t@(posedge clk) begin\n\t\t\ti_wb_cyc <= 1'b0;\n\t\t\ti_wb_stb <= 1'b0;\n\t\tend\n\n\t\tif (check_for_truth) begin\n\t\t\tif (o_wb_dat !== truth_data_test) begin\n\t\t\t\t$display(\"%t ERROR: failure found when truth_data = %h. Is %h but should be %h\",\n\t\t\t  \t$time, truth_data_test, o_wb_dat, truth_data_test); \n\t\t\t\t`ifdef ERRORSTOP\n\t\t\t\t\t$stop;\n\t\t\t\t`endif\n\t\t\tend\n\t\tend\n\tend\nendtask",
+        "task wb_write_strobe;\n\t\n\tinput [31:0] wb_waddress_test;\t\n\tinput [127:0] wb_data_test;\t\t\n\n\tbegin\n\t\t@(posedge clk) begin\t\t\t\n\t\t\ti_wb_adr <= wb_waddress_test;\t\n\t\t\ti_wb_cyc <= 1'b1;\t\t\t\n\t\t\ti_wb_stb <= 1'b1;\t\t\t\n\t\t\ti_wb_we  <= 1'b1;\t\t\t\n\t\t\ti_wb_dat <= wb_data_test;\t\n\t\tend\n\n\n\t\t@(posedge clk) begin\n\t\t\ti_wb_we  <= 1'b0;\t\t\t\n\t\t\ti_wb_cyc <= 1'b0;\t\t\t\n\t\t\ti_wb_stb <= 1'b0;\t\t\t\n\t\tend\n\tend\nendtask",
+        "initial begin\n\t$timeformat(-9,2,\"ns\", 16);\n\t`ifdef SDFSCAN\n\t\t$sdf_annotate(\"sdf/boot_mem128_tsmc18_scan.sdf\", test.top);\n\t`endif\n\tclk <= 1'b0;\n\treset <= 1'b0;\n\tscan_in0 <= 1'b0;\n\tscan_in1 <= 1'b0;\n\tscan_in2 <= 1'b0;\n\tscan_in3 <= 1'b0;\n\tscan_in4 <= 1'b0;\n\tscan_enable <= 1'b0;\n\ttest_mode <= 1'b0;\n\n\ti_wb_adr <= 'd0;\n\ti_wb_sel <= 16'h0000;\n\ti_wb_we  <= 1'b0;\n\ti_wb_dat <= 'd0;\n\ti_wb_cyc <= 1'b0;\n\ti_wb_stb <= 1'b0;\n\n\t@(posedge clk) begin\n\t\treset <= 1'b1;\n\tend\n\n\t@(posedge clk);\n\t\n\t@(negedge clk) begin\n\t\treset <= 1'b0;\n\tend\n\n\tfor (i=0; i<1024; i=i+1) begin\n\t\ti_wb_sel <= 16'hFFFF;\n\t\twb_write_strobe({18'h00000, i[9:0], 4'h0}, i);\n\tend\n\tfor (i=0; i<1024; i=i+1) begin\n\t\ti_wb_sel <= 16'hFFFF;\n\t\twb_read_strobe({18'h00000, i[9:0], 4'h0}, 0, 0);\n\tend\n\n    $finish;\nend"
+    ]
+}

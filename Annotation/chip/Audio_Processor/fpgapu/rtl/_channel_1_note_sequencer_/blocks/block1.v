@@ -1,0 +1,1 @@
+  assign o_phase_delta = w_phase_delta + r_vibrato_adjust;

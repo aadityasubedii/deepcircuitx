@@ -1,0 +1,11 @@
+Module name: tb.
+
+Module specification: 
+
+The tb module is a testbench designed for testing the 'top' module. Its primary task includes file operations for generating input and output data for 'top', managing clock signals, resetting conditions, and feeding data for specific RTL operations.
+
+The tb module has seven input ports - 'Dclk', 'Sclk', 'Reset_n', 'Frame', 'Start', 'InputL', and 'InputR'. The 'Dclk' and 'Sclk' are clock signals, with 'Dclk' being used to trigger module operations and 'Sclk' controlling writing of output data. 'Reset_n' is the reset signal known to initiate a reset in the 'top' module, while 'Frame' signifies when a new set of data is starting. 'Start' is used to trigger the process, and 'InputL' and 'InputR' respectively represent the left and right input signals. It also includes four output ports, 'InReady', 'OutReady', 'OutputL', and 'OutputR'. 'InReady' and 'OutReady' signal when the 'top' module is ready to receive or release data. 'OutputL' and 'OutputR' are the left and right output data signals released after the negative edge of 'Sclk'. 
+
+Internally, the module defines a number of signals and variables, including a 'top' module instance named 'uut_reg', parameters to control clock times of both 'Dclk' and 'Sclk', and integer counters to manage data reading and writing. Internal variables like 'writeL' and 'writeR' store output values, while 'flag_reset' records the reset state. The data array stores input data fed from a file.
+
+The module contains different blocks in the code executing distinct actions. The declaration section outlines signals, clock parameters, and variable definitions, followed by 'uut_reg' instantiation. Two clock always blocks manage the 'Dclk' and 'Sclk' signals generation. The input file is managed by reading its content to the 'data' array. A posedge 'Dclk' block regulates resetting conditions and feeding data to 'top', while the negedge 'Sclk' block controls writing output data to a file named 'output2.txt'. All these individual sections effectively transform the tb module into a fully-fledged test environment for the 'top' module.

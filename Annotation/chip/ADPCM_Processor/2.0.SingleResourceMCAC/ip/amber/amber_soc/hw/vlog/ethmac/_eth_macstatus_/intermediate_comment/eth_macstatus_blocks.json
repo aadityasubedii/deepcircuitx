@@ -1,0 +1,101 @@
+{
+    "line_num": [
+        [
+            412,
+            422
+        ],
+        [
+            398,
+            408
+        ],
+        [
+            386,
+            393
+        ],
+        [
+            375,
+            382
+        ],
+        [
+            364,
+            371
+        ],
+        [
+            349,
+            359
+        ],
+        [
+            335,
+            345
+        ],
+        [
+            320,
+            330
+        ],
+        [
+            305,
+            315
+        ],
+        [
+            292,
+            302
+        ],
+        [
+            274,
+            284
+        ],
+        [
+            270,
+            270
+        ],
+        [
+            260,
+            266
+        ],
+        [
+            249,
+            255
+        ],
+        [
+            244,
+            246
+        ],
+        [
+            236,
+            236
+        ],
+        [
+            232,
+            232
+        ],
+        [
+            219,
+            228
+        ],
+        [
+            205,
+            215
+        ]
+    ],
+    "blocks": [
+        "always @ (posedge MTxClk or posedge Reset)\nbegin\n  if(Reset)\n    CarrierSenseLost <=#Tp 1'b0;\n  else\n  if((StatePreamble | (|StateData)) & ~CarrierSense & ~Loopback & ~Collision & ~r_FullD)\n    CarrierSenseLost <=#Tp 1'b1;\n  else\n  if(TxStartFrm)\n    CarrierSenseLost <=#Tp 1'b0;\nend",
+        "always @ (posedge MTxClk or posedge Reset)\nbegin\n  if(Reset)\n    DeferLatched <=#Tp 1'b0;\n  else\n  if(DeferIndication)\n    DeferLatched <=#Tp 1'b1;\n  else\n  if(RstDeferLatched)\n    DeferLatched <=#Tp 1'b0;\nend",
+        "always @ (posedge MTxClk or posedge Reset)\nbegin\n  if(Reset)\n    LateCollLatched <=#Tp 1'b0;\n  else\n  if(StartTxDone | StartTxAbort)\n    LateCollLatched <=#Tp LateCollision;\nend",
+        "always @ (posedge MTxClk or posedge Reset)\nbegin\n  if(Reset)\n    RetryLimit <=#Tp 1'h0;\n  else\n  if(StartTxDone | StartTxAbort)\n    RetryLimit <=#Tp MaxCollisionOccured;\nend",
+        "always @ (posedge MTxClk or posedge Reset)\nbegin\n  if(Reset)\n    RetryCntLatched <=#Tp 4'h0;\n  else\n  if(StartTxDone | StartTxAbort)\n    RetryCntLatched <=#Tp RetryCnt;\nend",
+        "always @ (posedge MRxClk or posedge Reset)\nbegin\n  if(Reset)\n    ReceivedPacketTooBig <=#Tp 1'b0;\n  else\n  if(LoadRxStatus)\n    ReceivedPacketTooBig <=#Tp 1'b0;\n  else\n  if(TakeSample)\n    ReceivedPacketTooBig <=#Tp ~r_HugEn & RxByteCnt[15:0] > r_MaxFL[15:0];\nend",
+        "always @ (posedge MRxClk or posedge Reset)\nbegin\n  if(Reset)\n    DribbleNibble <=#Tp 1'b0;\n  else\n  if(RxStateSFD)\n    DribbleNibble <=#Tp 1'b0;\n  else\n  if(~MRxDV & RxStateData[1])\n    DribbleNibble <=#Tp 1'b1;\nend",
+        "always @ (posedge MRxClk or posedge Reset)\nbegin\n  if(Reset)\n    ShortFrame <=#Tp 1'b0;\n  else\n  if(LoadRxStatus)\n    ShortFrame <=#Tp 1'b0;\n  else\n  if(TakeSample)\n    ShortFrame <=#Tp RxByteCnt[15:0] < r_MinFL[15:0];\nend",
+        "always @ (posedge MRxClk or posedge Reset)\nbegin\n  if(Reset)\n    RxColWindow <=#Tp 1'b1;\n  else\n  if(~Collision & RxByteCnt[5:0] == CollValid[5:0] & RxStateData[1])\n    RxColWindow <=#Tp 1'b0;\n  else\n  if(RxStateIdle)\n    RxColWindow <=#Tp 1'b1;\nend",
+        "always @ (posedge MRxClk or posedge Reset)\nbegin\n  if(Reset)\n    RxLateCollision <=#Tp 1'b0;\n  else\n  if(LoadRxStatus)\n    RxLateCollision <=#Tp 1'b0;\n  else\n  if(Collision & (~r_FullD) & (~RxColWindow | r_RecSmall))\n    RxLateCollision <=#Tp 1'b1;\nend",
+        "always @ (posedge MRxClk or posedge Reset)\nbegin\n  if(Reset)\n    InvalidSymbol <=#Tp 1'b0;\n  else\n  if(LoadRxStatus & ~SetInvalidSymbol)\n    InvalidSymbol <=#Tp 1'b0;\n  else\n  if(SetInvalidSymbol)\n    InvalidSymbol <=#Tp 1'b1;\nend",
+        "assign SetInvalidSymbol = MRxDV & MRxErr & MRxD[3:0] == 4'he;",
+        "always @ (posedge MRxClk or posedge Reset)\nbegin\n  if(Reset)\n    ReceiveEnd  <=#Tp 1'b0;\n  else\n    ReceiveEnd  <=#Tp LoadRxStatus;                     \nend",
+        "always @ (posedge MRxClk or posedge Reset)\nbegin\n  if(Reset)\n    LoadRxStatus <=#Tp 1'b0;\n  else\n    LoadRxStatus <=#Tp TakeSample;\nend",
+        "assign TakeSample = (|RxStateData)   & (~MRxDV)                    |\n                      RxStateData[0] &   MRxDV & RxByteCntMaxFrame;\n",
+        "assign ReceivedLengthOK = RxByteCnt[15:0] >= r_MinFL[15:0] & RxByteCnt[15:0] <= r_MaxFL[15:0];",
+        "assign ReceivedPacketGood = ~LatchedCrcError;",
+        "always @ (posedge MRxClk or posedge Reset)\nbegin\n  if(Reset)\n    LatchedMRxErr <=#Tp 1'b0;\n  else\n  if(MRxErr & MRxDV & (RxStatePreamble | RxStateSFD | (|RxStateData) | RxStateIdle & ~Transmitting))\n    LatchedMRxErr <=#Tp 1'b1;\n  else\n    LatchedMRxErr <=#Tp 1'b0;\nend",
+        "always @ (posedge MRxClk or posedge Reset)\nbegin\n  if(Reset)\n    LatchedCrcError <=#Tp 1'b0;\n  else\n  if(RxStateSFD)\n    LatchedCrcError <=#Tp 1'b0;\n  else\n  if(RxStateData[0])\n    LatchedCrcError <=#Tp RxCrcError & ~RxByteCntEq0;\nend"
+    ]
+}

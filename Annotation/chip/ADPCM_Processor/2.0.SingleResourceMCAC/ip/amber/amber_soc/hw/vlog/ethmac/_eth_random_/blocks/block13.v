@@ -1,0 +1,1 @@
+assign Random [0] = x[0];

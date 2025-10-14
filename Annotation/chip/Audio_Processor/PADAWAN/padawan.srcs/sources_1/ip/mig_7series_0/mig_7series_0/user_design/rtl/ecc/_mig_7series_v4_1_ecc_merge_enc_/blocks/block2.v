@@ -1,0 +1,1 @@
+always @(posedge clk) mc_wrdata <= mc_wrdata_c;

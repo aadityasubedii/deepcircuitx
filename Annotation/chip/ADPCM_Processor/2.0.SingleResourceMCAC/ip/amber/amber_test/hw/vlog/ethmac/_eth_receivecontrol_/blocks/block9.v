@@ -1,0 +1,1 @@
+assign PauseTimerEq0 = ~(|PauseTimer[15:0]);

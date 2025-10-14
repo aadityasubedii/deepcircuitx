@@ -1,0 +1,11 @@
+Module name: Altera_UP_Slow_Clock_Generator
+
+Module specification: The Altera_UP_Slow_Clock_Generator is a digital slow clock generator module. Its core functionality is to output a slower clock signal (new_clk) derived from an input clock (clk). The rate of the resulting clock is defined by parameters COUNTER_BITS and COUNTER_INC. The module produces signals indicating the rising_edge and falling_edge of the new_clk. Additionally, it produces signals reflecting the middle_of_high_level and middle_of_low_level of the new clock signal by analyzing the clock counter's bits. Notably, this functionality hinges on the enable_clk and reset signals, where the reset signal has definitive priority.
+
+Three input ports feed into the module. These include clk (the master clock signal which undergoes manipulation to generate a slower clock signal), reset (which resets all outputs and registers to their initial states and sets the clock counter to zero), and enable_clk (which enables or disables the clock function).
+
+Five output ports result from this module. Such include new_clk (the generated slower clock signal), rising_edge (indicates the rising edge of the new clock), falling_edge (indicates the falling edge of the new clock), middle_of_high_level (goes high in the middle of a high level period of the new clock) and middle_of_low_level (goes high in the middle of a low-level period of the new clock).
+
+A key internal signal utilized within the module is the clk_counter. This register saves the count value, incrementing with each clock cycle when enable_clk is '1' and reset is '0'. The clk_counter helps generate the slowed-down clock signal and calculate the mid-level periods for the new clock signal. 
+
+The code is structured into different blocks or sections, each containing an always block that runs at the positive edge of the input clock. These sections govern the behavior of the clk_counter and output signals, influenced by the reset signal. Notably, each section runs independently and concurrently, controlled by the rising edge of the clk signal. The logic inside the blocks conditions and modifies the internal and output registers based on clk_counter and reset signal states.

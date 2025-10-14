@@ -1,0 +1,1 @@
+assign rdpath_rd_data_i =(FAMILY == "VIRTEX6" && MEM_BLEN == 4) ? rd_v6_mdata : mcb_rd_data_i ;

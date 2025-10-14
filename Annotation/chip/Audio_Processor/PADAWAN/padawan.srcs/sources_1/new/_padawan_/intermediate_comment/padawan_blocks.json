@@ -1,0 +1,16 @@
+{
+    "line_num": [
+        [
+            200,
+            200
+        ],
+        [
+            109,
+            198
+        ]
+    ],
+    "blocks": [
+        "    assign AUD_SD = 1'b1;    ",
+        "    always @ (posedge CLK100MHZ)\n    begin\n        case(next_state)\n\n            START: begin\n                audio_reg <= audio_data;\n                p1 <= audio_reg;\n                p2 <= p1;\n                p3 <= p2;\n                p4 <= p3;\n                p5 <= p4;\n                p6 <= p5;\n                p7 <= p6;\n                p8 <= p7;\n                p9 <= p8;\n                p10 <= p9;\n                p11 <= p10;\n                p12 <= p11;\n                p13 <= p12;\n                p14 <= p13;\n                p15 <= p14;\n                p16 <= p15;\n                p17 <= p16;\n                p18 <= p17;\n                p19 <= p18;\n                p20 <= p19;\n                p21 <= p20;\n                p22 <= p21;\n                p23 <= p22;\n                p24 <= p23;\n                p25 <= p24;\n                p26 <= p25;\n                p27 <= p26;\n                p28 <= p27;\n                p29 <= p28;\n                p30 <= p29;\n                p31 <= p30;\n                p32 <= p31;\n                next_state <= OVERDRIVE;\n            end\n\n            OVERDRIVE: begin\n                if (sw[BTN_OVERDRIVE]==1)\n                begin\n                    if (audio_reg > CENTER_VAL+thresh) audio_reg <= (CENTER_VAL+thresh)+drive_amount;\n                    else if(audio_reg < CENTER_VAL-thresh) audio_reg <= (CENTER_VAL-thresh)-drive_amount;\n                end\n                next_state <= CHORUS;\n            end\n\n            CHORUS: begin\n                if (sw[BTN_CHORUS]==1)\n                begin\n                    audio_reg <= (audio_reg+p32)>>1; \n                end\n                next_state <= TREMELO;\n            end\n\n            TREMELO: begin\n                if (sw[BTN_TREMELO]==1)\n                begin\n                tremelo_count <= tremelo_count+1;\n                if (tremelo_count == 32768) \n                    begin\n                        if (tremelo_decrease == 1)\n                            begin\n                                tremelo_amplitude = tremelo_amplitude-1;\n                                if (tremelo_amplitude == 0) tremelo_decrease = !tremelo_decrease;\n                            end\n                        else\n                            begin\n                                tremelo_amplitude = tremelo_amplitude+1;\n                                if (tremelo_amplitude == 1024) tremelo_decrease = !tremelo_decrease;\n                            end\n                 end           \n                 audio_reg <= (audio_reg*(1024+tremelo_amplitude)>>10);\n                end\n                next_state <= OUTPUT;\n            end\n\n            OUTPUT: begin\n                PWM <= audio_reg;\n                if (CLK_AUDIO == 1'b1) next_state <= START;\n            end\n\n            default: next_state <= START;\n\n        endcase\n    end\n"
+    ]
+}

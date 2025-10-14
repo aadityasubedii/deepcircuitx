@@ -1,0 +1,1 @@
+assign update_active_line_f1 = field_1 && (next_active_line_count != active_line_count_f1[13:1] || !active_line_count_f1[0]) && first_start_new_field;

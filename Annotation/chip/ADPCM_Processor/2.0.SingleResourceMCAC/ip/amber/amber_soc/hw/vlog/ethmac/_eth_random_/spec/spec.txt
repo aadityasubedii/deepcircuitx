@@ -1,0 +1,24 @@
+Module name: eth_random. 
+
+Module specification: The 'eth_random' module is an essential component of an Ethernet system. It generates a pseudo-random sequence of bits to support the system operation. 
+
+Input ports include:
+1. 'MTxClk', which is the clock signal driving the synchronous operations in the module.
+2. 'Reset', a control signal that resets the registers in this module.
+3. 'StateJam' and 'StateJam_q', control signals that conditionally capture the random sequence into the 'RandomLatched' register.
+4. 'RetryCnt', a 4-bit input that dictates which bits of the internal register 'x' will form the random sequence.
+5. 'NibCnt' and 'ByteCnt', used in a final comparison operation.
+
+Output ports include:
+1. 'RandomEq0', which turns high when 'RandomLatched' is all zeros.
+2. 'RandomEqByteCnt', an output that indicates when 'ByteCnt' equals the bitwise AND operation result of 'RandomLatched' and the least significant 7 bits of 'NibCnt'.
+
+Internal signals used within the module include:
+1. 'x', a 10-bit register updated with its own shifted version and a feedback derived from its second and ninth bits.
+2. 'Random', a 10-bit wire which selectively captures bits from 'x' based on 'RetryCnt'.
+3. 'RandomLatched', a 10-bit register that captures the 'Random' value under certain conditions.
+4. 'Feedback', a wire that computes the negation of the XOR operation between the second and ninth bits of 'x'.
+
+The module has two primary sections, each encapsulated by an 'always' block. The first 'always' block deals with updating the 'x' register at each rising edge of 'MTxClk' or 'Reset', applying a feedback logic. The second 'always' block updates the 'RandomLatched' register using 'Random', only if both 'StateJam' and 'StateJam_q' are high. The final outputs, 'RandomEq0' and 'RandomEqByteCnt', are determined using 'assign' statements that apply operations on 'RandomLatched', 'NibCnt', and 'ByteCnt'. 
+
+In summary, 'eth_random' is a module that creates a certain form of random sequence, capturing selective bits, latches them based on certain signals, and finally outputs two forms of comparison results for system application.

@@ -1,0 +1,81 @@
+{
+    "line_num": [
+        [
+            139,
+            139
+        ],
+        [
+            137,
+            137
+        ],
+        [
+            125,
+            134
+        ],
+        [
+            122,
+            122
+        ],
+        [
+            121,
+            121
+        ],
+        [
+            120,
+            120
+        ],
+        [
+            119,
+            119
+        ],
+        [
+            118,
+            118
+        ],
+        [
+            117,
+            117
+        ],
+        [
+            116,
+            116
+        ],
+        [
+            115,
+            115
+        ],
+        [
+            114,
+            114
+        ],
+        [
+            113,
+            113
+        ],
+        [
+            111,
+            111
+        ],
+        [
+            103,
+            109
+        ]
+    ],
+    "blocks": [
+        "assign RandomEqByteCnt = ByteCnt[9:0] == RandomLatched & (&NibCnt[6:0]);",
+        "assign RandomEq0 = RandomLatched == 10'h0; ",
+        "always @ (posedge MTxClk or posedge Reset)\nbegin\n  if(Reset)\n    RandomLatched <= #Tp 10'h000;\n  else\n    begin\n      if(StateJam & StateJam_q)\n        RandomLatched <= #Tp Random;\n    end\nend",
+        "assign Random [9] = (RetryCnt > 9) ? x[9] : 1'b0;",
+        "assign Random [8] = (RetryCnt > 8) ? x[8] : 1'b0;",
+        "assign Random [7] = (RetryCnt > 7) ? x[7] : 1'b0;",
+        "assign Random [6] = (RetryCnt > 6) ? x[6] : 1'b0;",
+        "assign Random [5] = (RetryCnt > 5) ? x[5] : 1'b0;",
+        "assign Random [4] = (RetryCnt > 4) ? x[4] : 1'b0;",
+        "assign Random [3] = (RetryCnt > 3) ? x[3] : 1'b0;",
+        "assign Random [2] = (RetryCnt > 2) ? x[2] : 1'b0;",
+        "assign Random [1] = (RetryCnt > 1) ? x[1] : 1'b0;",
+        "assign Random [0] = x[0];",
+        "assign Feedback = ~(x[2] ^ x[9]);",
+        "always @ (posedge MTxClk or posedge Reset)\nbegin\n  if(Reset)\n    x[9:0] <= #Tp 0;\n  else\n    x[9:0] <= #Tp {x[8:0], Feedback};\nend"
+    ]
+}

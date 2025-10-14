@@ -1,0 +1,1 @@
+assign ResetTxBDReady = TxDonePulse | TxAbortPulse | TxRetryPulse;

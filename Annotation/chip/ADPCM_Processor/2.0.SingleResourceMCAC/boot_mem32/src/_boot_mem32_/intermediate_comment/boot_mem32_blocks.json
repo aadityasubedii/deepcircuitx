@@ -1,0 +1,56 @@
+{
+    "line_num": [
+        [
+            170,
+            176
+        ],
+        [
+            168,
+            169
+        ],
+        [
+            150,
+            157
+        ],
+        [
+            143,
+            149
+        ],
+        [
+            121,
+            141
+        ],
+        [
+            111,
+            115
+        ],
+        [
+            104,
+            109
+        ],
+        [
+            100,
+            102
+        ],
+        [
+            92,
+            99
+        ],
+        [
+            89,
+            91
+        ]
+    ],
+    "blocks": [
+        "        initial\n            $display(\"Boot mem file is %s\", `BOOT_MEM32_PARAMS_FILE );\n    `endif\n`endif\n\n    \nendmodule",
+        "`ifdef XILINX_SPARTAN6_FPGA\n    `ifdef BOOT_MEM32_PARAMS_FILE",
+        "u_mem (\n    .i_clk          ( i_wb_clk             ),\n    .i_write_enable ( start_write          ),\n    .i_byte_enable  ( byte_enable          ),\n    .i_address      ( address              ),  \n    .o_read_data    ( read_data            ),\n    .i_write_data   ( write_data           )\n);",
+        "`ifndef XILINX_FPGA\ngeneric_sram_byte_en\n#(\n    .DATA_WIDTH     ( WB_DWIDTH             ),\n    .ADDRESS_WIDTH  ( MADDR_WIDTH           )\n)\n`endif ",
+        "`ifdef XILINX_FPGA\n    xs6_sram_4096x32_byte_en\n#(\n\n\n\n\n\n`ifdef BOOT_MEM32_PARAMS_FILE\n    `include `BOOT_MEM32_PARAMS_FILE\n`else\n    `ifdef BOOT_LOADER_ETHMAC\n        `include \"boot-loader-ethmac_memparams32.v\"\n    `else\n        \n        `include \"boot-loader_memparams32.v\"\n    `endif\n`endif\n\n)\n`endif ",
+        "`ifdef AMBER_WISHBONE_DEBUG\n    assign o_wb_ack    = i_wb_stb && ( start_write || start_read_r[jitter_r[1]] );\n`else\n    assign o_wb_ack    = i_wb_stb && ( start_write || start_read_r );\n`endif",
+        "assign o_wb_err = 1'd0;\n\nassign write_data  = i_wb_dat;\nassign byte_enable = i_wb_sel;\nassign o_wb_dat    = read_data;\nassign address     = i_wb_adr[MADDR_WIDTH+1:2];",
+        "    always @( posedge i_wb_clk )\n        start_read_r <= start_read;\n`endif",
+        "    always @( posedge i_wb_clk )\n        if (start_read)\n            start_read_r <= {3'd0, start_read};\n        else if (o_wb_ack)\n            start_read_r <= 'd0;\n        else\n            start_read_r <= {start_read_r[2:0], start_read};\n`else",
+        "    always @( posedge i_wb_clk )\n        jitter_r <= {jitter_r[6:0], jitter_r[7] ^ jitter_r[4] ^ jitter_r[1]};\n        "
+    ]
+}

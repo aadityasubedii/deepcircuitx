@@ -1,0 +1,51 @@
+{
+    "line_num": [
+        [
+            126,
+            128
+        ],
+        [
+            119,
+            123
+        ],
+        [
+            115,
+            117
+        ],
+        [
+            93,
+            111
+        ],
+        [
+            89,
+            91
+        ],
+        [
+            65,
+            81
+        ],
+        [
+            60,
+            63
+        ],
+        [
+            44,
+            50
+        ],
+        [
+            39,
+            42
+        ]
+    ],
+    "blocks": [
+        "\t\t\tassign dac_sck = !clk_1MHz&!dac_cs;\n\t\t\tassign dac_sdi = shift_reg[15];\nendmodule",
+        "\talways @(posedge clk_1MHz)\n\t\tif((dac_start==1'b1)&&(dac_cs==1'b1))\t\t\n\t\t\tshift_reg <= {cmd,data_in,2'b00};\n\t\telse \t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\tshift_reg <= {shift_reg[14:0],1'b0};",
+        "\tinitial\tbegin\t\n\t\tshift_reg = 16'b0; \n\t\tend",
+        "\talways @(posedge clk_1MHz)  begin\n\t\t\n\t\tdac_cs <= 1'b0; dac_ld <= 1'b1; \n\t\tstate <= state + 1'b1;\t\n\t\tcase (state)\n\t\t\t5'd0:\tif (dac_start == 1'b0)  begin  \n\t\t\t\t\t\tstate <= 5'd0; \t\t\t\t\n\t\t\t\t\t\tdac_cs <= 1'b1; \n\t\t\t\t\t\tend\n\t\t\t5'd16: begin  \n\t\t\t\t\t\tdac_cs <= 1'b1; dac_ld <= 1'b0; \n\t\t\t\t\t\tstate <= 5'd0;  \n\t\t\t\t\tend\n\t\t\tdefault:   begin\t\t\t\t\t\n\t\t\t\t\tdac_cs <= 1'b0; dac_ld <= 1'b1; \n\t\t\t\t\tstate <= state + 1'b1;\t\n\t\t\t\t\tend\n\t\t\tendcase\n\t\tend\t",
+        "\tinitial\tbegin\t\n\t\tstate = 5'b0; dac_ld = 1'b0; dac_cs = 1'b1; \n\t\tend",
+        "\talways @ (posedge clk)\n\t\tcase (sr_state)\n\t\t\tIDLE:\tif (load==1'b0) sr_state <= IDLE;\n\t\t\t\t\telse\tbegin\n\t\t\t\t\t\tsr_state <= WAIT_CSB_FALL;\n\t\t\t\t\t\tdac_start <= 1'b1;\n\t\t\t\t\t\tend  \t\t\t\t\n\t\t\tWAIT_CSB_FALL: if (dac_cs==1'b1) sr_state <= WAIT_CSB_FALL;\n\t\t\t\t\telse sr_state <= WAIT_CSB_HIGH;\n\t\t\t\t\t\n\t\t\tWAIT_CSB_HIGH: if (dac_cs==1'b0) sr_state <= WAIT_CSB_HIGH;\n\t\t\t\t\telse begin\n\t\t\t\t\t\tsr_state <= IDLE;\n\t\t\t\t\t\tdac_start <= 1'b0;\n\t\t\t\t\t\tend\t\n\t\t\tdefault: sr_state <= IDLE;\n\t\tendcase",
+        "\tinitial begin\n\t\tsr_state = IDLE;\n\t\tdac_start = 1'b0;\t\n\t\tend",
+        "\talways @ (posedge clk)   \n\t  if (ctr==0) begin\n\t\t  ctr <= TIME_CONSTANT;\n\t\t  clk_1MHz <= ~clk_1MHz; \n\t\tend\n\t  else\n\t\t  ctr <= ctr - 1'b1;",
+        "\tinitial begin\n\t\tclk_1MHz = 0;\t\t\t\n\t\tctr = 5'b0;\t\t\t\t\n\tend"
+    ]
+}

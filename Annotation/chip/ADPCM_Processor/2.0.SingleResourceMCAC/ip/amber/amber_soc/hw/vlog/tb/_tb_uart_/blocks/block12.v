@@ -1,0 +1,1 @@
+assign loopback     = `U_TEST_MODULE.tb_uart_control_reg[1];

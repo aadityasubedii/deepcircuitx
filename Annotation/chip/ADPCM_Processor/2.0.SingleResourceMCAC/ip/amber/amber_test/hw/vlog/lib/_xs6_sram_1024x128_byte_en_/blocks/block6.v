@@ -1,0 +1,22 @@
+    .INIT_3F ( SRAM4_INIT_63 ),
+    
+    .INIT_FILE              ( "NONE"            ),
+    .RSTTYPE                ( "SYNC"            ),
+    .RST_PRIORITY_A         ( "CE"              ),
+    .RST_PRIORITY_B         ( "CE"              ),
+    .SIM_COLLISION_CHECK    ( "GENERATE_X_ONLY" ),
+    .SIM_DEVICE             ( "SPARTAN6"        ),
+    .INIT_A                 ( 36'h000000000     ),
+    .INIT_B                 ( 36'h000000000     ),
+    .WRITE_MODE_A           ( "WRITE_FIRST"     ),
+    .WRITE_MODE_B           ( "WRITE_FIRST"     ),
+    .SRVAL_B                ( 36'h000000000     ))
+  u_sram4 (
+    .REGCEA ( 1'd0                              ),
+    .CLKA   ( i_clk                             ),
+    .ENB    ( 1'd0                              ),
+    .RSTB   ( 1'd0                              ),
+    .CLKB   ( 1'd0                              ),
+    .REGCEB ( 1'd0                              ),
+    .RSTA   ( 1'd0                              ),
+    .ENA    ( 1'd1                              ),

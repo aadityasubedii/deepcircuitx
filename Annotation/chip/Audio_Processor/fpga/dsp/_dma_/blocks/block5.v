@@ -1,0 +1,1 @@
+    wire [31:0] data_out;

@@ -1,0 +1,43 @@
+{
+    "gpt-message": [
+        {
+            "role": "system",
+            "content": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+        },
+        {
+            "role": "user",
+            "content": "Name of the module and its functionality is as follows: \nModule name: PISO. Explanation: The given module is a parallel-in-serial-out (PISO) shift register which takes in parallel data from the input, then outputs it serially. The functionality is controlled by various signals: 'clear' sets the output to an undetermined state 'x' and makes the output not ready. 'p2s_enable' latches the input data and gets the module ready to output. After that, the serial output starts, outputting one bit at a time starting from the 15th bit down to the 0th bit. When all bits have been output, 'output_ready' is set to 1. If no enabling signal is received, the module is reset to its default state and keeps outputting zeros until it's enabled again."
+        },
+        {
+            "role": "user",
+            "content": "Input and output ports and their explanation is as follows: \nInput Ports: [Frame, Sclk, clear, p2s_enable, data_in].\nExplanation: \n- Frame: This is an input signal, but it is not used in the given Verilog code.\n- Sclk: This is the system clock input. Its positive edge triggers the main logic of the module.\n- clear: This is a clear signal input. When set to 1, it clears the output and output_ready signals.\n- p2s_enable: This is the \"parallel to serial enable\" signal. When set to 1, it copies input data to the temporary storage and readies the system for output.\n- data_in: This is the 40-bit parallel input data that needs to be converted to serial output data.\n\nOutput ports: [Output, output_ready].\nExplanation:\n- Output: This is the serial output of the module. One bit at a time is set on this port starting from the 15'th bit of the parallel input. When the module is not actively converting or outputting, this is set to 0.\n- output_ready: This signal indicates the completion status of the serial output data. It's initially set to 0, but once all data bits had been processed or cleared, this becomes 1 to indicate that the output is ready."
+        },
+        {
+            "role": "user",
+            "content": "Internal signals and their explanation is as follows: \nInternal signals: [bit_count, frame_start, out_rdy, temp].\nExplanation: \n- bit_count: This is a 4-bit signal used to control the indexing of temp and the serial output process. When the output is happening, it starts from 15 and counts down to 0, at which point all the bits have been outputted.\n- frame_start: This is a 1-bit flag used to signify the start of the serial output process, it is raised when the output starts and lowered when it ends.\n- out_rdy: This stands for \"output ready\". It's a 1-bit flag that is raised to indicate that there is data ready to be outputted. It's raised when enabling the parallel to serial conversion and then lowered when the output starts.\n- temp: This is a 40-bit signal used as a temporary storage for the input data to preserve the original data while it's being outputted in a serial fashion."
+        }
+    ],
+    "claude-message": [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+                },
+                {
+                    "type": "text",
+                    "text": "Name of the module and its functionality is as follows: \nModule name: PISO. Explanation: The given module is a parallel-in-serial-out (PISO) shift register which takes in parallel data from the input, then outputs it serially. The functionality is controlled by various signals: 'clear' sets the output to an undetermined state 'x' and makes the output not ready. 'p2s_enable' latches the input data and gets the module ready to output. After that, the serial output starts, outputting one bit at a time starting from the 15th bit down to the 0th bit. When all bits have been output, 'output_ready' is set to 1. If no enabling signal is received, the module is reset to its default state and keeps outputting zeros until it's enabled again."
+                },
+                {
+                    "type": "text",
+                    "text": "Input and output ports and their explanation is as follows: \nInput Ports: [Frame, Sclk, clear, p2s_enable, data_in].\nExplanation: \n- Frame: This is an input signal, but it is not used in the given Verilog code.\n- Sclk: This is the system clock input. Its positive edge triggers the main logic of the module.\n- clear: This is a clear signal input. When set to 1, it clears the output and output_ready signals.\n- p2s_enable: This is the \"parallel to serial enable\" signal. When set to 1, it copies input data to the temporary storage and readies the system for output.\n- data_in: This is the 40-bit parallel input data that needs to be converted to serial output data.\n\nOutput ports: [Output, output_ready].\nExplanation:\n- Output: This is the serial output of the module. One bit at a time is set on this port starting from the 15'th bit of the parallel input. When the module is not actively converting or outputting, this is set to 0.\n- output_ready: This signal indicates the completion status of the serial output data. It's initially set to 0, but once all data bits had been processed or cleared, this becomes 1 to indicate that the output is ready."
+                },
+                {
+                    "type": "text",
+                    "text": "Internal signals and their explanation is as follows: \nInternal signals: [bit_count, frame_start, out_rdy, temp].\nExplanation: \n- bit_count: This is a 4-bit signal used to control the indexing of temp and the serial output process. When the output is happening, it starts from 15 and counts down to 0, at which point all the bits have been outputted.\n- frame_start: This is a 1-bit flag used to signify the start of the serial output process, it is raised when the output starts and lowered when it ends.\n- out_rdy: This stands for \"output ready\". It's a 1-bit flag that is raised to indicate that there is data ready to be outputted. It's raised when enabling the parallel to serial conversion and then lowered when the output starts.\n- temp: This is a 40-bit signal used as a temporary storage for the input data to preserve the original data while it's being outputted in a serial fashion."
+                }
+            ]
+        }
+    ]
+}

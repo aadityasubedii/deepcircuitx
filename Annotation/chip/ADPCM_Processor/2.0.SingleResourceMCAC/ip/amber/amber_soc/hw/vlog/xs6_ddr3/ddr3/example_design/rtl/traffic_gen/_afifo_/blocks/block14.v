@@ -1,0 +1,1 @@
+assign wr_addr = wr_ptr;

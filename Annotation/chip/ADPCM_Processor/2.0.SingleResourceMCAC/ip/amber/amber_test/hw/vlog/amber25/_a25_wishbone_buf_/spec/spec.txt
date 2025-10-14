@@ -1,0 +1,11 @@
+Module name: a25_wishbone_buf.
+
+Module specification: The `a25_wishbone_buf` is primarily a buffer for a system deploying the Wishbone protocol. This module manages read and write operations, handling the requests and acknowledgments accordingly. The basic functioning involves a system clock (clk) and a reset mechanism (reset).
+
+Input ports include the system clock (clk) which syncs all operations, the reset which resets the system, the request signal (i_req) which flags new read/write requests, operation mode signal (i_write) for read/write mechanisms, write-data (i_wdata), byte enable (i_be), address signal for data storage (i_addr), data acceptance signal (i_accepted), read-data(i_rdata), and read-data validity signal (i_rdata_valid). 
+
+Output ports comprise of output read-data (o_rdata), acknowledgment signal for requests (o_ack), validity signal of output data (o_valid), operation mode signal (o_write), output write-data (o_wdata), byte enable for output operations (o_be), and address of the next write operation (o_addr).
+
+Prominent internal signals include spaces used in buffer (wbuf_used_r), acknowledgment signal (ack_owed_r), array for write data, address and byte enable signals in buffer (wbuf_wdata_r, wbuf_addr_r, wbuf_be_r respectively), read/write operation flag (wbuf_write_r), read/write pointer (wbuf_rp_r, wbuf_wp_r), busy flag for read operation (busy_reading_r), wait signal for read data validity (wait_rdata_valid_r), and flags for write request and data push/pop in buffer (in_wreq, push, pop).
+
+Various sections of the code pertain to different functionalities. Initiation of all the internal signals and their state modifications occur in the `always` blocks. They handle the buffer filling, resetting, acknowledging requests, and data read/write operations. Conditional assignments are used to assign values to the output ports based on the buffer's state. The systematic reset of all modules and functionalities is controlled by the reset mechanism. The module ensures synchronized and correct data read/write operations following the Wishbone protocol.

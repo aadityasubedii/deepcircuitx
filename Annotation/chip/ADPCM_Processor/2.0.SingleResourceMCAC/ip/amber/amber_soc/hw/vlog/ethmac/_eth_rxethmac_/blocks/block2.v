@@ -1,0 +1,1 @@
+assign DribbleRxEndFrm  = StateData[1] &  ~MRxDV & ByteCntGreat2;

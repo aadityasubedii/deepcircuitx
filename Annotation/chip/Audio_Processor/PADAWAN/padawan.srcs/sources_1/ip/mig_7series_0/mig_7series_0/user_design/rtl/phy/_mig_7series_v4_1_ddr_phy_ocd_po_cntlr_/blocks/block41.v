@@ -1,0 +1,1 @@
+  assign stg3 = stg3_r;

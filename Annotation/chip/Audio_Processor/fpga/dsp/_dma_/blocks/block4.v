@@ -1,0 +1,1 @@
+    assign data_out = addr[1] ? { xfer_dat, 16'h0 } : { 16'h0, xfer_dat } ; 

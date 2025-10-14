@@ -1,0 +1,1 @@
+    assign cs_adr = wb_dbus_adr[31:24];

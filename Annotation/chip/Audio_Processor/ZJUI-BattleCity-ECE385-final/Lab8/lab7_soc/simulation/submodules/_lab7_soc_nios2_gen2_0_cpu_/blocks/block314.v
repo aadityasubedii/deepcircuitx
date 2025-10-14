@@ -1,0 +1,1 @@
+  assign ocireg_sstep = writedata[3];

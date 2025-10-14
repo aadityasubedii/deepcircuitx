@@ -1,0 +1,11 @@
+{
+    "line_num": [
+        [
+            29,
+            67
+        ]
+    ],
+    "blocks": [
+        "always @(posedge Sclk)\n    begin\n      if(Clear == 1'b1)\n\tbegin\n\t  count_bit = 6'd40;\n\t  register_piso = 40'd0;\n\t  ready_out = 1'b0;\n\t  frame_flag = 1'b0;\n\t  OutReady = 1'b0;\n\t  SerialOut = 1'b0;\n\tend\n      else if (p2s_en == 1'b1)\n\tbegin\n\t  register_piso = Shift_done;\n\t  ready_out = 1'b1;\n\tend\n      else if (Frame == 1'b1 && ready_out == 1'b1 && frame_flag == 1'b0)\n\tbegin\n\t  count_bit = count_bit - 1'b1;\n\t  SerialOut = register_piso [count_bit];\n\t  frame_flag = 1'b1;\n\t  ready_out = 1'b0;\n\t  OutReady = 1'b1;\n\tend\n      else if (frame_flag == 1'b1)\n\tbegin\n\t  count_bit = count_bit - 1'b1;\n          SerialOut = register_piso [count_bit];\n\t  OutReady = 1'b1;\n\t    if (count_bit == 6'd0)\n\t\tframe_flag = 1'b0;\n\tend\n\t    else\n\t      begin\n\t\tcount_bit = 6'd40;\n\t\tSerialOut = 1'b0;\n\t\tOutReady = 1'b0;\n\t      end\n       end"
+    ]
+}

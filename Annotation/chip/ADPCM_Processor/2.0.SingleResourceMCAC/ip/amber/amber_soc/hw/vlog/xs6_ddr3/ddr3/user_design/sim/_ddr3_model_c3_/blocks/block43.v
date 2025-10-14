@@ -1,0 +1,1 @@
+    always @(negedge dqs_in[22]) dqs_pos_timing_check(22);

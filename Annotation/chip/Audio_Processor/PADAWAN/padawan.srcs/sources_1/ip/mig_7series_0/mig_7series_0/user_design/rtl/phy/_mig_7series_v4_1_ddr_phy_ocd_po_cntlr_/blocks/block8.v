@@ -1,0 +1,1 @@
+  always @(posedge clk) resume_wait_r <= #TCQ resume_wait_ns;

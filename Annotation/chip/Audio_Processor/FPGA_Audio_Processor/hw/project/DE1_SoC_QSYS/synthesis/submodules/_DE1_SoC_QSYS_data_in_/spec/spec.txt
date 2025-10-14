@@ -1,0 +1,11 @@
+Module name: DE1_SoC_QSYS_data_in. 
+
+Module specification: 
+
+DE1_SoC_QSYS_data_in is a data input handling and processing module in Verilog. It primarily functions to process and transfer data inputs into the system for further operations. The module has four input ports, namely 'address', 'clk', 'in_port', and 'reset_n'. 'address' is a 2-bit input used to select a specific part of the incoming data. 'clk' is a clock signal synchronizing data read from the 'readdata' output. 'in_port' is a 16-bit data input port where system data enters. 'reset_n' is a reset signal, which when set to zero, clears the data at 'readdata' output.
+
+The module has one output port called 'readdata', a 32-bit output port. This port presents the selected input data where the lower 16-bits are dictated by 'address' input and the remaining upper 16-bits are zero-padded.
+
+Internally, the module utilizes three signals - 'clk_en', 'data_in', and 'read_mux_out'. 'clk_en' is a clock enable signal that activates clock operations in the module. 'data_in' is a signal representing the retrieved data from 'in_port'. 'read_mux_out' is a signal that processes 'data_in' based on 'address' signal state, managing the data read procedure through 'readdata' output.
+
+The module's operation is divided into three sections. The first section assigns constant values to 'clk_en' and 'data_in'. The second section assigns selected data parts to 'read_mux_out' influenced by the 'address' signal. The final section is a conditional block where, based on the 'clk' and 'reset_n' signals, the 'read_mux_out' data is transferred to the final output 'readdata'. If 'reset_n' is set to zero, then the 'readdata' output is reset. This module, in sum, efficiently manages input data processing and transfer within the given hardware system.

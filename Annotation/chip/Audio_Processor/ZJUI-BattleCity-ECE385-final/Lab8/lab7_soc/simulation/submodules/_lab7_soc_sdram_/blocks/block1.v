@@ -1,0 +1,1 @@
+  assign CODE = &(cmd_all|4'h7) ? 24'h494e48 : txt_code;

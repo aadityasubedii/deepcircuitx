@@ -1,0 +1,1 @@
+  always @(posedge clk) agg_samp_r <= #TCQ agg_samp_ns;

@@ -1,0 +1,1 @@
+assign Random [2] = (RetryCnt > 2) ? x[2] : 1'b0;

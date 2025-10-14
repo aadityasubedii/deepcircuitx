@@ -1,0 +1,10 @@
+  assign h[0] = 0;
+  assign h[1] = -4;
+  assign h[2] = -22;
+  assign h[3] = -50;
+  assign h[4] = 192;
+  assign h[5] = -50;
+  assign h[6] = -22;
+  assign h[7] = -4;
+  assign h[8] = 0;
+  assign Y = y[N2-1]>>H;

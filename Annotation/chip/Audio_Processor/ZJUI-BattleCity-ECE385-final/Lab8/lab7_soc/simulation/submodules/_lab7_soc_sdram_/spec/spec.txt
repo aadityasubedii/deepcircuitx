@@ -1,0 +1,11 @@
+Module name: lab7_soc_sdram and lab7_soc_sdram_input_efifo_module.
+
+Module specification: 
+
+The given Verilog code comprises two modules, "lab7_soc_sdram" and "lab7_soc_sdram_input_efifo_module". 
+
+The "lab7_soc_sdram_input_efifo_module" handles a FIFO queue necessary for interfacing and buffering of data between processes. The input ports of the module include clk (system clock), rd (read signal), reset_n (active low reset signal), wr (write signal), and wr_data (62-bit data written into the FIFO). The outputs include almost_empty, almost_full, empty, full (status flags of FIFO) and rd_data (62-bit FIFO output data). Internally, it employs a collection of registers and decision-logic for maintaining the FIFO structure and controlling data read/write operations.
+
+The "lab7_soc_sdram" module functions as an interface with an SDRAM memory, and manages tasks like refreshing memory, reading and writing data, translating command codes etc. It incorporates the FIFO created by the "lab7_soc_sdram_input_efifo_module" to queue up incoming requests to the SDRAM. The module has standard inputs like clk and reset_n as well as az_addr, az_be_n, az_data, az_rd_n, az_wr_n for control signals. The outputs include zs_addr, zs_ba, zs_cas_n, zs_cke, zs_cs_n, zs_dq, zs_dqm, zs_ras_n, zs_we_n (SDRAM control and address signals) as well as za_data, za_valid, za_waitrequest for the read data, validity of read data, and SDRAM controller readiness. Internally, it contains multiple logic and timing controlling units that handle refresh timings, data reading and writing, initialization, and selection and operations for data read from or written to the SDRAM.
+
+In summary, both modules are components of a system designed for efficient SDRAM interfacing facilitating timing control, state maintenance, and data buffering.

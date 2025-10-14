@@ -1,0 +1,1 @@
+assign HashBit = ByteHash[CrcHash[2:0]];

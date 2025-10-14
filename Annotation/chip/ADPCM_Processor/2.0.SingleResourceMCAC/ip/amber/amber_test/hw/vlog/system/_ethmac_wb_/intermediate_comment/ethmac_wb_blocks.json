@@ -1,0 +1,31 @@
+{
+    "line_num": [
+        [
+            164,
+            169
+        ],
+        [
+            156,
+            161
+        ],
+        [
+            138,
+            155
+        ],
+        [
+            127,
+            132
+        ],
+        [
+            101,
+            125
+        ]
+    ],
+    "blocks": [
+        "assign o_s_wb_ack = i_s_wb_ack;\nassign o_s_wb_err = i_s_wb_err;\nassign o_s_wb_adr = i_s_wb_adr;\nassign o_s_wb_we  = i_s_wb_we ;\nassign o_s_wb_cyc = i_s_wb_cyc;\nassign o_s_wb_stb = i_s_wb_stb;",
+        "else\n    begin : wbs32\n    assign o_s_wb_wdat = i_s_wb_wdat;\n    assign o_s_wb_sel  = i_s_wb_sel;\n    assign o_s_wb_rdat = i_s_wb_rdat;\n    end",
+        "generate\nif (WB_DWIDTH == 128) \n    begin : wbs128\n    assign o_s_wb_wdat = i_s_wb_adr[3:2] == 2'd3 ? i_s_wb_wdat[127:96] :\n                         i_s_wb_adr[3:2] == 2'd2 ? i_s_wb_wdat[ 95:64] :\n                         i_s_wb_adr[3:2] == 2'd1 ? i_s_wb_wdat[ 63:32] :\n                                                   i_s_wb_wdat[ 31: 0] ;\n                                                  \n    assign o_s_wb_sel  = i_s_wb_adr[3:2] == 2'd3 ? i_s_wb_sel[15:12] :\n                         i_s_wb_adr[3:2] == 2'd2 ? i_s_wb_sel[11: 8] :\n                         i_s_wb_adr[3:2] == 2'd1 ? i_s_wb_sel[ 7: 4] :\n                                                   i_s_wb_sel[ 3: 0] ;\n                                                  \n    assign o_s_wb_rdat = i_s_wb_adr[3:2] == 2'd3 ? {       i_s_wb_rdat, 96'd0} :\n                         i_s_wb_adr[3:2] == 2'd2 ? {32'd0, i_s_wb_rdat, 64'd0} :\n                         i_s_wb_adr[3:2] == 2'd1 ? {64'd0, i_s_wb_rdat, 32'd0} :\n                                                   {96'd0, i_s_wb_rdat       } ;\n    end",
+        "assign o_m_wb_ack = i_m_wb_ack;\nassign o_m_wb_err = i_m_wb_err;\nassign o_m_wb_adr = i_m_wb_adr;\nassign o_m_wb_we  = i_m_wb_we ;\nassign o_m_wb_cyc = i_m_wb_cyc;\nassign o_m_wb_stb = i_m_wb_stb;",
+        "generate\nif (WB_DWIDTH == 128) \n    begin : wbm128\n    assign o_m_wb_rdat = i_m_wb_adr[3:2] == 2'd3 ? endian_x32(i_m_wb_rdat[127:96]) :\n                         i_m_wb_adr[3:2] == 2'd2 ? endian_x32(i_m_wb_rdat[ 95:64]) :\n                         i_m_wb_adr[3:2] == 2'd1 ? endian_x32(i_m_wb_rdat[ 63:32]) :\n                                                   endian_x32(i_m_wb_rdat[ 31: 0]) ;\n                                                  \n    assign o_m_wb_sel  = i_m_wb_adr[3:2] == 2'd3 ? {       endian_x4(i_m_wb_sel), 12'd0} :\n                         i_m_wb_adr[3:2] == 2'd2 ? { 4'd0, endian_x4(i_m_wb_sel),  8'd0} :\n                         i_m_wb_adr[3:2] == 2'd1 ? { 8'd0, endian_x4(i_m_wb_sel),  4'd0} :\n                                                   {12'd0, endian_x4(i_m_wb_sel)       } ;\n                                                  \n    assign o_m_wb_wdat = i_m_wb_adr[3:2] == 2'd3 ? {       endian_x32(i_m_wb_wdat), 96'd0} :\n                         i_m_wb_adr[3:2] == 2'd2 ? {32'd0, endian_x32(i_m_wb_wdat), 64'd0} :\n                         i_m_wb_adr[3:2] == 2'd1 ? {64'd0, endian_x32(i_m_wb_wdat), 32'd0} :\n                                                   {96'd0, endian_x32(i_m_wb_wdat)       } ;\n    end \nelse\n    begin : wbm32\n    assign o_m_wb_rdat = endian_x32(i_m_wb_rdat);\n    assign o_m_wb_sel  = endian_x4 (i_m_wb_sel);\n    assign o_m_wb_wdat = endian_x32(i_m_wb_wdat);\n    end\nendgenerate"
+    ]
+}

@@ -1,0 +1,11 @@
+Module name: altera_reset_controller. 
+
+Module specification:
+
+The altera_reset_controller is a FPGA-based module primarily designed to process multiple reset and reset request signals, synchronize them and then generate a solitary, de-bounced and edge-detectable reset signal. It uses 16 reset inputs named 'reset_in[0-15]' and similarly 16 'reset_req_in[0-15]', and a clock signal 'clk'. The output from this module includes 'reset_out', providing the final, processed reset signal, and 'reset_req', indicating whether a reset is requested or not.
+
+The internal signals such as 'merged_reset', 'merged_reset_req_in', 'reset_out_pre', 'reset_req_pre', 'altera_reset_synchronizer_int_chain', 'r_sync_rst_chain', 'r_sync_rst', 'r_early_rst', 'reset_out_pre2' play key roles in merging, synchronizing and buffering the reset and reset request signals.
+
+The code is divided into different blocks or sections to handle different functionalities. The initialization parameters at the beginning of the module allow customization of reset requirements including synchronization depth, wait time, the requirement of reset request signals etc. The block after input, output declarations set the parameters which will be used later in signal processing. Following blocks work on merging all the inputs into single, pre-processing the merged inputs, and then creating the final, post-processed 'reset_out' and 'reset_req'. The final always block contains the logic to form synchronized 'reset_out' and 'reset_req'.
+
+The module ensures proper synchronization and debouncing, and it assists in avoiding system metastability, thus enhancing the reliability and robustness of the rest of the FPGA design.

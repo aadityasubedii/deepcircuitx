@@ -1,0 +1,43 @@
+{
+    "gpt-message": [
+        {
+            "role": "system",
+            "content": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+        },
+        {
+            "role": "user",
+            "content": "Name of the module and its functionality is as follows: \nModule name: i2s_rx. Explanation: This module is implementing an I2S receiver. I2S, short for Inter-IC Sound, is a communication protocol that is used mainly in digital audio applications. The 'i2s_rx' module reads input serial data (SD) and outputs the received data as left and right channel data. The functionality of the module is steered by a clock input (ck) and a sample validity signal (sample). A frame position signal (frame_posn) is also used to select when the left and right channels' data are latched. Parameterization of the number of bits (BITS) and clock cycles (CLOCKS) allows flexibility for different data formats."
+        },
+        {
+            "role": "user",
+            "content": "Input and output ports and their explanation is as follows: \nInput ports: \n1. ck: Explanation: This is the clock input for the module. It controls the rate of operation for the logic within the module.\n2. sample: Explanation: This is the validity signal for the incoming data. If set, the module knows that it should process the data on the 'sd' line.\n3. frame_posn: Explanation: This is the frame position signal. It is used to determine the current position within the I2S frame. Its value is later masked & used to determine when to latch the left and right channel data.\n4. sd: Explanation: This is the serial data input. It is shifted in on the rising edge of the clock when the 'sample' validity signal is high.\n\nOutput ports: \n1. left: Explanation: This output port is for the left channel data which has been received.\n2. right: Explanation: This output port is for the right channel data which has been received.\n\nBoth the 'left' and 'right' output ports are updated at the end of the corresponding I2S frame (EOW_LEFT and EOW_RIGHT) when the frame is valid (signaled by the 'sample' input)."
+        },
+        {
+            "role": "user",
+            "content": "Internal signals and their explanation is as follows: \nInternal signals: shift, EOW_LEFT, EOW_RIGHT, MASK, frame, midpoint.\n\nExplanation: \n\n1. shift: This register is used to accumulate the serial data input (sd). One bit is shifted in on each rising clock edge when the 'sample' signal is high. The latest received data is stored in this variable.\n\n2. EOW_LEFT and EOW_RIGHT: These are wire signals used to identify the frame position corresponding to the end of the word for the left channel (EOW_LEFT) and the right channel (EOW_RIGHT). They are assigned values by masking (using the MASK wire) the sum of the BITS parameter and 1 (for EOW_LEFT), and the sum of the BITS parameter, midpoint, and 1 (for EOW_RIGHT).\n\n3. MASK: This wire signal is used to create masks that decide the structure of the I2S frame, based on the specified number of clock cycles (CLOCKS). When CLOCKS=64, the MASK is \"all ones\", when CLOCKS=32, the MASK has one less bit. The MASK is used in deciding the EOW_LEFT, EOW_RIGHT, and frame signals.\n\n4. frame: This wire signal stores the current frame position (provided by frame_posn input) masked with the MASK signal. It is used to determine when to latch the data into left and right output variables.\n\n5. midpoint: This signal determines the midpoint of the I2S frame, based on the number of clock cycles (CLOCKS). The midpoint value is used to calculate EOW_RIGHT."
+        }
+    ],
+    "claude-message": [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+                },
+                {
+                    "type": "text",
+                    "text": "Name of the module and its functionality is as follows: \nModule name: i2s_rx. Explanation: This module is implementing an I2S receiver. I2S, short for Inter-IC Sound, is a communication protocol that is used mainly in digital audio applications. The 'i2s_rx' module reads input serial data (SD) and outputs the received data as left and right channel data. The functionality of the module is steered by a clock input (ck) and a sample validity signal (sample). A frame position signal (frame_posn) is also used to select when the left and right channels' data are latched. Parameterization of the number of bits (BITS) and clock cycles (CLOCKS) allows flexibility for different data formats."
+                },
+                {
+                    "type": "text",
+                    "text": "Input and output ports and their explanation is as follows: \nInput ports: \n1. ck: Explanation: This is the clock input for the module. It controls the rate of operation for the logic within the module.\n2. sample: Explanation: This is the validity signal for the incoming data. If set, the module knows that it should process the data on the 'sd' line.\n3. frame_posn: Explanation: This is the frame position signal. It is used to determine the current position within the I2S frame. Its value is later masked & used to determine when to latch the left and right channel data.\n4. sd: Explanation: This is the serial data input. It is shifted in on the rising edge of the clock when the 'sample' validity signal is high.\n\nOutput ports: \n1. left: Explanation: This output port is for the left channel data which has been received.\n2. right: Explanation: This output port is for the right channel data which has been received.\n\nBoth the 'left' and 'right' output ports are updated at the end of the corresponding I2S frame (EOW_LEFT and EOW_RIGHT) when the frame is valid (signaled by the 'sample' input)."
+                },
+                {
+                    "type": "text",
+                    "text": "Internal signals and their explanation is as follows: \nInternal signals: shift, EOW_LEFT, EOW_RIGHT, MASK, frame, midpoint.\n\nExplanation: \n\n1. shift: This register is used to accumulate the serial data input (sd). One bit is shifted in on each rising clock edge when the 'sample' signal is high. The latest received data is stored in this variable.\n\n2. EOW_LEFT and EOW_RIGHT: These are wire signals used to identify the frame position corresponding to the end of the word for the left channel (EOW_LEFT) and the right channel (EOW_RIGHT). They are assigned values by masking (using the MASK wire) the sum of the BITS parameter and 1 (for EOW_LEFT), and the sum of the BITS parameter, midpoint, and 1 (for EOW_RIGHT).\n\n3. MASK: This wire signal is used to create masks that decide the structure of the I2S frame, based on the specified number of clock cycles (CLOCKS). When CLOCKS=64, the MASK is \"all ones\", when CLOCKS=32, the MASK has one less bit. The MASK is used in deciding the EOW_LEFT, EOW_RIGHT, and frame signals.\n\n4. frame: This wire signal stores the current frame position (provided by frame_posn input) masked with the MASK signal. It is used to determine when to latch the data into left and right output variables.\n\n5. midpoint: This signal determines the midpoint of the I2S frame, based on the number of clock cycles (CLOCKS). The midpoint value is used to calculate EOW_RIGHT."
+                }
+            ]
+        }
+    ]
+}

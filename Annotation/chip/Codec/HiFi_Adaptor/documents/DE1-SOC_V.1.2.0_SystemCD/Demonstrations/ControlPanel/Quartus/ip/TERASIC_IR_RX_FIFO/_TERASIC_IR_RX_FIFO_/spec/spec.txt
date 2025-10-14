@@ -1,0 +1,36 @@
+**Module name:** TERASIC_IR_RX_FIFO. 
+
+**Module specification:** The TERASIC_IR_RX_FIFO is a Verilog module designed to receive infrared (IR) signals and manage them through an internal FIFO buffer. This module captures data from an IR receiver and utilizes a FIFO to store the data, generating interrupts when the data is ready and managing data communication with a processor. 
+
+**Input ports** include: 
+- **s_address** (selects internal registers for read/write operations), 
+- **clk** (clock signal for synchronization), 
+- **reset_n** (active-low reset signal), 
+- **s_cs_n** (active-low chip select), 
+- **s_read** (triggers data read operations), 
+- **s_writedata** (data bus for incoming write data), 
+- **s_write** (activates write operations), 
+- **ir** (infrared data input signal).
+
+**Output ports** include:
+- **irq** (interrupt request signal),
+- **s_readdata** (data bus that outputs the data being read).
+
+**Internal signals** utilized are:
+- **fifo_clear** (controls the clearing of the FIFO),
+- **use_dw** (indicates the number of words stored in the FIFO),
+- **writedata** (data intended to be written into the FIFO), 
+- **readdata** (data retrieved from the FIFO),
+- **data_ready** (status signal indicating the availability of new data),
+- **pre_data_ready** (stores the previous value of data_ready for edge detection),
+- **write** (triggers FIFO write operations), 
+- **read** (activates FIFO data read operations).
+
+**Code sections include:**
+1. **Edge Detection logic:** Updates pre_data_ready and manages interrupt signaling based on data availability.
+2. **FIFO Control logic:** Manages fifo_clear signal based on s_write and resets.
+3. **Data Read and Write control:** Manages data movement to and from FIFO via read and write signals using register address checks.
+4. **Instance of ir_fifo:** Manages the FIFO operations including data writing and reading.
+5. **Instance of IRDA_RECEIVE_Terasic:** Manages IR data reception and sets status signals accordingly.
+
+The module essentially captures, processes, and manages the flow of data from an infrared source, interfacing efficiently with system processors by utilizing interrupts and providing controlled read and write access through its dedicated FIFO system.

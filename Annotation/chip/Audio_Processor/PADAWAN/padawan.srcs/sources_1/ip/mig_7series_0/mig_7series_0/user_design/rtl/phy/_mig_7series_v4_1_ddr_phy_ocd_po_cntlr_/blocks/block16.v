@@ -1,0 +1,1 @@
+  always @(posedge clk) ninety_offsets_final_r <= #TCQ ninety_offsets_final_ns;

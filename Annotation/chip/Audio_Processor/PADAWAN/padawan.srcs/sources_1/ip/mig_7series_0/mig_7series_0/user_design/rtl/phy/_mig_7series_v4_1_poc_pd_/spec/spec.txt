@@ -1,0 +1,9 @@
+Module name: mig_7series_v4_1_poc_pd. 
+
+Module specification: The mig_7series_v4_1_poc_pd is a Verilog module primarily used for managing phase detection and output sampling in digital signal processing or communication interfaces. It makes use of IDDR to handle double data rate inputs, with sensitivity on both clock signal edges. Besides, the module offers a feature of sampling at a positive edge of primary clock (clk) with a delay defined by the TCQ parameter. Control flow capabilities for simulation or metastable conditions via 'generate' are also included.
+
+The module has four input ports and one output port. The input ports include: 'iddr_rst', a reset signal for the IDDR block; 'clk', the main clock signal for the module; 'kclk', the secondary clock serving as the data input to the IDDR block; and 'mmcm_ps_clk', a clock used for phase detector sampling within IDDR block. The sole output port 'pd_out' represents the final output produced by module's process, essentially the sampled value at clk positive edge.
+
+Internally, the module makes use of several signals for correct operation. These include 'q1', the signal output from IDDR block; 'pos_edge_samp', a register signal recording the sampled value of 'q1' at clk positive edge; 'q1_delayed', a register used solely in the simulation/metastable variant of the module operation; 'rising_clk_seen', a signal used to detect a rising edge on 'mmcm_ps_clk'; and 'pd_out_r', a register used to delay the output by the TCQ parameter.
+
+Overall, the internal workings of the module can be categorised into sections: the initial IDDR block handling double data rate and phase detection; 'generate' control flow branches covering normal and metastable or simulation conditions; and finally, the clocking and production of the output 'pd_out'. This structure supports the module's effective handling of phase detection and output sampling in various operating conditions.

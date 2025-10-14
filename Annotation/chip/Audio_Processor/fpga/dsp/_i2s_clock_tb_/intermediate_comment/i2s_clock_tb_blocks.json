@@ -1,0 +1,21 @@
+{
+    "line_num": [
+        [
+            62,
+            111
+        ],
+        [
+            15,
+            15
+        ],
+        [
+            8,
+            11
+        ]
+    ],
+    "blocks": [
+        "    initial begin\n\n        $display(\"start i2s tests\");\n\n        wait(!rst);\n\n        \n        wait(ws);\n        wait(!ws);\n        wait(ws);\n        wait(!ws);\n\n        \n        ext_rst <= 1;\n        for (i = 0; i < 30; i = i + 1) begin\n            @(posedge sck);\n        end\n\n        \n        ext_rst <= 0;\n        tb_assert(!external);\n\n        \n        for (i = 0; i < 6; i = i + 1) begin\n            wait(ws);\n            wait(!ws);\n        end\n\n        tb_assert(external);\n\n        \n        for (i = 0; i < 6; i = i + 1) begin\n            wait(ws);\n            wait(!ws);\n        end\n\n        \n        ext_rst <= 1;\n\n        \n        wait(ws);\n        wait(!ws);\n        wait(ws);\n        wait(!ws);\n\n        tb_assert(!external);\n\n        $display(\"done\");\n        $finish;\n    end",
+        "    always #42 ck <= !ck;",
+        "    initial begin\n        $dumpfile(\"dsp.vcd\");\n        $dumpvars(0, tb);\n    end"
+    ]
+}

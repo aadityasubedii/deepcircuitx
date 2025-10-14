@@ -1,0 +1,23 @@
+Module name: audio_codec. 
+
+Module specification: The 'audio_codec' module serves as a coder-decoder for digital audio systems, specifically interacting with the left and right audio channels. The fundamental function of this module is to manage and control audio data transmissions (incoming and outgoing) in a digital audio system. 
+
+Audio_codec takes in the following input ports: 
+1. CLOCK_50 - the primary clock signal.
+2. reset - system reset signal for initialization.
+3. read_s and write_s - enable signals controlling read and write operations, respectively.
+4. writedata_left and writedata_right - 24-bit data inputs for the left and right channels, respectively.
+5. AUD_ADCDAT - audio data input from the ADC.
+6. AUD_BCLK - bit clock for incoming audio.
+7. AUD_ADCLRCK and AUD_DACLRCK - clock signals for left and right channels of the ADC and DAC, respectively.
+
+The following output ports can be observed:
+1. read_ready and write_ready - indicators for when the system is prepared for reading or writing operations.
+2. readdata_left and readdata_right - 24 bit data outputs for left and right channels, respectively.
+3. AUD_DACDAT - this is the audio data output for the DAC.
+
+Internally, the module utilises various signals to manage operations and transitions of data across the audio channels. Significant among them are bclk_rising_edge, bclk_falling_edge, adc_lrclk_rising_edge, adc_lrclk_falling_edge, new_left_channel_audio, new_right_channel_audio, left_channel_read_available, right_channel_read_available, dac_lrclk_rising_edge, dac_lrclk_falling_edge, left_channel_write_space, right_channel_write_space, done_adc_channel_sync, and done_dac_channel_sync. These signals function collaboratively to manage rising edge detection, falling edge detection, data availability, write space availability, and synchronization of channels.
+
+The Verilog code itself is divided into several distinct blocks, each addressing a specific function of the audio_codec module. It includes channel synchronization mechanisms, a bit clock edge detector (Altera_UP_Clock_Edge), incoming data deserializer (Altera_UP_Audio_In_Deserializer), outgoing data serializer (Altera_UP_Audio_Out_Serializer), and various other condition checks and assignments.
+
+The module 'audio_codec' demonstrates an intricate design that serves as a key component in a digital audio system, effectively managing and controlling data flow across left and right audio channels.

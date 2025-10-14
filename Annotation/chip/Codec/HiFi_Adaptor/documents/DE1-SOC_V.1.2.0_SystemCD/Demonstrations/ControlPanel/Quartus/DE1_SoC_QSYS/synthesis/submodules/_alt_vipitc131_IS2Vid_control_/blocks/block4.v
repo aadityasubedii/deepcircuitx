@@ -1,0 +1,1 @@
+        assign write_trigger_ack = 1'b0;

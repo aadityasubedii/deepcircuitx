@@ -1,0 +1,1 @@
+  assign E_shift_rot_cnt_nxt = E_new_inst ? E_shift_rot_shfcnt : E_shift_rot_cnt-1;

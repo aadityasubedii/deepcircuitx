@@ -1,0 +1,1 @@
+  always @(posedge clk) order_q_r <= #TCQ order_q_ns;

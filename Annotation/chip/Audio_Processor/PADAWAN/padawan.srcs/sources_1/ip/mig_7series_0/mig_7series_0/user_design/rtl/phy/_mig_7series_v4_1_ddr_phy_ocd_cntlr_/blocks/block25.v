@@ -1,0 +1,1 @@
+  always @(posedge clk) ocd_prech_req_r <= #TCQ ocd_prech_req_ns;

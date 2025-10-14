@@ -1,0 +1,1 @@
+        assign depth32 = DEPTH;

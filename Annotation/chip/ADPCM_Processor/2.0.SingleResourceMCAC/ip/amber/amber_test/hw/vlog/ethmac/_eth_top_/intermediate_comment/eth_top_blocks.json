@@ -1,0 +1,121 @@
+{
+    "line_num": [
+        [
+            941,
+            941
+        ],
+        [
+            868,
+            880
+        ],
+        [
+            853,
+            866
+        ],
+        [
+            843,
+            851
+        ],
+        [
+            826,
+            832
+        ],
+        [
+            809,
+            823
+        ],
+        [
+            797,
+            803
+        ],
+        [
+            789,
+            795
+        ],
+        [
+            781,
+            787
+        ],
+        [
+            773,
+            779
+        ],
+        [
+            761,
+            768
+        ],
+        [
+            756,
+            756
+        ],
+        [
+            749,
+            753
+        ],
+        [
+            744,
+            744
+        ],
+        [
+            724,
+            740
+        ],
+        [
+            720,
+            720
+        ],
+        [
+            706,
+            718
+        ],
+        [
+            689,
+            702
+        ],
+        [
+            655,
+            670
+        ],
+        [
+            650,
+            650
+        ],
+        [
+            647,
+            647
+        ],
+        [
+            645,
+            645
+        ],
+        [
+            526,
+            540
+        ]
+    ],
+    "blocks": [
+        "assign m_wb_adr_o = {m_wb_adr_tmp, 2'h0};",
+        "always @ (posedge mrx_clk_pad_i or posedge wb_rst_i)\nbegin\n  if(wb_rst_i)\n    begin\n      RxAbortRst_sync1 <= #Tp 1'b0;\n      RxAbortRst       <= #Tp 1'b0;\n    end\n  else\n    begin\n      RxAbortRst_sync1 <= #Tp RxAbort_wb;\n      RxAbortRst       <= #Tp RxAbortRst_sync1;\n    end\nend",
+        "always @ (posedge wb_clk_i or posedge wb_rst_i)\nbegin\n  if(wb_rst_i)\n    begin\n      RxAbort_sync1 <= #Tp 1'b0;\n      RxAbort_wb    <= #Tp 1'b0;\n      RxAbort_wb    <= #Tp 1'b0;\n    end\n  else\n    begin\n      RxAbort_sync1 <= #Tp RxAbort_latch;\n      RxAbort_wb    <= #Tp RxAbort_sync1;\n    end\nend",
+        "always @ (posedge mrx_clk_pad_i or posedge wb_rst_i)\nbegin\n  if(wb_rst_i)\n    RxAbort_latch <= #Tp 1'b0;\n  else if(RxAbort | (ShortFrame & ~r_RecSmall) | LatchedMRxErr & ~InvalidSymbol | (ReceivedPauseFrm & (~r_PassAll)))\n    RxAbort_latch <= #Tp 1'b1;\n  else if(RxAbortRst)\n    RxAbort_latch <= #Tp 1'b0;\nend",
+        "always @ (posedge mtx_clk_pad_i or posedge wb_rst_i)\nbegin\n  if(wb_rst_i)\n    TPauseRq <= #Tp 1'b0;\n  else\n    TPauseRq <= #Tp TxPauseRq_sync2 & (~TxPauseRq_sync3);\nend",
+        "always @ (posedge mtx_clk_pad_i or posedge wb_rst_i)\nbegin\n  if(wb_rst_i)\n    begin\n      TxPauseRq_sync1 <= #Tp 1'b0;\n      TxPauseRq_sync2 <= #Tp 1'b0;\n      TxPauseRq_sync3 <= #Tp 1'b0;\n    end\n  else\n    begin\n      TxPauseRq_sync1 <= #Tp (r_TxPauseRq & r_TxFlow);\n      TxPauseRq_sync2 <= #Tp TxPauseRq_sync1;\n      TxPauseRq_sync3 <= #Tp TxPauseRq_sync2;\n    end\nend",
+        "always @ (posedge wb_clk_i or posedge wb_rst_i)\nbegin\n  if(wb_rst_i)\n    RstTxPauseRq <= 1'b0;\n  else\n    RstTxPauseRq <=#Tp WillSendControlFrame_sync2 & ~WillSendControlFrame_sync3;\nend",
+        "always @ (posedge wb_clk_i or posedge wb_rst_i)\nbegin\n  if(wb_rst_i)\n    WillSendControlFrame_sync3 <= 1'b0;\n  else\n    WillSendControlFrame_sync3 <=#Tp WillSendControlFrame_sync2;\nend",
+        "always @ (posedge wb_clk_i or posedge wb_rst_i)\nbegin\n  if(wb_rst_i)\n    WillSendControlFrame_sync2 <= 1'b0;\n  else\n    WillSendControlFrame_sync2 <=#Tp WillSendControlFrame_sync1;\nend",
+        "always @ (posedge wb_clk_i or posedge wb_rst_i)\nbegin\n  if(wb_rst_i)\n    WillSendControlFrame_sync1 <= 1'b0;\n  else\n    WillSendControlFrame_sync1 <=#Tp WillSendControlFrame;\nend",
+        "always @ (posedge mrx_clk_pad_i or posedge wb_rst_i)\nbegin\n  if(wb_rst_i)\n    RxEnSync <= #Tp 1'b0;\n  else\n  if(~mrxdv_pad_i)\n    RxEnSync <= #Tp r_RxEn;\nend ",
+        "assign Transmitting = ~r_FullD & WillTransmit_q2;",
+        "always @ (posedge mrx_clk_pad_i)\nbegin\n  WillTransmit_q <= #Tp WillTransmit;\n  WillTransmit_q2 <= #Tp WillTransmit_q;\nend ",
+        "assign Collision = ~r_FullD & Collision_Tx2;",
+        "always @ (posedge mtx_clk_pad_i or posedge wb_rst_i)\nbegin\n  if(wb_rst_i)\n    begin\n      Collision_Tx1 <= #Tp 1'b0;\n      Collision_Tx2 <= #Tp 1'b0;\n    end\n  else\n    begin\n      Collision_Tx1 <= #Tp mcoll_pad_i;\n      if(ResetCollision)\n        Collision_Tx2 <= #Tp 1'b0;\n      else\n      if(Collision_Tx1)\n        Collision_Tx2 <= #Tp 1'b1;\n    end\nend",
+        "assign TxCarrierSense = ~r_FullD & CarrierSense_Tx2;",
+        "always @ (posedge mtx_clk_pad_i or posedge wb_rst_i)\nbegin\n  if(wb_rst_i)\n    begin\n      CarrierSense_Tx1 <= #Tp 1'b0;\n      CarrierSense_Tx2 <= #Tp 1'b0;\n    end\n  else\n    begin\n      CarrierSense_Tx1 <= #Tp mcrs_pad_i;\n      CarrierSense_Tx2 <= #Tp CarrierSense_Tx1;\n    end\nend",
+        "eth_rxethmac rxethmac1\n(\n  .MRxClk(mrx_clk_pad_i),               .MRxDV(MRxDV_Lb),                     .MRxD(MRxD_Lb),\n  .Transmitting(Transmitting),          .HugEn(r_HugEn),                      .DlyCrcEn(r_DlyCrcEn), \n  .MaxFL(r_MaxFL),                      .r_IFG(r_IFG),                        .Reset(wb_rst_i),\n  .RxData(RxData),                      .RxValid(RxValid),                    .RxStartFrm(RxStartFrm), \n  .RxEndFrm(RxEndFrm),                  .ByteCnt(RxByteCnt), \n  .ByteCntEq0(RxByteCntEq0),            .ByteCntGreat2(RxByteCntGreat2),      .ByteCntMaxFrame(RxByteCntMaxFrame), \n  .CrcError(RxCrcError),                .StateIdle(RxStateIdle),              .StatePreamble(RxStatePreamble), \n  .StateSFD(RxStateSFD),                .StateData(RxStateData),\n  .MAC(r_MAC),                          .r_Pro(r_Pro),                        .r_Bro(r_Bro),\n  .r_HASH0(r_HASH0),                    .r_HASH1(r_HASH1),                    .RxAbort(RxAbort), \n  .AddressMiss(AddressMiss),            .PassAll(r_PassAll),                  .ControlFrmAddressOK(ControlFrmAddressOK)\n);",
+        "eth_txethmac txethmac1\n(\n  .MTxClk(mtx_clk_pad_i),             .Reset(wb_rst_i),                   .CarrierSense(TxCarrierSense), \n  .Collision(Collision),              .TxData(TxDataOut),                 .TxStartFrm(TxStartFrmOut), \n  .TxUnderRun(TxUnderRun),            .TxEndFrm(TxEndFrmOut),             .Pad(PadOut),  \n  .MinFL(r_MinFL),                    .CrcEn(CrcEnOut),                   .FullD(r_FullD), \n  .HugEn(r_HugEn),                    .DlyCrcEn(r_DlyCrcEn),              .IPGT(r_IPGT), \n  .IPGR1(r_IPGR1),                    .IPGR2(r_IPGR2),                    .CollValid(r_CollValid), \n  .MaxRet(r_MaxRet),                  .NoBckof(r_NoBckof),                .ExDfrEn(r_ExDfrEn), \n  .MaxFL(r_MaxFL),                    .MTxEn(mtxen_pad_o),                .MTxD(mtxd_pad_o), \n  .MTxErr(mtxerr_pad_o),              .TxUsedData(TxUsedDataIn),          .TxDone(TxDoneIn), \n  .TxRetry(TxRetry),                  .TxAbort(TxAbortIn),                .WillTransmit(WillTransmit), \n  .ResetCollision(ResetCollision),    .RetryCnt(RetryCnt),                .StartTxDone(StartTxDone), \n  .StartTxAbort(StartTxAbort),        .MaxCollisionOccured(MaxCollisionOccured), .LateCollision(LateCollision),   \n  .DeferIndication(DeferIndication),  .StatePreamble(StatePreamble),      .StateData(StateData)   \n);",
+        "assign MRxD_Lb[3:0] = r_LoopBck? mtxd_pad_o[3:0] : mrxd_pad_i[3:0];",
+        "assign MRxErr_Lb = r_LoopBck? mtxerr_pad_o : mrxerr_pad_i & RxEnSync;",
+        "",
+        "  always @ (posedge wb_clk_i or posedge wb_rst_i)\n  begin\n    if(wb_rst_i)\n      begin\n        temp_wb_ack_o_reg <=#Tp 1'b0;\n        temp_wb_dat_o_reg <=#Tp 32'h0;\n        temp_wb_err_o_reg <=#Tp 1'b0;\n      end\n    else\n      begin\n        temp_wb_ack_o_reg <=#Tp temp_wb_ack_o & ~temp_wb_ack_o_reg;\n        temp_wb_dat_o_reg <=#Tp temp_wb_dat_o;\n        temp_wb_err_o_reg <=#Tp temp_wb_err_o & ~temp_wb_err_o_reg;\n      end\n  end"
+    ]
+}

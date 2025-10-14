@@ -1,0 +1,1 @@
+assign write_data  = i_wb_dat;

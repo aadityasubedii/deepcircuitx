@@ -1,0 +1,31 @@
+{
+    "line_num": [
+        [
+            82,
+            83
+        ],
+        [
+            64,
+            80
+        ],
+        [
+            49,
+            57
+        ],
+        [
+            41,
+            41
+        ],
+        [
+            25,
+            39
+        ]
+    ],
+    "blocks": [
+        "    assign level = bits;\n    assign ready = !busy;",
+        "    always @(posedge ck) begin\n        if (en) begin\n            shift <= in;\n            bits <= 0;\n            busy <= 1;\n        end \n\n        if (busy && !en) begin\n            if (shift[IN_W-1] != shift[IN_W-2]) begin\n                \n                busy <= 0;\n            end else begin\n                bits <= bits + 1;\n                shift <= { shift[IN_W-1], shift[IN_W-2:0], !shift[IN_W-1] };\n            end\n        end\n    end",
+        "module level \n#(parameter IN_W=24, BITS = $clog2(IN_W))\n(\n    input wire ck,\n    input wire en,\n    input wire [IN_W-1:0] in,\n    output wire [BITS-1:0] level,\n    output wire ready\n);",
+        "    assign out = max;",
+        "    always @(posedge ck) begin\n\n        if (rst) begin\n            max <= 0;\n        end\n\n        if (peak_en & (uint >= max)) begin\n            max <= uint;\n        end \n\n        if (decay_en & (max > 0)) begin\n            max <= max - 1;\n        end\n\n    end"
+    ]
+}

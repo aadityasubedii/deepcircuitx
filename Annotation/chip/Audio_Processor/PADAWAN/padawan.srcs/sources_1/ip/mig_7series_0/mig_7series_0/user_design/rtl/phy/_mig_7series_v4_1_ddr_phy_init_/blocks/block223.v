@@ -1,0 +1,1 @@
+  assign calib_rank_cnt = chip_cnt_r;

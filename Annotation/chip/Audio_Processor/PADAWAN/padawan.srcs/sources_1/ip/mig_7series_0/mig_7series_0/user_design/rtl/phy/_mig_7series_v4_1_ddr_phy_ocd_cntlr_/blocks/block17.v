@@ -1,0 +1,1 @@
+  always @(posedge clk) prde_r1 <= #TCQ phy_rddata_en;

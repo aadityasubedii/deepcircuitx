@@ -1,0 +1,1 @@
+assign reset_total_f0 = reset_total_sample | (update_total_line_f1 & total_line_count_f1[0]);

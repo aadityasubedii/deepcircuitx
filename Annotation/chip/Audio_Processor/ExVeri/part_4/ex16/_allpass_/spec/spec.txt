@@ -1,0 +1,11 @@
+Module name: Processor.
+
+Module specification: The 'Processor' module acts as a digital signal processor for compensating the ADC and DAC offsets in a signal. It has two inputs, 'sysclk' and 'data_in', and one output 'data_out'. 'sysclk' is the system clock input, providing the clock signal required for synchronizing operations, and 'data_in' is a 10-bit wide digital input data that the module processes.
+
+The output 'data_out' is a 10-bit wide digital data that carries the processed and adjusted value from the module.
+
+The module uses internal signals 'sysclk', 'data_in', 'data_out', 'x', and 'y'. 'sysclk' orchestrates the synchronous operations, while 'data_in' and 'data_out' are instrumental for data transfer.
+
+'x' is an internal signal that stores the result of subtracting the 'ADC_OFFSET' from 'data_in', and 'y' subsequently carries the value of 'x' for additional processing.
+
+The module's primary functions are split across multiple blocks. The 'assign' block is responsible for performing arithmetic operations on the input data to adjust the ADC and DAC offsets, consequently storing them in 'x' and 'y'. Following this, there's an 'always' block which, at every positive edge of the system clock 'sysclk', adds 'y' to the 'DAC_OFFSET', and updates 'data_out'. This continues in a cycle and results in an offset-adjusted processed signal at 'data_out'.

@@ -1,0 +1,1 @@
+  assign R_ctrl_jmp_direct_nxt = D_ctrl_jmp_direct;

@@ -1,0 +1,1 @@
+OBUFT iob_ras (.O(mcbx_dram_ras_n),.I(ioi_ras),.T(t_ras));

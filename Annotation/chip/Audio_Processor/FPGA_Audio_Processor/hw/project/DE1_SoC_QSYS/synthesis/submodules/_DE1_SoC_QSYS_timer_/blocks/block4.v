@@ -1,0 +1,1 @@
+  assign snap_read_value = counter_snapshot;

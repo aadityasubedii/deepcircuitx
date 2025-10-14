@@ -1,0 +1,9 @@
+  assign h[0] = -1;
+  assign h[1] = 5;
+  assign h[2] = 39;
+  assign h[3] = 86;
+  assign h[4] = 86;
+  assign h[5] = 39;
+  assign h[6] = 5;
+  assign h[7] = -1;
+  assign Y = y[N-1]>>H;

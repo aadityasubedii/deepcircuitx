@@ -1,0 +1,1 @@
+    end else if (nSLOTS == 2) begin: gen_dual_slot_odt

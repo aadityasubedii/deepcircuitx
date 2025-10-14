@@ -1,0 +1,1 @@
+assign registers_write = {NO_REGISTERS{1'b0}};

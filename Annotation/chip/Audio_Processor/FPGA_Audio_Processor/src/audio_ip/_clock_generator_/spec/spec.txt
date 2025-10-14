@@ -1,0 +1,19 @@
+Module name: clock_generator. 
+
+Module specification: The 'clock_generator' module is a digital circuit designed to generate a clock signal for an audio system. It employs an altpll (Phase Locked Loop) function to adjust and stabilize the frequency of the clock signal. It includes two parameters, 'AUD_CLK_DIV' and 'AUD_CLK_MULT', for adjusting the clock's frequency.
+
+Input Ports:
+1. `CLOCK_27`: A 1-bit clock input to the module that serves as the source clock for the Phase-Locked Loop (PLL). It provides the reference frequency for the PLL.
+2. `reset`: A signal used to reset the PLL, bringing it back to a known state, hence restarting the frequency stabilization process.
+
+Output Ports:
+1. `AUD_XCK`: The output port of the module that provides the adjusted clock signal for the audio system.
+2. `audio_clk_locked`: An output indicating whether the PLL has achieved lock status.
+
+Internal Signals:
+1. `audio_clk_locked`: An internal signal indicating whether the PLL has achieved lock status. It acts as a control parameter for other system functionalities that depend on the status of the PLL lock.
+
+Overview of Blocks/Sections:
+The 'altpll' function component termed 'DE_Clock_Generator_Audio' lies at the core of this module. It consumes the reference clock and reset signals (`CLOCK_27`, `reset`), uses various control parameters, and provides the required clock output (`AUD_XCK`) and a lock status (`audio_clk_locked`). The `defparam` section defines various operational parameters for the PLL. It outlines the PLL parameters like clock divide value, clock multiplier value, duty cycle, the operational mode of the PLL, and the port usage data. 
+
+In summary, the 'clock_generator' module is designed to produce a clock signal that is stable and has a derived frequency, based on the provided clock input and control parameters. This is achieved using a PLL mechanism. The module's state can be reset using a reset signal, and the status of the PLL lock can be observed from a designated output signal.

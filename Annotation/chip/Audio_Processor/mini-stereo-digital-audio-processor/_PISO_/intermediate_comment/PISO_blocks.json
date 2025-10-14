@@ -1,0 +1,11 @@
+{
+    "line_num": [
+        [
+            10,
+            48
+        ]
+    ],
+    "blocks": [
+        "\talways @(posedge Sclk)\n\tbegin\n\t\tif(Clear == 1'b1)\n\t\tbegin\n\t\t\tcount_bit = 6'd40;\n\t\t\tregister_piso = 40'd0;\n\t\t\tready_out = 1'b0;\n\t\t\tframe_flag = 1'b0;\n\t\t\tOutReady = 1'b0;\n\t\t\tSerialOut = 1'b0;\n\t\tend\n\t\telse if (p2s_en == 1'b1)\n\t\tbegin\n\t\t\tregister_piso = Shift_done;\n\t\t\tready_out = 1'b1;\n\t\tend\n\t\telse if (Frame == 1'b1 && ready_out == 1'b1 && frame_flag == 1'b0)\n\t\tbegin\n\t\t\tcount_bit = count_bit - 1'b1;\n\t\t\tSerialOut = register_piso [count_bit];\n\t\t\tframe_flag = 1'b1;\n\t\t\tready_out = 1'b0;\n\t\t\tOutReady = 1'b1;\n\t\tend\n\t\telse if (frame_flag == 1'b1)\n\t\tbegin\n\t\t\tcount_bit = count_bit - 1'b1;\n\t\t\tSerialOut = register_piso [count_bit];\n\t\t\tOutReady = 1'b1;\n\t\t\tif (count_bit == 6'd0)\n\t\t\t\tframe_flag = 1'b0;\n\t\tend\n\t\telse\n\t\tbegin\n\t\t\tcount_bit = 6'd40;\n\t\t\tSerialOut = 1'b0;\n\t\t\tOutReady = 1'b0;\n\t\tend\n\tend"
+    ]
+}

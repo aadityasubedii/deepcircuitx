@@ -1,0 +1,1 @@
+assign int_ready = int_ready_reg & enable_synced;

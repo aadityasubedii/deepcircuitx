@@ -1,0 +1,71 @@
+{
+    "line_num": [
+        [
+            203,
+            216
+        ],
+        [
+            196,
+            196
+        ],
+        [
+            189,
+            196
+        ],
+        [
+            185,
+            185
+        ],
+        [
+            178,
+            185
+        ],
+        [
+            174,
+            174
+        ],
+        [
+            167,
+            174
+        ],
+        [
+            164,
+            164
+        ],
+        [
+            159,
+            164
+        ],
+        [
+            156,
+            198
+        ],
+        [
+            154,
+            154
+        ],
+        [
+            131,
+            149
+        ],
+        [
+            96,
+            125
+        ]
+    ],
+    "blocks": [
+        "    function integer log2ceil;\n        input integer val;\n        integer i;\n\n        begin\n            i = 1;\n            log2ceil = 0;\n\n            while (i < val) begin\n                log2ceil = log2ceil + 1;\n                i = i << 1;\n            end\n        end\n    endfunction",
+        "            assign out_error = 1'b0;",
+        "        if (USE_ERROR) begin\n            assign out_error = out_payload[\n              DATA_WIDTH + PACKET_WIDTH + PCHANNEL_W + EMPTY_WIDTH + PERROR_W - 1 : \n              DATA_WIDTH + PACKET_WIDTH + PCHANNEL_W + EMPTY_WIDTH\n            ];\n        end else begin\n            \n            assign out_error = 1'b0;",
+        "            assign out_empty = 1'b0;",
+        "        if (EMPTY_WIDTH) begin\n            assign out_empty = out_payload[\n              DATA_WIDTH + PACKET_WIDTH + PCHANNEL_W + EMPTY_WIDTH - 1 : \n              DATA_WIDTH + PACKET_WIDTH + PCHANNEL_W\n            ];\n        end else begin\n            \n            assign out_empty = 1'b0;",
+        "            assign out_channel = 1'b0;",
+        "        if (USE_CHANNEL) begin\n            assign out_channel = out_payload[\n              DATA_WIDTH + PACKET_WIDTH + PCHANNEL_W - 1 : \n              DATA_WIDTH + PACKET_WIDTH\n            ];\n        end else begin\n            \n            assign out_channel = 1'b0;",
+        "        end",
+        "            assign {out_startofpacket, out_endofpacket} = \n                out_payload[DATA_WIDTH + PACKET_WIDTH - 1 : DATA_WIDTH];\n        end else begin\n            \n            assign {out_startofpacket, out_endofpacket} = 2'b0;\n        end",
+        "    generate\n        \n        if (USE_PACKETS) begin\n            assign {out_startofpacket, out_endofpacket} = \n                out_payload[DATA_WIDTH + PACKET_WIDTH - 1 : DATA_WIDTH];\n        end else begin\n            \n            assign {out_startofpacket, out_endofpacket} = 2'b0;\n        end\n   \n        \n        if (USE_CHANNEL) begin\n            assign out_channel = out_payload[\n              DATA_WIDTH + PACKET_WIDTH + PCHANNEL_W - 1 : \n              DATA_WIDTH + PACKET_WIDTH\n            ];\n        end else begin\n            \n            assign out_channel = 1'b0;\n        end\n\n        \n        if (EMPTY_WIDTH) begin\n            assign out_empty = out_payload[\n              DATA_WIDTH + PACKET_WIDTH + PCHANNEL_W + EMPTY_WIDTH - 1 : \n              DATA_WIDTH + PACKET_WIDTH + PCHANNEL_W\n            ];\n        end else begin\n            \n            assign out_empty = 1'b0;\n        end\n\n        \n        if (USE_ERROR) begin\n            assign out_error = out_payload[\n              DATA_WIDTH + PACKET_WIDTH + PCHANNEL_W + EMPTY_WIDTH + PERROR_W - 1 : \n              DATA_WIDTH + PACKET_WIDTH + PCHANNEL_W + EMPTY_WIDTH\n            ];\n        end else begin\n            \n            assign out_error = 1'b0;\n        end\n    endgenerate",
+        "    assign out_data = out_payload[DATA_WIDTH - 1 : 0];",
+        "    altera_avalon_st_clock_crosser\n    #(\n        .SYMBOLS_PER_BEAT    (1),\n        .BITS_PER_SYMBOL     (PAYLOAD_WIDTH),\n        .FORWARD_SYNC_DEPTH  (VALID_SYNC_DEPTH),\n        .BACKWARD_SYNC_DEPTH (READY_SYNC_DEPTH),\n        .USE_OUTPUT_PIPELINE (USE_OUTPUT_PIPELINE)\n    ) clock_xer (\n        .in_clk    (in_clk      ),\n        .in_reset  (in_reset    ),\n        .in_ready  (in_ready    ),\n        .in_valid  (in_valid    ),\n        .in_data   (in_payload  ),\n        .out_clk   (out_clk     ),\n        .out_reset (out_reset   ),\n        .out_ready (out_ready   ),\n        .out_valid (out_valid   ),\n        .out_data  (out_payload )\n    );",
+        "    generate\n        \n        if (PACKET_WIDTH) begin\n            assign in_payload[\n                DATA_WIDTH + PACKET_WIDTH - 1 : \n                DATA_WIDTH\n            ] = {in_startofpacket, in_endofpacket};\n        end\n        \n        if (USE_CHANNEL) begin\n            assign in_payload[\n              DATA_WIDTH + PACKET_WIDTH + PCHANNEL_W - 1 : \n              DATA_WIDTH + PACKET_WIDTH\n            ] = in_channel;\n        end\n        \n        if (EMPTY_WIDTH) begin\n            assign in_payload[\n                DATA_WIDTH + PACKET_WIDTH + PCHANNEL_W + EMPTY_WIDTH - 1 : \n                DATA_WIDTH + PACKET_WIDTH + PCHANNEL_W\n            ] = in_empty;\n        end\n        \n        if (USE_ERROR) begin\n            assign in_payload[\n                DATA_WIDTH + PACKET_WIDTH + PCHANNEL_W + EMPTY_WIDTH + PERROR_W - 1 : \n                DATA_WIDTH + PACKET_WIDTH + PCHANNEL_W + EMPTY_WIDTH\n            ] = in_error;\n        end\n    endgenerate"
+    ]
+}

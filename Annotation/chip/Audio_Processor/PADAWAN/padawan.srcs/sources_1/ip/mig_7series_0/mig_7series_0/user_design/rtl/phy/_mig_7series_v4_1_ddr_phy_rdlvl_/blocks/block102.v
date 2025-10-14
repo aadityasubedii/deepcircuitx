@@ -1,0 +1,1 @@
+    end else if (nCK_PER_CLK == 2) begin: mpr_2to1

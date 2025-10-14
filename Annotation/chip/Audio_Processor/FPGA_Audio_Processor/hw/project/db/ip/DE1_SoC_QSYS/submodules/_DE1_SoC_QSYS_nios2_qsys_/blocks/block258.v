@@ -1,0 +1,1 @@
+  assign trc_enb = trc_ctrl[0];

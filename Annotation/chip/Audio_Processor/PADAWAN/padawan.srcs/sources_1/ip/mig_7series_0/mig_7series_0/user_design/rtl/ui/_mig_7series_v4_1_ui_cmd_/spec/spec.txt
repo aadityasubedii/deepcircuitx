@@ -1,0 +1,13 @@
+Module name: mig_7series_v4_1_ui_cmd. 
+
+Module specification: The mig_7series_v4_1_ui_cmd module, part of the Memory Interface Generator (MIG) tool, is designed for managing read and write requests to memory on 7series FPGAs. It receives inputs such as command type, size, high-priority indicator, memory address, and others, using these inputs for interpreting the command type, calculating the readiness of the app, and generating the correct memory addresses. The module outputs read and write acceptance signals, memory addresses (bank, rank, row, column), command size, and priority.
+
+Input ports of the module include rst (reset signal), clk (clock signal), accept_ns (new cycle indicator), rd_buf_full (read buffer status), wr_req_16 (write request signal), app_addr (memory address), app_cmd (command type), app_sz (size of data), app_hi_pri (high priority flag), app_en (app module enable flag), wr_data_buf_addr (write data buffer address), and rd_data_buf_addr_r (read data buffer address).
+
+Output ports for the module are app_rdy (app readiness), use_addr (address availability), rank, bank, row, col (detailed memory address), size, cmd (command operation), hi_priority, rd_accepted (read acceptance), wr_accepted (write acceptance), and data_buf_addr (used data buffer address).
+
+Internal signals such as app_rdy_ns, app_rdy_r, app_addr_r1, app_addr_r2, app_cmd_r1, app_cmd_r2, app_sz_r1, app_sz_r2, app_hi_pri_r1, app_hi_pri_r2, app_en_r1, app_en_r2, app_addr_ns1 and more, help in pipelining operation, enabling next cycle preparations during the current cycle, and providing a mechanism for reset, read and write operations.
+
+The module contains several blocks. First, it processes input signals, prepares them for next clock cycle while adjusting the app readiness based on available space for write/read operations. Then, depending on the memory order (either "TG_TEST", "ROW_BANK_COLUMN" or default), it assigns the memory addresses (rank, bank, row, column) accordingly. The module also handles the acceptance of requests to read, write, and provides the address in the data buffer to be used next, depending on whether it is a write or read operation. 
+
+Overall, this module provides an intricate mechanism to process memory access commands, making it a vital unit in the overall MIG design for memory management on FPGAs.

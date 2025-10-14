@@ -1,0 +1,1 @@
+  assign i_read_nxt = W_valid | W_rf_ecc_unrecoverable_valid | (i_read & i_waitrequest);

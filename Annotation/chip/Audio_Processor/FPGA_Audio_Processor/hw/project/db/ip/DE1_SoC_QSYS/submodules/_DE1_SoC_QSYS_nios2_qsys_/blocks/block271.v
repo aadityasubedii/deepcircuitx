@@ -1,0 +1,1 @@
+  assign input_ge1 = |input_tm_cnt;

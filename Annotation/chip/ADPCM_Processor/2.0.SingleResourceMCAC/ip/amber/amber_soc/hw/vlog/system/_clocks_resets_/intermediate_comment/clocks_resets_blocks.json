@@ -1,0 +1,41 @@
+{
+    "line_num": [
+        [
+            306,
+            306
+        ],
+        [
+            303,
+            305
+        ],
+        [
+            286,
+            301
+        ],
+        [
+            262,
+            283
+        ],
+        [
+            252,
+            259
+        ],
+        [
+            232,
+            236
+        ],
+        [
+            225,
+            231
+        ]
+    ],
+    "blocks": [
+        "assign o_clk_200        = i_brd_clk_p;",
+        "assign o_sys_clk        = sys_clk_beh;\nassign rst0             = i_brd_rst;\nassign calib_done_33mhz = 1'd1;",
+        "always @( pll_clk_beh )\n    begin\n    if ( pll_div_count == (\n        `AMBER_CLK_DIVIDER \n        * 2 ) - 1 )\n        pll_div_count <= 'd0;\n    else    \n        pll_div_count <= pll_div_count + 1'd1;\n        \n    if ( pll_div_count == 0 )\n        sys_clk_beh = 1'd1;\n    else if ( pll_div_count == \n        `AMBER_CLK_DIVIDER \n        )\n        sys_clk_beh = 1'd0;\n    end",
+        "always @( posedge i_brd_clk_p )\n    begin\n    pll_clk_beh = 1'd1;\n    # ( pll_clk_period / 2 )\n    pll_clk_beh = 1'd0;\n    # ( pll_clk_period / 2 )\n\n    pll_clk_beh = 1'd1;\n    # ( pll_clk_period / 2 )\n    pll_clk_beh = 1'd0;\n    # ( pll_clk_period / 2 )\n\n    pll_clk_beh = 1'd1;\n    # ( pll_clk_period / 2 )\n    pll_clk_beh = 1'd0;\n    # ( pll_clk_period / 2 )\n\n    pll_clk_beh = 1'd1;\n    # ( pll_clk_period / 2 )\n    pll_clk_beh = 1'd0;\n\n    end",
+        "initial\n    begin\n    @ (posedge i_brd_clk_p)\n    brd_temp = $time;\n    @ (posedge i_brd_clk_p)\n    brd_clk_period = $time - brd_temp;\n    pll_clk_period = brd_clk_period / 4;\n    end",
+        "    always @(posedge o_sys_clk or posedge rst_tmp)\n        if (rst_tmp)\n            ddr_calib_done_sync_r <= {RST_SYNC_NUM{1'b0}};\n        else\n            ddr_calib_done_sync_r <= {ddr_calib_done_sync_r[RST_SYNC_NUM-2:0], i_ddr_calib_done};",
+        "    always @(posedge o_sys_clk or posedge rst_tmp)\n        if (rst_tmp)\n          rst0_sync_r <= {RST_SYNC_NUM{1'b1}};\n        else\n          \n          rst0_sync_r <= rst0_sync_r << 1;\n"
+    ]
+}

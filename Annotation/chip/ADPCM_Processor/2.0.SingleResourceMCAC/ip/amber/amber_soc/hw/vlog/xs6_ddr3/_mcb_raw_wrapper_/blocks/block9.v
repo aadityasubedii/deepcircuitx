@@ -1,0 +1,1 @@
+OBUFT iob_we  (.O(mcbx_dram_we_n ),.I(ioi_we ),.T(t_we ));

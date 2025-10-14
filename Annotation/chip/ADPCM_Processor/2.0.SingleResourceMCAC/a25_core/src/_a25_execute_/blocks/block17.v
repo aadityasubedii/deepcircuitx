@@ -1,0 +1,1 @@
+assign iaddress_update                 = pc_dmem_wen || (!i_core_stall && !i_conflict);

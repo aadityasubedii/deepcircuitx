@@ -1,0 +1,1 @@
+  assign av_ld_extend = av_ld_aligning_data;

@@ -1,0 +1,1 @@
+assign TxDonePulse    = TxDone_wb    & ~TxDone_wb_q;

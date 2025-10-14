@@ -1,0 +1,1 @@
+assign valid_out = internal_output_is_valid & ena;

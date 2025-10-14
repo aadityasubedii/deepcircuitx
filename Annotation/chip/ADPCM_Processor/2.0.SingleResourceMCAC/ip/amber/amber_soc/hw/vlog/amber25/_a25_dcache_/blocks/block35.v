@@ -1,0 +1,3 @@
+
+                          
+assign ex_read_hit      = exclusive_access && !i_write_enable && idle_hit;

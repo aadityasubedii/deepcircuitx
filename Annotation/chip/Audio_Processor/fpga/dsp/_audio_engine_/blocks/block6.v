@@ -1,0 +1,1 @@
+    assign status_rdt = status_re ? sreg_rdt(status_addr) : 0;

@@ -1,0 +1,1 @@
+  assign do_start_counter = start_strobe;

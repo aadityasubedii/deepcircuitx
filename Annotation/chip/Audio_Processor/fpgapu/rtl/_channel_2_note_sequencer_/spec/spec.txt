@@ -1,0 +1,16 @@
+Module Name: channel_2_note_sequencer.
+
+Module Specification:
+The 'channel_2_note_sequencer' module functions to generate a sequence of musical notes with varying note lengths. The sequence and lengths are controlled by the current note index and duration count. The module also has the capability to manage note transitions and duration tracking with the assistance of a clock input 'i_clk' and reset signal 'i_rst'. It includes the ability to generate an envelope output based on different envelope indices. It maintains a constant high output for 'o_top_valid' and a constant byte-stream for 'o_top'. Furthermore, it initiates an instance of another module named 'note_table' for the purpose of generating music notes. 
+
+Input Ports: 
+'i_clk' functions as the clock input for all digital components within the module. 'i_rst' is a reset input serving to reset the sequence. 'i_tick_stb' is a tick strobe input used for envelope tracking. 'i_note_stb' is a note strobe which triggers the beginning of a new note.
+
+Output Ports: 
+'o_top' serves as output for a constant byte-stream. 'o_top_valid' indicates the validity of the 'o_top' value and remains always active. 'o_phase_delta' connects to the 'note_table' instance and works as an output for the comparison of the current note to the one stored in the note table. 'o_envelope' is an output managing the envelope of the current note based on the envelope index, essentially controlling the amplitude over time for the note sequence.
+
+Internal Signals: 
+The module makes use of various internal signals such as 'r_duration_count', 'r_note_index', 'r_note', 'r_note_len', 'r_new_note', 'r_envelope_index' and 'r_envelope'. These signals have unique functionalities varying from holding the duration of the current note, promoting the sequence progress to the next note, triggering the start of a new note, managing the amplitude over time for the note sequence to shaping the amplitude of a signal.
+
+Overview: 
+The code is primarily divided into various always blocks and a note_table instance. The always blocks serve to increment duration count and note index, set the current note and its duration, and create the envelope for the note sequence. The 'note_table' instance is used to generate music notes.

@@ -1,0 +1,1 @@
+assign StartRxPointerRead = RxBDRead & RxBDReady;

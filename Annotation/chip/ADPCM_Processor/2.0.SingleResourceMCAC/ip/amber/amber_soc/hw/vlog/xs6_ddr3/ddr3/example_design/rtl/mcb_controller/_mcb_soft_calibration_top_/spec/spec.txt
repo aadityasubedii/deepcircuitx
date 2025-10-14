@@ -1,0 +1,11 @@
+Module Name: mcb_soft_calibration_top.
+
+Module Specification: 
+
+The mcb_soft_calibration_top is the top module for the memory controller block's (MCB) soft calibration. This module facilitates the process of calibration to ensure the appropriate timing or functionality of a memory system. The memory type, calibration mode, and various calibration stages are controlled through hardcoded or passed in parameters. This module also encompasses IO buffer related code, flip-flops for synchronization, and an internal instance of the mcb_soft_calibration block.
+
+The module is hooked to a number of input and output ports. Input ports include clocks (UI_CLK, IOCLK), reset input signal (RST), calibration start signal (MCB_UO_CAL_START), and data inputs (MCB_UODATA, MCB_UODATAVALID). Flag inputs related to calibration, self-refresh operations, MCB mode, and other operations are also present. The output ports of this module encompass a wide range of signals related to MCB operations, control, and status information. Key outputs include DONE_SOFTANDHARD_CAL, SELFREFRESH_MCB_REQ, SELFREFRESH_MODE, MCB_UIADD, MCB_UISDI, MCB_UIADDR, various MCB operation prompts, and the CKE_Train signal. Inout pins RZQ_Pin and ZIO_Pin are used for I/O operations in the calibration process.
+
+There are also several internal signals used in the module such as the IODRP_ADD, IODRP_SDI which are likely to be address and data inputs for I/O Dynamic Reconfiguration Port (DRP). The RZQ and ZIO related signals are used for memory operation while signals like RZQ_TOUT, ZIO_TOUT indicate timeout for calibration sequences.
+
+The module is organized into input handling, calibration processing, IO buffering and output generation phases. It initiates with I/O operations and handles the configuration for a mcb_soft_calibration instance. Input signals are synchronized and then passed to the mcb_soft_calibration instance. The IODRP2 block handles I/O operations for the calibration task, and finally, multiple control and command signals are generated from the module as output. The generate block houses an IOBUF and IODRP2 block for memory operations based on the type of memory and the calibration mode.

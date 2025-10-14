@@ -1,0 +1,1 @@
+	initial count = 10'b0;	

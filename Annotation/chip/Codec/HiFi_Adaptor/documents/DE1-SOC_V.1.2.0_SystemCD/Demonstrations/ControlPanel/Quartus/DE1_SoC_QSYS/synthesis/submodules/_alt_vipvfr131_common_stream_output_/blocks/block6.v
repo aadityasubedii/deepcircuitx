@@ -1,0 +1,1 @@
+assign synced_int_nxt = (image_packet & eop) | (synced_int & ~sop);

@@ -1,0 +1,1 @@
+      assign wr_req_16 = (wr_req_cnt_ns == 5'h10);

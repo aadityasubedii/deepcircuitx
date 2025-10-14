@@ -1,0 +1,1 @@
+    initial out = 0;

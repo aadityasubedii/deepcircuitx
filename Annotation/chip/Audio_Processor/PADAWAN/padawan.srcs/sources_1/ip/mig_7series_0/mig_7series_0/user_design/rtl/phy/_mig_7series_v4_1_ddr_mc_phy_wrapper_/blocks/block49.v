@@ -1,0 +1,1 @@
+  assign phy_rd_en = !if_empty;

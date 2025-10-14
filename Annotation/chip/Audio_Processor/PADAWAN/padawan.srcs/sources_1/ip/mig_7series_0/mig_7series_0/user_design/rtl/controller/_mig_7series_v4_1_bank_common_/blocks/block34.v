@@ -1,0 +1,1 @@
+  assign idle = init_calib_complete && &idle_r;

@@ -1,0 +1,1 @@
+always @(posedge clk_i) prbs_ignore_first_byte_r <= #TCQ mem_out[16];

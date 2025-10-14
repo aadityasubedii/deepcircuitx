@@ -1,0 +1,1 @@
+  always @(posedge clk) row_hit_r <= #TCQ row_hit_ns;

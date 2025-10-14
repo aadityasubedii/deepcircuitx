@@ -1,0 +1,1 @@
+  wire clear_req = bm_end_lcl || rst;

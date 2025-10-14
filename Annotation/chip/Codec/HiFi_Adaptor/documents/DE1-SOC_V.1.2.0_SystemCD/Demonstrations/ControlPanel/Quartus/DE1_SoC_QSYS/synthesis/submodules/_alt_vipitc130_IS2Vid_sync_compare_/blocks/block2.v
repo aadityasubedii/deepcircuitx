@@ -1,0 +1,1 @@
+assign sync_compare_h_reset_next = (remove_lines_next) ? h_count_remove : h_count_repeat;

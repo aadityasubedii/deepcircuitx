@@ -1,0 +1,13 @@
+Module name: eth_rxethmac.
+
+Module specification: The "eth_rxethmac" module is dedicated to managing the Ethernet Media Access Control (MAC) receive functionality, specifically processing incoming Ethernet frames from the PHY layer. This includes error checking, frame validation, CRC checks, address filtering, and managing output signals that indicate frame status and data validity. 
+
+Input ports include MRxClk (receive clock), MRxDV (data valid signal), MRxD (4-bit receive data), Reset, and control signals such as Transmitting, MaxFL (maximum frame length), among others that tailor the module's behavior like enabling broadcast frame reception (r_Bro) and promiscuous mode (r_Pro). Output ports such as RxData (8-bit processed data), RxValid (data validity flag), RxStartFrm (start of frame indicator), and RxEndFrm (end of frame indicator) signal various statuses to other parts of the system.
+
+Internal signals like Broadcast, Multicast, CrcHash, and others manage the detection of frame types, control CRC operations, and determine conditions for data validation and frame boundaries. The module comprises several sub-modules or blocks: 
+1. `eth_rxstatem`, which governs state transitions based on the incoming data and various control signals.
+2. `eth_rxcounters`, responsible for maintaining various byte counts and conditions necessary for processing frames.
+3. `eth_rxaddrcheck`, which checks incoming frames against specific address rules and set flags accordingly.
+4. `eth_crc`, which calculates CRC for error detection. 
+
+These sub-blocks communicate with the main module through wires and registers, making the eth_rxethmac a complex yet meticulously organized module critical for handling the reception and validation of Ethernet frames in network communications.

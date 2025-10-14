@@ -1,0 +1,1 @@
+  always @(posedge clk) ordered_r_lcl <= #TCQ ordered_ns;

@@ -1,0 +1,1 @@
+assign register_vector = {sx[3:0], sy} ;

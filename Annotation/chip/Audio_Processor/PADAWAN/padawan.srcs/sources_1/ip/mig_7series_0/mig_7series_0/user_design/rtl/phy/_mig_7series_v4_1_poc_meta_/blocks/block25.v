@@ -1,0 +1,1 @@
+  always @(posedge clk) rise_trail_center_offset_r <= #TCQ rise_trail_center_offset_ns;

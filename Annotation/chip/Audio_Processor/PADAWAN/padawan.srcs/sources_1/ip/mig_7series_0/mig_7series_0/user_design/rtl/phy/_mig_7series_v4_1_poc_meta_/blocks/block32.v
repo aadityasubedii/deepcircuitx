@@ -1,0 +1,1 @@
+  always @(*) run_polarity_held_ns = run_end ? run_polarity : run_polarity_held_r;

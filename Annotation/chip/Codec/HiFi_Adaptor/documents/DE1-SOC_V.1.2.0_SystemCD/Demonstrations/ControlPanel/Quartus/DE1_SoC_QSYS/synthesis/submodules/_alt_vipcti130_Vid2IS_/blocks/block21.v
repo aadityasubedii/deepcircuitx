@@ -1,0 +1,1 @@
+assign start_of_hsync = h_sync & ~h_sync_reg;

@@ -1,0 +1,1 @@
+  assign tw = 0 ?  { (empty ? 4'h0 : fifo_head[35 : 32]),   fifo_head[31 : 0]}  : itm;

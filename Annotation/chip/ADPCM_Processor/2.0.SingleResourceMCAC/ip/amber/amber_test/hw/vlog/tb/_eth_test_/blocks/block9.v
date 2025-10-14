@@ -1,0 +1,1 @@
+assign init    = state_r == PREB;

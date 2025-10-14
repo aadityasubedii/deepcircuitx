@@ -1,0 +1,1 @@
+  assign D_ctrl_mem16 = D_op_ldhu|D_op_ldh|D_op_ldhio|D_op_ldhuio|D_op_sth|D_op_sthio;

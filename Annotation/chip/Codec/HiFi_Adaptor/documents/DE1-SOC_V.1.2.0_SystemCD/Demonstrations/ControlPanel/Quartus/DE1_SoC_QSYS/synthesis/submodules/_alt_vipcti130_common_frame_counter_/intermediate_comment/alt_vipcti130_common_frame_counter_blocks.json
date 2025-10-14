@@ -1,0 +1,41 @@
+{
+    "line_num": [
+        [
+            82,
+            82
+        ],
+        [
+            61,
+            80
+        ],
+        [
+            57,
+            57
+        ],
+        [
+            56,
+            56
+        ],
+        [
+            54,
+            54
+        ],
+        [
+            53,
+            53
+        ],
+        [
+            51,
+            59
+        ]
+    ],
+    "blocks": [
+        "assign new_line = (h_count >= h_total_int) && count_sample;",
+        "always @ (posedge rst or posedge clk) begin\n    if(rst) begin\n        h_count <= 14'd0;\n        v_count <= 13'd0;\n    end else begin\n        if(sclr) begin\n            h_count <= h_reset + {{13{1'b0}}, count_sample & hd_sdn};\n            v_count <= v_reset;\n        end else if(enable) begin\n            if(new_line) begin\n                h_count <= 14'd0;\n                if(v_count >= v_total_int)\n                    v_count <= 13'd0;\n                else\n                    v_count <= v_count + 13'd1;\n            end else if(count_sample)\n                h_count <= h_count + 14'd1;\n        end\n    end\nend",
+        "        assign v_total_int = v_total - 13'd1;",
+        "        assign h_total_int = h_total - 14'd1;",
+        "        assign v_total_int = v_total;",
+        "        assign h_total_int = h_total;",
+        "generate \n    if(TOTALS_MINUS_ONE) begin : totals_minus_one_generate\n        assign h_total_int = h_total;\n        assign v_total_int = v_total;\n    end else begin\n        assign h_total_int = h_total - 14'd1;\n        assign v_total_int = v_total - 13'd1;\n    end\nendgenerate"
+    ]
+}

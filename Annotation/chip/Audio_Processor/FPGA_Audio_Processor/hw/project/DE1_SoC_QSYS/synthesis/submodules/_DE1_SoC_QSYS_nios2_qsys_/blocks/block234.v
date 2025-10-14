@@ -1,0 +1,1 @@
+  assign F_valid = i_read & ~i_waitrequest;

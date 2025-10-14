@@ -1,0 +1,1 @@
+  assign grant_config_r = grant_config_r_lcl;

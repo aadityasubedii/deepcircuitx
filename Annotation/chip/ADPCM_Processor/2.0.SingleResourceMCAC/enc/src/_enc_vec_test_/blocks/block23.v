@@ -1,0 +1,1 @@
+always #(`UART_CLK_PERIOD/2) uart_clk = ~uart_clk;

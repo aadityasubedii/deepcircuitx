@@ -1,0 +1,13 @@
+Module name: read_data_path.
+
+Module specification: The read_data_path module is a key component in memory read operations. It manages data reading for memory components or similar hardware configurations. The module's functionality includes validation checks on data, decoding read data, handling any errors in data transmission, and managing read commands. An important aspect of the module is its adaptability to different hardware families and memory burst lengths, along with the ability to reset data errors manually. 
+
+The module has several Input Ports including system clock (clk_i), system reset (rst_i), manual data error reset signal (manual_clear_error), command validation signal (cmd_valid_i), PRBS seed value (prbs_fseed_i), data mode switch (data_mode_i), address signal (addr_i), burst length (bl_i), command sent (cmd_sent), burst length sent(bl_sent), command enable signal (cmd_en_i) and Data Inputs (data_i, fixed_data_i). 
+
+The Output ports include signals for command readiness (cmd_rdy_o), data readiness (data_rdy_o), last word read indication (last_word_rd_o), indication for data error (data_error_o), compared data (cmp_data_o), data read from memory (rd_mdata_o), compared address (cmp_addr_o), compared burst length (cmp_bl_o), force command generation sign (force_wrcmd_gen_o). Additionally, ports provide information about read buffer availability (rd_buff_avail_o), error accumulation in the data queue lane (cumlative_dq_lane_error_r), and error presence in each data queue byte lane during data comparison (dq_error_bytelane_cmp).
+
+Internally, the module uses several signals including gen_rdy, cmp_data, last_word_rd, and rd_mdata. The signals like gen_rdy, gen_valid, gen_addr, and gen_bl are associated with command generations and cmp_rdy, cmp_valid, cmp_addr, and cmp_bl are used for comparison. Signals like rd_data_r, rd_data_r2 are used to track stages of data reading. 
+
+The code is organized in sections each handling specific functionalities. Some of these sections include functions handling data errors based on hardware families and memory burst lengths, using if-else conditions, and loops. Error handling on byte lanes is implemented through different `generate` loops, depending on the hardware family and burst length.
+
+Finally, the SPARTAN6 and VIRTEX6 specific operations are carried out through a `generate` keyword, separating the functionalities based on these specifications. This module implements an effective method of handling data read operations suitable for different hardware configurations.

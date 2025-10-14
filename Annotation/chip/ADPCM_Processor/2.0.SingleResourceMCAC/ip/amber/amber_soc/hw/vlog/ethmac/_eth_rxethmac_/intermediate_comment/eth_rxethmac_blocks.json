@@ -1,0 +1,66 @@
+{
+    "line_num": [
+        [
+            362,
+            374
+        ],
+        [
+            359,
+            359
+        ],
+        [
+            358,
+            358
+        ],
+        [
+            343,
+            355
+        ],
+        [
+            341,
+            341
+        ],
+        [
+            326,
+            338
+        ],
+        [
+            324,
+            324
+        ],
+        [
+            310,
+            321
+        ],
+        [
+            292,
+            307
+        ],
+        [
+            266,
+            288
+        ],
+        [
+            255,
+            262
+        ],
+        [
+            250,
+            253
+        ]
+    ],
+    "blocks": [
+        "always @ (posedge MRxClk or posedge Reset)\nbegin\n  if(Reset)\n    begin\n      RxEndFrm_d <= #Tp 1'b0;\n      RxEndFrm   <= #Tp 1'b0;\n    end\n  else\n    begin\n      RxEndFrm_d <= #Tp GenerateRxEndFrm;\n      RxEndFrm   <= #Tp RxEndFrm_d | DribbleRxEndFrm;\n    end\nend",
+        "assign DribbleRxEndFrm  = StateData[1] &  ~MRxDV & ByteCntGreat2;",
+        "assign GenerateRxEndFrm = StateData[0] & (~MRxDV & ByteCntGreat2 | ByteCntMaxFrame);",
+        "always @ (posedge MRxClk or posedge Reset)\nbegin\n  if(Reset)\n    begin\n      RxStartFrm_d <= #Tp 1'b0;\n      RxStartFrm   <= #Tp 1'b0;\n    end\n  else\n    begin\n      RxStartFrm_d <= #Tp GenerateRxStartFrm;\n      RxStartFrm   <= #Tp RxStartFrm_d;\n    end\nend",
+        "assign GenerateRxStartFrm = StateData[0] & (ByteCntEq1 & ~DlyCrcEn | DlyCrcCnt == 4'h3 & DlyCrcEn);",
+        "always @ (posedge MRxClk or posedge Reset)\nbegin\n  if(Reset)\n    begin\n      RxValid_d <= #Tp 1'b0;\n      RxValid   <= #Tp 1'b0;\n    end\n  else\n    begin\n      RxValid_d <= #Tp GenerateRxValid;\n      RxValid   <= #Tp RxValid_d;\n    end\nend",
+        "assign GenerateRxValid = StateData[0] & (~ByteCntEq0 | DlyCrcCnt >= 4'h3);",
+        "always @ (posedge MRxClk or posedge Reset)\nbegin\n  if(Reset)\n    Multicast <= #Tp 1'b0;\n  else\n    begin      \n      if(StateData[0] & ByteCntEq1 & LatchedByte[0])\n        Multicast <= #Tp 1'b1;\n      else if(RxAbort | RxEndFrm)\n      Multicast <= #Tp 1'b0;\n    end\nend",
+        "always @ (posedge MRxClk or posedge Reset)\nbegin\n  if(Reset)\n    Broadcast <= #Tp 1'b0;\n  else\n    begin      \n      if(StateData[0] & ~(&LatchedByte[7:0]) & ByteCntSmall7)\n        Broadcast <= #Tp 1'b0;\n      else\n      if(StateData[0] & (&LatchedByte[7:0]) & ByteCntEq1)\n        Broadcast <= #Tp 1'b1;\n      else\n      if(RxAbort | RxEndFrm)\n        Broadcast <= #Tp 1'b0;\n    end\nend",
+        "always @ (posedge MRxClk or posedge Reset)\nbegin\n  if(Reset)\n    begin\n      RxData_d[7:0]      <= #Tp 8'h0;\n      DelayData          <= #Tp 1'b0;\n      LatchedByte[7:0]   <= #Tp 8'h0;\n      RxData[7:0]        <= #Tp 8'h0;\n    end\n  else\n    begin\n      LatchedByte[7:0]   <= #Tp {MRxD[3:0], LatchedByte[7:4]};  \n      DelayData          <= #Tp StateData[0];\n\n      if(GenerateRxValid)\n        RxData_d[7:0] <= #Tp LatchedByte[7:0] & {8{|StateData}};  \n      else\n      if(~DelayData)\n        RxData_d[7:0] <= #Tp 8'h0;                                \n\n      RxData[7:0] <= #Tp RxData_d[7:0];                           \n    end\nend",
+        "always @ (posedge MRxClk)\nbegin\n  if(Reset | StateIdle)\n    CrcHash[5:0] <= #Tp 6'h0;\n  else\n  if(StateData[0] & ByteCntEq6)\n    CrcHash[5:0] <= #Tp Crc[31:26];\nend",
+        "always @ (posedge MRxClk)\nbegin\n  CrcHashGood <= #Tp StateData[0] & ByteCntEq6;\nend"
+    ]
+}

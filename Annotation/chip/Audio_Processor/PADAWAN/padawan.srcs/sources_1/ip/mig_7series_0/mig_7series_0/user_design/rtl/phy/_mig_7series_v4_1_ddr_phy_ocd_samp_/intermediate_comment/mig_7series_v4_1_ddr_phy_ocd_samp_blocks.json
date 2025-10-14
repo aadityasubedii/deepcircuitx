@@ -1,0 +1,121 @@
+{
+    "line_num": [
+        [
+            325,
+            325
+        ],
+        [
+            253,
+            322
+        ],
+        [
+            249,
+            249
+        ],
+        [
+            248,
+            248
+        ],
+        [
+            247,
+            247
+        ],
+        [
+            244,
+            246
+        ],
+        [
+            242,
+            242
+        ],
+        [
+            241,
+            241
+        ],
+        [
+            238,
+            239
+        ],
+        [
+            226,
+            236
+        ],
+        [
+            225,
+            225
+        ],
+        [
+            209,
+            209
+        ],
+        [
+            208,
+            208
+        ],
+        [
+            205,
+            205
+        ],
+        [
+            203,
+            203
+        ],
+        [
+            199,
+            199
+        ],
+        [
+            195,
+            195
+        ],
+        [
+            190,
+            190
+        ],
+        [
+            188,
+            188
+        ],
+        [
+            185,
+            185
+        ],
+        [
+            179,
+            179
+        ],
+        [
+            177,
+            177
+        ],
+        [
+            124,
+            130
+        ]
+    ],
+    "blocks": [
+        "endmodule ",
+        "  always @(*) begin\n\n  \n\n    agg_samp_ns = agg_samp_r;\n    data_cnt_ns = data_cnt_r;\n    oclk_calib_resume_ns = 1'b0;\n    oneeighty_ns = oneeighty_r;\n    rd_victim_sel_ns = rd_victim_sel_r;\n    samp_done_ns = samp_done_r;\n    samps_ns = samps_r;\n    sm_ns = sm_r;\n    zero_ns = zero_r;\n    \n    if (rst == 1'b1) begin\n  \n      sm_ns = 1'd0;\n      \n    end else\n      \n  \n      case (sm_r)\n\n        1'd0:begin\n\t  agg_samp_ns = NULL;\n\t  data_cnt_ns = data_cnt;\n\t  oneeighty_ns = 'b0;\n\t  zero_ns = 'b0;\n\t  rd_victim_sel_ns = 3'b0;\n\t  samps_ns = complex_oclkdelay_calib_start ? CMPLX_SAMPS[SAMP_CNT_WIDTH-1:0]\n                                                   : OCAL_SIMPLE_SCAN_SAMPS[SAMP_CNT_WIDTH-1:0];\n\t \n\t  \n\t  if (taps_set) begin\n\t    samp_done_ns = 1'b0;\n\t    sm_ns = 1'd1;\n\t    oclk_calib_resume_ns = 1'b1;\n\t  end\n        end\n\n        1'd1:begin\n\t  if (phy_rddata_en_1) begin\n\n\t    case (agg_samp_r)\n\t      NULL : if (~&match) agg_samp_ns = match;\n\t      ZERO, ONEEIGHTY : if (~(agg_samp_r == match || &match)) agg_samp_ns = FUZZ;\n\t      FUZZ : ;\n\t    endcase \n\n\t    if (~data_end) data_cnt_ns = data_cnt_r - ONE[DATA_CNT_WIDTH-1:0];\n\t    else begin\n\t      data_cnt_ns = data_cnt;\n\t      if (rd_victim_end != rd_victim_sel_r) rd_victim_sel_ns = rd_victim_sel_r + 3'h1;\n\t      else begin\n\t\trd_victim_sel_ns = 3'h0;\n\t\tif (agg_samp_ns == ZERO) zero_ns = zero_r + ONE[SAMP_CNT_WIDTH-1:0];\n\t        if (agg_samp_ns == ONEEIGHTY) oneeighty_ns = oneeighty_r + ONE[SAMP_CNT_WIDTH-1:0];\n\t\tagg_samp_ns = NULL;\n\t\tif (~samp_end) samps_ns = samps_r - ONE[SAMP_CNT_WIDTH-1:0];\n\t\telse samp_done_ns = 1'b1;\n\t      end\n\t    end\n    \n      \t    if (samp_done_ns) sm_ns = 1'd0;\n\t    else oclk_calib_resume_ns = ~complex_oclkdelay_calib_start && data_end;\n\t  end\n\tend\n\t\n      endcase \n  end ",
+        "  wire samp_end = samps_r == ONE[SAMP_CNT_WIDTH-1:0];",
+        "  wire data_end = data_cnt_r == ONE[DATA_CNT_WIDTH-1:0];",
+        "  wire [2:0] rd_victim_end = complex_oclkdelay_calib_start ? 3'h7 : 3'h0;",
+        "  wire [DATA_CNT_WIDTH-1:0] data_cnt = complex_oclkdelay_calib_start \n                                         ? CMPLX_DATA_CNT[DATA_CNT_WIDTH-1:0] \n                                         : SIMP_DATA_CNT[DATA_CNT_WIDTH-1:0];",
+        "  always @(posedge clk) sm_r <= #TCQ sm_ns;",
+        "  reg [0:0] sm_ns, sm_r;",
+        "  output [1:0] samp_result;\n  assign samp_result = samp_result_ns;",
+        "  always @(*) \n    if (rst) samp_result_ns = 'b0;\n    else begin\n      samp_result_ns = samp_result_r;\n      if (samp_valid) begin\n\tif (~samp_result_r[0] && zero_ge_thresh) samp_result_ns[0] = 'b1;\n        if (samp_result_r[0] && zero_le_half_thresh) samp_result_ns[0] = 'b0;\n\tif (~samp_result_r[1] && oneeighty_ge_thresh) samp_result_ns[1] = 'b1;\n        if (samp_result_r[1] && oneeighty_le_half_thresh) samp_result_ns[1] = 'b0;\n      end\n    end",
+        "  always @(posedge clk) samp_result_r <= #TCQ samp_result_ns;",
+        "  always @(posedge clk) oneeighty_r <= #TCQ oneeighty_ns;",
+        "  always @(posedge clk) zero_r <= #TCQ zero_ns;",
+        "  assign rd_victim_sel = rd_victim_sel_r;",
+        "  always @(posedge clk) rd_victim_sel_r <= #TCQ rd_victim_sel_ns;",
+        "  always @(posedge clk) samps_r <= #TCQ samps_ns;",
+        "  always @(posedge clk) data_cnt_r <= #TCQ data_cnt_ns;",
+        "  assign oclk_calib_resume = oclk_calib_resume_r;",
+        "  always @(posedge clk) oclk_calib_resume_r <= #TCQ oclk_calib_resume_ns;",
+        "  always @(posedge clk) agg_samp_r <= #TCQ agg_samp_ns;",
+        "  assign samp_done = samp_done_r;",
+        "  always @(posedge clk) samp_done_r <= #TCQ samp_done_ns;",
+        "  function integer clogb2 (input integer size); \n    begin\n      size = size - 1;\n      for (clogb2=1; size>1; clogb2=clogb2+1)\n            size = size >> 1;\n    end\n  endfunction "
+    ]
+}

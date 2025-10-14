@@ -1,0 +1,9 @@
+Module name: channel_1_note_sequencer. 
+
+Module specification: The channel_1_note_sequencer is a custom module designed to function as a sequencer for playing a sequence of musical notes, controlling their associated attributes like duration, envelope, and vibrato. It takes four inputs: i_clk (clock signal), i_rst (reset signal), i_tick_stb (tick strobe signal), i_note_stb (note strobe signal). It produces four outputs: o_top (generic output), o_top_valid (validation signal for o_top), o_phase_delta (phase delta for oscillators), o_envelope (amplitude of the current note being played).
+
+The module utilizes several internal signals like r_note, r_new_note, r_duration_count, r_note_len to keep track of the current note being played and its corresponding attributes, and other signals like r_envelope, r_vibrato_len, r_vibrato_depth to manage the note's envelope and vibrato aspects. Additionally, the vibrato characteristics are handled using a ROM look-up table.
+
+The module is divided into several blocks denoted by always and assign statements. These blocks respectively handle note sequencing, envelope and vibrato modulation, control signals handling and output phase delta calculation. At each clock cycle, the system checks for reset and strobe signals, updates the sequence based on the note and vibrato length, adjusts the depth of vibrato, and plays the note with the given envelope. 
+
+The output signal o_phase_delta is computed by adding the phase delta fetched from the note table to vibrato adjustment. This output can be fed to an oscillator module for producing continuous music notes sequence. This module gives flexibility in varying the pitch, length, and modulations of musical notes making it suitable for musical applications requiring extensive controls over note characteristics.

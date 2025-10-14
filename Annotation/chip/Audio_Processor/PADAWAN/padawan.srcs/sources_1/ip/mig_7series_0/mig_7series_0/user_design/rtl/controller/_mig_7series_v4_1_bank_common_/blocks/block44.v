@@ -1,0 +1,1 @@
+  always @(posedge clk) accept_r <= #TCQ accept_ns_lcl;

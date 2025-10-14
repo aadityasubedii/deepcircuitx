@@ -1,0 +1,1 @@
+  assign R_ctrl_shift_right_arith_nxt = D_ctrl_shift_right_arith;

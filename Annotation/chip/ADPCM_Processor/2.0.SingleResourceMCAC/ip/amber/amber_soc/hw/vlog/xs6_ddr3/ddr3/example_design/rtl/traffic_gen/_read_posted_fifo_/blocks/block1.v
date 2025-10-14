@@ -1,0 +1,1 @@
+   assign gen_valid_o = !empty;

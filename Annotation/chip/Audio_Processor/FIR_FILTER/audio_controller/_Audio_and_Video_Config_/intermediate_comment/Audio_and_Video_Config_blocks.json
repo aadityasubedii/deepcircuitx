@@ -1,0 +1,51 @@
+{
+    "line_num": [
+        [
+            363,
+            394
+        ],
+        [
+            325,
+            361
+        ],
+        [
+            303,
+            320
+        ],
+        [
+            244,
+            283
+        ],
+        [
+            233,
+            238
+        ],
+        [
+            227,
+            232
+        ],
+        [
+            203,
+            225
+        ],
+        [
+            156,
+            197
+        ],
+        [
+            144,
+            154
+        ]
+    ],
+    "blocks": [
+        "Altera_UP_I2C I2C_Controller (\n\t\n\t.clk\t\t\t\t\t(clk),\n\t.reset\t\t\t\t\t(internal_reset),\n\n\t.clear_ack\t\t\t\t(clear_status_bits),\n\n\t.clk_400KHz\t\t\t\t(clk_400KHz),\n\t.start_and_stop_en\t\t(start_and_stop_en),\n\t.change_output_bit_en\t(change_output_bit_en),\n\n\t.send_start_bit\t\t\t(send_start_bit),\n\t.send_stop_bit\t\t\t(send_stop_bit),\n\n\t.data_in\t\t\t\t(data_to_transfer),\n\t.transfer_data\t\t\t(transfer_data),\n\t.read_byte\t\t\t\t(read_byte),\n\t.num_bits_to_transfer\t(num_bits_to_transfer),\n\n\t\n\t.i2c_sdata\t\t\t\t(I2C_SDAT),\n\n\t\n\t.i2c_sclk\t\t\t\t(I2C_SCLK),\n\t.i2c_scen\t\t\t\t(),\n\n\t.enable_clk\t\t\t\t(enable_clk),\n\n\t.ack\t\t\t\t\t(i2c_ack),\n\t.data_from_i2c\t\t\t(i2c_received_data),\n\t.transfer_complete\t\t(transfer_complete)\n);",
+        "Altera_UP_I2C_AV_Auto_Initialize Auto_Initialize (\n\t\n\t.clk\t\t\t\t(clk),\n\t.reset\t\t\t\t(internal_reset),\n\n\t.clear_error\t\t(clear_status_bits),\n\n\t.ack\t\t\t\t(i2c_ack),\n\t.transfer_complete\t(transfer_complete),\n\n\t\n\n\t\n\t.data_out\t\t\t(auto_init_data),\n\t.transfer_data\t\t(auto_init_transfer_data),\n\t.send_start_bit\t\t(auto_init_start_bit),\n\t.send_stop_bit\t\t(auto_init_stop_bit),\n\n\t.auto_init_complete\t(auto_init_complete),\n\t.auto_init_error\t(auto_init_error)\n);\ndefparam\n\tAuto_Initialize.MIN_ROM_ADDRESS\t= MIN_ROM_ADDRESS,\n\tAuto_Initialize.MAX_ROM_ADDRESS\t= MAX_ROM_ADDRESS,\n\n\tAuto_Initialize.USE_MIC_INPUT = USE_MIC_INPUT,\n\n\tAuto_Initialize.AUD_LINE_IN_LC\t= AUD_LINE_IN_LC,\n\tAuto_Initialize.AUD_LINE_IN_RC\t= AUD_LINE_IN_RC,\n\tAuto_Initialize.AUD_LINE_OUT_LC\t= AUD_LINE_OUT_LC,\n\tAuto_Initialize.AUD_LINE_OUT_RC\t= AUD_LINE_OUT_RC,\n\tAuto_Initialize.AUD_ADC_PATH\t= AUD_ADC_PATH,\n\tAuto_Initialize.AUD_DAC_PATH\t= AUD_DAC_PATH,\n\tAuto_Initialize.AUD_POWER\t\t= AUD_POWER,\n\tAuto_Initialize.AUD_DATA_FORMAT\t= AUD_DATA_FORMAT,\n\tAuto_Initialize.AUD_SAMPLE_CTRL\t= AUD_SAMPLE_CTRL,\n\tAuto_Initialize.AUD_SET_ACTIVE\t= AUD_SET_ACTIVE;",
+        "Altera_UP_Slow_Clock_Generator Clock_Generator_400KHz (\n\t\n\t.clk\t\t\t\t\t(clk),\n\t.reset\t\t\t\t\t(internal_reset),\n\n\t.enable_clk\t\t\t\t(enable_clk),\n\t\n\t\n\n\t\n\t.new_clk\t\t\t\t(clk_400KHz),\n\n\t.rising_edge\t\t\t(),\n\t.falling_edge\t\t\t(),\n\n\t.middle_of_high_level\t(start_and_stop_en),\n\t.middle_of_low_level\t(change_output_bit_en)\n);",
+        "assign ob_readdata\t\t= readdata;\nassign ob_waitrequest\t= waitrequest;\n\n\nassign readdata[31: 8]\t= 24'h000000;\nassign readdata[ 7: 4]\t= (address == 2'h3) ? i2c_received_data[7:4]\t: 4'h0;\nassign readdata[ 3]\t\t= (address == 2'h1) ? auto_init_error\t\t\t: \n\t\t\t\t\t\t  (address == 2'h3) ? i2c_received_data[3]\t\t: 1'b0;\nassign readdata[ 2]\t\t= (address == 2'h1) ? ~auto_init_complete\t\t: \n\t\t\t\t\t\t  (address == 2'h3) ? i2c_received_data[2]\t\t: 1'b0;\nassign readdata[ 1]\t\t= (address == 2'h1) ? \n\t\t\t\t\t\t\t(s_alavon_slave != I2C_STATE_0_IDLE)\t\t: \n\t\t\t\t\t\t  (address == 2'h3) ? i2c_received_data[1]\t\t: 1'b0;\nassign readdata[ 0]\t\t= (address == 2'h1) ? i2c_ack\t\t\t\t\t: \n\t\t\t\t\t\t  (address == 2'h3) ? i2c_received_data[0]\t\t: 1'b0;\n\nassign waitrequest = valid_operation & \n\t\t\t((write & (s_alavon_slave != I2C_STATE_1_START)) |\n\t\t\t(read & ~transfer_complete));\n\nassign address\t\t= ob_address[1:0];\nassign byteenable\t= ob_byteenable;\nassign chipselect\t= ob_chipselect;\nassign read\t\t\t= ob_read;\nassign write\t\t= ob_write;\nassign writedata\t= ob_writedata;\n\nassign internal_reset\t\t= \n\t\t\treset | \n\t\t\t(chipselect & byteenable[0] & (address == 2'h0) & \n\t\t\t\twrite & writedata[0]);\n\nassign valid_operation\t\t= \n\t\t\tchipselect & byteenable[0] & (\n\t\t\t\t((address == 2'h0) & write & ~writedata[0]) |\n\t\t\t\t((address == 2'h2) & write) |\n\t\t\t\t (address == 2'h3)\n\t\t\t\t);\n\nassign clear_status_bits\t= chipselect & (address == 2'h1) & write;",
+        "always @(posedge clk)\n\tif (reset == 1'b1)\n\t\ttransfer_is_read <= 1'b0;\n\telse if ((s_alavon_slave == I2C_STATE_1_START) && (address == 2'h0))\n\t\ttransfer_is_read <= writedata[3];\n",
+        "always @(posedge clk)\n\tif (reset == 1'b1)\n\t\tread_byte <= 1'b0;\n\telse if (s_alavon_slave == I2C_STATE_1_START)\n\t\tread_byte <= read;\n",
+        "always @(posedge clk)\nbegin\n\tif (internal_reset == 1'b1)\n\tbegin\n\t\tdata_to_transfer\t\t<= 8'h00;\n\t\tnum_bits_to_transfer\t<= 3'h0;\n\tend\n\telse if (auto_init_complete == 1'b0)\n\tbegin\n\t\tdata_to_transfer\t\t<= auto_init_data;\n\t\tnum_bits_to_transfer\t<= 3'h7;\n\tend\n\telse if (s_alavon_slave == I2C_STATE_1_START)\n\tbegin\n\t\tnum_bits_to_transfer <= 3'h7;\n\t\tif ((ob_address == 3'h0) & writedata[2])\n\t\t\tdata_to_transfer <= 8'h34;\n\t\telse if ((ob_address == 3'h4) & writedata[2])\n\t\t\tdata_to_transfer <= 8'h40 | writedata[3];\n\t\telse\n\t\t\tdata_to_transfer <= writedata[7:0];\n\tend\nend",
+        "always @(*)\nbegin\n\t\n\tns_alavon_slave = I2C_STATE_0_IDLE;\n\n    case (s_alavon_slave)\n\tI2C_STATE_0_IDLE:\n\t\tbegin\n\t\t\tif ((valid_operation == 1'b1) && (auto_init_complete == 1'b1))\n\t\t\tbegin\n\t\t\t\tns_alavon_slave = I2C_STATE_1_START;\n\t\t\tend\n\t\t\telse\n\t\t\tbegin\n\t\t\t\tns_alavon_slave = I2C_STATE_0_IDLE;\n\t\t\tend\n\t\tend\n\tI2C_STATE_1_START:\n\t\tbegin\n\t\t\tns_alavon_slave = I2C_STATE_2_TRANSFERING;\n\t\tend\n\tI2C_STATE_2_TRANSFERING:\n\t\tbegin\n\t\t\tif (transfer_complete == 1'b1)\n\t\t\tbegin\n\t\t\t\tns_alavon_slave = I2C_STATE_3_COMPLETE;\n\t\t\tend\n\t\t\telse\n\t\t\tbegin\n\t\t\t\tns_alavon_slave = I2C_STATE_2_TRANSFERING;\n\t\t\tend\n\t\tend\n\tI2C_STATE_3_COMPLETE:\n\t\tbegin\n\t\t\tns_alavon_slave = I2C_STATE_0_IDLE;\n\t\tend\n\tdefault:\n\t\tbegin\n\t\t\tns_alavon_slave = I2C_STATE_0_IDLE;\n\t\tend\n\tendcase\nend",
+        "always @(posedge clk)\nbegin\n\tif (internal_reset == 1'b1)\n\tbegin\n\t\ts_alavon_slave <= I2C_STATE_0_IDLE;\n\tend\n\telse\n\tbegin\n\t\ts_alavon_slave <= ns_alavon_slave;\n\tend\nend"
+    ]
+}

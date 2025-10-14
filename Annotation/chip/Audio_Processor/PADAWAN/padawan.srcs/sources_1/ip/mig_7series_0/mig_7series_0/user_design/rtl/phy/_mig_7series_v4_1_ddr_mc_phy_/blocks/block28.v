@@ -1,0 +1,11 @@
+   assign pi_dqs_found_w[0]    = 1;
+   assign pi_dqs_found_all_w[0]    = 1;
+   assign pi_dqs_found_any_w[0]    = 0;
+   assign pi_phase_locked_lanes[HIGHEST_LANE_B0-1:0]  = 4'b1111;
+   assign pi_dqs_found_lanes[HIGHEST_LANE_B0-1:0]  = 4'b1111;
+   assign pi_dqs_out_of_range_w[0]    = 0;
+   assign pi_phase_locked_w[0]    = 1;
+   assign po_fine_overflow_w[0] = 0;
+   assign po_coarse_overflow_w[0] = 0;
+   assign po_fine_overflow_w[0] = 0;
+   assign pi_fine_overflow_w[0] = 0;

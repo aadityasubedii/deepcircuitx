@@ -1,0 +1,1 @@
+  assign irq = timeout_occurred && control_interrupt_enable;

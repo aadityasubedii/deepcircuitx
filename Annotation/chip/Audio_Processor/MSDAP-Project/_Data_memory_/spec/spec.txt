@@ -1,0 +1,9 @@
+Module name: data_memory.
+
+Module specification: The `data_memory` module is a Verilog module whose primary function is to mimic the functionality of a data memory system. There are two main components to this module, a memory writing mechanism and a mechanism to count zeros in the input. The first component utilizes the system clock signal `Sclk` to write a 16-bit input data `data_in` into a specified memory address `data_wr_addr` at every negative edge, provided the write enable signal `wr_en` is high. The second component counts the number of times a zero input is received on `data_in` at every positive edge of the signal `input_rdy_flag`, up to a maximum of 800, at which point it raises the output signal `zero_flag`. 
+
+The module has several input and output ports. `wr_en` and `rd_en` are the write and read enable signals. `Sclk` is the system clock. `data_wr_addr` and `data_rd_addr` are the write and read addresses for memory. `data_in` is a 16-bit input data, and `xin_data` is a 16-bit data output. The `zero_flag` output signal is raised when 800 zeros have been input. Lastly, `input_rdy_flag` is used to control the zero counting mechanism.
+
+Internally, the module uses two signals: `data_mem` and `zero_cnt`. `data_mem` is a 256-entry memory register array for storing and retrieving data, and `zero_cnt` is a 12-bit counter for zero counting.
+
+The original code is divided into three main blocks. The first `always` block listens for negative edge of `Sclk` and controls the memory writing operation. The second `always`` block listens for the positive edge of `input_rdy_flag` and operates the zero counter. And finally, the `assign` statement decides on the output of the memory reading operation.

@@ -1,0 +1,1 @@
+assign coeffdataL = coeffl[index_coeffL];

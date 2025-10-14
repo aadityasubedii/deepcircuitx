@@ -1,0 +1,26 @@
+{
+    "line_num": [
+        [
+            126,
+            161
+        ],
+        [
+            124,
+            124
+        ],
+        [
+            123,
+            123
+        ],
+        [
+            110,
+            121
+        ]
+    ],
+    "blocks": [
+        "always @( posedge reset, posedge clk_uart) begin\n\tif (reset) begin\n\t\trx_state            <= 'd0;\n\t\trx_bit              <= 'd0;\n\t\trx_byte             <= 'd0;\n\t\trx_tap              <= 'd0;\n\t\trx_start_negedge_d1 <= 'd0;\n\tend else begin\n\t\trx_tap <= {rx_tap[2:0], i_uart_rxd};\n\t\tcase ( rx_state )\n\t\t\t2'd0: begin\n\t\t\t\tif (rx_start_negedge) begin\n\t\t\t\t\trx_state <= 2'd1;\n\t\t\t\tend\n\t\t\tend\n\t\t\t2'd1: begin\n\t\t\t\tif (rx_bit == 3'b110) begin\n\t\t\t\t\trx_state <= 2'd2; \n\t\t\t\tend\n\t\t\tend\n\t\t\t2'd2: begin\n\t\t\t\trx_state <= 2'd0; \n\t\t\tend\n\t\tendcase\n\t\tif ((rx_state == 2'd1) || rx_start_negedge) begin\n\t\t\trx_bit  <= rx_bit + 1'd1;\n\t\t\t\n\t\t\trx_byte <= {i_uart_rxd, rx_byte[7:1]};\n\t\tend\n\t\t\n\t\t\n\t\tif (rx_state == 2'd2 && rx_byte != 8'h0d && (rx_byte != 8'h0c)) begin\n\t\t\t$write(\"%c\", rx_byte);\n\t\tend\n\tend\nend",
+        "assign rx_start_negedge = rx_tap[1] && !rx_tap[0] && (rx_state == 2'h0); ",
+        "assign rx_bit_start = (rx_bit_count == 4'h0);      ",
+        "always @( posedge reset, posedge clk_uart) begin\n\tif (reset) begin\n\t\trx_bit_count <= 4'h0;\n\tend else if (rx_bit_count == 4'h9) begin\n\t\trx_bit_count <= 4'h0;\n\t\t\n\tend else if (rx_start_negedge) begin\n\t\trx_bit_count <= 4'h0;\n\tend else begin\n\t\trx_bit_count <= rx_bit_count + 1'd1;\n\tend\nend"
+    ]
+}

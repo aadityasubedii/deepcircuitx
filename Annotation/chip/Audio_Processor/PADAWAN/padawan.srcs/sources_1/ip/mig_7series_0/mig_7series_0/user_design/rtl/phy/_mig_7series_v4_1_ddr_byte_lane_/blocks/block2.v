@@ -1,0 +1,45 @@
+mig_7series_v4_1_ddr_byte_group_io   #
+   (
+   .PO_DATA_CTL             (PO_DATA_CTL),
+   .BITLANES                (BITLANES),
+   .BITLANES_OUTONLY        (BITLANES_OUTONLY),
+   .OSERDES_DATA_RATE       (L_OSERDES_DATA_RATE),
+   .OSERDES_DATA_WIDTH      (L_OSERDES_DATA_WIDTH),
+   .IODELAY_GRP             (IODELAY_GRP),
+   .FPGA_SPEED_GRADE        (FPGA_SPEED_GRADE),
+   .IDELAYE2_IDELAY_TYPE    (IDELAYE2_IDELAY_TYPE),
+   .IDELAYE2_IDELAY_VALUE   (IDELAYE2_IDELAY_VALUE),
+   .TCK                     (TCK),
+   .SYNTHESIS               (SYNTHESIS)
+   )
+   ddr_byte_group_io
+   (
+   .mem_dq_out               (mem_dq_out),
+   .mem_dq_ts                (mem_dq_ts),
+   .mem_dq_in                (mem_dq_in),
+   .mem_dqs_in               (mem_dqs_in),
+   .mem_dqs_out              (mem_dqs_out),
+   .mem_dqs_ts               (mem_dqs_ts),
+   .rst                      (rst),
+   .oserdes_rst              (po_oserdes_rst),
+   .iserdes_rst              (pi_iserdes_rst ),
+   .iserdes_dout             (iserdes_dout),
+   .dqs_to_phaser            (dqs_to_phaser),
+   .phy_clk                  (phy_clk),
+   .iserdes_clk              (iserdes_clk),
+   .iserdes_clkb             (!iserdes_clk),
+   .iserdes_clkdiv           (iserdes_clkdiv),
+   .idelay_inc               (idelay_inc),
+   .idelay_ce                (idelay_ce),
+   .idelay_ld                (idelay_ld),
+   .idelayctrl_refclk        (idelayctrl_refclk),
+   .oserdes_clk              (oserdes_clk),
+   .oserdes_clk_delayed      (oserdes_clk_delayed),
+   .oserdes_clkdiv           (oserdes_clkdiv),
+   .oserdes_dqs              ({oserdes_dqs[1], oserdes_dqs[0]}),
+   .oserdes_dqsts            ({oserdes_dqs_ts[1], oserdes_dqs_ts[0]}),
+   .oserdes_dq               (of_dqbus),
+   .oserdes_dqts             ({oserdes_dq_ts[1], oserdes_dq_ts[0]}),
+   .fine_delay               (fine_delay),
+   .fine_delay_sel           (fine_delay_sel)
+    );

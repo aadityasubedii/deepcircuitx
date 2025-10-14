@@ -1,0 +1,1 @@
+  assign samp_done = samp_done_r;

@@ -1,0 +1,1 @@
+  assign out_port = data_out;

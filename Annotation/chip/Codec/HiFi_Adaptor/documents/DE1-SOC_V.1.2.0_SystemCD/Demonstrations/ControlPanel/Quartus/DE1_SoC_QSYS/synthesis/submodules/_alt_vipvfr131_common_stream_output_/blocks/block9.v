@@ -1,0 +1,1 @@
+assign sop = dout_valid & dout_sop;

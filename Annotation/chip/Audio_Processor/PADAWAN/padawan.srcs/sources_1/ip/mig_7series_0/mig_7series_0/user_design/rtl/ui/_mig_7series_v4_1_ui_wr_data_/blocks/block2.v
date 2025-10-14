@@ -1,0 +1,1 @@
+  assign {wr_data_mask, wr_data} = wr_buf_out_data[WR_BUF_WIDTH-1:0];

@@ -1,0 +1,1 @@
+  assign E_vinst = E_valid ? D_inst : {7{8'h2d}};

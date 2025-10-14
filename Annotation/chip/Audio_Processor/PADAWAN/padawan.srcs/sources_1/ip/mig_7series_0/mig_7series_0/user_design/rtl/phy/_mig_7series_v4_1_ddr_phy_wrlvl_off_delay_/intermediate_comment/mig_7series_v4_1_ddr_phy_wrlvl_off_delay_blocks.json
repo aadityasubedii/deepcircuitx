@@ -1,0 +1,86 @@
+{
+    "line_num": [
+        [
+            241,
+            245
+        ],
+        [
+            234,
+            239
+        ],
+        [
+            227,
+            232
+        ],
+        [
+            221,
+            226
+        ],
+        [
+            215,
+            220
+        ],
+        [
+            207,
+            213
+        ],
+        [
+            204,
+            206
+        ],
+        [
+            194,
+            197
+        ],
+        [
+            186,
+            191
+        ],
+        [
+            180,
+            185
+        ],
+        [
+            174,
+            178
+        ],
+        [
+            166,
+            172
+        ],
+        [
+            158,
+            164
+        ],
+        [
+            155,
+            155
+        ],
+        [
+            149,
+            149
+        ],
+        [
+            139,
+            147
+        ]
+    ],
+    "blocks": [
+        "  always @(posedge clk) begin\n    po_s2_incdec_c <= #TCQ po_stg2_incdec_c;\n    po_en_s2_c <= #TCQ po_en_stg2_c;\n    ctl_lane_cnt <= #TCQ lane_cnt_dqs_c_r;\n  end",
+        "   always @(posedge clk) begin\n     delay_done_r1 <= #TCQ delay_done;\n     delay_done_r2 <= #TCQ delay_done_r1;\n     delay_done_r3 <= #TCQ delay_done_r2;\n     delay_done_r4 <= #TCQ delay_done_r3;\n   end",
+        "  always @(posedge clk)\n    if (rst || ~pi_fine_dly_dec_done_r)\n      delay_done    <= #TCQ 1'b0;\n    else if ((delay_cnt_r == 6'd1) && (lane_cnt_dqs_c_r == 1'b0))\n      delay_done    <= #TCQ 1'b1;\n",
+        "  always @(posedge clk)\n    if (rst)\n      lane_cnt_dqs_c_r  <= #TCQ 'd0;\n    else if ( po_en_stg2_c && (delay_cnt_r == 6'd1))\n      lane_cnt_dqs_c_r  <= #TCQ lane_cnt_dqs_c_r + 1;\n",
+        "  always @(posedge clk)\n    if (rst || ~pi_fine_dly_dec_done_r || (delay_cnt_r == 6'd0))\n     delay_cnt_r  <= #TCQ TDQSS_DLY;\n    else if ( po_en_stg2_c && (delay_cnt_r > 6'd0))\n      delay_cnt_r  <= #TCQ delay_cnt_r - 1;\n",
+        "  always @(posedge clk)\n    if (rst || ~pi_fine_dly_dec_done_r || delay_done) begin\n      po_stg2_incdec_c   <= #TCQ 1'b1;\n      po_en_stg2_c    <= #TCQ 1'b0;\n    end else if (delay_cnt_r > 6'd0) begin\n      po_en_stg2_c    <= #TCQ ~po_en_stg2_c;\n    end",
+        "   assign po_ck_addr_cmd_delay_done = (TDQSS_DLY == 0) ? pi_fine_dly_dec_done_r\n                                     : delay_done_r4;\n",
+        "  always @(posedge clk) begin\n    po_s2_incdec_f <= #TCQ po_stg2_f_incdec;\n    po_en_s2_f <= #TCQ po_en_stg2_f;\n  end",
+        "  always @(posedge clk) begin\n    po_delay_done_r1 <= #TCQ po_delay_done;\n    po_delay_done_r2 <= #TCQ po_delay_done_r1;\n    po_delay_done_r3 <= #TCQ po_delay_done_r2;\n    po_delay_done_r4 <= #TCQ po_delay_done_r3;\n  end",
+        "  always @(posedge clk)\n    if (rst || ~cmd_delay_start_r6 )\n      po_delay_done    <= #TCQ 1'b0;\n    else if ((po_delay_cnt_r == 6'd1) && (lane_cnt_po_r ==1'b0))\n      po_delay_done    <= #TCQ 1'b1;\n",
+        "  always @(posedge clk)\n    if (rst)\n      lane_cnt_po_r  <= #TCQ 'd0;\n    else if ( po_en_stg2_f  && (po_delay_cnt_r == 6'd1))\n      lane_cnt_po_r  <= #TCQ lane_cnt_po_r + 1;",
+        "  always @(posedge clk)\n    if (rst || ~cmd_delay_start_r6 || (po_delay_cnt_r == 6'd0))\n      \n      \n      po_delay_cnt_r  <= #TCQ (PO_INITIAL_DLY - 31);\n    else if ( po_en_stg2_f && (po_delay_cnt_r > 6'd0))\n      po_delay_cnt_r  <= #TCQ po_delay_cnt_r - 1;",
+        "  always @(posedge clk)\n    if (rst || ~cmd_delay_start_r6 || po_delay_done) begin\n      po_stg2_f_incdec  <= #TCQ 1'b0;\n      po_en_stg2_f    <= #TCQ 1'b0;\n    end else if (po_delay_cnt_r > 6'd0) begin\n      po_en_stg2_f    <= #TCQ ~po_en_stg2_f;\n    end",
+        "  assign po_dec_done = (PO_INITIAL_DLY == 0) ? 1 : po_delay_done_r4;",
+        "   assign phy_ctl_rdy_dly  = cmd_delay_start_r6;",
+        "   always @(posedge clk) begin\n      cmd_delay_start_r1     <= #TCQ cmd_delay_start;\n      cmd_delay_start_r2     <= #TCQ cmd_delay_start_r1;\n      cmd_delay_start_r3     <= #TCQ cmd_delay_start_r2;\n      cmd_delay_start_r4     <= #TCQ cmd_delay_start_r3;\n      cmd_delay_start_r5     <= #TCQ cmd_delay_start_r4;\n      cmd_delay_start_r6     <= #TCQ cmd_delay_start_r5;\n      pi_fine_dly_dec_done_r <= #TCQ pi_fine_dly_dec_done;\n    end"
+    ]
+}

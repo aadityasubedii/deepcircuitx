@@ -1,0 +1,1 @@
+  always @(posedge clk) run_polarity_held_r <= #TCQ run_polarity_held_ns;

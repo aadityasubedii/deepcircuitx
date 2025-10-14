@@ -1,0 +1,43 @@
+{
+    "gpt-message": [
+        {
+            "role": "system",
+            "content": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+        },
+        {
+            "role": "user",
+            "content": "Name of the module and its functionality is as follows: \nModule name: stereo_audio_serializer. \nExplanation: This module serializes stereo audio input, alternating between left and right audio inputs. Inputs are accepted when `i_valid` signal and `i_ready` signal are high. During this stage, the left and right audio input are stored in the `left` and `right` registers. Following this, the `i_ready` signal is set low, halting new inputs. The current audio being outputted is determined by the `o_is_left` register. If `o_is_left` is high, the left audio is outputted; if it is low, the right audio is outputted. The outputting audio alternates between left and right whenever `o_valid` and `o_ready` signals are high. The `i_ready` signal is set to inverse of `o_is_left`, making the module ready to accept inputs when right audio is being outputted. Upon reset, the module is ready to accept new input and defaults to outputting left audio. The stereo audio serializer operates on a clock signal where data transfer occurs at the positive edge of the clock."
+        },
+        {
+            "role": "user",
+            "content": "Input and output ports and their explanation is as follows: \nInput Ports:\n1. reset: It is a control signal. When high, it resets the state of the module, making it ready to accept inputs and defaulting to output the left audio.\n2. clk: This is the clock signal. The positive edge triggers data transfer in this module.\n3. i_valid: This is the validation signal for inputs. The module accepts input when i_valid is high and i_ready is also high.\n4. i_left: This is the left audio input.\n5. i_right: This is the right audio input.\n6. o_ready: This is the readiness signal for output. The module alternates the audio output and make the module ready to accept new input when o_ready is high and o_valid is also high.\n\nOutput Ports:\n1. i_ready: This indicates if the module is ready to accept inputs. It is high after a reset or when right audio is outputted.\n2. o_is_left: This is a binary signal. When it's high, the module outputs the left audio, otherwise it outputs the right. It is defaulted to high on reset.\n3. o_valid: This is the validation signal for output. It is high when the module is not ready to accept input.\n4. o_audio: This is the audio output of the module. It is either the left or right audio input, the choice of which is determined by o_is_left signal."
+        },
+        {
+            "role": "user",
+            "content": "Internal signals and their explanation is as follows: \nInternal signals: `right`, `left`.\n\nExplanation: \n\n1. `right`: This is an internal register that holds the value of the right audio input (`i_right`), if the module was ready to accept inputs when a positive edge of the clock signal came in and the inputs were valid (`i_valid` was high).  \n\n2. `left`: This is an internal register that holds the value of the left audio input (`i_left`), if the module was ready to accept inputs when a positive edge of the clock signal came in and the inputs were valid (`i_valid` was high). \n\nBoth `right` and `left` are used to output the audio signal, with the choice between them being determined by the value of `o_is_left` - if it is high, `left` is chosen, otherwise `right` is chosen. \nAlso, when a reset signal comes, both the `right` and `left` registers are cleared (set to 0)."
+        }
+    ],
+    "claude-message": [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+                },
+                {
+                    "type": "text",
+                    "text": "Name of the module and its functionality is as follows: \nModule name: stereo_audio_serializer. \nExplanation: This module serializes stereo audio input, alternating between left and right audio inputs. Inputs are accepted when `i_valid` signal and `i_ready` signal are high. During this stage, the left and right audio input are stored in the `left` and `right` registers. Following this, the `i_ready` signal is set low, halting new inputs. The current audio being outputted is determined by the `o_is_left` register. If `o_is_left` is high, the left audio is outputted; if it is low, the right audio is outputted. The outputting audio alternates between left and right whenever `o_valid` and `o_ready` signals are high. The `i_ready` signal is set to inverse of `o_is_left`, making the module ready to accept inputs when right audio is being outputted. Upon reset, the module is ready to accept new input and defaults to outputting left audio. The stereo audio serializer operates on a clock signal where data transfer occurs at the positive edge of the clock."
+                },
+                {
+                    "type": "text",
+                    "text": "Input and output ports and their explanation is as follows: \nInput Ports:\n1. reset: It is a control signal. When high, it resets the state of the module, making it ready to accept inputs and defaulting to output the left audio.\n2. clk: This is the clock signal. The positive edge triggers data transfer in this module.\n3. i_valid: This is the validation signal for inputs. The module accepts input when i_valid is high and i_ready is also high.\n4. i_left: This is the left audio input.\n5. i_right: This is the right audio input.\n6. o_ready: This is the readiness signal for output. The module alternates the audio output and make the module ready to accept new input when o_ready is high and o_valid is also high.\n\nOutput Ports:\n1. i_ready: This indicates if the module is ready to accept inputs. It is high after a reset or when right audio is outputted.\n2. o_is_left: This is a binary signal. When it's high, the module outputs the left audio, otherwise it outputs the right. It is defaulted to high on reset.\n3. o_valid: This is the validation signal for output. It is high when the module is not ready to accept input.\n4. o_audio: This is the audio output of the module. It is either the left or right audio input, the choice of which is determined by o_is_left signal."
+                },
+                {
+                    "type": "text",
+                    "text": "Internal signals and their explanation is as follows: \nInternal signals: `right`, `left`.\n\nExplanation: \n\n1. `right`: This is an internal register that holds the value of the right audio input (`i_right`), if the module was ready to accept inputs when a positive edge of the clock signal came in and the inputs were valid (`i_valid` was high).  \n\n2. `left`: This is an internal register that holds the value of the left audio input (`i_left`), if the module was ready to accept inputs when a positive edge of the clock signal came in and the inputs were valid (`i_valid` was high). \n\nBoth `right` and `left` are used to output the audio signal, with the choice between them being determined by the value of `o_is_left` - if it is high, `left` is chosen, otherwise `right` is chosen. \nAlso, when a reset signal comes, both the `right` and `left` registers are cleared (set to 0)."
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,1 @@
+    twos_complement #(.WIDTH(OUT_W))

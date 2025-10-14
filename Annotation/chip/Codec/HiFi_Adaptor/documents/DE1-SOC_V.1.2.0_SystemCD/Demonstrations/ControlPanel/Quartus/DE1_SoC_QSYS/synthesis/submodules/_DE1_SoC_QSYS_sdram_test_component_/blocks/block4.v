@@ -1,0 +1,1 @@
+  assign index = latency - 1'b1;

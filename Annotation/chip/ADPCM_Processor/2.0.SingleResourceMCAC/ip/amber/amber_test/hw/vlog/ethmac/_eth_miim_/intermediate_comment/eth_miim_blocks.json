@@ -1,0 +1,101 @@
+{
+    "line_num": [
+        [
+            443,
+            446
+        ],
+        [
+            437,
+            440
+        ],
+        [
+            433,
+            434
+        ],
+        [
+            428,
+            429
+        ],
+        [
+            421,
+            424
+        ],
+        [
+            419,
+            419
+        ],
+        [
+            396,
+            415
+        ],
+        [
+            364,
+            391
+        ],
+        [
+            359,
+            359
+        ],
+        [
+            356,
+            356
+        ],
+        [
+            355,
+            355
+        ],
+        [
+            354,
+            354
+        ],
+        [
+            353,
+            353
+        ],
+        [
+            309,
+            349
+        ],
+        [
+            290,
+            306
+        ],
+        [
+            262,
+            286
+        ],
+        [
+            227,
+            258
+        ],
+        [
+            213,
+            222
+        ],
+        [
+            197,
+            209
+        ]
+    ],
+    "blocks": [
+        "eth_outputcontrol outctrl(.Clk(Clk), .Reset(Reset), .MdcEn_n(MdcEn_n), .InProgress(InProgress), \n                          .ShiftedBit(ShiftedBit), .BitCounter(BitCounter), .WriteOp(WriteOp), .NoPre(NoPre), \n                          .Mdo(Mdo), .MdoEn(MdoEn)\n                         );",
+        "eth_shiftreg shftrg(.Clk(Clk), .Reset(Reset), .MdcEn_n(MdcEn_n), .Mdi(Mdi), .Fiad(Fiad), .Rgad(Rgad), \n                    .CtrlData(CtrlData), .WriteOp(WriteOp), .ByteSelect(ByteSelect), .LatchByte(LatchByte), \n                    .ShiftedBit(ShiftedBit), .Prsd(Prsd), .LinkFail(LinkFail)\n                   );",
+        "eth_clockgen clkgen(.Clk(Clk), .Reset(Reset), .Divider(Divider[7:0]), .MdcEn(MdcEn), .MdcEn_n(MdcEn_n), .Mdc(Mdc) \n                   );",
+        "assign LatchByte1_d2 = InProgress & ~WriteOp & BitCounter == 7'h37;\nassign LatchByte0_d2 = InProgress & ~WriteOp & BitCounter == 7'h3F;",
+        "assign ByteSelect[0] = InProgress & ((NoPre & (BitCounter == 7'h0)) | (~NoPre & (BitCounter == 7'h20)));\nassign ByteSelect[1] = InProgress & (BitCounter == 7'h28);\nassign ByteSelect[2] = InProgress & WriteOp & (BitCounter == 7'h30);\nassign ByteSelect[3] = InProgress & WriteOp & (BitCounter == 7'h38);",
+        "assign EndOp = BitCounter==63;",
+        "always @ (posedge Clk or posedge Reset)\nbegin\n  if(Reset)\n    BitCounter[6:0] <= #Tp 7'h0;\n  else\n    begin\n      if(MdcEn)\n        begin\n          if(InProgress)\n            begin\n              if(NoPre & ( BitCounter == 7'h0 ))\n                BitCounter[6:0] <= #Tp 7'h21;\n              else\n                BitCounter[6:0] <= #Tp BitCounter[6:0] + 1'b1;\n            end\n          else\n            BitCounter[6:0] <= #Tp 7'h0;\n        end\n    end\nend",
+        "always @ (posedge Clk or posedge Reset)\nbegin\n  if(Reset)\n    begin\n      InProgress <= #Tp 1'b0;\n      WriteOp <= #Tp 1'b0;\n    end\n  else\n    begin\n      if(MdcEn)\n        begin\n          if(StartOp)\n            begin\n              if(~InProgress)\n                WriteOp <= #Tp WriteDataOp;\n              InProgress <= #Tp 1'b1;\n            end\n          else\n            begin\n              if(EndOp)\n                begin\n                  InProgress <= #Tp 1'b0;\n                  WriteOp <= #Tp 1'b0;\n                end\n            end\n        end\n    end\nend",
+        "assign Busy = WCtrlData | WCtrlDataStart | RStat | RStatStart | SyncStatMdcEn | EndBusy | InProgress | InProgress_q3 | Nvalid;",
+        "assign StartOp      = WriteDataOp | ReadStatusOp | ScanStatusOp;",
+        "assign ScanStatusOp = SyncStatMdcEn     & ~InProgress & ~InProgress_q1 & ~InProgress_q2;",
+        "assign ReadStatusOp = RStatStart_q1     & ~RStatStart_q2;",
+        "assign WriteDataOp  = WCtrlDataStart_q1 & ~WCtrlDataStart_q2;    ",
+        "always @ (posedge Clk or posedge Reset)\nbegin\n  if(Reset)\n    begin\n      WCtrlDataStart_q1 <= #Tp 1'b0;\n      WCtrlDataStart_q2 <= #Tp 1'b0;\n\n      RStatStart_q1 <= #Tp 1'b0;\n      RStatStart_q2 <= #Tp 1'b0;\n\n      InProgress_q1 <= #Tp 1'b0;\n      InProgress_q2 <= #Tp 1'b0;\n      InProgress_q3 <= #Tp 1'b0;\n\n  \t  LatchByte0_d <= #Tp 1'b0;\n  \t  LatchByte1_d <= #Tp 1'b0;\n\n  \t  LatchByte <= #Tp 2'b00;\n    end\n  else\n    begin\n      if(MdcEn)\n        begin\n          WCtrlDataStart_q1 <= #Tp WCtrlDataStart;\n          WCtrlDataStart_q2 <= #Tp WCtrlDataStart_q1;\n\n          RStatStart_q1 <= #Tp RStatStart;\n          RStatStart_q2 <= #Tp RStatStart_q1;\n\n          LatchByte[0] <= #Tp LatchByte0_d;\n          LatchByte[1] <= #Tp LatchByte1_d;\n\n          LatchByte0_d <= #Tp LatchByte0_d2;\n          LatchByte1_d <= #Tp LatchByte1_d2;\n\n          InProgress_q1 <= #Tp InProgress;\n          InProgress_q2 <= #Tp InProgress_q1;\n          InProgress_q3 <= #Tp InProgress_q2;\n        end\n    end\nend ",
+        "always @ (posedge Clk or posedge Reset)\nbegin\n  if(Reset)\n    Nvalid <= #Tp 1'b0;\n  else\n    begin\n      if(~InProgress_q2 & InProgress_q3)\n        begin\n          Nvalid <= #Tp 1'b0;\n        end\n      else\n        begin\n          if(ScanStat_q2  & ~SyncStatMdcEn)\n            Nvalid <= #Tp 1'b1;\n        end\n    end\nend ",
+        "always @ (posedge Clk or posedge Reset)\nbegin\n  if(Reset)\n    begin\n      WCtrlDataStart <= #Tp 1'b0;\n      WCtrlDataStart_q <= #Tp 1'b0;\n      RStatStart <= #Tp 1'b0;\n    end\n  else\n    begin\n      if(EndBusy)\n        begin\n          WCtrlDataStart <= #Tp 1'b0;\n          RStatStart <= #Tp 1'b0;\n        end\n      else\n        begin\n          if(WCtrlData_q2 & ~WCtrlData_q3)\n            WCtrlDataStart <= #Tp 1'b1;\n          if(RStat_q2 & ~RStat_q3)\n            RStatStart <= #Tp 1'b1;\n          WCtrlDataStart_q <= #Tp WCtrlDataStart;\n        end\n    end\nend ",
+        "always @ (posedge Clk or posedge Reset)\nbegin\n  if(Reset)\n    begin\n      WCtrlData_q1 <= #Tp 1'b0;\n      WCtrlData_q2 <= #Tp 1'b0;\n      WCtrlData_q3 <= #Tp 1'b0;\n      \n      RStat_q1 <= #Tp 1'b0;\n      RStat_q2 <= #Tp 1'b0;\n      RStat_q3 <= #Tp 1'b0;\n\n      ScanStat_q1  <= #Tp 1'b0;\n      ScanStat_q2  <= #Tp 1'b0;\n      SyncStatMdcEn <= #Tp 1'b0;\n    end\n  else\n    begin\n      WCtrlData_q1 <= #Tp WCtrlData;\n      WCtrlData_q2 <= #Tp WCtrlData_q1;\n      WCtrlData_q3 <= #Tp WCtrlData_q2;\n\n      RStat_q1 <= #Tp RStat;\n      RStat_q2 <= #Tp RStat_q1;\n      RStat_q3 <= #Tp RStat_q2;\n\n      ScanStat_q1  <= #Tp ScanStat;\n      ScanStat_q2  <= #Tp ScanStat_q1;\n      if(MdcEn)\n        SyncStatMdcEn  <= #Tp ScanStat_q2;\n    end\nend",
+        "always @ (posedge Clk or posedge Reset)\nbegin\n  if(Reset)\n    UpdateMIIRX_DATAReg <= #Tp 0;\n  else\n  if(EndBusy & ~WCtrlDataStart_q)\n    UpdateMIIRX_DATAReg <= #Tp 1;\n  else\n    UpdateMIIRX_DATAReg <= #Tp 0;    \nend",
+        "always @ (posedge Clk or posedge Reset)\nbegin\n  if(Reset)\n    begin\n      EndBusy_d <= #Tp 1'b0;\n      EndBusy <= #Tp 1'b0;\n    end\n  else\n    begin\n      EndBusy_d <= #Tp ~InProgress_q2 & InProgress_q3;\n      EndBusy   <= #Tp EndBusy_d;\n    end\nend"
+    ]
+}

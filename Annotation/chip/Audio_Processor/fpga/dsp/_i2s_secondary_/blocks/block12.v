@@ -1,0 +1,1 @@
+    assign start_frame = prev_ws & !ws0;

@@ -1,0 +1,1 @@
+    assign out_data = out_payload[DATA_WIDTH - 1 : 0];

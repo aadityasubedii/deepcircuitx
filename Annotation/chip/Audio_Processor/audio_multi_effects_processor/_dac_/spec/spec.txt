@@ -1,0 +1,9 @@
+Module name: dac. 
+
+Module specification: The 'dac' module is a critical component of a digital-to-analog converter (DAC) system that operates through SPI (Serial Peripheral Interface). The module's operation synchronizes on the positive and negative edges of a clock signal, where the positive edge deals with the block/state management, and the negative edge adjusts output 'mosi' according to the block/state. 
+
+The module inputs include 'clock', the primary timing signal, 'clockenable' acting as a control to allow or suspend operations, and a 12-bit 'datos' as the primary data input. The module outputs consist of 'mosi,' the main data signal that holds the command, address, or 'datos' in two's complement form, 'daccs' acting as a control signal to manage the start and end of data block transmission, 'sck' which serves as the clock for the SPI, and 'dacclr' which appears to function as a reset signal for the external DAC.
+
+Internal signals encompass 'datos2compl', holding the 2's complement of 'datos', 'bloque' that keeps track of the current block number or state, 'estadosck' controlling the output 'sck', 'command' holding a hardcoded DAC command, and 'address' holding a hardcoded DAC address. 
+
+In terms of functionality, two 'always' blocks driven by positive and negative clock edge form the main code. The positive edge block handles the state management and transitions, while the negative edge block controls the outgoing SPI signal based on state. It results in an overall SPI interface module for DAC, capable of transmitting commands, addresses, and data sequentially and in sync with the clock signal.

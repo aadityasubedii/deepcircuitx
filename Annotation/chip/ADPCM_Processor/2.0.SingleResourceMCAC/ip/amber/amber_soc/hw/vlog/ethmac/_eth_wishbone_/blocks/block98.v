@@ -1,0 +1,1 @@
+assign TxAbortPulse   = TxAbort_wb   & ~TxAbort_wb_q;

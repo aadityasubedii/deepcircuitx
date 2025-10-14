@@ -1,0 +1,1 @@
+  assign xbrk_traceoff = 1'b0;

@@ -1,0 +1,1 @@
+  assign MonARegAddrInc = MonAReg[10 : 2]+1;

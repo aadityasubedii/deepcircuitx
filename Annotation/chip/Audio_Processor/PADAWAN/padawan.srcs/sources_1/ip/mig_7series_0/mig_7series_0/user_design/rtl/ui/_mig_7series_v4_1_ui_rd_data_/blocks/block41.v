@@ -1,0 +1,1 @@
+        always @(rd_data_en) app_rd_data_valid = rd_data_en;

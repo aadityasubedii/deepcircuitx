@@ -1,0 +1,1 @@
+  assign take_action_any_break = take_action_break_a | take_action_break_b | take_action_break_c;

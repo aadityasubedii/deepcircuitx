@@ -1,0 +1,1 @@
+  always @(posedge clk) oneeighty_r <= #TCQ oneeighty_ns;

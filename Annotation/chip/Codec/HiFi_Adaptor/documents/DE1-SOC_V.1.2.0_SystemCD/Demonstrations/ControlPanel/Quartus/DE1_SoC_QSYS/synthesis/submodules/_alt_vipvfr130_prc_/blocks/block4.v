@@ -1,0 +1,1 @@
+		assign dout_valid = valid_out;

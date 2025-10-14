@@ -1,0 +1,1 @@
+    always @(dm_in[ 0]) dm_timing_check( 0);

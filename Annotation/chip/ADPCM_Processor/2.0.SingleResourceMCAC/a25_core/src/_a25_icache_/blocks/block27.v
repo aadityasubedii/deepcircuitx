@@ -1,0 +1,1 @@
+        assign data_wenable_way[i] = ( source_sel[C_FILL] || read_miss_fill ) && select_way[i];

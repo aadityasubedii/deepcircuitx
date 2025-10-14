@@ -1,0 +1,1 @@
+assign MasterAccessFinished = m_wb_ack_i | m_wb_err_i;

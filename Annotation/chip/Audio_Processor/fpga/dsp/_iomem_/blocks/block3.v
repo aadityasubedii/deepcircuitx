@@ -1,0 +1,1 @@
+    initial ready = 0;

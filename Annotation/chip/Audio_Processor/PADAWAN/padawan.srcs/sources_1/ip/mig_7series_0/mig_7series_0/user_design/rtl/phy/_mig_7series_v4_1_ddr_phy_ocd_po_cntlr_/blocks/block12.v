@@ -1,0 +1,1 @@
+  always @(posedge clk) ocal_scan_win_not_found_r <= #TCQ ocal_scan_win_not_found_ns;

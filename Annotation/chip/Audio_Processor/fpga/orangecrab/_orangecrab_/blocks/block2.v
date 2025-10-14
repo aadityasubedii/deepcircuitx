@@ -1,0 +1,1 @@
+    assign clock_out = divide;

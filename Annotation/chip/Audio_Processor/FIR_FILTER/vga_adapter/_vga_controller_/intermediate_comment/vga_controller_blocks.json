@@ -1,0 +1,46 @@
+{
+    "line_num": [
+        [
+            167,
+            193
+        ],
+        [
+            155,
+            155
+        ],
+        [
+            139,
+            152
+        ],
+        [
+            118,
+            130
+        ],
+        [
+            113,
+            113
+        ],
+        [
+            104,
+            112
+        ],
+        [
+            101,
+            101
+        ],
+        [
+            90,
+            100
+        ]
+    ],
+    "blocks": [
+        "\talways @(pixel_colour)\n\tbegin\t\t\n\t\tVGA_R <= 'b0;\n\t\tVGA_G <= 'b0;\n\t\tVGA_B <= 'b0;\n\t\tif (MONOCHROME == \"FALSE\")\n\t\tbegin\n\t\t\tfor (index = 10-BITS_PER_COLOUR_CHANNEL; index >= 0; index = index - BITS_PER_COLOUR_CHANNEL)\n\t\t\tbegin\n\t\t\t\tfor (sub_index = BITS_PER_COLOUR_CHANNEL - 1; sub_index >= 0; sub_index = sub_index - 1)\n\t\t\t\tbegin\n\t\t\t\t\tVGA_R[sub_index+index] <= pixel_colour[sub_index + BITS_PER_COLOUR_CHANNEL*2];\n\t\t\t\t\tVGA_G[sub_index+index] <= pixel_colour[sub_index + BITS_PER_COLOUR_CHANNEL];\n\t\t\t\t\tVGA_B[sub_index+index] <= pixel_colour[sub_index];\n\t\t\t\tend\n\t\t\tend\t\n\t\tend\n\t\telse\n\t\tbegin\n\t\t\tfor (index = 0; index < 10; index = index + 1)\n\t\t\tbegin\n\t\t\t\tVGA_R[index] <= pixel_colour[0:0];\n\t\t\t\tVGA_G[index] <= pixel_colour[0:0];\n\t\t\t\tVGA_B[index] <= pixel_colour[0:0];\n\t\t\tend\t\n\t\tend\n\tend",
+        "\tassign VGA_SYNC = vcc;",
+        "\talways @(posedge vga_clock)\n\tbegin\n\t\t\n\t\tVGA_HS1 <= ~((xCounter >= C_HORZ_SYNC_START) && (xCounter <= C_HORZ_SYNC_END));\n\t\tVGA_VS1 <= ~((yCounter >= C_VERT_SYNC_START) && (yCounter <= C_VERT_SYNC_END));\n\t\t\n\t\t\n\t\tVGA_BLANK1 <= ((xCounter < C_HORZ_NUM_PIXELS) && (yCounter < C_VERT_NUM_PIXELS));\t\n\t\n\t\t\n\t\tVGA_HS <= VGA_HS1;\n\t\tVGA_VS <= VGA_VS1;\n\t\tVGA_BLANK <= VGA_BLANK1;\t\n\tend",
+        "\talways @(*)\n\tbegin\n\t\tif (RESOLUTION == \"320x240\")\n\t\tbegin\n\t\t\tx = xCounter[9:1];\n\t\t\ty = yCounter[8:1];\n\t\tend\n\t\telse\n\t\tbegin\n\t\t\tx = xCounter[9:2];\n\t\t\ty = yCounter[8:2];\n\t\tend\n\tend",
+        "\tassign yCounter_clear = (yCounter == (C_VERT_TOTAL_COUNT-1)); ",
+        "\talways @(posedge vga_clock or negedge resetn)\n\tbegin\n\t\tif (!resetn)\n\t\t\tyCounter <= 10'd0;\n\t\telse if (xCounter_clear && yCounter_clear)\n\t\t\tyCounter <= 10'd0;\n\t\telse if (xCounter_clear)\t\t\n\t\t\tyCounter <= yCounter + 1'b1;\n\tend",
+        "\tassign xCounter_clear = (xCounter == (C_HORZ_TOTAL_COUNT-1));",
+        "\talways @(posedge vga_clock or negedge resetn)\n\tbegin\n\t\tif (!resetn)\n\t\t\txCounter <= 10'd0;\n\t\telse if (xCounter_clear)\n\t\t\txCounter <= 10'd0;\n\t\telse\n\t\tbegin\n\t\t\txCounter <= xCounter + 1'b1;\n\t\tend\n\tend"
+    ]
+}

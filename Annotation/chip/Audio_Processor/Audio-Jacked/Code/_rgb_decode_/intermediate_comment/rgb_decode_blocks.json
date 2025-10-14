@@ -1,0 +1,41 @@
+{
+    "line_num": [
+        [
+            66,
+            95
+        ],
+        [
+            63,
+            63
+        ],
+        [
+            62,
+            62
+        ],
+        [
+            60,
+            60
+        ],
+        [
+            59,
+            59
+        ],
+        [
+            51,
+            55
+        ],
+        [
+            33,
+            48
+        ]
+    ],
+    "blocks": [
+        "always@(posedge clk)\n\tif(reset)\n\tbegin\n\t\tR <= 8'd0;\n\t\tG <= 8'd0;\n\t\tB <= 8'd0;\n\tend\n\telse if(buff_num)\n\t\tcase(data_color_0)\n\t\t2'b00:begin\n\t\t\t\tR <= {3'b110,5'd0}; \n\t\t\t\tG <= {3'b110,5'd0};\n\t\t\t\tB <= {2'b11, 6'd0};\n\t\t\t\tend\n\t\t2'b01:begin\n\t\t\t\tR <= {3'b000,5'd0}; \n\t\t\t\tG <= {3'b010,5'd0};\n\t\t\t\tB <= {2'b11, 6'd0};\n\t\t\t\tend\n\t\t2'b10:begin\n\t\t\t\tR <= {3'b111,5'd0}; \n\t\t\t\tG <= {3'b001,5'd0};\n\t\t\t\tB <= {2'b00, 6'd0};\n\t\t\t\tend\n\t\t2'b11:begin\n\t\t\t\tR <= {3'b001,5'd0}; \n\t\t\t\tG <= {3'b100,5'd0};\n\t\t\t\tB <= {2'b11, 6'd0};\n\t\t\t\tend\n\t   endcase",
+        "assign data_color_1[0] = br_rgb_data_1[30-(hcount*2)]; ",
+        "assign data_color_1[1] = br_rgb_data_1[31-(hcount*2)]; ",
+        "assign data_color_0[0] = br_rgb_data_0[30-(hcount*2)]; ",
+        "assign data_color_0[1] = br_rgb_data_0[31-(hcount*2)]; ",
+        "always@(vga_addr_bit)\n\tif (reset)\n\t\tbuff_num <= 0;\n\telse \n\t\tbuff_num <= ~buff_num; ",
+        "always@(posedge clk)\n    if (reset)\n        begin\n        br_rgb_data_0 <= 0;\n\t\t  br_rgb_data_1 <= 0;\n        end\n    else if (decode_state)\n\t\t  get_data <= 1;\n\t else if (get_data)\n\t\tbegin\n\t\tget_data <= 0;\n        if (buff_num)\n            br_rgb_data_0 <= br_memdata_out; \n        else\n            br_rgb_data_1 <= br_memdata_out;\n\t\tend"
+    ]
+}

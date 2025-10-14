@@ -1,0 +1,1 @@
+  assign D_ctrl_mem32 = D_op_ldw|D_op_ldwio|D_op_stw|D_op_stwio;

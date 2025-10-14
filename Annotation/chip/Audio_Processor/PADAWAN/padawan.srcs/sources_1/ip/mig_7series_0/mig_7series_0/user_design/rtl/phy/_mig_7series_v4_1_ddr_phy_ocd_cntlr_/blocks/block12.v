@@ -1,0 +1,1 @@
+  always @(posedge clk) phy_rddata_en_r2 <= #TCQ phy_rddata_en_r1;

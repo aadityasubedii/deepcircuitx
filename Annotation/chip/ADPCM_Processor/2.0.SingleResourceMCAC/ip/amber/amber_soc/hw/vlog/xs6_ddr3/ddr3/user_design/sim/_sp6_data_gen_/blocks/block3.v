@@ -1,0 +1,5 @@
+generate
+
+
+
+if (DATA_PATTERN == "DGEN_ADDR"  || DATA_PATTERN == "DGEN_ALL")  begin : ADDRESS_PATTERN

@@ -1,0 +1,1 @@
+        for (i = 1; i < DEPTH-1; i = i + 1) begin : storage_logic

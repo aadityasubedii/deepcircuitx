@@ -1,0 +1,56 @@
+{
+    "line_num": [
+        [
+            169,
+            169
+        ],
+        [
+            168,
+            169
+        ],
+        [
+            133,
+            166
+        ],
+        [
+            121,
+            124
+        ],
+        [
+            116,
+            116
+        ],
+        [
+            112,
+            112
+        ],
+        [
+            108,
+            115
+        ],
+        [
+            105,
+            105
+        ],
+        [
+            103,
+            106
+        ],
+        [
+            101,
+            102
+        ]
+    ],
+    "blocks": [
+        "  assign rd_merge_data = buf_out_data[2*nCK_PER_CLK*DATA_WIDTH-1:0];",
+        "  output wire [2*nCK_PER_CLK*DATA_WIDTH-1:0] rd_merge_data;\n  assign rd_merge_data = buf_out_data[2*nCK_PER_CLK*DATA_WIDTH-1:0];",
+        "  generate\n    begin : ram_buf\n      wire [RAM_WIDTH-1:0] buf_in_data;\n      if (REMAINDER == 0)\n        assign buf_in_data = payload;\n      else\n        assign buf_in_data = {{6-REMAINDER{1'b0}}, payload};\n\n      genvar i;\n      for (i=0; i<RAM_CNT; i=i+1) begin : rd_buffer_ram\n        RAM32M\n          #(.INIT_A(64'h0000000000000000),\n            .INIT_B(64'h0000000000000000),\n            .INIT_C(64'h0000000000000000),\n            .INIT_D(64'h0000000000000000)\n          ) RAM32M0 (\n            .DOA(buf_out_data[((i*6)+4)+:2]),\n            .DOB(buf_out_data[((i*6)+2)+:2]),\n            .DOC(buf_out_data[((i*6)+0)+:2]),\n            .DOD(),\n            .DIA(buf_in_data[((i*6)+4)+:2]),\n            .DIB(buf_in_data[((i*6)+2)+:2]),\n            .DIC(buf_in_data[((i*6)+0)+:2]),\n            .DID(2'b0),\n            .ADDRA(buf_rd_addr_r),\n            .ADDRB(buf_rd_addr_r),\n            .ADDRC(buf_rd_addr_r),\n            .ADDRD(buf_wr_addr),\n            .WE(wr_ecc_buf),\n            .WCLK(clk)\n           );\n      end \n    end\n  endgenerate",
+        "  always @(rd_data)\n    for (h=0; h<2*nCK_PER_CLK; h=h+1)\n      payload[h*DATA_WIDTH+:DATA_WIDTH] = \n        rd_data[h*PAYLOAD_WIDTH+:DATA_WIDTH];",
+        "  endgenerate",
+        "      assign buf_wr_addr = {{4-DATA_BUF_ADDR_WIDTH{1'b0}},",
+        "      always @(posedge clk) \n        buf_rd_addr_r <= #TCQ{{4-DATA_BUF_ADDR_WIDTH{1'b0}},\n                               wr_data_addr[DATA_BUF_ADDR_WIDTH-1:0],\n                               wr_data_offset};\n      assign buf_wr_addr = {{4-DATA_BUF_ADDR_WIDTH{1'b0}},\n                            rd_data_addr[DATA_BUF_ADDR_WIDTH-1:0], \n                            rd_data_offset};\n    end",
+        "      assign buf_wr_addr = {rd_data_addr[3:0], rd_data_offset};",
+        "      always @(posedge clk)  \n        buf_rd_addr_r <= #TCQ{wr_data_addr[3:0], wr_data_offset};\n      assign buf_wr_addr = {rd_data_addr[3:0], rd_data_offset};\n    end",
+        "  generate\n    if (DATA_BUF_ADDR_WIDTH >= 4) begin : ge_4_addr_bits"
+    ]
+}

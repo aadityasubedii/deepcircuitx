@@ -1,0 +1,1 @@
+  assign irq = |(edge_capture & irq_mask);

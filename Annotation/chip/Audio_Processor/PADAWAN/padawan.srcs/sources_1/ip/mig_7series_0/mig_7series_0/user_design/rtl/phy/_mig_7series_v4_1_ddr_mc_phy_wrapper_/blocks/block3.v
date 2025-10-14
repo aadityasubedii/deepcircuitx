@@ -1,0 +1,1 @@
+   assign phy_ctl_full = phy_ctl_full_temp[0];

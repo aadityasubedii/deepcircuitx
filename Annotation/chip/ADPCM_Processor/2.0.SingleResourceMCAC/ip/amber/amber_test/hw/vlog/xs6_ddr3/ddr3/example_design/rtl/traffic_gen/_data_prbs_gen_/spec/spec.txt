@@ -1,0 +1,11 @@
+Module name: data_prbs_gen. 
+
+Module specification: The 'data_prbs_gen' module is a parameterized Pseudorandom Binary Sequence (PRBS) generator that uses a linear feedback shift register (LFSR) for PRBS generation. The generated PRBS can be used for different purposes like testing and debugging. 
+
+Input ports include 'clk_i' for clock input to process operations; 'clk_en' signal to decide whether the clock will have an effect; 'rst_i' to reset the LFSR; 'prbs_fseed_i' as a 32-bit input to fine-tune the seed of the PRBS; 'prbs_seed_init' to setup the initial seed for the PRBS and 'prbs_seed_i' is an array signal input carrying the PRBS seed data or initial value of the LFSR. 
+
+The module has one output port 'prbs_o', which is an array signal output that provides the generated pseudorandom binary sequence for further use. 
+
+Internal signals used include 'prbs' which is a register array that holds the generated PRBS; 'lfsr_q' which is an array that represents the LFSR and is used for the generation of the pseudorandom sequence, and 'i', an integer, unused in the current version of the code. 
+
+The module's operation can be distinctly divided into two sections: one handles the seeding and resetting of the LFSR based on params 'prbs_seed_init', 'EYE_TEST', and 'rst_i'. The second section, on clock enable 'clk_en', updates the LFSR based on a logic and produces an output 'prbs_o' that reflects the states of the LFSR. A standalone section assigns the shifted LFSR values to the 'prbs' which will then be assigned to output 'prbs_o' for externa use.

@@ -1,0 +1,17 @@
+  assign phy_ctl_clk_split1     = phy_clk;
+  assign phy_ctl_wd_split1      = phy_ctl_wd;
+  assign phy_data_offset_1_split1   = data_offset_1;
+  assign phy_ctl_wr_split1      = phy_ctl_wr;
+  assign phy_clk_split1         = phy_clk;
+  assign phy_cmd_wr_en_split1   = phy_cmd_wr_en;
+  assign phy_data_wr_en_split1  = phy_data_wr_en;
+  assign phy_rd_en_split1       = phy_rd_en;
+  assign phy_dout_split1        = phy_dout;
+  assign phy_ctl_clk_split2     = phy_clk;
+  assign phy_ctl_wd_split2      = phy_ctl_wd;
+  assign phy_data_offset_2_split2   = data_offset_2;
+  assign phy_ctl_wr_split2      = phy_ctl_wr;
+  assign phy_clk_split2         = phy_clk;
+  assign phy_cmd_wr_en_split2   = phy_cmd_wr_en;
+  assign phy_data_wr_en_split2  = phy_data_wr_en;
+  assign phy_rd_en_split2       = phy_rd_en;

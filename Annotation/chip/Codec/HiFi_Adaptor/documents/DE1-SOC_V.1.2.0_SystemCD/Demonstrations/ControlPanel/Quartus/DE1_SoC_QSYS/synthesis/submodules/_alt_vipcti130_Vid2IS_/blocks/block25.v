@@ -1,0 +1,1 @@
+assign wrreq_pre_swap = wrreq & ~full;

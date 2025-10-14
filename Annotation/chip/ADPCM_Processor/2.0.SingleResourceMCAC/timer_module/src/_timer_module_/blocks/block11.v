@@ -1,0 +1,1 @@
+assign o_wb_err = 1'd0;

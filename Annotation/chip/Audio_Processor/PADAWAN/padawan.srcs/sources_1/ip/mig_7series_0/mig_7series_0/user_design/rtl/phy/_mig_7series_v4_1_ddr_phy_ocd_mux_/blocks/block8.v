@@ -1,0 +1,1 @@
+  assign po_stg23_incdec = po_stg23_incdec_r;

@@ -1,0 +1,1 @@
+  localparam CODE_WIDTH = DATA_WIDTH + ECC_WIDTH;

@@ -1,0 +1,1 @@
+  assign cke = zs_cke;

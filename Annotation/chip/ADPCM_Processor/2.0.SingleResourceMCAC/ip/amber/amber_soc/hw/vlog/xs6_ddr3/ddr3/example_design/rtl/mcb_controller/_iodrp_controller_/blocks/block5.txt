@@ -1,0 +1,4 @@
+Line number: 
+[206, 220]
+Comment: 
+This block is responsible for managing the phases of addressing in a dynamic random access memory (DRAM) system. It uses a clock signal `DRP_CLK`, and works by resetting the `AddressPhase` flag on a synchronous reset indication (`sync_rst`). If not in reset, it sets the `AddressPhase` flag based on the current state, setting it to the conjunction of its current value and the negation of the condition `(state == ALMOST_READY)` if `AddressPhase` was previously set or as the conjunction of `(state == ADDR_PHASE)` and `(bit_cnt == 3'b111)` if it wasn't. This effectively enables entrance into the address phase when the state is `ADDR_PHASE` and `bit_cnt` has reached its maximum value of 7, and ensures the continuity of this phase unless `state` reaches `ALMOST_READY`.

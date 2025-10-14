@@ -1,0 +1,1 @@
+  always @(*) run_too_small_ns = run_end && (run <  TAPSPERKCLK/4);

@@ -1,0 +1,21 @@
+Module name: lab7_soc_keycode_0. 
+
+Module specification: 
+
+The module "lab7_soc_keycode_0" is a memory system with two slots which provides readable and writable storage. The operation is designed to sync with the positive edge of the 'clk' signal, and the content resets to 0 if the 'reset_n' signal is de-asserted. 
+
+The module has 6 input ports and 2 output ports:
+1. Input ports: 
+    - address: a 2-bit input decides which memory slot to interact with.
+    - chipselect: a control signal activates the memory module.
+    - clk: the input clock signal synchronizes the module's operations.
+    - reset_n: an active low input resets the memory content to zero.
+    - write_n: an active low input signal selects between read and write operations.
+    - writedata: a 32-bit data to be written into memory when write operation is activated.
+2. Output ports: 
+    - out_port: a 16-bit output that reflects the content currently held in storage.
+    - readdata: a 32-bit output corresponding to the value read from the addressed storage slot.
+
+This Verilog RTL code consists of several internal signals including clk_en, data_out, out_port, read_mux_out, and readdata. The clk_en signal is a wire permanently assigned to 1, data_out is a 16-bit register used to store the written data, out_port is a wire used to output the stored data, read_mux_out is a wire used to decide which data is available for reading, and readdata is a wire assigned a 32-bit value according to the value of read_mux_out and zerofilling. 
+
+The code is primarily organized into three parts, first part is dedicated to assigning the clk_en and read_mux_out signals, second takes care of updating data_out based on input conditions, and the third part assigns the values to the two output ports. This structure allows for an efficient reading and writing operation.

@@ -1,0 +1,1 @@
+    always @(we_n_in    ) cmd_addr_timing_check( 3);

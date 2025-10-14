@@ -1,0 +1,1 @@
+assign rd_addr = rd_ptr[ASIZE-1:0];

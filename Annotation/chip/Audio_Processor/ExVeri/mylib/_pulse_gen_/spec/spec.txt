@@ -1,0 +1,11 @@
+Module name: pulse_gen. 
+
+Module specification: The 'pulse_gen' module is designed to generate a pulse whenever there's a rising edge (transition from low to high) in the 'trigger' signal. The module operates synchronously with the clock signal, 'clk', and evaluates the state of the 'trigger' signal at every positive edge of the 'clk'. 
+
+The module has two input ports: 'clk', a clock signal that drives the operation of the module, and 'trigger', a signal that instigates the generation of a pulse when it transitions from low to high. The module has one output port: 'pulse', which is the generated pulse signal. 
+
+Internally, the module employs two registers. 'pre_trigger' is used to store the previous state of the 'trigger' signal, assisting in identifying a transition from low to high. 'pulse' stores the produced pulse output. 
+
+The module's operation begins with an initial block that sets the 'pre_trigger' signal to low. The always block, driven by the positive edge of the 'clk' signal, contains a conditional statement. If 'pre_trigger' is low and 'trigger' is high, it indicates a rising edge in 'trigger', causing 'pulse' to be set high and 'pre_trigger' to retain the high state of 'trigger'. In all other cases, 'pulse' is set to low and 'pre_trigger' replicates the current state of 'trigger'. 
+
+In summary, the 'pulse_gen' module acts as a single cycle pulse generator, triggered by a high state in the 'trigger' input and operating synchronously with a given clock signal.

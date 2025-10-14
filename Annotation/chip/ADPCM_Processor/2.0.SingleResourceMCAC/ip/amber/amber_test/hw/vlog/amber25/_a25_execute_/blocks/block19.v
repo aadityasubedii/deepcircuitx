@@ -1,0 +1,1 @@
+assign o_exec_stall                    = barrel_shift_stall;

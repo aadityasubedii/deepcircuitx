@@ -1,0 +1,1 @@
+  assign cmd_all = m_cmd;

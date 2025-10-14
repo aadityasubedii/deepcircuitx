@@ -1,0 +1,106 @@
+{
+    "line_num": [
+        [
+            192,
+            192
+        ],
+        [
+            190,
+            190
+        ],
+        [
+            188,
+            193
+        ],
+        [
+            186,
+            186
+        ],
+        [
+            158,
+            184
+        ],
+        [
+            147,
+            153
+        ],
+        [
+            145,
+            145
+        ],
+        [
+            144,
+            144
+        ],
+        [
+            143,
+            143
+        ],
+        [
+            111,
+            141
+        ],
+        [
+            109,
+            109
+        ],
+        [
+            108,
+            108
+        ],
+        [
+            107,
+            107
+        ],
+        [
+            84,
+            106
+        ],
+        [
+            83,
+            83
+        ],
+        [
+            81,
+            81
+        ],
+        [
+            80,
+            81
+        ],
+        [
+            79,
+            79
+        ],
+        [
+            78,
+            79
+        ],
+        [
+            66,
+            110
+        ]
+    ],
+    "blocks": [
+        "    \tassign is_std = {{16-STD_WIDTH{1'b0}}, vid_std};",
+        "    \tassign is_std = vid_std[15:0];",
+        "generate\n\tif(STD_WIDTH >= 16)\n    \tassign is_std = vid_std[15:0];\n\telse\n    \tassign is_std = {{16-STD_WIDTH{1'b0}}, vid_std};\nendgenerate",
+        "assign is_update = update ^ is_update_reg;",
+        "always @ (posedge rst or posedge clk) begin\n    if(rst) begin\n        is_stable <= 1'b0;\n        is_interlaced <= INTERLACED;\n        is_active_sample_count <= {H_ACTIVE_PIXELS_F0, 1'b1};\n        is_active_line_count_f0 <= {V_ACTIVE_LINES_F0, 1'b1};\n        is_active_line_count_f1 <= (INTERLACED) ? {V_ACTIVE_LINES_F1, 1'b1} : 17'd0;\n        is_total_sample_count <= 17'd0;\n        is_total_line_count_f0 <= 17'd0;\n        is_total_line_count_f1 <= 17'd0;\n        is_resolution_valid <= 1'b0;\n        \n        is_update_reg <= 1'b0; \n     end else begin\n        is_stable <= (is_update) ? stable : is_stable;\n        is_interlaced <= (is_update) ? interlaced : is_interlaced;\n        is_active_sample_count <= (is_update) ? {1'd0, active_sample_count} : is_active_sample_count;\n        is_active_line_count_f0 <= (is_update) ? {2'd0, active_line_count_f0} : is_active_line_count_f0;\n        is_active_line_count_f1 <= (is_update) ? {2'd0, active_line_count_f1} : is_active_line_count_f1;\n        is_total_sample_count <= (is_update) ? {1'd0, total_sample_count} : is_total_sample_count;\n        is_total_line_count_f0 <= (is_update) ? {2'd0, total_line_count_f0} : is_total_line_count_f0;\n        is_total_line_count_f1 <= (is_update) ? {2'd0, total_line_count_f1} : is_total_line_count_f1;\n        is_resolution_valid <= (is_update) ? resolution_valid : is_resolution_valid;\n        \n        is_update_reg <= update;\n     end\nend",
+        "        always @ (posedge clk) begin\n            genlock_enable <= 1'b0;\n            sof_sample <= 14'd0;\n            sof_subsample <= 2'd0;\n            sof_line <= 13'd0;\n            refclk_divider_value <= 14'd0;\n        end",
+        "        assign clear_overflow_sticky = 1'b0;",
+        "        assign status_update_int = 1'b0;",
+        "        assign enable = 1'b1;",
+        "        always @ (posedge rst or posedge clk) begin\n            if(rst) begin\n                genlock_enable <= 1'b0;\n                interrupt_enable <= 2'b00;\n                enable_reg <= 1'b0;\n                status_update_int_reg <= 1'b0;\n                stable_int_reg <= 1'b0;\n                sof_sample <= 14'd0;\n                sof_subsample <= 2'd0;\n                sof_line <= 13'd0;\n                refclk_divider_value <= 14'd0;\n                \n                is_stable_reg <= 1'b0;\n                resolution_change_reg <= 1'b0;\n                clear_overflow_sticky_reg <= 1'b0;\n             end else begin\n                {genlock_enable, interrupt_enable, enable_reg} <= (av_write && av_address == 4'd0) ? av_writedata[3:0] : {genlock_enable, interrupt_enable, enable_reg};\n                status_update_int_reg <= ((resolution_change ^ resolution_change_reg) | status_update_int_reg) & ~(clear_interrupts & av_writedata[1]) & interrupt_enable[0];\n                stable_int_reg <= ((is_stable ^ is_stable_reg) | stable_int_reg) & ~(clear_interrupts & av_writedata[2]) & interrupt_enable[1];\n                if(av_write && av_address == 4'd11) begin\n                    sof_sample <= av_writedata[15:2];\n                    sof_subsample <= av_writedata[1:0];\n                end\n                sof_line <= (av_write && av_address == 4'd12) ? av_writedata[12:0] : sof_line;\n                refclk_divider_value <= (av_write && av_address == 4'd13) ? av_writedata[13:0] : refclk_divider_value;\n                \n                is_stable_reg <= is_stable;\n                resolution_change_reg <= resolution_change;\n                clear_overflow_sticky_reg <= ((av_write && av_address == 4'd1 && av_writedata[9]) | clear_overflow_sticky_reg) & overflow_sticky;\n             end\n        end",
+        "        assign clear_overflow_sticky = clear_overflow_sticky_reg;",
+        "        assign clear_interrupts = (av_write && av_address == 4'd2);",
+        "        assign status_update_int = status_update_int_reg | stable_int_reg;",
+        "        assign av_readdata = (av_address == 4'd1)  ? {{5{1'b0}}, is_resolution_valid,\n                                                                 overflow_sticky,\n                                                                 is_stable,\n                                                                 is_interlaced,\n                                                                 is_active_line_count_f1[0] & is_total_line_count_f1[0],\n                                                                 1'b0,\n                                                                 is_active_line_count_f0[0] & is_total_line_count_f0[0],\n                                                                 is_active_sample_count[0] & is_total_sample_count[0],\n                                                                 2'b0,\n                                                                 is_output_enable} :\n                             (av_address == 4'd2)  ? {13'd0, stable_int_reg, status_update_int_reg, 1'b0} :\n                             (av_address == 4'd3)  ? usedw_output :\n                             (av_address == 4'd4)  ? is_active_sample_count[16:1] :\n                             (av_address == 4'd5)  ? is_active_line_count_f0[16:1] :\n                             (av_address == 4'd6)  ? is_active_line_count_f1[16:1] :\n                             (av_address == 4'd7)  ? is_total_sample_count[16:1] :\n                             (av_address == 4'd8)  ? is_total_line_count_f0[16:1] :\n                             (av_address == 4'd9)  ? is_total_line_count_f1[16:1] :\n                             (av_address == 4'd10) ? is_std :\n                             (av_address == 4'd11) ? {sof_sample, sof_subsample} :\n                             (av_address == 4'd12) ? {3'd0, sof_line} :\n                             (av_address == 4'd13) ? {2'd0, refclk_divider_value} :\n                             {{12{1'b0}}, genlock_enable, interrupt_enable, enable_reg};",
+        "        assign enable = enable_reg;",
+        "            assign usedw_output = {{16-USED_WORDS_WIDTH{1'b0}}, usedw};",
+        "        else\n            assign usedw_output = {{16-USED_WORDS_WIDTH{1'b0}}, usedw};",
+        "            assign usedw_output = usedw[15:0];",
+        "        if(USED_WORDS_WIDTH >= 16)\n            assign usedw_output = usedw[15:0];",
+        "generate\n    if(USE_CONTROL) begin\n        reg enable_reg;\n        wire [15:0] usedw_output;\n        reg status_update_int_reg;\n        reg stable_int_reg;\n        reg is_stable_reg;\n        wire clear_interrupts;\n        reg [1:0] interrupt_enable;\n        reg clear_overflow_sticky_reg;\n        reg resolution_change_reg;\n        \n        if(USED_WORDS_WIDTH >= 16)\n            assign usedw_output = usedw[15:0];\n        else\n            assign usedw_output = {{16-USED_WORDS_WIDTH{1'b0}}, usedw};\n        \n        assign enable = enable_reg;\n        assign av_readdata = (av_address == 4'd1)  ? {{5{1'b0}}, is_resolution_valid,\n                                                                 overflow_sticky,\n                                                                 is_stable,\n                                                                 is_interlaced,\n                                                                 is_active_line_count_f1[0] & is_total_line_count_f1[0],\n                                                                 1'b0,\n                                                                 is_active_line_count_f0[0] & is_total_line_count_f0[0],\n                                                                 is_active_sample_count[0] & is_total_sample_count[0],\n                                                                 2'b0,\n                                                                 is_output_enable} :\n                             (av_address == 4'd2)  ? {13'd0, stable_int_reg, status_update_int_reg, 1'b0} :\n                             (av_address == 4'd3)  ? usedw_output :\n                             (av_address == 4'd4)  ? is_active_sample_count[16:1] :\n                             (av_address == 4'd5)  ? is_active_line_count_f0[16:1] :\n                             (av_address == 4'd6)  ? is_active_line_count_f1[16:1] :\n                             (av_address == 4'd7)  ? is_total_sample_count[16:1] :\n                             (av_address == 4'd8)  ? is_total_line_count_f0[16:1] :\n                             (av_address == 4'd9)  ? is_total_line_count_f1[16:1] :\n                             (av_address == 4'd10) ? is_std :\n                             (av_address == 4'd11) ? {sof_sample, sof_subsample} :\n                             (av_address == 4'd12) ? {3'd0, sof_line} :\n                             (av_address == 4'd13) ? {2'd0, refclk_divider_value} :\n                             {{12{1'b0}}, genlock_enable, interrupt_enable, enable_reg};\n        assign status_update_int = status_update_int_reg | stable_int_reg;\n        assign clear_interrupts = (av_write && av_address == 4'd2);\n        assign clear_overflow_sticky = clear_overflow_sticky_reg;\n        "
+    ]
+}

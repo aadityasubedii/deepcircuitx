@@ -1,0 +1,21 @@
+{
+    "line_num": [
+        [
+            63,
+            63
+        ],
+        [
+            33,
+            61
+        ],
+        [
+            23,
+            31
+        ]
+    ],
+    "blocks": [
+        "    assign AUD_DACDAT = dataOut;",
+        "always @(negedge AUD_BCLK or negedge reset_n)\n\n    if (reset_n == 0)\n    begin\n        address = 0;\n        clock_counter <= 0;\n        DACLRCK_DAT = 0;\n        DataAcquisition = 0;\n    end\n\n    else if (clock_counter == 250)\n    begin\n        clock_counter <= 1;\n        DACLRCK_DAT = 1;\n        address = Q;\n        DataAcquisition = 1;\n\n    end\n    else if (clock_counter == 1 && DataAcquisition == 1)\n    begin\n        DACLRCK_DAT = 0;\n        clock_counter <= clock_counter + 1;\n        dataOut[31:16] = memOut;\n        dataOut[15:0] = memOut;\n    end\n    else\n    begin\n        clock_counter <= clock_counter + 1;\n    end",
+        "always @(negedge AUD_BCLK)\nbegin\n    if (DataAcquisition == 1 && Q == 240254)\n        Q <= 0;\n    else if (Q != 240254)\n        Q <= Q + 1;\n    else\n        Q <= 0;\nend"
+    ]
+}

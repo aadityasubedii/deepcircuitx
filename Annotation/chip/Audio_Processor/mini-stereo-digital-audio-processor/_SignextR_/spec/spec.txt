@@ -1,0 +1,7 @@
+Module name: SignextR. 
+
+Module specification: The SignextR is a sign-extension unit implemented in Verilog. Its core functionality includes extending the most significant bit (sign bit) of a smaller bit value to produce a value with significantly more bits. Specifically, the module monitors the most significant bit of the 16-bit signinR input when the sign_statusR input is active (1). The module performs bit extension by extending 40 bits of either all 1s or all 0s with the value of signinR placed on bits [31:16] of padR (a 40-bit internal register signal), based on the state of signinR's most significant bit. 
+
+For input ports, the module takes Sclk (system clock), sign_statusR (a single bit determining extension operation activation), and signinR (a 16-bit input signal to be sign-extended). Regarding output, the module sends out signoutR, which is a 40-bit register that gets updated with the processed value at each positive edge of the system clock when sign extension is enabled. 
+
+The internal signal in this module is the register 'padR' holding the extended value of signinR. In terms of operation, the code section within "always @ (posedge Sclk)" block, encapsulates the logic operations dependent on the system clock's positive edge. The operation is only conducted when sign_statusR is active (1), and the outcome depends on the state of the most significant bit from signinR. As a result, the module successfully extends the input signal with respect to its sign bit, updating its output at each positive clock edge.

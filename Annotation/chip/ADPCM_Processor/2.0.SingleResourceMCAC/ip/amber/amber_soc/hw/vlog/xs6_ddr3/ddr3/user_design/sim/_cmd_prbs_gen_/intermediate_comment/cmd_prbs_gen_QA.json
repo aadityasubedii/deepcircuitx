@@ -1,0 +1,43 @@
+{
+    "gpt-message": [
+        {
+            "role": "system",
+            "content": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+        },
+        {
+            "role": "user",
+            "content": "Name of the module and its functionality is as follows: \nModule name: cmd_prbs_gen. \nExplanation: This is a Pseudo-Random Bit Sequence (PRBS) generator module used primarily for generating pseudo-random sequences of data in test situations. Various parameters are declared, including TCQ (propagation delay), FAMILY (device family such as SPARTAN6), and PRBS_CMD (type of PRBS command). The module generates a pseudo-random sequence (prbs) of width SEED_WIDTH based on the linear feedback shift register (lfsr_q). The module allows various PRBS sequence widths: 64 bit, 32 bit, or 20 bit based on the parameters PRBS_CMD and PRBS_WIDTH.  The starting seed for the PRBS can be fed externally. The module also takes commands that drive the output sequence to emulate different test scenarios for ADDRESSES and INSTRUCTIONS (INSTR). Different conditions are written for different FPGA families (e.g., SPARTAN6)."
+        },
+        {
+            "role": "user",
+            "content": "Input and output ports and their explanation is as follows: \nInput ports:  \n1. clk_i: This is the clock input of the module. It is used to synchronize the execution of the sequential logic written in the module.\n2. prbs_seed_init: This is a control signal input to initialize or reset the PRBS sequence to a known state (mentioned by the seed).\n3. clk_en: This is the clock enable signal which is used to decide whether the internal state of the PRBS generator (lfsr_q) should be updated or not.\n4. prbs_seed_i: This is the input pseudo-random bit sequence seed. It initializes or resets the pseudo-random bit sequence to a known state.\n\nOutput ports:\n1. prbs_o: This is the output pseudo-random bit sequence (PRBS). It provides the calculated pseudo-random sequences that can be used by other modules or entities."
+        },
+        {
+            "role": "user",
+            "content": "Internal signals and their explanation is as follows: \nInternal signals: \n1. ZEROS\n2. prbs\n3. lfsr_q\n\nExplanation: \n1. ZEROS: This signal generates a zero sequence of length equal to ADDR_WIDTH. It is used as part of the undersized PRBS generator when PRBS_CMD is set to \"INSTR\" or \"BLEN\", as the output bit width is smaller than the SEED_WIDTH.\n2. prbs: This register holds the pseudo-random bit sequence, which is derived from the lfsr_q signal. This signal forms the output of the PRBS generator.\n3. lfsr_q: This signal is used for implementing a linear feedback shift register in the PRBS generator. It keeps shifting its values based on the PRBS command and the ticks of the clock. It is initialized with a seed 'prbs_seed_i' and then continuously updated based on the pseudo-random sequence generation algorithm, governed by the bit length PRBS_WIDTH and PRBS_CMD."
+        }
+    ],
+    "claude-message": [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "You are an expert in hardware design with a deep understanding of Verilog RTL codes. Now I want to train a large language model for code comment generation tasks specifically focused on Verilog RTL codes. And I want you to help me process the raw data, transforming it into suitable formats that can serve as inputs and outputs for the model."
+                },
+                {
+                    "type": "text",
+                    "text": "Name of the module and its functionality is as follows: \nModule name: cmd_prbs_gen. \nExplanation: This is a Pseudo-Random Bit Sequence (PRBS) generator module used primarily for generating pseudo-random sequences of data in test situations. Various parameters are declared, including TCQ (propagation delay), FAMILY (device family such as SPARTAN6), and PRBS_CMD (type of PRBS command). The module generates a pseudo-random sequence (prbs) of width SEED_WIDTH based on the linear feedback shift register (lfsr_q). The module allows various PRBS sequence widths: 64 bit, 32 bit, or 20 bit based on the parameters PRBS_CMD and PRBS_WIDTH.  The starting seed for the PRBS can be fed externally. The module also takes commands that drive the output sequence to emulate different test scenarios for ADDRESSES and INSTRUCTIONS (INSTR). Different conditions are written for different FPGA families (e.g., SPARTAN6)."
+                },
+                {
+                    "type": "text",
+                    "text": "Input and output ports and their explanation is as follows: \nInput ports:  \n1. clk_i: This is the clock input of the module. It is used to synchronize the execution of the sequential logic written in the module.\n2. prbs_seed_init: This is a control signal input to initialize or reset the PRBS sequence to a known state (mentioned by the seed).\n3. clk_en: This is the clock enable signal which is used to decide whether the internal state of the PRBS generator (lfsr_q) should be updated or not.\n4. prbs_seed_i: This is the input pseudo-random bit sequence seed. It initializes or resets the pseudo-random bit sequence to a known state.\n\nOutput ports:\n1. prbs_o: This is the output pseudo-random bit sequence (PRBS). It provides the calculated pseudo-random sequences that can be used by other modules or entities."
+                },
+                {
+                    "type": "text",
+                    "text": "Internal signals and their explanation is as follows: \nInternal signals: \n1. ZEROS\n2. prbs\n3. lfsr_q\n\nExplanation: \n1. ZEROS: This signal generates a zero sequence of length equal to ADDR_WIDTH. It is used as part of the undersized PRBS generator when PRBS_CMD is set to \"INSTR\" or \"BLEN\", as the output bit width is smaller than the SEED_WIDTH.\n2. prbs: This register holds the pseudo-random bit sequence, which is derived from the lfsr_q signal. This signal forms the output of the PRBS generator.\n3. lfsr_q: This signal is used for implementing a linear feedback shift register in the PRBS generator. It keeps shifting its values based on the PRBS command and the ticks of the clock. It is initialized with a seed 'prbs_seed_i' and then continuously updated based on the pseudo-random sequence generation algorithm, governed by the bit length PRBS_WIDTH and PRBS_CMD."
+                }
+            ]
+        }
+    ]
+}

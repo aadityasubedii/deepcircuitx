@@ -1,0 +1,56 @@
+{
+    "line_num": [
+        [
+            205,
+            217
+        ],
+        [
+            201,
+            201
+        ],
+        [
+            199,
+            199
+        ],
+        [
+            184,
+            196
+        ],
+        [
+            180,
+            180
+        ],
+        [
+            176,
+            178
+        ],
+        [
+            172,
+            174
+        ],
+        [
+            169,
+            170
+        ],
+        [
+            167,
+            168
+        ],
+        [
+            152,
+            164
+        ]
+    ],
+    "blocks": [
+        "always @ (posedge MTxClk or posedge Reset)\nbegin\n  if(Reset)\n    DlyCrcCnt <= #Tp 3'h0;\n  else\n    begin        \n      if(StateData[1] & DlyCrcCnt == 3'h4 | StartJam | PacketFinished_q)\n        DlyCrcCnt <= #Tp 3'h0;\n      else\n      if(DlyCrcEn & (StateSFD | StateData[1] & (|DlyCrcCnt[2:0])))\n        DlyCrcCnt <= #Tp DlyCrcCnt + 1'b1;\n    end\nend",
+        "assign ByteCntMax = &ByteCnt[15:0];",
+        "assign MaxFrame = ByteCnt[15:0] == MaxFL[15:0] & ~HugEn;",
+        "always @ (posedge MTxClk or posedge Reset)\nbegin\n  if(Reset)\n    ByteCnt[15:0] <= #Tp 16'h0;\n  else\n    begin\n      if(ResetByteCnt)\n        ByteCnt[15:0] <= #Tp 16'h0;\n      else\n      if(IncrementByteCnt)\n        ByteCnt[15:0] <= #Tp ByteCnt[15:0] + 1'b1;\n    end\nend",
+        "assign ResetByteCnt = StartBackoff | StateIdle & TxStartFrm | PacketFinished_q;",
+        "assign IncrementByteCnt = StateData[1] & ~ByteCntMax\n                        | StateBackOff & (&NibCnt[6:0])\n                        | (StatePAD | StateFCS) & NibCnt[0] & ~ByteCntMax;",
+        "assign ExcessiveDeferCnt = NibCnt[13:0] == 16'h17b7;\n\nassign ExcessiveDefer  = NibCnt[13:0] == 16'h17b7 & ~ExDfrEn;   ",
+        "\nassign NibbleMinFl = NibCnt >= (((MinFL-3'h4)<<1) -1);  ",
+        "assign NibCntEq7   = &NibCnt[2:0];\nassign NibCntEq15  = &NibCnt[3:0];",
+        "always @ (posedge MTxClk or posedge Reset)\nbegin\n  if(Reset)\n    NibCnt <= #Tp 16'h0;\n  else\n    begin\n      if(ResetNibCnt)\n        NibCnt <= #Tp 16'h0;\n      else\n      if(IncrementNibCnt)\n        NibCnt <= #Tp NibCnt + 1'b1;\n     end\nend"
+    ]
+}

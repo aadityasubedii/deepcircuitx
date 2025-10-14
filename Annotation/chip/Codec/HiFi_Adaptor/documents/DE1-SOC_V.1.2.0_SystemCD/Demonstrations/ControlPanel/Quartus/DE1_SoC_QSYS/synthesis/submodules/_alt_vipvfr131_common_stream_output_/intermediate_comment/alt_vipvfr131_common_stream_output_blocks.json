@@ -1,0 +1,56 @@
+{
+    "line_num": [
+        [
+            84,
+            84
+        ],
+        [
+            83,
+            83
+        ],
+        [
+            60,
+            81
+        ],
+        [
+            54,
+            54
+        ],
+        [
+            53,
+            53
+        ],
+        [
+            52,
+            52
+        ],
+        [
+            51,
+            51
+        ],
+        [
+            50,
+            50
+        ],
+        [
+            49,
+            49
+        ],
+        [
+            37,
+            47
+        ]
+    ],
+    "blocks": [
+        "assign int_ready = int_ready_reg & enable_synced;",
+        "assign dout_valid = int_valid_reg & int_ready_reg;",
+        "always @ (posedge clk or posedge rst) begin\n    if(rst) begin\n        int_valid_reg <= 1'b0;\n        dout_data <= {DATA_WIDTH{1'b0}};\n        dout_sop <= 1'b0;\n        dout_eop <= 1'b0;\n        int_ready_reg <= 1'b0;\n    end else begin\n        if(int_ready_reg) begin\n            if(enable_synced) begin\n                int_valid_reg <= int_valid;\n                dout_data <= int_data;\n                dout_sop <= int_sop;\n                dout_eop <= int_eop;\n            end else begin\n                int_valid_reg <= 1'b0;\n            end \n        end\n        \n        int_ready_reg <= dout_ready;\n    end\nend",
+        "assign synced = ~enable_synced;",
+        "assign enable_synced = (synced_int_nxt) ? enable : enable_synced_reg;",
+        "assign synced_int_nxt = (image_packet & eop) | (synced_int & ~sop);",
+        "assign image_packet_nxt = (sop && dout_data == 0) || (image_packet && ~eop);",
+        "assign eop = dout_valid & dout_eop;",
+        "assign sop = dout_valid & dout_sop;",
+        "always @ (posedge clk or posedge rst) begin\n    if(rst) begin\n        image_packet <= 1'b0;\n        synced_int <= 1'b1;\n        enable_synced_reg <= 1'b0;\n    end else begin\n        image_packet <= image_packet_nxt;\n        synced_int <= synced_int_nxt;\n        enable_synced_reg <= enable_synced;\n    end\nend"
+    ]
+}

@@ -1,0 +1,1 @@
+  assign R_ctrl_set_src2_rem_imm_nxt = D_ctrl_set_src2_rem_imm;

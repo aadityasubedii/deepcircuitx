@@ -1,0 +1,181 @@
+{
+    "line_num": [
+        [
+            282,
+            283
+        ],
+        [
+            269,
+            274
+        ],
+        [
+            266,
+            266
+        ],
+        [
+            265,
+            265
+        ],
+        [
+            264,
+            264
+        ],
+        [
+            258,
+            258
+        ],
+        [
+            249,
+            256
+        ],
+        [
+            240,
+            240
+        ],
+        [
+            234,
+            234
+        ],
+        [
+            233,
+            233
+        ],
+        [
+            226,
+            228
+        ],
+        [
+            216,
+            216
+        ],
+        [
+            211,
+            211
+        ],
+        [
+            209,
+            209
+        ],
+        [
+            203,
+            203
+        ],
+        [
+            196,
+            196
+        ],
+        [
+            194,
+            194
+        ],
+        [
+            189,
+            189
+        ],
+        [
+            187,
+            187
+        ],
+        [
+            182,
+            182
+        ],
+        [
+            180,
+            180
+        ],
+        [
+            178,
+            179
+        ],
+        [
+            172,
+            177
+        ],
+        [
+            170,
+            172
+        ],
+        [
+            164,
+            164
+        ],
+        [
+            162,
+            162
+        ],
+        [
+            150,
+            150
+        ],
+        [
+            140,
+            140
+        ],
+        [
+            138,
+            138
+        ],
+        [
+            136,
+            136
+        ],
+        [
+            135,
+            137
+        ],
+        [
+            121,
+            134
+        ],
+        [
+            117,
+            117
+        ],
+        [
+            115,
+            115
+        ],
+        [
+            107,
+            107
+        ]
+    ],
+    "blocks": [
+        "  always @(posedge clk) rank_busy_r <= #TCQ rank_busy_ns;\n",
+        "  always @(act_wait_r or req_row_r_lcl) begin\n    row_addr = req_row_r_lcl;\n\n    if (~act_wait_r) row_addr[10] = 1'b0;\n  end\n",
+        "  assign row_cmd_wr = act_wait_r;",
+        "  assign req_cas = 1'b1;",
+        "  assign req_ras = 1'b0;",
+        "  assign col_addr = col_addr_template[ROW_WIDTH-1:0];",
+        "  always @(auto_pre_r or rd_half_rmw or req_col_r\n           or req_size_r_lcl) begin\n    col_addr_template = req_col_r;\n    col_addr_template[10] = auto_pre_r && ~rd_half_rmw;\n    col_addr_template[11] = req_col_r[10];\n    col_addr_template[12] = req_size_r_lcl;\n    col_addr_template[13] = req_col_r[11];\n  end",
+        "  assign maint_hit = (req_rank_r_lcl == maint_rank_r) || maint_zq_r || maint_sre_r;",
+        "  always @(posedge clk) row_hit_r <= #TCQ row_hit_ns;",
+        "  always @(posedge clk) rb_hit_busy_r <= #TCQ rb_hit_busy_ns_lcl;",
+        "  assign rb_hit_busy_ns_lcl = rank_bank_hit && ~idle_ns;\n  output wire  rb_hit_busy_ns;\n  assign rb_hit_busy_ns = rb_hit_busy_ns_lcl;",
+        "  always @(posedge clk) req_priority_r <= #TCQ req_priority_ns;",
+        "  assign req_wr_r = req_wr_r_lcl;",
+        "  always @(posedge clk) req_wr_r_lcl <= #TCQ req_wr_ns;",
+        "  always @(posedge clk) req_col_r[COL_WIDTH-1:0] <= #TCQ req_col_ns;",
+        "  assign req_row_r = req_row_r_lcl;",
+        "  always @(posedge clk) req_row_r_lcl <= #TCQ req_row_ns;",
+        "  assign req_bank_r = req_bank_r_lcl;",
+        "  always @(posedge clk) req_bank_r_lcl <= #TCQ req_bank_ns;",
+        "  assign req_rank_r = req_rank_r_lcl;",
+        "  endgenerate",
+        "      always @(posedge clk) req_rank_r_lcl <= #TCQ req_rank_ns;\n    end",
+        "      always @(idle_ns or periodic_rd_insert\n               or periodic_rd_rank_r or rank or req_rank_r_lcl) req_rank_ns = idle_ns\n                                  ? periodic_rd_insert\n                                      ? periodic_rd_rank_r\n                                      : rank\n                                  : req_rank_r_lcl;",
+        "  generate\n    if (RANKS != 1) begin\n      always @(idle_ns or periodic_rd_insert",
+        "  assign rd_wr_r = rd_wr_r_lcl;",
+        "  always @(posedge clk) rd_wr_r_lcl <= #TCQ rd_wr_ns;",
+        "  always @(posedge clk) req_cmd_r <= #TCQ req_cmd_ns;",
+        "  assign req_size_r = req_size_r_lcl;",
+        "  endgenerate",
+        "          assign req_size_r_lcl = req_size;",
+        "          always @(posedge clk) req_size <= #TCQ req_size_ns;\n          assign req_size_r_lcl = req_size;\n        end",
+        "  generate\n    if (BURST_MODE == \"4\") begin : burst_mode_4\n      assign req_size_r_lcl = 1'b0;\n    end\n    else\n      if (BURST_MODE == \"8\") begin : burst_mode_8\n        assign req_size_r_lcl = 1'b1;\n      end\n      else\n        if (BURST_MODE == \"OTF\") begin : burst_mode_otf\n          reg req_size;\n          wire req_size_ns = idle_ns\n                                 ? (periodic_rd_insert || size)\n                                 : req_size;",
+        "  assign req_periodic_rd_r = req_periodic_rd_r_lcl;",
+        "  always @(posedge clk) req_periodic_rd_r_lcl <= #TCQ req_periodic_rd_ns;",
+        "  always @(posedge clk) req_data_buf_addr_r <= #TCQ req_data_buf_addr_ns;"
+    ]
+}

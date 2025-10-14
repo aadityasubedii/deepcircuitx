@@ -1,0 +1,1 @@
+assign o_wb_dat_e[63:32]  = o_wb_dat_e[31:0];

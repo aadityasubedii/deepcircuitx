@@ -1,0 +1,1 @@
+assign mux_co_proc_clk = test_mode ? clk : co_proc_clk;

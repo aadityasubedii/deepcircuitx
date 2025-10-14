@@ -1,0 +1,1 @@
+  assign rd_strobe = m_cmd[2 : 0] == 3'h5;

@@ -1,0 +1,1 @@
+  always @(posedge clk) auto_pre_r_lcl <= #TCQ auto_pre_ns;

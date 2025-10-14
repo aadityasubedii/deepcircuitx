@@ -1,0 +1,20 @@
+always @ ( posedge reset, posedge clk ) begin
+	if (reset) begin
+		ex_read_hit_r <= 'd0;
+		ex_read_hit_way <= 'd0;
+	end else begin
+		if ( ex_read_hit_clear ) begin
+			ex_read_hit_r   <= 1'd0;
+			ex_read_hit_way <= 'd0;
+		end else if ( ex_read_hit ) begin
+			`ifdef A25_CACHE_DEBUG
+				`TB_DEBUG_MESSAGE
+				$display ("Exclusive access cache hit address 0x%08h", i_address);
+			`endif
+			ex_read_hit_r   <= 1'd1;
+			ex_read_hit_way <= data_hit_way;
+        	end else if ( c_state == CS_FILL_COMPLETE && ex_read_hit_r ) begin
+			ex_read_hit_way <= select_way;
+		end
+	end
+end

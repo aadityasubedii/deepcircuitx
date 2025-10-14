@@ -1,0 +1,291 @@
+{
+    "line_num": [
+        [
+            1750,
+            1802
+        ],
+        [
+            1698,
+            1746
+        ],
+        [
+            1685,
+            1695
+        ],
+        [
+            1682,
+            1684
+        ],
+        [
+            1671,
+            1681
+        ],
+        [
+            1657,
+            1666
+        ],
+        [
+            1645,
+            1654
+        ],
+        [
+            1634,
+            1643
+        ],
+        [
+            1449,
+            1536
+        ],
+        [
+            1433,
+            1437
+        ],
+        [
+            1432,
+            1432
+        ],
+        [
+            1431,
+            1431
+        ],
+        [
+            1430,
+            1430
+        ],
+        [
+            1429,
+            1429
+        ],
+        [
+            1428,
+            1428
+        ],
+        [
+            1427,
+            1427
+        ],
+        [
+            1426,
+            1426
+        ],
+        [
+            1425,
+            1425
+        ],
+        [
+            1424,
+            1424
+        ],
+        [
+            1423,
+            1423
+        ],
+        [
+            1422,
+            1422
+        ],
+        [
+            1421,
+            1432
+        ],
+        [
+            1408,
+            1417
+        ],
+        [
+            1396,
+            1405
+        ],
+        [
+            1385,
+            1394
+        ],
+        [
+            1198,
+            1383
+        ],
+        [
+            1194,
+            1196
+        ],
+        [
+            1179,
+            1189
+        ],
+        [
+            1176,
+            1178
+        ],
+        [
+            1166,
+            1175
+        ],
+        [
+            1153,
+            1162
+        ],
+        [
+            1141,
+            1150
+        ],
+        [
+            1130,
+            1139
+        ],
+        [
+            1031,
+            1032
+        ],
+        [
+            944,
+            1016
+        ],
+        [
+            936,
+            941
+        ],
+        [
+            929,
+            935
+        ],
+        [
+            924,
+            924
+        ],
+        [
+            915,
+            921
+        ],
+        [
+            914,
+            921
+        ],
+        [
+            905,
+            910
+        ],
+        [
+            885,
+            904
+        ],
+        [
+            882,
+            882
+        ],
+        [
+            875,
+            880
+        ],
+        [
+            871,
+            873
+        ],
+        [
+            858,
+            865
+        ],
+        [
+            848,
+            855
+        ],
+        [
+            837,
+            846
+        ],
+        [
+            833,
+            836
+        ],
+        [
+            824,
+            828
+        ],
+        [
+            819,
+            823
+        ],
+        [
+            814,
+            818
+        ],
+        [
+            810,
+            829
+        ],
+        [
+            768,
+            768
+        ],
+        [
+            750,
+            766
+        ],
+        [
+            738,
+            748
+        ],
+        [
+            703,
+            736
+        ]
+    ],
+    "blocks": [
+        "always @(*) begin\n      case (calib_sel[5:3])\n      3'b000: begin\n          po_coarse_overflow  = po_coarse_overflow_w[0];\n          po_fine_overflow    = po_fine_overflow_w[0];\n          po_counter_read_val = po_counter_read_val_w[0];\n          pi_fine_overflow    = pi_fine_overflow_w[0];\n          pi_counter_read_val = pi_counter_read_val_w[0];\n          pi_phase_locked     = pi_phase_locked_w[0];\n          if ( calib_in_common)\n             pi_dqs_found        = pi_dqs_found_any;\n          else\n             pi_dqs_found        = pi_dqs_found_w[0];\n          pi_dqs_out_of_range = pi_dqs_out_of_range_w[0];\n        end\n      3'b001: begin\n          po_coarse_overflow  = po_coarse_overflow_w[1];\n          po_fine_overflow    = po_fine_overflow_w[1];\n          po_counter_read_val = po_counter_read_val_w[1];\n          pi_fine_overflow    = pi_fine_overflow_w[1];\n          pi_counter_read_val = pi_counter_read_val_w[1];\n          pi_phase_locked     = pi_phase_locked_w[1];\n          if ( calib_in_common)\n              pi_dqs_found        = pi_dqs_found_any;\n          else\n              pi_dqs_found        = pi_dqs_found_w[1];\n          pi_dqs_out_of_range = pi_dqs_out_of_range_w[1];\n        end\n      3'b010: begin\n          po_coarse_overflow  = po_coarse_overflow_w[2];\n          po_fine_overflow    = po_fine_overflow_w[2];\n          po_counter_read_val = po_counter_read_val_w[2];\n          pi_fine_overflow    = pi_fine_overflow_w[2];\n          pi_counter_read_val = pi_counter_read_val_w[2];\n          pi_phase_locked     = pi_phase_locked_w[2];\n          if ( calib_in_common)\n             pi_dqs_found        = pi_dqs_found_any;\n          else\n             pi_dqs_found        = pi_dqs_found_w[2];\n          pi_dqs_out_of_range = pi_dqs_out_of_range_w[2];\n        end\n       default: begin\n          po_coarse_overflow  = 0;\n          po_fine_overflow    = 0;\n          po_counter_read_val = 0;\n          pi_fine_overflow    = 0;\n          pi_counter_read_val = 0;\n          pi_phase_locked     = 0;\n          pi_dqs_found        = 0;\n          pi_dqs_out_of_range = 0;\n        end\n       endcase\nend",
+        "generate\n\n\n\n\n\nif ( BYTE_LANES_B1 == 0 && BYTE_LANES_B2 == 0 && RCLK_SELECT_BANK>0)\nbegin : phaser_in_rclk\n\nlocalparam L_EXTRA_PI_FINE_DELAY = DEFAULT_RCLK_DELAY;\n\nPHASER_IN_PHY #(\n  .BURST_MODE                       ( PHY_0_A_BURST_MODE),\n  .CLKOUT_DIV                       ( PHY_0_A_PI_CLKOUT_DIV),\n  .FREQ_REF_DIV                     ( PHY_0_A_PI_FREQ_REF_DIV),\n  .REFCLK_PERIOD                    ( L_FREQ_REF_PERIOD_NS),\n  .FINE_DELAY                       ( L_EXTRA_PI_FINE_DELAY),\n  .OUTPUT_CLK_SRC                   ( RCLK_PI_OUTPUT_CLK_SRC)\n) phaser_in_rclk (\n  .DQSFOUND                         (),\n  .DQSOUTOFRANGE                    (),\n  .FINEOVERFLOW                     (),\n  .PHASELOCKED                      (),\n  .ISERDESRST                       (),\n  .ICLKDIV                          (),\n  .ICLK                             (),\n  .COUNTERREADVAL                   (),\n  .RCLK                             (),\n  .WRENABLE                         (),\n  .BURSTPENDINGPHY                  (),\n  .ENCALIBPHY                       (),\n  .FINEENABLE                       (0),\n  .FREQREFCLK                       (freq_refclk),\n  .MEMREFCLK                        (mem_refclk),\n  .RANKSELPHY                       (0),\n  .PHASEREFCLK                      (),\n  .RSTDQSFIND                       (0),\n  .RST                              (rst),\n  .FINEINC                          (),\n  .COUNTERLOADEN                    (),\n  .COUNTERREADEN                    (),\n  .COUNTERLOADVAL                   (),\n  .SYNCIN                           (sync_pulse),\n  .SYSCLK                           (phy_clk)\n);\n\nend\n\nendgenerate",
+        "       assign pi_dqs_found_w[2]    = 1;\n       assign pi_dqs_found_all_w[2]    = 1;\n       assign pi_dqs_found_any_w[2]    = 0;\n       assign pi_dqs_out_of_range_w[2]    = 0;\n       assign pi_phase_locked_w[2]    = 1;\n       assign po_coarse_overflow_w[2] = 0;\n       assign po_fine_overflow_w[2] = 0;\n       assign po_counter_read_val_w[2] = 0;\n       assign pi_counter_read_val_w[2] = 0;\n       assign mcGo_w[2] = 1;\nend",
+        "       always @(*)\n         aux_out[11:8] = 0;\n   end",
+        "       assign phy_din[HIGHEST_LANE_B2*80+640-1:640] = 0;\n       assign _phy_ctl_a_full_p[2] = 0;\n       assign of_ctl_a_full_v[2]   = 0;\n       assign of_ctl_full_v[2]     = 0;\n       assign of_data_a_full_v[2]  = 0;\n       assign of_data_full_v[2]    = 0;\n       assign pre_data_a_full_v[2] = 0;\n       assign if_empty_v[2]        = 0;\n       assign byte_rd_en_v[2]      = 1;\n       assign pi_phase_locked_lanes[HIGHEST_LANE_B2+8-1:8]  = 4'b1111;\n       assign pi_dqs_found_lanes[HIGHEST_LANE_B2+8-1:8]  = 4'b1111;",
+        "      always @(negedge auxout_clk or posedge rst_auxout)  begin\n        if (rst_auxout) begin\n            aux_out[9]  <= #100 0;\n            aux_out[11] <= #100 0;\n        end\n        else begin\n            aux_out[9]  <= #100 aux_out_[9];\n            aux_out[11] <= #100 aux_out_[11];\n        end\n      end",
+        "      always @(posedge auxout_clk or posedge rst_auxout)  begin\n        if (rst_auxout) begin\n            aux_out[9]  <= #100 0;\n            aux_out[11] <= #100 0;\n        end\n        else begin\n            aux_out[9]  <= #100 aux_out_[9];\n            aux_out[11] <= #100 aux_out_[11];\n        end\n      end",
+        "   always @(posedge auxout_clk or posedge rst_auxout)  begin\n     if (rst_auxout) begin\n         aux_out[8]  <= #100 0;\n         aux_out[10] <= #100 0;\n     end\n     else begin\n         aux_out[8]  <= #100 aux_out_[8];\n         aux_out[10] <= #100 aux_out_[10];\n     end\n   end",
+        "if ( BYTE_LANES_B2 != 0) begin : ddr_phy_4lanes_2\n\nmig_7series_v4_1_ddr_phy_4lanes #\n  (\n     .BYTE_LANES                (BYTE_LANES_B2),        \n     .DATA_CTL_N                (PHY_2_DATA_CTL), \n     .PO_CTL_COARSE_BYPASS      (PO_CTL_COARSE_BYPASS),\n     .PO_FINE_DELAY             (L_PHY_2_PO_FINE_DELAY),\n     .BITLANES                  (PHY_2_BITLANES),\n     .BITLANES_OUTONLY          (PHY_2_BITLANES_OUTONLY),\n     .BYTELANES_DDR_CK          (LP_PHY_2_BYTELANES_DDR_CK),\n     .LAST_BANK                 (PHY_2_IS_LAST_BANK ),\n     .LANE_REMAP                (PHY_2_LANE_REMAP),\n     .OF_ALMOST_FULL_VALUE      (PHY_2_OF_ALMOST_FULL_VALUE),\n     .IF_ALMOST_EMPTY_VALUE     (PHY_2_IF_ALMOST_EMPTY_VALUE),\n     .GENERATE_IDELAYCTRL       (PHY_2_GENERATE_IDELAYCTRL),\n     .IODELAY_GRP               (PHY_2_IODELAY_GRP),\n     .FPGA_SPEED_GRADE          (FPGA_SPEED_GRADE),\n     .BANK_TYPE                 (BANK_TYPE),\n     .NUM_DDR_CK                (NUM_DDR_CK),\n     .TCK                       (TCK),\n     .RCLK_SELECT_LANE          (RCLK_SELECT_LANE),\n     .USE_PRE_POST_FIFO         (USE_PRE_POST_FIFO),\n     .SYNTHESIS                 (SYNTHESIS),\n     .PC_CLK_RATIO              (PHY_CLK_RATIO),\n     .PC_EVENTS_DELAY           (PHY_EVENTS_DELAY),\n     .PC_FOUR_WINDOW_CLOCKS     (PHY_FOUR_WINDOW_CLOCKS),\n     .PC_BURST_MODE             (PHY_2_A_BURST_MODE),\n     .PC_SYNC_MODE              (PHY_SYNC_MODE),\n     .PC_MULTI_REGION           (PHY_MULTI_REGION),\n     .PC_PHY_COUNT_EN           (PHY_COUNT_EN),\n     .PC_DISABLE_SEQ_MATCH      (PHY_DISABLE_SEQ_MATCH),\n     .PC_CMD_OFFSET             (PHY_2_CMD_OFFSET),\n     .PC_RD_CMD_OFFSET_0        (PHY_2_RD_CMD_OFFSET_0),\n     .PC_RD_CMD_OFFSET_1        (PHY_2_RD_CMD_OFFSET_1),\n     .PC_RD_CMD_OFFSET_2        (PHY_2_RD_CMD_OFFSET_2),\n     .PC_RD_CMD_OFFSET_3        (PHY_2_RD_CMD_OFFSET_3),\n     .PC_RD_DURATION_0          (PHY_2_RD_DURATION_0),\n     .PC_RD_DURATION_1          (PHY_2_RD_DURATION_1),\n     .PC_RD_DURATION_2          (PHY_2_RD_DURATION_2),\n     .PC_RD_DURATION_3          (PHY_2_RD_DURATION_3),\n     .PC_WR_CMD_OFFSET_0        (PHY_2_WR_CMD_OFFSET_0),\n     .PC_WR_CMD_OFFSET_1        (PHY_2_WR_CMD_OFFSET_1),\n     .PC_WR_CMD_OFFSET_2        (PHY_2_WR_CMD_OFFSET_2),\n     .PC_WR_CMD_OFFSET_3        (PHY_2_WR_CMD_OFFSET_3),\n     .PC_WR_DURATION_0          (PHY_2_WR_DURATION_0),\n     .PC_WR_DURATION_1          (PHY_2_WR_DURATION_1),\n     .PC_WR_DURATION_2          (PHY_2_WR_DURATION_2),\n     .PC_WR_DURATION_3          (PHY_2_WR_DURATION_3),\n     .PC_AO_WRLVL_EN            (PHY_2_AO_WRLVL_EN),\n     .PC_AO_TOGGLE              (PHY_2_AO_TOGGLE),\n\n     .PI_SEL_CLK_OFFSET         (PI_SEL_CLK_OFFSET),\n\n     .A_PI_FINE_DELAY           (L_PHY_2_A_PI_FINE_DELAY),\n     .B_PI_FINE_DELAY           (L_PHY_2_B_PI_FINE_DELAY),\n     .C_PI_FINE_DELAY           (L_PHY_2_C_PI_FINE_DELAY),\n     .D_PI_FINE_DELAY           (L_PHY_2_D_PI_FINE_DELAY),\n     .A_PI_FREQ_REF_DIV         (PHY_2_A_PI_FREQ_REF_DIV),\n     .A_PI_BURST_MODE           (PHY_2_A_BURST_MODE),\n     .A_PI_OUTPUT_CLK_SRC       (L_PHY_2_A_PI_OUTPUT_CLK_SRC),\n     .B_PI_OUTPUT_CLK_SRC       (L_PHY_2_B_PI_OUTPUT_CLK_SRC),\n     .C_PI_OUTPUT_CLK_SRC       (L_PHY_2_C_PI_OUTPUT_CLK_SRC),\n     .D_PI_OUTPUT_CLK_SRC       (L_PHY_2_D_PI_OUTPUT_CLK_SRC),\n     .A_PO_OUTPUT_CLK_SRC       (PHY_2_A_PO_OUTPUT_CLK_SRC),\n     .A_PO_OCLK_DELAY           (PHY_2_A_PO_OCLK_DELAY),\n     .A_PO_OCLKDELAY_INV        (PHY_2_A_PO_OCLKDELAY_INV),\n     .A_OF_ARRAY_MODE           (PHY_2_A_OF_ARRAY_MODE),\n     .B_OF_ARRAY_MODE           (PHY_2_B_OF_ARRAY_MODE),\n     .C_OF_ARRAY_MODE           (PHY_2_C_OF_ARRAY_MODE),\n     .D_OF_ARRAY_MODE           (PHY_2_D_OF_ARRAY_MODE),\n     .A_IF_ARRAY_MODE           (PHY_2_A_IF_ARRAY_MODE),\n     .B_IF_ARRAY_MODE           (PHY_2_B_IF_ARRAY_MODE),\n     .C_IF_ARRAY_MODE           (PHY_2_C_IF_ARRAY_MODE),\n     .D_IF_ARRAY_MODE           (PHY_2_D_IF_ARRAY_MODE),\n     .A_OS_DATA_RATE            (PHY_2_A_OSERDES_DATA_RATE),\n     .A_OS_DATA_WIDTH           (PHY_2_A_OSERDES_DATA_WIDTH),\n     .B_OS_DATA_RATE            (PHY_2_B_OSERDES_DATA_RATE),\n     .B_OS_DATA_WIDTH           (PHY_2_B_OSERDES_DATA_WIDTH),\n     .C_OS_DATA_RATE            (PHY_2_C_OSERDES_DATA_RATE),\n     .C_OS_DATA_WIDTH           (PHY_2_C_OSERDES_DATA_WIDTH),\n     .D_OS_DATA_RATE            (PHY_2_D_OSERDES_DATA_RATE),\n     .D_OS_DATA_WIDTH           (PHY_2_D_OSERDES_DATA_WIDTH),\n     .A_IDELAYE2_IDELAY_TYPE    (PHY_2_A_IDELAYE2_IDELAY_TYPE),\n     .A_IDELAYE2_IDELAY_VALUE   (PHY_2_A_IDELAYE2_IDELAY_VALUE)\n     ,.CKE_ODT_AUX                   (CKE_ODT_AUX)\n     ,.PI_DIV2_INCDEC           (PI_DIV2_INCDEC)\n)",
+        "       always @(*)\n          aux_out[7:4] = 0;\n   end\n       assign pi_dqs_found_w[1]    = 1;\n       assign pi_dqs_found_all_w[1]    = 1;",
+        "       assign pi_dqs_found_lanes[HIGHEST_LANE_B1+4-1:4]  = 4'b1111;",
+        "       assign pi_phase_locked_lanes[HIGHEST_LANE_B1+4-1:4]  = 4'b1111;",
+        "       assign byte_rd_en_v[1]      = 1;",
+        "       assign if_empty_v[1]        = 0;",
+        "       assign pre_data_a_full_v[1] = 0;",
+        "       assign of_data_full_v[1]    = 0;",
+        "       assign of_data_a_full_v[1]  = 0;",
+        "       assign of_ctl_full_v[1]     = 0;",
+        "       assign of_ctl_a_full_v[1]   = 0;",
+        "       assign _phy_ctl_a_full_p[1] = 0;",
+        "       assign phy_din[HIGHEST_LANE_B1*80+320-1:320] = 0;",
+        "   if ( HIGHEST_BANK > 1)  begin\n       assign phy_din[HIGHEST_LANE_B1*80+320-1:320] = 0;\n       assign _phy_ctl_a_full_p[1] = 0;\n       assign of_ctl_a_full_v[1]   = 0;\n       assign of_ctl_full_v[1]     = 0;\n       assign of_data_a_full_v[1]  = 0;\n       assign of_data_full_v[1]    = 0;\n       assign pre_data_a_full_v[1] = 0;\n       assign if_empty_v[1]        = 0;\n       assign byte_rd_en_v[1]      = 1;\n       assign pi_phase_locked_lanes[HIGHEST_LANE_B1+4-1:4]  = 4'b1111;\n       assign pi_dqs_found_lanes[HIGHEST_LANE_B1+4-1:4]  = 4'b1111;",
+        "      always @(negedge auxout_clk or posedge rst_auxout)  begin\n        if (rst_auxout) begin\n            aux_out[5]  <= #100 0;\n            aux_out[7]  <= #100 0;\n        end\n        else begin\n            aux_out[5]  <= #100 aux_out_[5];\n            aux_out[7]  <= #100 aux_out_[7];\n        end\n      end",
+        "      always @(posedge auxout_clk or posedge rst_auxout)  begin\n        if (rst_auxout) begin\n            aux_out[5]  <= #100 0;\n            aux_out[7]  <= #100 0;\n        end\n        else begin\n            aux_out[5]  <= #100 aux_out_[5];\n            aux_out[7]  <= #100 aux_out_[7];\n        end\n      end",
+        "   always @(posedge auxout_clk or posedge rst_auxout)  begin\n     if (rst_auxout) begin\n         aux_out[4]  <= #100 0;\n         aux_out[6]  <= #100 0;\n     end\n     else begin\n         aux_out[4]  <= #100 aux_out_[4];\n         aux_out[6]  <= #100 aux_out_[6];\n     end\n   end",
+        "if ( BYTE_LANES_B1 != 0) begin : ddr_phy_4lanes_1\n\nmig_7series_v4_1_ddr_phy_4lanes #\n  (\n     .BYTE_LANES                (BYTE_LANES_B1),        \n     .DATA_CTL_N                (PHY_1_DATA_CTL), \n     .PO_CTL_COARSE_BYPASS      (PO_CTL_COARSE_BYPASS),\n     .PO_FINE_DELAY             (L_PHY_1_PO_FINE_DELAY),\n     .BITLANES                  (PHY_1_BITLANES),\n     .BITLANES_OUTONLY          (PHY_1_BITLANES_OUTONLY),\n     .BYTELANES_DDR_CK          (LP_PHY_1_BYTELANES_DDR_CK),\n     .LAST_BANK                 (PHY_1_IS_LAST_BANK ),\n     .LANE_REMAP                (PHY_1_LANE_REMAP),\n     .OF_ALMOST_FULL_VALUE      (PHY_1_OF_ALMOST_FULL_VALUE),\n     .IF_ALMOST_EMPTY_VALUE     (PHY_1_IF_ALMOST_EMPTY_VALUE),\n     .GENERATE_IDELAYCTRL       (PHY_1_GENERATE_IDELAYCTRL),\n     .IODELAY_GRP               (PHY_1_IODELAY_GRP),\n     .FPGA_SPEED_GRADE          (FPGA_SPEED_GRADE),\n     .BANK_TYPE                 (BANK_TYPE),\n     .NUM_DDR_CK                (NUM_DDR_CK),\n     .TCK                       (TCK),\n     .RCLK_SELECT_LANE          (RCLK_SELECT_LANE),\n     .USE_PRE_POST_FIFO         (USE_PRE_POST_FIFO),\n     .SYNTHESIS                 (SYNTHESIS),\n     .PC_CLK_RATIO              (PHY_CLK_RATIO),\n     .PC_EVENTS_DELAY           (PHY_EVENTS_DELAY),\n     .PC_FOUR_WINDOW_CLOCKS     (PHY_FOUR_WINDOW_CLOCKS),\n     .PC_BURST_MODE             (PHY_1_A_BURST_MODE),\n     .PC_SYNC_MODE              (PHY_SYNC_MODE),\n     .PC_MULTI_REGION           (PHY_MULTI_REGION),\n     .PC_PHY_COUNT_EN           (PHY_COUNT_EN),\n     .PC_DISABLE_SEQ_MATCH      (PHY_DISABLE_SEQ_MATCH),\n     .PC_CMD_OFFSET             (PHY_1_CMD_OFFSET),\n     .PC_RD_CMD_OFFSET_0        (PHY_1_RD_CMD_OFFSET_0),\n     .PC_RD_CMD_OFFSET_1        (PHY_1_RD_CMD_OFFSET_1),\n     .PC_RD_CMD_OFFSET_2        (PHY_1_RD_CMD_OFFSET_2),\n     .PC_RD_CMD_OFFSET_3        (PHY_1_RD_CMD_OFFSET_3),\n     .PC_RD_DURATION_0          (PHY_1_RD_DURATION_0),\n     .PC_RD_DURATION_1          (PHY_1_RD_DURATION_1),\n     .PC_RD_DURATION_2          (PHY_1_RD_DURATION_2),\n     .PC_RD_DURATION_3          (PHY_1_RD_DURATION_3),\n     .PC_WR_CMD_OFFSET_0        (PHY_1_WR_CMD_OFFSET_0),\n     .PC_WR_CMD_OFFSET_1        (PHY_1_WR_CMD_OFFSET_1),\n     .PC_WR_CMD_OFFSET_2        (PHY_1_WR_CMD_OFFSET_2),\n     .PC_WR_CMD_OFFSET_3        (PHY_1_WR_CMD_OFFSET_3),\n     .PC_WR_DURATION_0          (PHY_1_WR_DURATION_0),\n     .PC_WR_DURATION_1          (PHY_1_WR_DURATION_1),\n     .PC_WR_DURATION_2          (PHY_1_WR_DURATION_2),\n     .PC_WR_DURATION_3          (PHY_1_WR_DURATION_3),\n     .PC_AO_WRLVL_EN            (PHY_1_AO_WRLVL_EN),\n     .PC_AO_TOGGLE              (PHY_1_AO_TOGGLE),\n\n     .PI_SEL_CLK_OFFSET         (PI_SEL_CLK_OFFSET),\n\n     .A_PI_FINE_DELAY           (L_PHY_1_A_PI_FINE_DELAY),\n     .B_PI_FINE_DELAY           (L_PHY_1_B_PI_FINE_DELAY),\n     .C_PI_FINE_DELAY           (L_PHY_1_C_PI_FINE_DELAY),\n     .D_PI_FINE_DELAY           (L_PHY_1_D_PI_FINE_DELAY),\n\n     .A_PI_FREQ_REF_DIV         (PHY_1_A_PI_FREQ_REF_DIV),\n     .A_PI_BURST_MODE           (PHY_1_A_BURST_MODE),\n     .A_PI_OUTPUT_CLK_SRC       (L_PHY_1_A_PI_OUTPUT_CLK_SRC),\n     .B_PI_OUTPUT_CLK_SRC       (L_PHY_1_B_PI_OUTPUT_CLK_SRC),\n     .C_PI_OUTPUT_CLK_SRC       (L_PHY_1_C_PI_OUTPUT_CLK_SRC),\n     .D_PI_OUTPUT_CLK_SRC       (L_PHY_1_D_PI_OUTPUT_CLK_SRC),\n     .A_PO_OUTPUT_CLK_SRC       (PHY_1_A_PO_OUTPUT_CLK_SRC),\n     .A_PO_OCLK_DELAY           (PHY_1_A_PO_OCLK_DELAY),\n     .A_PO_OCLKDELAY_INV        (PHY_1_A_PO_OCLKDELAY_INV),\n     .A_OF_ARRAY_MODE           (PHY_1_A_OF_ARRAY_MODE),\n     .B_OF_ARRAY_MODE           (PHY_1_B_OF_ARRAY_MODE),\n     .C_OF_ARRAY_MODE           (PHY_1_C_OF_ARRAY_MODE),\n     .D_OF_ARRAY_MODE           (PHY_1_D_OF_ARRAY_MODE),\n     .A_IF_ARRAY_MODE           (PHY_1_A_IF_ARRAY_MODE),\n     .B_IF_ARRAY_MODE           (PHY_1_B_IF_ARRAY_MODE),\n     .C_IF_ARRAY_MODE           (PHY_1_C_IF_ARRAY_MODE),\n     .D_IF_ARRAY_MODE           (PHY_1_D_IF_ARRAY_MODE),\n     .A_OS_DATA_RATE            (PHY_1_A_OSERDES_DATA_RATE),\n     .A_OS_DATA_WIDTH           (PHY_1_A_OSERDES_DATA_WIDTH),\n     .B_OS_DATA_RATE            (PHY_1_B_OSERDES_DATA_RATE),\n     .B_OS_DATA_WIDTH           (PHY_1_B_OSERDES_DATA_WIDTH),\n     .C_OS_DATA_RATE            (PHY_1_C_OSERDES_DATA_RATE),\n     .C_OS_DATA_WIDTH           (PHY_1_C_OSERDES_DATA_WIDTH),\n     .D_OS_DATA_RATE            (PHY_1_D_OSERDES_DATA_RATE),\n     .D_OS_DATA_WIDTH           (PHY_1_D_OSERDES_DATA_WIDTH),\n     .A_IDELAYE2_IDELAY_TYPE    (PHY_1_A_IDELAYE2_IDELAY_TYPE),\n     .A_IDELAYE2_IDELAY_VALUE   (PHY_1_A_IDELAYE2_IDELAY_VALUE)\n     ,.CKE_ODT_AUX                   (CKE_ODT_AUX)\n     ,.PI_DIV2_INCDEC           (PI_DIV2_INCDEC)\n)\n u_ddr_phy_4lanes\n(\n      .rst                      (rst),\n      .phy_clk                  (phy_clk_split1),\n      .clk_div2                 (clk_div2),\n      .phy_ctl_clk              (phy_ctl_clk_split1),\n      .phy_ctl_wd               (phy_ctl_wd_split1),\n      .data_offset              (phy_data_offset_1_split1),\n      .phy_ctl_wr               (phy_ctl_wr_split1),\n      .mem_refclk               (mem_refclk_split),\n      .freq_refclk              (freq_refclk_split),\n      .mem_refclk_div4          (mem_refclk_div4_split),\n      .sync_pulse               (sync_pulse_split),\n      .phy_dout                 (phy_dout_split1[HIGHEST_LANE_B1*80+320-1:320]),\n      .phy_cmd_wr_en            (phy_cmd_wr_en_split1),\n      .phy_data_wr_en           (phy_data_wr_en_split1),\n      .phy_rd_en                (phy_rd_en_split1),\n      .pll_lock                 (pll_lock),\n      .ddr_clk                  (ddr_clk_w[1]),\n      .rclk                     (),\n      .rst_out                  (rst_out_w[1]),\n      .mcGo                     (mcGo_w[1]),\n      .ref_dll_lock             (ref_dll_lock_w[1]),\n      .idelayctrl_refclk        (idelayctrl_refclk),\n      .idelay_inc               (idelay_inc),\n      .idelay_ce                (idelay_ce),\n      .idelay_ld                (idelay_ld),\n      .phy_ctl_mstr_empty       (phy_ctl_mstr_empty),\n      .if_rst                   (if_rst),\n      .if_empty_def             (if_empty_def),\n      .byte_rd_en_oth_banks     (byte_rd_en_oth_banks[3:2]),\n      .if_a_empty               (if_a_empty_v[1]),\n      .if_empty                 (if_empty_v[1]),\n      .byte_rd_en               (byte_rd_en_v[1]),\n      .if_empty_or              (if_empty_or_v[1]),\n      .if_empty_and             (if_empty_and_v[1]),\n      .of_ctl_a_full            (of_ctl_a_full_v[1]),\n      .of_data_a_full           (of_data_a_full_v[1]),\n      .of_ctl_full              (of_ctl_full_v[1]),\n      .of_data_full             (of_data_full_v[1]),\n      .pre_data_a_full          (pre_data_a_full_v[1]),\n      .phy_din                  (phy_din[HIGHEST_LANE_B1*80+320-1:320]),\n      .phy_ctl_a_full           (_phy_ctl_a_full_p[1]),\n      .phy_ctl_full             (_phy_ctl_full_p[1]),\n      .phy_ctl_empty            (phy_ctl_empty[1]),\n      .mem_dq_out               (mem_dq_out[HIGHEST_LANE_B1*12+48-1:48]),\n      .mem_dq_ts                (mem_dq_ts[HIGHEST_LANE_B1*12+48-1:48]),\n      .mem_dq_in                (mem_dq_in[HIGHEST_LANE_B1*10+40-1:40]),\n      .mem_dqs_out              (mem_dqs_out[HIGHEST_LANE_B1+4-1:4]),\n      .mem_dqs_ts               (mem_dqs_ts[HIGHEST_LANE_B1+4-1:4]),\n      .mem_dqs_in               (mem_dqs_in[HIGHEST_LANE_B1+4-1:4]),\n      .aux_out                  (aux_out_[7:4]),\n      .phy_ctl_ready            (phy_ctl_ready_w[1]),\n      .phy_write_calib          (phy_write_calib),\n      .phy_read_calib           (phy_read_calib),\n\n\n\n\n      .phyGo                    (phyGo),\n      .input_sink               (input_sink),\n\n      .calib_sel                (calib_sel_byte1),\n      .calib_zero_ctrl          (calib_zero_ctrl[1]),\n      .calib_zero_lanes         (calib_zero_lanes_int[7:4]),\n      .calib_in_common          (calib_in_common),\n      .po_coarse_enable         (po_coarse_enable[1]),\n      .po_fine_enable           (po_fine_enable[1]),\n      .po_fine_inc              (po_fine_inc[1]),\n      .po_coarse_inc            (po_coarse_inc[1]),\n      .po_counter_load_en       (po_counter_load_en),\n      .po_sel_fine_oclk_delay   (po_sel_fine_oclk_delay[1]),\n      .po_counter_load_val      (po_counter_load_val),\n      .po_counter_read_en       (po_counter_read_en),\n      .po_coarse_overflow       (po_coarse_overflow_w[1]),\n      .po_fine_overflow         (po_fine_overflow_w[1]),\n      .po_counter_read_val      (po_counter_read_val_w[1]),\n\n      .pi_rst_dqs_find          (pi_rst_dqs_find[1]),\n      .pi_fine_enable           (pi_fine_enable),\n      .pi_fine_inc              (pi_fine_inc),\n      .pi_counter_load_en       (pi_counter_load_en),\n      .pi_counter_read_en       (pi_counter_read_en),\n      .pi_counter_load_val      (pi_counter_load_val),\n      .pi_fine_overflow         (pi_fine_overflow_w[1]),\n      .pi_counter_read_val      (pi_counter_read_val_w[1]),\n      .pi_dqs_found             (pi_dqs_found_w[1]),\n      .pi_dqs_found_all         (pi_dqs_found_all_w[1]),\n      .pi_dqs_found_any         (pi_dqs_found_any_w[1]),\n      .pi_phase_locked_lanes    (pi_phase_locked_lanes[HIGHEST_LANE_B1+4-1:4]),\n      .pi_dqs_found_lanes       (pi_dqs_found_lanes[HIGHEST_LANE_B1+4-1:4]),\n      .pi_dqs_out_of_range      (pi_dqs_out_of_range_w[1]),\n      .pi_phase_locked          (pi_phase_locked_w[1]),\n      .pi_phase_locked_all      (pi_phase_locked_all_w[1]),\n      .fine_delay               (fine_delay),\n      .fine_delay_sel           (fine_delay_sel)\n);",
+        "     always @(*)\n        aux_out[3:0] = 0;\nend",
+        "   assign pi_dqs_found_w[0]    = 1;\n   assign pi_dqs_found_all_w[0]    = 1;\n   assign pi_dqs_found_any_w[0]    = 0;\n   assign pi_phase_locked_lanes[HIGHEST_LANE_B0-1:0]  = 4'b1111;\n   assign pi_dqs_found_lanes[HIGHEST_LANE_B0-1:0]  = 4'b1111;\n   assign pi_dqs_out_of_range_w[0]    = 0;\n   assign pi_phase_locked_w[0]    = 1;\n   assign po_fine_overflow_w[0] = 0;\n   assign po_coarse_overflow_w[0] = 0;\n   assign po_fine_overflow_w[0] = 0;\n   assign pi_fine_overflow_w[0] = 0;",
+        "       always @(*)\n           aux_out[3:0] = 0;\n   end",
+        "   if ( HIGHEST_BANK > 0) begin\n       assign phy_din[HIGHEST_LANE_B0*80-1:0] = 0;\n       assign _phy_ctl_a_full_p[0] = 0;\n       assign of_ctl_a_full_v[0]   = 0;\n       assign of_ctl_full_v[0]     = 0;\n       assign of_data_a_full_v[0]  = 0;\n       assign of_data_full_v[0]    = 0;\n       assign pre_data_a_full_v[0] = 0;\n       assign if_empty_v[0]        = 0;\n       assign byte_rd_en_v[0]      = 1;",
+        "      always @(negedge auxout_clk or posedge rst_auxout)  begin\n        if (rst_auxout) begin\n            aux_out[1]  <= #100 0;\n            aux_out[3]  <= #100 0;\n        end\n        else begin\n            aux_out[1]  <= #100 aux_out_[1];\n            aux_out[3]  <= #100 aux_out_[3];\n        end\n      end",
+        "      always @(posedge auxout_clk or posedge rst_auxout)  begin\n        if (rst_auxout) begin\n            aux_out[1]  <= #100 0;\n            aux_out[3]  <= #100 0;\n        end\n        else begin\n            aux_out[1]  <= #100 aux_out_[1];\n            aux_out[3]  <= #100 aux_out_[3];\n        end\n      end",
+        "   always @(posedge auxout_clk or posedge rst_auxout)  begin\n     if (rst_auxout) begin\n         aux_out[0]  <= #100 0;\n         aux_out[2]  <= #100 0;\n     end\n     else begin\n         aux_out[0]  <= #100 aux_out_[0];\n         aux_out[2]  <= #100 aux_out_[2];\n     end\n   end",
+        ")\n u_ddr_phy_4lanes",
+        "if ( BYTE_LANES_B0 != 0)  begin : ddr_phy_4lanes_0\nmig_7series_v4_1_ddr_phy_4lanes #\n  (\n     .BYTE_LANES                (BYTE_LANES_B0),        \n     .DATA_CTL_N                (PHY_0_DATA_CTL), \n     .PO_CTL_COARSE_BYPASS      (PO_CTL_COARSE_BYPASS),\n     .PO_FINE_DELAY             (L_PHY_0_PO_FINE_DELAY),\n     .BITLANES                  (PHY_0_BITLANES),\n     .BITLANES_OUTONLY          (PHY_0_BITLANES_OUTONLY),\n     .BYTELANES_DDR_CK          (LP_PHY_0_BYTELANES_DDR_CK),\n     .LAST_BANK                 (PHY_0_IS_LAST_BANK),\n     .LANE_REMAP                (PHY_0_LANE_REMAP),\n     .OF_ALMOST_FULL_VALUE      (PHY_0_OF_ALMOST_FULL_VALUE),\n     .IF_ALMOST_EMPTY_VALUE     (PHY_0_IF_ALMOST_EMPTY_VALUE),\n     .GENERATE_IDELAYCTRL       (PHY_0_GENERATE_IDELAYCTRL),\n     .IODELAY_GRP               (PHY_0_IODELAY_GRP),\n     .FPGA_SPEED_GRADE          (FPGA_SPEED_GRADE),\n     .BANK_TYPE                 (BANK_TYPE),\n     .NUM_DDR_CK                (NUM_DDR_CK),\n     .TCK                       (TCK),\n     .RCLK_SELECT_LANE          (RCLK_SELECT_LANE),\n     .USE_PRE_POST_FIFO         (USE_PRE_POST_FIFO),\n     .SYNTHESIS                 (SYNTHESIS),\n     .PC_CLK_RATIO              (PHY_CLK_RATIO),\n     .PC_EVENTS_DELAY           (PHY_EVENTS_DELAY),\n     .PC_FOUR_WINDOW_CLOCKS     (PHY_FOUR_WINDOW_CLOCKS),\n     .PC_BURST_MODE             (PHY_0_A_BURST_MODE),\n     .PC_SYNC_MODE              (PHY_SYNC_MODE),\n     .PC_MULTI_REGION           (PHY_MULTI_REGION),\n     .PC_PHY_COUNT_EN           (PHY_COUNT_EN),\n     .PC_DISABLE_SEQ_MATCH      (PHY_DISABLE_SEQ_MATCH),\n     .PC_CMD_OFFSET             (PHY_0_CMD_OFFSET),\n     .PC_RD_CMD_OFFSET_0        (PHY_0_RD_CMD_OFFSET_0),\n     .PC_RD_CMD_OFFSET_1        (PHY_0_RD_CMD_OFFSET_1),\n     .PC_RD_CMD_OFFSET_2        (PHY_0_RD_CMD_OFFSET_2),\n     .PC_RD_CMD_OFFSET_3        (PHY_0_RD_CMD_OFFSET_3),\n     .PC_RD_DURATION_0          (PHY_0_RD_DURATION_0),\n     .PC_RD_DURATION_1          (PHY_0_RD_DURATION_1),\n     .PC_RD_DURATION_2          (PHY_0_RD_DURATION_2),\n     .PC_RD_DURATION_3          (PHY_0_RD_DURATION_3),\n     .PC_WR_CMD_OFFSET_0        (PHY_0_WR_CMD_OFFSET_0),\n     .PC_WR_CMD_OFFSET_1        (PHY_0_WR_CMD_OFFSET_1),\n     .PC_WR_CMD_OFFSET_2        (PHY_0_WR_CMD_OFFSET_2),\n     .PC_WR_CMD_OFFSET_3        (PHY_0_WR_CMD_OFFSET_3),\n     .PC_WR_DURATION_0          (PHY_0_WR_DURATION_0),\n     .PC_WR_DURATION_1          (PHY_0_WR_DURATION_1),\n     .PC_WR_DURATION_2          (PHY_0_WR_DURATION_2),\n     .PC_WR_DURATION_3          (PHY_0_WR_DURATION_3),\n     .PC_AO_WRLVL_EN            (PHY_0_AO_WRLVL_EN),\n     .PC_AO_TOGGLE              (PHY_0_AO_TOGGLE),\n\n     .PI_SEL_CLK_OFFSET         (PI_SEL_CLK_OFFSET),\n\n     .A_PI_FINE_DELAY           (L_PHY_0_A_PI_FINE_DELAY),\n     .B_PI_FINE_DELAY           (L_PHY_0_B_PI_FINE_DELAY),\n     .C_PI_FINE_DELAY           (L_PHY_0_C_PI_FINE_DELAY),\n     .D_PI_FINE_DELAY           (L_PHY_0_D_PI_FINE_DELAY),\n\n     .A_PI_FREQ_REF_DIV         (PHY_0_A_PI_FREQ_REF_DIV),\n     .A_PI_BURST_MODE           (PHY_0_A_BURST_MODE),\n     .A_PI_OUTPUT_CLK_SRC       (L_PHY_0_A_PI_OUTPUT_CLK_SRC),\n     .B_PI_OUTPUT_CLK_SRC       (L_PHY_0_B_PI_OUTPUT_CLK_SRC),\n     .C_PI_OUTPUT_CLK_SRC       (L_PHY_0_C_PI_OUTPUT_CLK_SRC),\n     .D_PI_OUTPUT_CLK_SRC       (L_PHY_0_D_PI_OUTPUT_CLK_SRC),\n     .A_PO_OUTPUT_CLK_SRC       (PHY_0_A_PO_OUTPUT_CLK_SRC),\n     .A_PO_OCLK_DELAY           (PHY_0_A_PO_OCLK_DELAY),\n     .A_PO_OCLKDELAY_INV        (PHY_0_A_PO_OCLKDELAY_INV),\n     .A_OF_ARRAY_MODE           (PHY_0_A_OF_ARRAY_MODE),\n     .B_OF_ARRAY_MODE           (PHY_0_B_OF_ARRAY_MODE),\n     .C_OF_ARRAY_MODE           (PHY_0_C_OF_ARRAY_MODE),\n     .D_OF_ARRAY_MODE           (PHY_0_D_OF_ARRAY_MODE),\n     .A_IF_ARRAY_MODE           (PHY_0_A_IF_ARRAY_MODE),\n     .B_IF_ARRAY_MODE           (PHY_0_B_IF_ARRAY_MODE),",
+        "else if (HIGHEST_BANK == 2) begin : banks_2\n  assign byte_rd_en_oth_banks[1:0] = {byte_rd_en_v[1],1'b1};\n  assign byte_rd_en_oth_banks[3:2] = {byte_rd_en_v[0],1'b1};\nend\nelse begin : banks_1\n  assign byte_rd_en_oth_banks[1:0] = {1'b1,1'b1};",
+        "generate\n\nif (HIGHEST_BANK == 3) begin : banks_3\n  assign byte_rd_en_oth_banks[1:0] = {byte_rd_en_v[1],byte_rd_en_v[2]};\n  assign byte_rd_en_oth_banks[3:2] = {byte_rd_en_v[0],byte_rd_en_v[2]};\n  assign byte_rd_en_oth_banks[5:4] = {byte_rd_en_v[0],byte_rd_en_v[1]};\nend",
+        "endgenerate",
+        "    assign _phy_ctl_wd     = phy_ctl_wd;\n    assign aux_in_[1]      = aux_in_1;\n    assign aux_in_[2]      = aux_in_2;\n    assign phy_ctl_a_full  = |_phy_ctl_a_full_p;\n    assign phy_ctl_full[0] = |_phy_ctl_full_p;\n    assign phy_ctl_full[3:1] = 3'b000;\n    assign _phy_clk        = phy_clk;",
+        "else if (PHYCTL_CMD_FIFO == \"FALSE\") begin\n    assign _phy_ctl_wd     = phy_ctl_wd;\n    assign aux_in_[1]      = aux_in_1;\n    assign aux_in_[2]      = aux_in_2;\n    assign phy_ctl_a_full  = |_phy_ctl_a_full_p;\n    assign phy_ctl_full[0] = |_phy_ctl_full_p;\n    assign phy_ctl_full[3:1] = 3'b000;\n    assign _phy_clk        = phy_clk;",
+        "    always @(posedge phy_clk) begin\n          phy_wd_reg   <= #1 phy_ctl_wd;\n          aux_in1_reg  <= #1 aux_in_1;\n          aux_in2_reg  <= #1 aux_in_2;\n          sfifo_ready  <= #1 phy_ctl_wr;\n    end",
+        "generate\n\n\n\n\nif (PHYCTL_CMD_FIFO == \"TRUE\") begin : cmd_fifo_soft\n    reg  [31:0] phy_wd_reg = 0;\n    reg  [3:0]  aux_in1_reg = 0;\n    reg  [3:0]  aux_in2_reg = 0;\n    reg         sfifo_ready = 0;\n    assign _phy_ctl_wd     = phy_wd_reg;\n    assign aux_in_[1]      = aux_in1_reg;\n    assign aux_in_[2]      = aux_in2_reg;\n    assign phy_ctl_a_full  = |_phy_ctl_a_full_p;\n    assign phy_ctl_full[0] = |_phy_ctl_full_p;\n    assign phy_ctl_full[1] = |_phy_ctl_full_p;\n    assign phy_ctl_full[2] = |_phy_ctl_full_p;\n    assign phy_ctl_full[3] = |_phy_ctl_full_p;\n    assign _phy_clk        = phy_clk;\n",
+        "assign mcGo = mcGo_r[15];",
+        "always @(posedge phy_clk) begin\n    if ( rst)\n       mcGo_r <= #(1) 0;\n    else\n       mcGo_r <= #(1) (mcGo_r << 1) |  &mcGo_w;\nend",
+        "always @(*) begin\n      rst_out =  rst_out_w[L_RESET_SELECT_BANK] & ddr_rst_in_n;\nend",
+        "  always @(negedge auxout_clk or posedge rst)  begin\n    if ( rst) begin\n       rst_auxout     <= #(1) 1'b1;\n    end\n    else begin\n       rst_auxout     <= #(1) rst_auxout_rr;\n    end\n  end",
+        "  always @(posedge auxout_clk or posedge rst)  begin\n    if ( rst) begin\n       rst_auxout     <= #(1) 1'b1;\n    end\n    else begin\n       rst_auxout     <= #(1) rst_auxout_rr;\n    end\n  end",
+        "always @(posedge auxout_clk or posedge rst) begin\n  if ( rst) begin\n     rst_auxout_r   <= #(1) 1'b1;\n     rst_auxout_rr  <= #(1) 1'b1;\n  end\n  else begin\n     rst_auxout_r   <= #(1) rst;\n     rst_auxout_rr  <= #(1) rst_auxout_r;\n  end\nend",
+        "reg rst_auxout;\nreg rst_auxout_r;\nreg rst_auxout_rr;\n",
+        "      16'h3243: assign ddr_clk[(i+1)*LP_DDR_CK_WIDTH-1:(i*LP_DDR_CK_WIDTH)] = (ddr_clk_w[2] >> (LP_DDR_CK_WIDTH*i+24)) & 2'b11;\n      16'h3244: assign ddr_clk[(i+1)*LP_DDR_CK_WIDTH-1:(i*LP_DDR_CK_WIDTH)] = (ddr_clk_w[2] >> (LP_DDR_CK_WIDTH*i+36)) & 2'b11;\n      default : initial $display(\"ERROR: mc_phy ddr_clk_gen : invalid specification for parameter GENERATE_DDR_CK_MAP , clock index =  %d, spec= %x (hex) \",  i, (( GENERATE_DDR_CK_MAP >> (16 * i )) & 16'hffff ));\n   endcase\nend",
+        "      16'h3142: assign ddr_clk[(i+1)*LP_DDR_CK_WIDTH-1:(i*LP_DDR_CK_WIDTH)] = (ddr_clk_w[1] >> (LP_DDR_CK_WIDTH*i+12)) & 2'b11;\n      16'h3143: assign ddr_clk[(i+1)*LP_DDR_CK_WIDTH-1:(i*LP_DDR_CK_WIDTH)] = (ddr_clk_w[1] >> (LP_DDR_CK_WIDTH*i+24)) & 2'b11;\n      16'h3144: assign ddr_clk[(i+1)*LP_DDR_CK_WIDTH-1:(i*LP_DDR_CK_WIDTH)] = (ddr_clk_w[1] >> (LP_DDR_CK_WIDTH*i+36)) & 2'b11;\n      16'h3241: assign ddr_clk[(i+1)*LP_DDR_CK_WIDTH-1:(i*LP_DDR_CK_WIDTH)] = (ddr_clk_w[2] >> (LP_DDR_CK_WIDTH*i)) & 2'b11;\n      16'h3242: assign ddr_clk[(i+1)*LP_DDR_CK_WIDTH-1:(i*LP_DDR_CK_WIDTH)] = (ddr_clk_w[2] >> (LP_DDR_CK_WIDTH*i+12)) & 2'b11;",
+        "      16'h3041: assign ddr_clk[(i+1)*LP_DDR_CK_WIDTH-1:(i*LP_DDR_CK_WIDTH)] = (ddr_clk_w[0] >> (LP_DDR_CK_WIDTH*i)) & 2'b11;\n      16'h3042: assign ddr_clk[(i+1)*LP_DDR_CK_WIDTH-1:(i*LP_DDR_CK_WIDTH)] = (ddr_clk_w[0] >> (LP_DDR_CK_WIDTH*i+12)) & 2'b11;\n      16'h3043: assign ddr_clk[(i+1)*LP_DDR_CK_WIDTH-1:(i*LP_DDR_CK_WIDTH)] = (ddr_clk_w[0] >> (LP_DDR_CK_WIDTH*i+24)) & 2'b11;\n      16'h3044: assign ddr_clk[(i+1)*LP_DDR_CK_WIDTH-1:(i*LP_DDR_CK_WIDTH)] = (ddr_clk_w[0] >> (LP_DDR_CK_WIDTH*i+36)) & 2'b11;\n      16'h3141: assign ddr_clk[(i+1)*LP_DDR_CK_WIDTH-1:(i*LP_DDR_CK_WIDTH)] = (ddr_clk_w[1] >> (LP_DDR_CK_WIDTH*i)) & 2'b11;",
+        "generate\ngenvar i;\nfor (i = 0; i != NUM_DDR_CK; i = i + 1) begin : ddr_clk_gen\n   case  ((GENERATE_DDR_CK_MAP >> (16*i)) & 16'hffff)\n      16'h3041: assign ddr_clk[(i+1)*LP_DDR_CK_WIDTH-1:(i*LP_DDR_CK_WIDTH)] = (ddr_clk_w[0] >> (LP_DDR_CK_WIDTH*i)) & 2'b11;\n      16'h3042: assign ddr_clk[(i+1)*LP_DDR_CK_WIDTH-1:(i*LP_DDR_CK_WIDTH)] = (ddr_clk_w[0] >> (LP_DDR_CK_WIDTH*i+12)) & 2'b11;\n      16'h3043: assign ddr_clk[(i+1)*LP_DDR_CK_WIDTH-1:(i*LP_DDR_CK_WIDTH)] = (ddr_clk_w[0] >> (LP_DDR_CK_WIDTH*i+24)) & 2'b11;\n      16'h3044: assign ddr_clk[(i+1)*LP_DDR_CK_WIDTH-1:(i*LP_DDR_CK_WIDTH)] = (ddr_clk_w[0] >> (LP_DDR_CK_WIDTH*i+36)) & 2'b11;\n      16'h3141: assign ddr_clk[(i+1)*LP_DDR_CK_WIDTH-1:(i*LP_DDR_CK_WIDTH)] = (ddr_clk_w[1] >> (LP_DDR_CK_WIDTH*i)) & 2'b11;\n      16'h3142: assign ddr_clk[(i+1)*LP_DDR_CK_WIDTH-1:(i*LP_DDR_CK_WIDTH)] = (ddr_clk_w[1] >> (LP_DDR_CK_WIDTH*i+12)) & 2'b11;\n      16'h3143: assign ddr_clk[(i+1)*LP_DDR_CK_WIDTH-1:(i*LP_DDR_CK_WIDTH)] = (ddr_clk_w[1] >> (LP_DDR_CK_WIDTH*i+24)) & 2'b11;\n      16'h3144: assign ddr_clk[(i+1)*LP_DDR_CK_WIDTH-1:(i*LP_DDR_CK_WIDTH)] = (ddr_clk_w[1] >> (LP_DDR_CK_WIDTH*i+36)) & 2'b11;\n      16'h3241: assign ddr_clk[(i+1)*LP_DDR_CK_WIDTH-1:(i*LP_DDR_CK_WIDTH)] = (ddr_clk_w[2] >> (LP_DDR_CK_WIDTH*i)) & 2'b11;\n      16'h3242: assign ddr_clk[(i+1)*LP_DDR_CK_WIDTH-1:(i*LP_DDR_CK_WIDTH)] = (ddr_clk_w[2] >> (LP_DDR_CK_WIDTH*i+12)) & 2'b11;\n      16'h3243: assign ddr_clk[(i+1)*LP_DDR_CK_WIDTH-1:(i*LP_DDR_CK_WIDTH)] = (ddr_clk_w[2] >> (LP_DDR_CK_WIDTH*i+24)) & 2'b11;\n      16'h3244: assign ddr_clk[(i+1)*LP_DDR_CK_WIDTH-1:(i*LP_DDR_CK_WIDTH)] = (ddr_clk_w[2] >> (LP_DDR_CK_WIDTH*i+36)) & 2'b11;\n      default : initial $display(\"ERROR: mc_phy ddr_clk_gen : invalid specification for parameter GENERATE_DDR_CK_MAP , clock index =  %d, spec= %x (hex) \",  i, (( GENERATE_DDR_CK_MAP >> (16 * i )) & 16'hffff ));\n   endcase\nend\nendgenerate",
+        "",
+        "  assign phy_ctl_clk_split1     = phy_clk;\n  assign phy_ctl_wd_split1      = phy_ctl_wd;\n  assign phy_data_offset_1_split1   = data_offset_1;\n  assign phy_ctl_wr_split1      = phy_ctl_wr;\n  assign phy_clk_split1         = phy_clk;\n  assign phy_cmd_wr_en_split1   = phy_cmd_wr_en;\n  assign phy_data_wr_en_split1  = phy_data_wr_en;\n  assign phy_rd_en_split1       = phy_rd_en;\n  assign phy_dout_split1        = phy_dout;\n  assign phy_ctl_clk_split2     = phy_clk;\n  assign phy_ctl_wd_split2      = phy_ctl_wd;\n  assign phy_data_offset_2_split2   = data_offset_2;\n  assign phy_ctl_wr_split2      = phy_ctl_wr;\n  assign phy_clk_split2         = phy_clk;\n  assign phy_cmd_wr_en_split2   = phy_cmd_wr_en;\n  assign phy_data_wr_en_split2  = phy_data_wr_en;\n  assign phy_rd_en_split2       = phy_rd_en;",
+        "  assign sync_pulse_split       = sync_pulse;\n  assign mem_refclk_split       = mem_refclk;\n  assign freq_refclk_split      = freq_refclk;\n  assign mem_refclk_div4_split  = mem_refclk_div4;\n  assign phy_ctl_clk_split0     = _phy_clk;\n  assign phy_ctl_wd_split0      = phy_ctl_wd;\n  assign phy_ctl_wr_split0      = phy_ctl_wr;\n  assign phy_clk_split0         = phy_clk;\n  assign phy_cmd_wr_en_split0   = phy_cmd_wr_en;\n  assign phy_data_wr_en_split0  = phy_data_wr_en;\n  assign phy_rd_en_split0       = phy_rd_en;",
+        "initial begin\n  if ( SYNTHESIS == \"FALSE\" ) begin\n  $display(\"%m : BYTE_LANES_B0 = %x BYTE_LANES_B1 = %x DATA_CTL_B0 = %x DATA_CTL_B1 = %x\", BYTE_LANES_B0, BYTE_LANES_B1, DATA_CTL_B0, DATA_CTL_B1);\n  $display(\"%m : HIGHEST_LANE = %d HIGHEST_LANE_B0 = %d HIGHEST_LANE_B1 = %d\",  HIGHEST_LANE, HIGHEST_LANE_B0, HIGHEST_LANE_B1);\n  $display(\"%m : HIGHEST_BANK = %d\", HIGHEST_BANK);\n\n  $display(\"%m : FREQ_REF_PERIOD         = %0.2f \", FREQ_REF_PERIOD);\n  $display(\"%m : DDR_TCK                 = %0d \", DDR_TCK);\n  $display(\"%m : PO_S2_TAPS_SIZE         = %0.2f \", PO_S2_TAPS_SIZE);\n  $display(\"%m : PO_CIRC_BUF_EARLY       = %0d \", PO_CIRC_BUF_EARLY);\n  $display(\"%m : PO_CIRC_BUF_OFFSET      = %0.2f \", PO_CIRC_BUF_OFFSET);\n  $display(\"%m : PO_CIRC_BUF_META_ZONE   = %0.2f \", PO_CIRC_BUF_META_ZONE);\n  $display(\"%m : PO_STG2_FINE_INTR_DLY   = %0.2f \", PO_STG2_FINE_INTRINSIC_DELAY);\n  $display(\"%m : PO_STG2_COARSE_INTR_DLY = %0.2f \", PO_STG2_COARSE_INTRINSIC_DELAY);\n  $display(\"%m : PO_STG2_INTRINSIC_DELAY = %0.2f \", PO_STG2_INTRINSIC_DELAY);\n  $display(\"%m : PO_CIRC_BUF_DELAY       = %0d \", PO_CIRC_BUF_DELAY);\n  $display(\"%m : PO_INTRINSIC_DELAY      = %0.2f \", PO_INTRINSIC_DELAY);\n  $display(\"%m : PO_DELAY                = %0.2f \", PO_DELAY);\n  $display(\"%m : PO_OCLK_DELAY           = %0d \", PHY_0_A_PO_OCLK_DELAY);\n  $display(\"%m : L_PHY_0_PO_FINE_DELAY   = %0d \", L_PHY_0_PO_FINE_DELAY);\n\n  $display(\"%m : PI_STG1_INTRINSIC_DELAY = %0.2f \", PI_STG1_INTRINSIC_DELAY);\n  $display(\"%m : PI_STG2_INTRINSIC_DELAY = %0.2f \", PI_STG2_INTRINSIC_DELAY);\n  $display(\"%m : PI_INTRINSIC_DELAY      = %0.2f \", PI_INTRINSIC_DELAY);\n  $display(\"%m : PI_MAX_STG2_DELAY       = %0.2f \", PI_MAX_STG2_DELAY);\n  $display(\"%m : PI_OFFSET               = %0.2f \", PI_OFFSET);\n  if ( PI_OFFSET < 0) $display(\"%m : a negative PI_OFFSET means that rclk path is longer than oclk path so rclk will be delayed to next oclk edge and the negedge of rclk may be used.\");\n  $display(\"%m : PI_STG2_DELAY           = %0.2f \", PI_STG2_DELAY);\n  $display(\"%m :PI_STG2_DELAY_CAND       = %0.2f \",PI_STG2_DELAY_CAND);\n  $display(\"%m : DEFAULT_RCLK_DELAY      = %0d \", DEFAULT_RCLK_DELAY);\n  $display(\"%m : RCLK_SELECT_EDGE        = %0b \", LP_RCLK_SELECT_EDGE);\n  end \n  if ( PI_STG2_DELAY_CAND > PI_MAX_STG2_DELAY) $display(\"WARNING: %m: The required delay though the phaser_in to internally match the aux_out clock  to ddr clock exceeds the maximum allowable delay. The clock edge  will occur at the output registers of aux_out %0.2f ps before the ddr clock  edge. If aux_out is used for memory inputs, this may violate setup or hold time.\", PI_STG2_DELAY_CAND - PI_MAX_STG2_DELAY);\nend"
+    ]
+}

@@ -1,0 +1,96 @@
+{
+    "line_num": [
+        [
+            315,
+            322
+        ],
+        [
+            285,
+            311
+        ],
+        [
+            281,
+            281
+        ],
+        [
+            265,
+            278
+        ],
+        [
+            263,
+            263
+        ],
+        [
+            261,
+            261
+        ],
+        [
+            260,
+            260
+        ],
+        [
+            259,
+            259
+        ],
+        [
+            246,
+            256
+        ],
+        [
+            242,
+            242
+        ],
+        [
+            235,
+            239
+        ],
+        [
+            222,
+            232
+        ],
+        [
+            210,
+            216
+        ],
+        [
+            197,
+            207
+        ],
+        [
+            182,
+            192
+        ],
+        [
+            168,
+            177
+        ],
+        [
+            153,
+            163
+        ],
+        [
+            139,
+            149
+        ]
+    ],
+    "blocks": [
+        "always @ (posedge MTxClk or posedge TxReset)\nbegin\n  if(TxReset)\n    ControlData[7:0] <= #Tp 8'h0;\n  else\n  if(~ByteCnt[0])\n    ControlData[7:0] <= #Tp MuxedCtrlData[7:0];\nend",
+        "always @ (ByteCnt or DlyCrcEn or MAC or TxPauseTV or DlyCrcCnt)\nbegin\n  case(ByteCnt)\n    6'h0:    if(~DlyCrcEn | DlyCrcEn & (&DlyCrcCnt[1:0]))\n               MuxedCtrlData[7:0] = 8'h01;                   \n             else\n\t\t\t\t\t\t \t MuxedCtrlData[7:0] = 8'h0;\n    6'h2:      MuxedCtrlData[7:0] = 8'h80;\n    6'h4:      MuxedCtrlData[7:0] = 8'hC2;\n    6'h6:      MuxedCtrlData[7:0] = 8'h00;\n    6'h8:      MuxedCtrlData[7:0] = 8'h00;\n    6'hA:      MuxedCtrlData[7:0] = 8'h01;\n    6'hC:      MuxedCtrlData[7:0] = MAC[47:40];\n    6'hE:      MuxedCtrlData[7:0] = MAC[39:32];\n    6'h10:     MuxedCtrlData[7:0] = MAC[31:24];\n    6'h12:     MuxedCtrlData[7:0] = MAC[23:16];\n    6'h14:     MuxedCtrlData[7:0] = MAC[15:8];\n    6'h16:     MuxedCtrlData[7:0] = MAC[7:0];\n    6'h18:     MuxedCtrlData[7:0] = 8'h88;                   \n    6'h1A:     MuxedCtrlData[7:0] = 8'h08;\n    6'h1C:     MuxedCtrlData[7:0] = 8'h00;                   \n    6'h1E:     MuxedCtrlData[7:0] = 8'h01;\n    6'h20:     MuxedCtrlData[7:0] = TxPauseTV[15:8];         \n    6'h22:     MuxedCtrlData[7:0] = TxPauseTV[7:0];\n    default:   MuxedCtrlData[7:0] = 8'h0;\n  endcase\nend",
+        "assign ControlEnd = ByteCnt[5:0] == 6'h22;",
+        "always @ (posedge MTxClk or posedge TxReset)\nbegin\n  if(TxReset)\n    ByteCnt <= #Tp 6'h0;\n  else\n  if(ResetByteCnt)\n    ByteCnt <= #Tp 6'h0;\n  else\n  if(IncrementByteCntBy2 & EnableCnt)\n    ByteCnt <= #Tp (ByteCnt[5:0] ) + 2'h2;\n  else\n  if(IncrementByteCnt & EnableCnt)\n    ByteCnt <= #Tp (ByteCnt[5:0] ) + 1'b1;\nend",
+        "assign EnableCnt = (~DlyCrcEn | DlyCrcEn & (&DlyCrcCnt[1:0]));",
+        "assign IncrementByteCntBy2 = CtrlMux & TxCtrlStartFrm & (~TxCtrlStartFrm_q) & TxUsedDataIn;     ",
+        "assign IncrementByteCnt = CtrlMux & (TxCtrlStartFrm & ~TxCtrlStartFrm_q & ~TxUsedDataIn | TxUsedDataIn & ~ControlEnd);",
+        "assign ResetByteCnt = TxReset | (~TxCtrlStartFrm & (TxDoneIn | TxAbortIn));",
+        "always @ (posedge MTxClk or posedge TxReset)\nbegin\n  if(TxReset)\n    DlyCrcCnt <= #Tp 4'h0;\n  else\n  if(ResetByteCnt)\n    DlyCrcCnt <= #Tp 4'h0;\n  else\n  if(IncrementDlyCrcCnt)\n    DlyCrcCnt <= #Tp DlyCrcCnt + 1'b1;\nend",
+        "assign IncrementDlyCrcCnt = CtrlMux & TxUsedDataIn &  ~DlyCrcCnt[2];",
+        "always @ (posedge MTxClk)\nbegin\n  ControlEnd_q     <= #Tp ControlEnd;\n  TxCtrlStartFrm_q <= #Tp TxCtrlStartFrm;\nend",
+        "always @ (posedge MTxClk or posedge TxReset)\nbegin\n  if(TxReset)\n    BlockTxDone <= #Tp 1'b0;\n  else\n  if(TxCtrlStartFrm)\n    BlockTxDone <= #Tp 1'b1;\n  else\n  if(TxStartFrmIn)\n    BlockTxDone <= #Tp 1'b0;\nend",
+        "always @ (posedge MTxClk or posedge TxReset)\nbegin\n  if(TxReset)\n    TxUsedDataIn_q <= #Tp 1'b0;\n  else\n    TxUsedDataIn_q <= #Tp TxUsedDataIn;\nend",
+        "always @ (posedge MTxClk or posedge TxReset)\nbegin\n  if(TxReset)\n    SendingCtrlFrm <= #Tp 1'b0;\n  else\n  if(WillSendControlFrame & TxCtrlStartFrm)\n    SendingCtrlFrm <= #Tp 1'b1;\n  else\n  if(TxDoneIn)\n    SendingCtrlFrm <= #Tp 1'b0;\nend",
+        "always @ (posedge MTxClk or posedge TxReset)\nbegin\n  if(TxReset)\n    CtrlMux <= #Tp 1'b0;\n  else\n  if(WillSendControlFrame & ~TxUsedDataOut)\n    CtrlMux <= #Tp 1'b1;\n  else\n  if(TxDoneIn)\n    CtrlMux <= #Tp 1'b0;\nend",
+        "always @ (posedge MTxClk or posedge TxReset)\nbegin\n  if(TxReset)\n    TxCtrlEndFrm <= #Tp 1'b0;\n  else\n  if(ControlEnd | ControlEnd_q)\n    TxCtrlEndFrm <= #Tp 1'b1;\n  else\n    TxCtrlEndFrm <= #Tp 1'b0;\nend",
+        "always @ (posedge MTxClk or posedge TxReset)\nbegin\n  if(TxReset)\n    TxCtrlStartFrm <= #Tp 1'b0;\n  else\n  if(TxUsedDataIn_q & CtrlMux)\n    TxCtrlStartFrm <= #Tp 1'b0;\n  else\n  if(WillSendControlFrame & ~TxUsedDataOut & (TxDoneIn | TxAbortIn | TxStartFrmIn | (~TxUsedDataOutDetected)))\n    TxCtrlStartFrm <= #Tp 1'b1;\nend",
+        "always @ (posedge MTxClk or posedge TxReset)\nbegin\n  if(TxReset)\n    WillSendControlFrame <= #Tp 1'b0;\n  else\n  if(TxCtrlEndFrm & CtrlMux)\n    WillSendControlFrame <= #Tp 1'b0;\n  else\n  if(TPauseRq & TxFlow)\n    WillSendControlFrame <= #Tp 1'b1;\nend"
+    ]
+}

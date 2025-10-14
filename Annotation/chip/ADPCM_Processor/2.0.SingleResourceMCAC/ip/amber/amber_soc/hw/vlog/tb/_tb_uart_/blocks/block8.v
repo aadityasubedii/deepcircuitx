@@ -1,0 +1,1 @@
+assign tx_bit_start = tx_bit_count == 4'd0;      

@@ -1,0 +1,1 @@
+  assign phy_if_empty_def = 1'b0;

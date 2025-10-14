@@ -1,0 +1,9 @@
+Module name: vga_adapter. 
+
+Module specification: The 'vga_adapter' module is responsible for managing VGA screen control operations. The functionality primarily involves managing input parameters and forwarding them to various submodules such as, 'vga_address_translator', 'altsyncram'(VideoMemory), and 'vga_controller'. This module calculates the 'writeEn' and 'valid' signals for write operations based on the screen resolutions and boundaries. It uses 'altsyncram' as dual-port RAM to store pixel colour input and provides this information to 'vga_controller' for output to the VGA screen.
+
+The input ports include 'resetn', 'clock', 'clock_25', 'colour', 'x', 'y', and 'plot'. 'resetn' is used for module reset, 'clock' and 'clock_25' are clock signals, 'colour' represents the colour to be plotted, 'x' and 'y' are VGA display co-ordinates and 'plot' controls writing operation. The output ports are 'VGA_R', 'VGA_G', 'VGA_B', 'VGA_HS', 'VGA_VS', 'VGA_BLANK', 'VGA_SYNC'; these signals are related to VGA screen, colours channels, synchronizing signals and blanking the VGA screen.
+
+Internal signals include 'valid_160x120', 'valid_320x240', 'writeEn', 'to_ctrl_colour', 'user_to_video_memory_addr', 'controller_to_video_memory_addr', 'vcc', and 'gnd'. These signals are used to validate and manage the write operations, colour value for VGA controller, address storing in VideoMemory for user and controller, and logic high and low signals.
+
+About blocks of the code: The code employs 'vga_address_translator' to convert X and Y coordinates to address, 'altsyncram'(VideoMemory) to cache the pixel colour data, and 'vga_controller' to generate the VGA output based on the pixel colour information retrieved from the VideoMemory. Functionality wise, it receives plotting parameters, calculates the screen validity and write enable signals, stores and retrieves pixel colours from memory and generates the VGA screen output.

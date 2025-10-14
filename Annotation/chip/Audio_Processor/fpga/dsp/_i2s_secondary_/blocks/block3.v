@@ -1,0 +1,1 @@
+    assign valid = good_frames == 2'b11;

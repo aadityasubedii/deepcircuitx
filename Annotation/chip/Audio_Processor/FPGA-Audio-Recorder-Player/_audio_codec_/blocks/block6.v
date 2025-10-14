@@ -1,0 +1,1 @@
+assign sample_req[0] = (lrck_divider == 8'h7e);

@@ -1,0 +1,1 @@
+  assign R_ctrl_alu_signed_comparison_nxt = D_ctrl_alu_signed_comparison;

@@ -1,0 +1,1 @@
+	assign data_out = sreg;

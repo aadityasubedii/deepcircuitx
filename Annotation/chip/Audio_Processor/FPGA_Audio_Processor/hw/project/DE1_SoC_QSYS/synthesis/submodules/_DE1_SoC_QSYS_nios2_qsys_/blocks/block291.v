@@ -1,0 +1,1 @@
+  assign fifo_9_mux = (((fifo_wrptr == 4'd9) && itm_valid))? itm :

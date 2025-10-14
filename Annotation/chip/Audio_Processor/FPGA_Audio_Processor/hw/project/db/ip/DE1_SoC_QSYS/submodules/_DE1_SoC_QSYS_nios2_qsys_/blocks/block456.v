@@ -1,0 +1,1 @@
+  assign E_cpu_addr_en = E_valid;

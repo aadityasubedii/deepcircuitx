@@ -1,0 +1,1 @@
+assign read_miss        = request_hold && !idle_hit && !i_write_enable;

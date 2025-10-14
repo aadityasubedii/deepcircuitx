@@ -1,0 +1,1 @@
+  always @(posedge clk) prbs_ignore_last_bytes_r <= #TCQ prbs_ignore_last_bytes;

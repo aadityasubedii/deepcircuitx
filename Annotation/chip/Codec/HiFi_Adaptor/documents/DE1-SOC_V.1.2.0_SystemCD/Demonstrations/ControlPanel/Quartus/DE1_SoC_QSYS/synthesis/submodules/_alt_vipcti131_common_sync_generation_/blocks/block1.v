@@ -1,0 +1,5 @@
+defparam divider_counter.NUMBER_OF_COLOUR_PLANES = NUMBER_OF_COLOUR_PLANES,
+         divider_counter.COLOUR_PLANES_ARE_IN_PARALLEL = COLOUR_PLANES_ARE_IN_PARALLEL,
+         divider_counter.LOG2_NUMBER_OF_COLOUR_PLANES = LOG2_NUMBER_OF_COLOUR_PLANES,
+         divider_counter.CONVERT_SEQ_TO_PAR = CONVERT_SEQ_TO_PAR,
+         divider_counter.TOTALS_MINUS_ONE = 1;

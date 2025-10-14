@@ -1,0 +1,1 @@
+  assign scan_done = scan_done_r;

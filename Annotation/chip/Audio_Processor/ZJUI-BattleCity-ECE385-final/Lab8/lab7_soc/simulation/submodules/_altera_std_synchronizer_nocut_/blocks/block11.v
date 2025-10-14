@@ -1,0 +1,1 @@
+   generate if (rst_value == 1)

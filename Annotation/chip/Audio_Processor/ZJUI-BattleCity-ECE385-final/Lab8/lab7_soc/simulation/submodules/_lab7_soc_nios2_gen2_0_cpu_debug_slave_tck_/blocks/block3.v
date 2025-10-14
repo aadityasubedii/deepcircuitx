@@ -1,0 +1,1 @@
+  defparam the_altera_std_synchronizer2.depth = 2;

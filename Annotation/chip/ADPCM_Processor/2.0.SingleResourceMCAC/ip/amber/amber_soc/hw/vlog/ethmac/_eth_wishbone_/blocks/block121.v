@@ -1,0 +1,1 @@
+assign TxFifoClear = (TxAbortPacket | TxRetryPacket);

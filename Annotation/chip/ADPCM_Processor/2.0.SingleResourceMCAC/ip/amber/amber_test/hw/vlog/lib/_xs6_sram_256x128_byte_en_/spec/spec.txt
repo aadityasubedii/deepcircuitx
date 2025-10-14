@@ -1,0 +1,9 @@
+Module name: xs6_sram_256x128_byte_en.
+
+Module specification: The module xs6_sram_256x128_byte_en represents a SRAM (static random-access memory) implementation of size 256x128 with byte-enabled write functionality using Verilog. The functionality is controlled by several input and output ports. The input ports include:
+- i_clk: the clock signal controlling when reading or writing occurs in memory,
+- i_write_data: the data to be written into memory,
+- i_write_enable: a signal enabling the write operation into memory,
+- i_address: an 8-bit address of memory, indicating where the data should be read from or written to,
+- i_byte_enable: a 16-bit port controlling the grant for byte-wise write operations on the i_write_data.
+These input ports collectively control the how, when, and where the data is written into memory. The output port, o_read_data (a 128-bit port), forwards the value read from the memory to subsequent stages of the larger system in which this module is embedded. An internal signal, byte_write_enable, is used to manage the permission for specific bytes to be written into memory. This module includes a generate block, that iterates over the desired RAM blocks, instantiating 'RAMB8BWER' units with defined parameters and interconnections. The module checks if correct parameter values for DATA_WIDTH and ADDRESS_WIDTH have been passed and presents warning messages if the values are incorrect. As a whole, the module permits a granular control over the writing functionality, specifically enabling any combination of bytes requiring modification within a wide data-width.

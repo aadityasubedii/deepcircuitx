@@ -1,0 +1,1 @@
+  always @(posedge clk) act_wait_r_lcl <= #TCQ act_wait_ns;

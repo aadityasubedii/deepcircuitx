@@ -1,0 +1,1 @@
+  assign q = mem_array[read_address];

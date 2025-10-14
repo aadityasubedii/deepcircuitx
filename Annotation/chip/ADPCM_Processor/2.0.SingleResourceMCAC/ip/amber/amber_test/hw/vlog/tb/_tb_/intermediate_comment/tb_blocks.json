@@ -1,0 +1,86 @@
+{
+    "line_num": [
+        [
+            649,
+            661
+        ],
+        [
+            590,
+            643
+        ],
+        [
+            579,
+            585
+        ],
+        [
+            533,
+            573
+        ],
+        [
+            531,
+            531
+        ],
+        [
+            530,
+            530
+        ],
+        [
+            525,
+            528
+        ],
+        [
+            508,
+            524
+        ],
+        [
+            416,
+            504
+        ],
+        [
+            415,
+            415
+        ],
+        [
+            337,
+            408
+        ],
+        [
+            329,
+            331
+        ],
+        [
+            307,
+            323
+        ],
+        [
+            301,
+            305
+        ],
+        [
+            291,
+            296
+        ],
+        [
+            281,
+            286
+        ]
+    ],
+    "blocks": [
+        "function [127:0] insert_32_into_128;\ninput [1:0]   pos;\ninput [127:0] word128;\ninput [31:0]  word32;\nbegin\n     case (pos)\n         2'd0: insert_32_into_128 = {word128[127:32], word32};\n         2'd1: insert_32_into_128 = {word128[127:64], word32, word128[31:0]};\n         2'd2: insert_32_into_128 = {word128[127:96], word32, word128[63:0]};\n         2'd3: insert_32_into_128 = {word32, word128[95:0]};\n     endcase\nend\nendfunction",
+        "task display_registers;\nbegin\n    $display(\"\");\n    $display(\"----------------------------------------------------------------------------\");\n    $display(\"Amber Core\");\n\n    case (`U_EXECUTE.status_bits_mode)\n        FIRQ:    $display(\"         User       > FIRQ         IRQ          SVC\"); \n        IRQ:     $display(\"         User         FIRQ       > IRQ          SVC\"); \n        SVC:     $display(\"         User         FIRQ         IRQ        > SVC\"); \n        default: $display(\"       > User         FIRQ         IRQ          SVC\"); \n    endcase\n\n    $display(\"r0       0x%08x\", `U_REGISTER_BANK.r0);\n    $display(\"r1       0x%08x\", `U_REGISTER_BANK.r1);\n    $display(\"r2       0x%08x\", `U_REGISTER_BANK.r2);\n    $display(\"r3       0x%08x\", `U_REGISTER_BANK.r3);\n    $display(\"r4       0x%08x\", `U_REGISTER_BANK.r4);\n    $display(\"r5       0x%08x\", `U_REGISTER_BANK.r5);\n    $display(\"r6       0x%08x\", `U_REGISTER_BANK.r6);\n    $display(\"r7       0x%08x\", `U_REGISTER_BANK.r7);\n    $display(\"r8       0x%08x   0x%08x \", `U_REGISTER_BANK.r8,  `U_REGISTER_BANK.r8_firq);\n    $display(\"r9       0x%08x   0x%08x \", `U_REGISTER_BANK.r9,  `U_REGISTER_BANK.r9_firq);\n    $display(\"r10      0x%08x   0x%08x \", `U_REGISTER_BANK.r10, `U_REGISTER_BANK.r10_firq);\n    $display(\"r11      0x%08x   0x%08x \", `U_REGISTER_BANK.r11, `U_REGISTER_BANK.r11_firq);\n    $display(\"r12      0x%08x   0x%08x \", `U_REGISTER_BANK.r12, `U_REGISTER_BANK.r12_firq);\n    \n    $display(\"r13      0x%08x   0x%08x   0x%08x   0x%08x\", \n                                               `U_REGISTER_BANK.r13, \n                                               `U_REGISTER_BANK.r13_firq, \n                                               `U_REGISTER_BANK.r13_irq,\n                                               `U_REGISTER_BANK.r13_svc);\n    $display(\"r14 (lr) 0x%08x   0x%08x   0x%08x   0x%08x\", \n                                               `U_REGISTER_BANK.r14, \n                                               `U_REGISTER_BANK.r14_firq, \n                                               `U_REGISTER_BANK.r14_irq,\n                                               `U_REGISTER_BANK.r14_svc);\n\n\n    $display(\"r15 (pc) 0x%08x\", {6'd0,`U_REGISTER_BANK.r15,2'd0});\n    $display(\"\");\n    $display(\"Status Bits: N=%d, Z=%d, C=%d, V=%d, IRQ Mask %d, FIRQ Mask %d, Mode = %s\",  \n       `U_EXECUTE.status_bits_flags[3],\n       `U_EXECUTE.status_bits_flags[2],\n       `U_EXECUTE.status_bits_flags[1],\n       `U_EXECUTE.status_bits_flags[0],\n       `U_EXECUTE.status_bits_irq_mask,\n       `U_EXECUTE.status_bits_firq_mask,\n       mode_name (`U_EXECUTE.status_bits_mode) );\n    $display(\"----------------------------------------------------------------------------\");\n    $display(\"\");       \n\nend\nendtask",
+        "always @ ( posedge `U_SYSTEM.sys_clk )\n    if ( timeout != 0 )\n        if (`U_TB.clk_count >= timeout)\n            begin\n            `TB_ERROR_MESSAGE\n            $display(\"Timeout Error. Edit $AMBER_BASE/hw/tests/timeouts.txt to change the timeout\");\n            end",
+        "always @*\n        begin\n        if ( test_status_set || testfail )\n            begin\n            if ( test_status_reg == 32'd17 && !testfail )\n                begin\n                display_registers;\n                $display(\"++++++++++++++++++++\");\n                $write(\"Passed %s %0d ticks\\n\", `AMBER_TEST_NAME, `U_TB.clk_count);\n                $display(\"++++++++++++++++++++\");\n                $fwrite(`U_TB.log_file,\"Passed %s %0d ticks\\n\", `AMBER_TEST_NAME, `U_TB.clk_count);\n                $finish;\n                end\n            else\n                begin\n                display_registers;\n                if ( testfail )\n                    begin\n                    $display(\"++++++++++++++++++++\");\n                    $write(\"Failed %s\\n\", `AMBER_TEST_NAME);\n                    $display(\"++++++++++++++++++++\");\n                    $fwrite(`U_TB.log_file,\"Failed %s\\n\", `AMBER_TEST_NAME);\n                    $finish;\n                    end\n                else\n                    begin\n                    $display(\"++++++++++++++++++++\");\n                    if (test_status_reg >= 32'h8000)\n                        $write(\"Failed %s - with error 0x%08x\\n\", `AMBER_TEST_NAME, test_status_reg);\n                    else\n                        $write(\"Failed %s - with error on line %1d\\n\", `AMBER_TEST_NAME, test_status_reg);\n                    $display(\"++++++++++++++++++++\");\n                    if (test_status_reg >= 32'h8000)\n                        $fwrite(`U_TB.log_file,\"Failed %s - with error 0x%08h\\n\", `AMBER_TEST_NAME, test_status_reg);\n                    else\n                        $fwrite(`U_TB.log_file,\"Failed %s - with error on line %1d\\n\", `AMBER_TEST_NAME, test_status_reg);\n                    $finish;\n                    end\n                end\n            end\n        end",
+        "assign test_status_reg = `U_TEST_MODULE.test_status_reg;",
+        "assign test_status_set = `U_TEST_MODULE.test_status_set;",
+        "initial\n    begin\n    testfail  = 1'd0;\n    end",
+        "dumpvcd u_dumpvcd();\n\n\n\n\n`ifdef AMBER_A25_CORE\n    `include \"a25_localparams.vh\"\n    `include \"a25_functions.vh\"\n`else\n    `include \"a23_localparams.vh\"\n    `include \"a23_functions.vh\"\n`endif\n\nreg             testfail;\nwire            test_status_set;\nwire [31:0]     test_status_reg;\n",
+        "always @ ( posedge `U_SYSTEM.sys_rst )\n        begin\n\t\trepeat(`RESET_MEM_TICKS)\n\t\t\t@ ( negedge `U_SYSTEM.sys_clk );\n        $display(\"Load main memory from %s\", `MAIN_MEM_FILE);\n        `ifdef XILINX_FPGA\n        \n        $display(\"Wait for DDR3 initialization to complete before loading main memory\");\n        #70000000\n        $display(\"Done waiting at %d ticks\", `U_TB.clk_count);\n        `endif\n        main_mem_file   = $fopen(`MAIN_MEM_FILE, \"r\");\n            \n        \n        main_mem_line_count   = 0;\n        \n        if (main_mem_file == 0)\n            begin\n            $display(\"ERROR: Can't open input file %s\", `MAIN_MEM_FILE);\n            `TB_ERROR_MESSAGE\n            end\n        \n\n        if (main_mem_file != 0)\n            begin  \n            fgets_return = 1;\n            while (fgets_return != 0)\n                begin\n                fgets_return        = $fgets(line, main_mem_file);\n                main_mem_line_count = main_mem_line_count + 1;\n                aligned_line        = align_line(line);\n                \n                \n                if (aligned_line[120*8-1:118*8] != 16'h2f2f)\n                    begin\n                    \n                    if (aligned_line[120*8-1:119*8] != 8'h40 && aligned_line[120*8-1:119*8] != 8'h00)\n                        begin\n                        $display(\"Format ERROR in input file %s, line %1d. Line must start with a @, not %08x\", \n                                 `MAIN_MEM_FILE, main_mem_line_count, aligned_line[118*8-1:117*8]);\n                        `TB_ERROR_MESSAGE\n                        end\n                    \n                    if (aligned_line[120*8-1:119*8] != 8'h00)\n                        begin\n                        main_mem_file_address =   hex_chars_to_32bits (aligned_line[119*8-1:111*8]);\n                        main_mem_file_data    =   hex_chars_to_32bits (aligned_line[110*8-1:102*8]);\n                        \n                        `ifdef XILINX_FPGA\n                            mm_ddr3_addr = {main_mem_file_address[13:11], main_mem_file_address[26:14], main_mem_file_address[10:4]};\n                        \n                            main_mem_file_data_128 = tb.u_ddr3_model.memory [mm_ddr3_addr];\n                            tb.u_ddr3_model.memory [mm_ddr3_addr] =\n                                    insert_32_into_128 ( main_mem_file_address[3:2], \n                                                         main_mem_file_data_128, \n                                                         main_mem_file_data );\n                                                \n                            `ifdef AMBER_LOAD_MEM_DEBUG\n                                main_mem_file_data_128 = tb.u_ddr3_model.memory [mm_ddr3_addr];\n                                $display (\"Load DDR3: PAddr: 0x%08x, DDR3 Addr 0x%08h, Data 0x%032x\", \n                                          main_mem_file_address, mm_ddr3_addr, main_mem_file_data_128);\n                            `endif   \n\n                        `else\n                            \n                        \n                            \n                            \n                            \n                            main_mem_file_data_128 = `U_RAM [main_mem_file_address[31:4]];\n                            `U_RAM [main_mem_file_address[31:4]] = \n                                insert_32_into_128 ( main_mem_file_address[3:2], \n                                                     main_mem_file_data_128, \n                                                     main_mem_file_data );\n\n                            `ifdef AMBER_LOAD_MEM_DEBUG\n                                $display (\"Load RAM: PAddr: 0x%08x, Data 0x%08x\", \n                                           main_mem_file_address, main_mem_file_data);\n                            `endif   \n                        \n                        `endif\n                        \n                        end\n                    end  \n                end\n                \n            $display(\"Read in %1d lines\", main_mem_line_count);      \n            end\n        end",
+        "`ifdef AMBER_LOAD_MAIN_MEM",
+        "always @ ( posedge `U_SYSTEM.sys_rst )\n        begin\n\t\trepeat(`RESET_MEM_TICKS)\n\t\t\t@ ( negedge `U_SYSTEM.sys_clk );\n`ifndef XILINX_FPGA\n        $display(\"Load boot memory from %s\", `BOOT_MEM_FILE);\n        boot_mem_line_count   = 0;\n        boot_mem_file         = $fopen(`BOOT_MEM_FILE,    \"r\");\n        if (boot_mem_file == 0)\n            begin\n            `TB_ERROR_MESSAGE\n            $display(\"ERROR: Can't open input file %s\", `BOOT_MEM_FILE);\n            $finish;\n            end\n        \n        if (boot_mem_file != 0)\n            begin  \n            fgets_return = 1;\n            while (fgets_return != 0)\n                begin\n                fgets_return        = $fgets(line, boot_mem_file);\n                boot_mem_line_count = boot_mem_line_count + 1;\n                aligned_line        = align_line(line);\n                \n                \n                if (aligned_line[120*8-1:118*8] != 16'h2f2f)\n                    begin\n                    \n                    if (aligned_line[120*8-1:119*8] != 8'h40 && aligned_line[120*8-1:119*8] != 8'h00)\n                        begin\n                        $display(\"Format ERROR in input file %s, line %1d. Line must start with a @, not %08x\", \n                                 `BOOT_MEM_FILE, boot_mem_line_count, aligned_line[118*8-1:117*8]);\n                        `TB_ERROR_MESSAGE\n                        end\n                    \n                    if (aligned_line[120*8-1:119*8] != 8'h00)\n                        begin\n                        boot_mem_file_address  =   hex_chars_to_32bits (aligned_line[119*8-1:111*8]);\n                        boot_mem_file_data     =   hex_chars_to_32bits (aligned_line[110*8-1:102*8]);\n                        \n                        `ifdef AMBER_A25_CORE\n                            boot_mem_file_data_128 = `U_BOOT_MEM.u_mem.mem[boot_mem_file_address[BOOT_MSB:4]];\n                            `U_BOOT_MEM.u_mem.mem[boot_mem_file_address[BOOT_MSB:4]] = \n                                    insert_32_into_128 ( boot_mem_file_address[3:2], \n                                                         boot_mem_file_data_128, \n                                                         boot_mem_file_data );\n                        `else\n                            `U_BOOT_MEM.u_mem.mem[boot_mem_file_address[BOOT_MSB:2]] = boot_mem_file_data;\n                        `endif\n                        \n                        `ifdef AMBER_LOAD_MEM_DEBUG\n                            $display (\"Load Boot Mem: PAddr: 0x%08x, Data 0x%08x\", \n                                        boot_mem_file_address, boot_mem_file_data);\n                        `endif   \n                        end\n                    end  \n                end\n                \n            $display(\"Read in %1d lines\", boot_mem_line_count);      \n            end\n`endif\n            \n        \n        timeout   = `AMBER_TIMEOUT   ;  \n        `ifdef AMBER_A25_CORE\n        core_str = \"amber25\";\n        `else\n        core_str = \"amber23\";\n        `endif         \n        $display(\"Core %s, log file %s, timeout %0d, test name %0s \", core_str, `AMBER_LOG_FILE, timeout, `AMBER_TEST_NAME );          \n        log_file = $fopen(`AMBER_LOG_FILE, \"a\");                               \n        end",
+        "always @ ( posedge `U_SYSTEM.sys_clk )\n    clk_count <= clk_count + 1'd1;\n",
+        "initial\n    begin\n    test_mode = 0 ;\n    scan_enable = 0 ;\n    scan_in0 = 0 ;\n    scan_in1 = 0 ;\n    scan_in2 = 0 ;\n    scan_in3 = 0 ;\n    scan_in4 = 0 ;\n    sysrst = #0 1'd0;\n    sysrst = #1 1'd0;\n    @(posedge clk_25mhz)\n        sysrst = #1 1'd1;\n    repeat(`RESET_TICKS)\n\t\t@(posedge clk_25mhz);\n    sysrst = 1'd0;\n    end",
+        "initial\n    begin\n    clk_25mhz = 1'd0;\n    forever #20000 clk_25mhz = ~clk_25mhz;\n    end",
+        "initial\n    begin\n    clk_533mhz = 1'd0;\n    \n    forever #938 clk_533mhz = ~clk_533mhz;\n    end",
+        "initial\n    begin\n    clk_200mhz = 1'd0;\n    \n    forever #2500 clk_200mhz = ~clk_200mhz;\n    end"
+    ]
+}

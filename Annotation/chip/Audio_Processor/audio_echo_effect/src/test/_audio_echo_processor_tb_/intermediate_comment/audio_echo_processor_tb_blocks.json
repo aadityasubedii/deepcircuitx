@@ -1,0 +1,31 @@
+{
+    "line_num": [
+        [
+            64,
+            91
+        ],
+        [
+            53,
+            62
+        ],
+        [
+            44,
+            51
+        ],
+        [
+            14,
+            19
+        ],
+        [
+            8,
+            11
+        ]
+    ],
+    "blocks": [
+        "    initial begin\n        reset = 1;\n        i_valid = 0;\n        o_ready = 1;\n        i_left = 0;\n        i_right = 0;\n        repeat (2) @(posedge clk) reset = 1'b1;\n        repeat (2) @(posedge clk) reset = 1'b0;\n\n        out_data(16'hC000, 16'h1100);\n        out_data(16'h2000, 16'h2100);\n        out_data(16'h3000, 16'h3100);\n        out_data(16'h4000, 16'h4100);\n\n        out_data(16'hE001, 16'h0101);\n        out_data(16'h0002, 16'h0102);\n        out_data(16'h0003, 16'h0103);\n        out_data(16'h0004, 16'h0104);\n\n        out_data(16'h0005, 16'h0105);\n        out_data(16'h0006, 16'h0106);\n        out_data(16'h0007, 16'h0107);\n        out_data(16'h0008, 16'h0108);\n\n        repeat (16) @(posedge clk);\n\n        $finish;\n    end",
+        "    task out_data(input [audio_width-1:0] left, input [audio_width-1:0] right);\n        begin\n            i_valid <= 1'b1;\n            i_left <= left;\n            i_right <= right;\n            wait (i_ready) @(posedge clk);\n            i_valid <= 1'b0;\n            @(posedge clk);\n        end\n    endtask",
+        "    always @(posedge clk or reset) begin\n        if (reset) begin\n        end else begin\n            if (o_valid) begin\n                $write(\"l = %08h, r = %08h\\n\", o_left, o_right);\n            end\n        end\n    end",
+        "    initial begin\n        clk = 1'b0;\n        forever begin\n            #(CLK_TIME / 2) clk = ~clk;\n        end\n    end",
+        "    initial begin\n        $dumpfile(\"audio_echo_processor_tb.vcd\");\n        $dumpvars;\n    end"
+    ]
+}

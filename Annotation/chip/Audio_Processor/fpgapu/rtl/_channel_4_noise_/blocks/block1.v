@@ -1,0 +1,1 @@
+  assign o_output = r_shift_register[0]? w_envelope : 9'h00;

@@ -1,0 +1,56 @@
+{
+    "line_num": [
+        [
+            110,
+            166
+        ],
+        [
+            81,
+            81
+        ],
+        [
+            80,
+            80
+        ],
+        [
+            73,
+            77
+        ],
+        [
+            62,
+            70
+        ],
+        [
+            56,
+            60
+        ],
+        [
+            44,
+            52
+        ],
+        [
+            29,
+            40
+        ],
+        [
+            15,
+            15
+        ],
+        [
+            7,
+            11
+        ]
+    ],
+    "blocks": [
+        "    initial begin\n        wait(!rst);\n        @(posedge ck);\n        @(posedge ck);\n        @(posedge ck);\n\n        \n        i = COEF;\n        write(i, 32'h08000000); i += 4; \n        write(i, 32'h48081234); i += 4; \n        write(i, 32'h78000000); i += 4; \n        write(i, 32'h78000000); i += 4; \n\n        \n        write(RESET, 0);\n        @(posedge ck);\n        tb_assert(!engine_ready);\n\n        \n        poll_addr <= STATUS;\n        wait(rd_data & 32'h1);\n        poll_addr <= 32'h0;\n        tb_assert(engine_ready);\n        @(posedge ck);\n\n        \n        read(STATUS + 4);\n        \n        @(posedge ck);\n        tb_assert(rd_data == 32'h48081234);\n        \n\n        \n        write(STATUS, 1);\n        @(posedge ck);\n\n        \n\n        \n        write(INPUT + ('h104 * 2), 16'h1234); \n        @(posedge ck);\n\n        i = COEF;\n        write(i, 32'h48213456); i += 4; \n        write(i, 32'h00000000); i += 4; \n        write(i, 32'h00000000); i += 4; \n        write(i, 32'h08100000); i += 4; \n        write(i, 32'h78000000); i += 4; \n        write(i, 32'h78000000); i += 4; \n\n        \n        write(RESET, 0);\n        @(posedge ck);\n        wait(engine_ready);\n        @(posedge ck);\n\n    end",
+        "    assign ws = 0;",
+        "    assign sck = 0;",
+        "    always @(posedge ck) begin\n        if (!wb_dbus_cyc) begin\n            tb_assert(wb_dbus_rdt == 0);\n        end\n    end",
+        "    always @(posedge ck) begin\n        if (wb_dbus_ack) begin\n            wb_dbus_adr <= 32'hZ;\n            wb_dbus_dat <= 32'hZ;\n            wb_dbus_sel <= 0;\n            wb_dbus_we <= 0;\n            wb_dbus_cyc <= 0;\n        end\n    end",
+        "    always @(posedge ck) begin\n        if (poll_addr != 0) begin\n            read(poll_addr);\n        end\n    end",
+        "    task read(input [31:0] addr);\n\n            wb_dbus_adr <= addr;\n            wb_dbus_cyc <= 1;\n            @(posedge ck);\n            wait(!wb_dbus_cyc);\n            rd_data <= wb_dbus_rdt;\n\n    endtask",
+        "    task write(input [31:0] addr, input [31:0] data);\n        begin\n            wb_dbus_adr <= addr;\n            wb_dbus_dat <= data;\n            wb_dbus_sel <= 4'b1111;\n            wb_dbus_we <= 1;\n            wb_dbus_cyc <= 1;\n            @(posedge ck);\n            wait(!wb_dbus_cyc);\n            @(posedge ck);\n        end\n    endtask",
+        "    always #42 ck <= !ck;",
+        "    initial begin\n        $dumpfile(\"dsp.vcd\");\n        $dumpvars(0, tb);\n        #500000 $finish;\n    end"
+    ]
+}

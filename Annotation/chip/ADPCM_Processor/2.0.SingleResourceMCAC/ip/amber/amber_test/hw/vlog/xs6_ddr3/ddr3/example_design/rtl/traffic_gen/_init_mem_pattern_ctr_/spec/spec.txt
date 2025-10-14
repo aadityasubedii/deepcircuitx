@@ -1,0 +1,15 @@
+Module name: init_mem_pattern_ctr
+
+Module specification: The init_mem_pattern_ctr module forms a critical part of memory testing, handling initialization of memory patterns for test read and write transactions. It interacts with the memory controller block to obtain information on memory addressing and control signals.
+
+The module has a variety of input ports:
+- clk_i and rst_i, which handle the core clock and reset signals,
+- mcb_cmd_addr_i, mcb_cmd_bl_i, mcb_cmd_en_i, and mcb_wr_en_i which provide instructions and addresses from the memory controller,
+- vio_modify_enable, vio_data_mode_value, vio_addr_mode_value, and vio_fixed_bl_value handle the Virtual Input/Output settings,
+- mcb_init_done_i and cmp_error indicate the status of memory controller initialization and memory comparison errors. 
+
+The outputs of this module include indications of active memory operations, specific address ranges, instruction and address modes, seed values for test patterns, and error signals in case of mismatched comparisons. 
+
+Internally, the module uses state registers, address comparators, end boundary registers, and mode selectors to hold and manipulate data during operations. These ensure correct handling of the initialization and test memory transactions while ensuring correct synchronization with the memory controller input instructions.
+
+Functions of key module blocks/code sections include memory write and read initialization, test memory operation, handling of comparison errors, and transitions based on the current_state of the system's operation. It ensures memory testing is performed in an orderly and accurate manner, ensuring the integrity of memory transactions in the hardware design.

@@ -1,0 +1,1 @@
+  always @(posedge clk) poc_sample_pd_r <= #TCQ poc_sample_pd_ns;

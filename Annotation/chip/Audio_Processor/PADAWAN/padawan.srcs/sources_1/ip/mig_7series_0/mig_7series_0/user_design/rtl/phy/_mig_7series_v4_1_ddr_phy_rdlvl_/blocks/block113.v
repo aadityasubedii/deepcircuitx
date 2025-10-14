@@ -1,0 +1,1 @@
+   assign idelay_inc = cal1_dq_idel_inc;

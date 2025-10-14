@@ -1,0 +1,1 @@
+            assign enable_count = enable && ((ticks >= TICKS_PER_COUNT - 1) || !enable_ticks);

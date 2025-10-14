@@ -1,0 +1,1 @@
+  assign R_ctrl_src2_choose_imm_nxt = D_ctrl_src2_choose_imm;

@@ -1,0 +1,9 @@
+Module name: tdm_gen. 
+
+Module specification: The "tdm_gen" is a hardware module designed in Verilog that primarily executes the function of a clock domain crossing boundary unit. Its operation centralizes around a principal clock signal, 'bclk', alongside another clock signal, 'wclk'. The functionality of 'tdm_gen' revolves around generating an output 'tdm_out' extracted from a constant 32-bit 'FIX_DATA' using the index marked by 'bclk_cnt'. 
+
+The module maintains two input ports, 'bclk' and 'wclk'. 'bclk' is the main clock input guiding the module functions and 'wclk' serves as the secondary clock input ensuring the 'bclk_cnt' is updated at the appropriate instance. The key output of this module is 'tdm_out', the computation of which involves picking a bit from 'FIX_DATA' premised on the index provided by 'bclk_cnt'. 
+
+In regards to the internal signals used in the 'tdm_gen' module, they include 'wc_ff', 'bclk_cnt', and 'FIX_DATA'. 'wc_ff' is a 2-bit shift register, updated at the positive edge of 'bclk' by shifting its existing state and appending 'wclk' at its LSB. 'bclk_cnt' is a 6-bit counter, getting updated inversely at the negative edge of 'bclk' and either getting reset to 6'd62 if 'wc_ff' reads as '2'b01' or else being reduced by 1. 'bclk_cnt' is crucial as it defines the index into 'FIX_DATA'. 'FIX_DATA', meanwhile, embodies a parameter in the module containing a static 32-bit data value. 
+
+In terms of the distinct code sections, the Verilog RTL code comprises two always blocks. The first block centers on updating 'wc_ff' on the positive edge of 'bclk', effectively tracking the arrival of a positive edge of 'wclk' after the negative edge of 'bclk'. The second always block updates 'bclk_cnt' on the negative edge of 'bclk' setting it to either '6d62' or decrementing it by 1, based on the value of 'wc_ff'. Corresponding bits from 'FIX_DATA' are derived as 'tdm_out' according to the value of 'bclk_cnt'.

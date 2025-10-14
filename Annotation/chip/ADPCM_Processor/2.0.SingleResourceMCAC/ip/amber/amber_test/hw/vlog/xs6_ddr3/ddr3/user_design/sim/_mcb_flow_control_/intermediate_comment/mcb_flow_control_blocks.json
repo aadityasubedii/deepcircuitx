@@ -1,0 +1,106 @@
+{
+    "line_num": [
+        [
+            302,
+            632
+        ],
+        [
+            293,
+            299
+        ],
+        [
+            282,
+            292
+        ],
+        [
+            273,
+            280
+        ],
+        [
+            255,
+            268
+        ],
+        [
+            247,
+            250
+        ],
+        [
+            235,
+            242
+        ],
+        [
+            230,
+            234
+        ],
+        [
+            215,
+            225
+        ],
+        [
+            210,
+            210
+        ],
+        [
+            208,
+            208
+        ],
+        [
+            207,
+            207
+        ],
+        [
+            206,
+            206
+        ],
+        [
+            204,
+            204
+        ],
+        [
+            203,
+            203
+        ],
+        [
+            201,
+            203
+        ],
+        [
+            182,
+            198
+        ],
+        [
+            172,
+            180
+        ],
+        [
+            161,
+            170
+        ],
+        [
+            154,
+            159
+        ]
+    ],
+    "blocks": [
+        "always @ (*)\nbegin\n               push_cmd  = 1'b0;\n               xfer_cmd = 1'b0;\n               \n               wdp_valid = 1'b0;\n               wdp_validB = 1'b0;\n               wdp_validC = 1'b0;\n               \n               rdp_valid = 1'b0;\n               cmd_rdy = 1'b0;\n               next_state = current_state;\ncase(current_state)\n   READY:  \n        begin\n         if(rdp_rdy_i & cmd_rd & cmd_fifo_rdy)   \n\n            begin\n              next_state = READ;\n              push_cmd = 1'b1;\n              xfer_cmd = 1'b0;\n              rdp_valid = 1'b1;\n              \n            end\n         else if (wdp_rdy_i & cmd_wr & cmd_fifo_rdy)\n             begin\n              next_state = WRITE;\n               push_cmd = 1'b1;\n               wdp_valid     = 1'b1;\n               wdp_validB = 1'b1;\n               wdp_validC = 1'b1;\n               \n             end \n         else if ( cmd_others & cmd_fifo_rdy)\n             begin\n              next_state = REFRESH_ST;\n               push_cmd = 1'b1;\n               xfer_cmd = 1'b0;\n               \n             end \n             \n         else\n              begin\n              next_state = READY;\n              push_cmd = 1'b0;\n              end\n              \n              \n         if (cmd_fifo_rdy)\n             cmd_rdy = 1'b1;\n         else\n             cmd_rdy = 1'b0;\n         \n         \n         end\n         \n   REFRESH_ST : begin\n   \n         if (rdp_rdy_i && cmd_rd && cmd_fifo_rdy  )\n            begin\n               next_state = READ;\n               push_cmd = 1'b1;\n               rdp_valid = 1'b1;\n               wdp_valid = 1'b0;\n               xfer_cmd = 1'b1;\n              \n               \n            end   \n          else if (cmd_fifo_rdy && cmd_wr && wdp_rdy_i )\n             begin\n               next_state = WRITE;\n               push_cmd = 1'b1;\n               xfer_cmd = 1'b1;\n               \n               wdp_valid     = 1'b1;\n               wdp_validB    = 1'b1;\n               wdp_validC    = 1'b1;\n               \n             \n              \n             end\n            \n          else if (cmd_fifo_rdy && cmd_others)\n             begin\n               push_cmd = 1'b1;\n               xfer_cmd = 1'b1;\n             end\n          else if (!cmd_fifo_rdy)\n\n             begin\n               next_state = CMD_WAIT;\n               tstpointA    = 4'b1001;\n               \n             end  \n          else\n               next_state = READ; \n \n \n               \n          if (cmd_fifo_rdy && ((rdp_rdy_i && cmd_rd) || (wdp_rdy_i && cmd_wr) || (cmd_others)))\n              cmd_rdy = 1'b1;\n         else \n              cmd_rdy = 1'b0;\n          \n         \n   \n          end\n   READ:  begin\n   \n         if (rdp_rdy_i && cmd_rd && cmd_fifo_rdy  )\n            begin\n               next_state = READ;\n               push_cmd = 1'b1;\n               rdp_valid = 1'b1;\n               wdp_valid = 1'b0;\n               xfer_cmd = 1'b1;\n               tstpointA    = 4'b0101;\n               \n            end   \n          else if (cmd_fifo_rdy && cmd_wr && wdp_rdy_i )\n             begin\n               next_state = WRITE;\n               push_cmd = 1'b1;\n               xfer_cmd = 1'b1;\n               \n               wdp_valid     = 1'b1;\n               wdp_validB    = 1'b1;\n               wdp_validC    = 1'b1;\n               \n                tstpointA    = 4'b0110;\n              \n             end\n            \n         else if (!rdp_rdy_i )\n            begin\n               next_state = READ; \n               push_cmd  = 1'b0;\n                 xfer_cmd  = 1'b0;\n              \n               tstpointA    = 4'b0111;\n              \n               wdp_valid = 1'b0;\n               wdp_validB = 1'b0;\n               wdp_validC    = 1'b0;\n               rdp_valid = 1'b0;\n            end                       \n          else if (last_word_rd_i && cmd_others && cmd_fifo_rdy )\n\n             begin\n               next_state = REFRESH_ST;\n               push_cmd = 1'b1;\n               xfer_cmd = 1'b1;\n               wdp_valid = 1'b0;\n               wdp_validB = 1'b0;\n               wdp_validC    = 1'b0;\n               rdp_valid = 1'b0;\n               tstpointA    = 4'b1000;\n              \n             end\n          else if (!cmd_fifo_rdy || !wdp_rdy_i)\n\n             begin\n               next_state = CMD_WAIT;\n               tstpointA    = 4'b1001;\n               \n             end  \n          else\n               next_state = READ; \n \n \n               \n          if ((rdp_rdy_i && cmd_rd || cmd_wr && wdp_rdy_i || cmd_others) && cmd_fifo_rdy)\n             cmd_rdy = wait_done;\n         else \n              cmd_rdy = 1'b0;\n          \n        \n        end\n   WRITE: begin  \n         if (cmd_fifo_rdy &&  cmd_rd && rdp_rdy_i && last_word_wr_i)\n               begin\n               next_state = READ;\n               push_cmd = 1'b1;\n               xfer_cmd = 1'b1;\n               rdp_valid     = 1'b1;\n               tstpointA    = 4'b0000;\n               end\n          else if (!wdp_rdy_i || (wdp_rdy_i && cmd_wr && cmd_fifo_rdy && last_word_wr_i) )\n               begin\n               next_state = WRITE;\n               tstpointA    = 4'b0001;\n               \n               if (cmd_wr && last_word_wr_i) begin\n                  wdp_valid     = 1'b1;\n                  wdp_validB = 1'b1;\n                  wdp_validC    = 1'b1;\n                  \n               end\n               else begin\n                  wdp_valid     = 1'b0;\n                  wdp_validB = 1'b0;\n               wdp_validC    = 1'b0;\n                  \n               end\n               \n               if (last_word_wr_i ) begin\n                  push_cmd = 1'b1;\n                  xfer_cmd = 1'b1;\n               end\n               else begin\n                  push_cmd = 1'b0;\n                  xfer_cmd = 1'b0;\n               end\n                             \n               end\n          else if (last_word_wr_i && cmd_others && cmd_fifo_rdy)\n             begin\n               next_state = REFRESH_ST;\n               push_cmd = 1'b1;\n               xfer_cmd = 1'b1;\n               tstpointA    = 4'b0010;\n               \n               wdp_valid = 1'b0;\n               wdp_validB = 1'b0;\n               wdp_validC    = 1'b0;\n               \n               rdp_valid = 1'b0;\n               \n             end\n               \n          else if (!cmd_fifo_rdy && last_word_wr_i || !rdp_rdy_i || (!cmd_valid_i && wait_done) )\n\n               begin\n               next_state = CMD_WAIT;\n               push_cmd = 1'b0;\n               xfer_cmd = 1'b0;\n               tstpointA    = 4'b0011;\n               \n               end\n          \n          else begin\n                  next_state = WRITE;\n               tstpointA    = 4'b0100;\n                  \n               end\n\n         \n         \n   if (last_word_wr_i && (cmd_others || rdp_rdy_i && cmd_rd || cmd_wr && wdp_rdy_i) && cmd_fifo_rdy)\n             cmd_rdy = wait_done;\n         else \n             cmd_rdy = 1'b0;\n         \n              \n         end\n   \n   \n   \n\n   \n   CMD_WAIT: if (!cmd_fifo_rdy || wr_in_progress)\n               begin\n               next_state = CMD_WAIT;\n               cmd_rdy = 1'b0;\n               tstpointA    = 4'b1010;\n               \n               end\n             else if (cmd_fifo_rdy && rdp_rdy_i && cmd_rd)\n               begin\n               next_state = READ;\n               push_cmd = 1'b1;\n               xfer_cmd = 1'b1;\n               cmd_rdy = 1'b1;\n               rdp_valid     = 1'b1;\n               \n               tstpointA    = 4'b1011;\n               end\n             else if (cmd_fifo_rdy  && cmd_wr && (wait_done || cmd_wr_pending_r1))\n\n               begin\n               next_state = WRITE;\n               push_cmd = 1'b1;\n               xfer_cmd = 1'b1;                                   \n               wdp_valid     = 1'b1;\n               wdp_validB = 1'b1;\n               wdp_validC    = 1'b1;\n               \n               cmd_rdy = 1'b1;\n               tstpointA    = 4'b1100;\n               \n               end\n             else if (cmd_fifo_rdy &&  cmd_others)\n               begin\n               next_state = REFRESH_ST;\n               push_cmd = 1'b1;  \n               xfer_cmd = 1'b1;   \n               tstpointA    = 4'b1101;\n               cmd_rdy = 1'b1;\n               \n               end\n             else\n               begin\n               next_state = CMD_WAIT;\n               tstpointA    = 4'b1110;\n               \n               if ((wdp_rdy_i && rdp_rdy_i))\n                  cmd_rdy = 1'b1;\n               else\n                  cmd_rdy = 1'b0;\n                  \n                  \n               end\n     \n               \n   default:\n          begin\n           push_cmd = 1'b0;\n           xfer_cmd = 1'b0;\n           \n           wdp_valid = 1'b0;\n           wdp_validB = 1'b0;\n           wdp_validC    = 1'b0;\n           next_state = READY;              \n         \n                    \n                         \n\n         end\n   \n endcase\n end",
+        " always @ (posedge clk_i)\n begin\n    if (rst_i[0])\n        current_state <= #TCQ  4'b0001;\n    else\n        current_state <= #TCQ next_state;\n end",
+        " always @ (posedge clk_i)\n begin\nif (rst_i[0])\n   wr_in_progress <= #TCQ  1'b0;\nelse if (last_word_wr_i)   \n   wr_in_progress <= #TCQ  1'b0;   \nelse if (current_state == WRITE)   \n   wr_in_progress <= #TCQ  1'b1;\n\n\nend",
+        "always @ (posedge clk_i)\nbegin\nif (cmd_rd & push_cmd)\n    cmd_rd_pending_r1 <= #TCQ 1'b1;\nelse if (xfer_cmd)\n    cmd_rd_pending_r1 <= #TCQ 1'b0;\n\nend    ",
+        "always @ (posedge clk_i)\nbegin\nif (rst_i[0])\n    cmd_wr_pending_r1 <= #TCQ 1'b0;\n\n\n\nelse if ( last_word_wr_i )\n\n\n    cmd_wr_pending_r1 <= #TCQ 1'b1;\nelse if (push_cmd)\n    cmd_wr_pending_r1 <= #TCQ 1'b0;\nend    ",
+        "assign  cmd_wr     = ((cmd_i == WR  | cmd_i == WRP) & cmd_valid_i )  ? 1'b1 : 1'b0;\nassign  cmd_rd     = ((cmd_i == RD | cmd_i == RDP) & cmd_valid_i) ? 1'b1 : 1'b0;\nassign  cmd_others = ((cmd_i[2] == 1'b1)& cmd_valid_i && (FAMILY == \"SPARTAN6\")) ? 1'b1 : 1'b0;\n",
+        "always @ (posedge clk_i)\n if (push_cmd)\n   begin\n        cmd_reg <=    #TCQ cmd_i;\n        addr_reg <= #TCQ addr_i;\n        bl_reg   <= #TCQ bl_i - 1;\n        \nend",
+        "always @ (posedge clk_i)\n     begin\n     push_cmd_r  <= #TCQ push_cmd;\n    \n     end",
+        "always @ (posedge clk_i)\nbegin\nif (rst_i[8])\n   wait_done <= #TCQ  1'b1;\nelse if (push_cmd_r)\n   wait_done <=  #TCQ 1'b1;\nelse if (cmd_rdy_o && cmd_valid_i && FAMILY == \"SPARTAN6\")\n   wait_done <=  #TCQ 1'b0;\n\n\nend",
+        "assign rdp_valid_o = rdp_valid;",
+        "assign wdp_validC_o = wdp_validC;",
+        "assign wdp_validB_o = wdp_validB;",
+        "assign wdp_valid_o = wdp_valid;",
+        "assign wr_bl_o   = bl_i ;",
+        "assign rd_bl_o   = bl_i ;",
+        "       assign  wr_addr_o = addr_i;\n       assign  rd_addr_o = addr_i;\nassign rd_bl_o   = bl_i ;",
+        "always @ (posedge clk_i)\nbegin\nif (rst_i[9]) begin\n    addr_o <= #TCQ  'b0;\n    cmd_o  <= #TCQ  'b0;\n    bl_o   <= #TCQ  'b0;\nend\nelse if (xfer_cmd ) begin\n    addr_o <= #TCQ  addr_reg;           \n    if (FAMILY == \"SPARTAN6\")\n        cmd_o <= #TCQ  cmd_reg;\n    else\n        cmd_o  <= #TCQ  {2'b00,cmd_reg[0]};\n    bl_o   <= #TCQ  bl_reg;\nend\n\nend",
+        "always @ (posedge clk_i)\nbegin\nif (rst_i[9])\n    cmd_fifo_rdy <= #TCQ  1'b1;\nelse if (xfer_cmd)\n    cmd_fifo_rdy <= #TCQ  1'b0;\nelse if (!mcb_cmd_full)    \n    cmd_fifo_rdy <= #TCQ  1'b1;\nend",
+        "always @ (posedge clk_i)\nbegin\nif (rst_i[8])\n    cmd_en_r1 <= #TCQ  1'b0;\nelse if ( xfer_cmd)\n    cmd_en_r1 <= #TCQ  1'b1;\n else if (!mcb_cmd_full)\n    cmd_en_r1 <= #TCQ  1'b0;\n \n end",
+        "always @ (posedge clk_i) begin\n\n    cmd_rdy_o <= #TCQ  cmd_rdy;\n    tst_cmd_rdy_o <= #TCQ  cmd_rdy;\n    \nend"
+    ]
+}

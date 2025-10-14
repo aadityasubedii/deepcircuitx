@@ -1,0 +1,1 @@
+  always @(posedge clk) rnk_config_strobe_r[0] <= #TCQ rnk_config_strobe_ns;

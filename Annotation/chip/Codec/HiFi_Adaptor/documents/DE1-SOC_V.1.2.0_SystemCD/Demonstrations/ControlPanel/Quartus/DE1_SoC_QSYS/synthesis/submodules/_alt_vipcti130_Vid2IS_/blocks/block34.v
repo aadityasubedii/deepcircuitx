@@ -1,0 +1,1 @@
+assign ap = vid_datavalid_reg;

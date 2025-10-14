@@ -1,0 +1,1 @@
+        assign frame_synch = end_of_vsync;

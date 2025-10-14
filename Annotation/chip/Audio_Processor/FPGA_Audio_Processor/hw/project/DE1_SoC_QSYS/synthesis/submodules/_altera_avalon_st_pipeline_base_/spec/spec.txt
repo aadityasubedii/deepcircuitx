@@ -1,0 +1,9 @@
+Module name: altera_avalon_st_pipeline_base. 
+
+Module specification: The altera_avalon_st_pipeline_base is a module implementing a two-stage data pipeline for the Altera Avalon streaming (ST) interface. Its operation is controlled by the PIPELINE_READY parameter: when set, the pipeline operates in 'registered' mode, otherwise, 'unregistered' mode. The primary inputs are 'clk', 'reset', 'in_valid', 'in_data' and 'out_ready'. 'clk' is the system clock signal which regulates the synchronization of sequential actions. 'reset' is the system reset signal which when active, zeroes out all internal pipeline registers. 'in_valid', when high, indicates that the data on the 'in_data' line is valid and ready to be read. 'in_data' is the actual data input to the module, of WIDTH 'DATA_WIDTH'. 'out_ready' indicates readiness of the receiving end to accept data. 
+
+The primary outputs are 'in_ready', 'out_valid', and 'out_data'. 'in_ready' shows availability of space for new data in the pipeline. 'out_valid' identifies valid data ready for transmission to the receiver when high, whilst 'out_data' carries the output data from the module, of WIDTH 'DATA_WIDTH'. 
+
+Internally, the module defines 'full0' and 'full1' as control flags for each pipeline stage, which when high, indicate each stage is storing data. Run-time data for each pipeline stage is held in 'data0' and 'data1' respectively. 
+
+In terms of operational blocks, there's a 'registered' mode, which uses a two-stage pipeline to store input data and pass it to output on availability, and an 'unregistered' mode where incoming data is directly passed to the output, bypassing the twofold pipeline. For both modes, the 'reset' input is utilized to reset all the pipeline registers, ensuring the pipeline is flushed clean. These blocks ensure the pipeline effectively manages flow control for data handling operations.

@@ -1,0 +1,16 @@
+{
+    "line_num": [
+        [
+            253,
+            253
+        ],
+        [
+            202,
+            250
+        ]
+    ],
+    "blocks": [
+        "assign {wbuf_rdata_valid[2], wbuf_rdata_valid[1], wbuf_rdata_valid[0]} = {3{i_wb_ack & ~ o_wb_we}} & serving_port;",
+        "always @(posedge i_clk)\n    begin\n    if (new_access)\n        begin\n        if (wbuf_valid[0])\n            begin\n            o_wb_adr        <= wbuf_addr [0];\n            o_wb_sel        <= wbuf_be   [0];\n            o_wb_we         <= wbuf_write[0];\n            o_wb_dat        <= wbuf_wdata[0];\n            o_wb_cyc        <= 1'd1;\n            o_wb_stb        <= 1'd1;\n            serving_port    <= 3'b001;\n            end\n        else if (wbuf_valid[1])\n            begin\n            o_wb_adr        <= wbuf_addr [1];\n            o_wb_sel        <= wbuf_be   [1];\n            o_wb_we         <= wbuf_write[1];\n            o_wb_dat        <= wbuf_wdata[1];\n            o_wb_cyc        <= 1'd1;\n            o_wb_stb        <= 1'd1;\n            serving_port    <= 3'b010;\n            end\n        else if (wbuf_valid[2])\n            begin\n            o_wb_adr        <= wbuf_addr [2];\n            o_wb_sel        <= wbuf_be   [2];\n            o_wb_we         <= wbuf_write[2];\n            o_wb_dat        <= wbuf_wdata[2];\n            o_wb_cyc        <= 1'd1;\n            o_wb_stb        <= 1'd1;\n            serving_port    <= 3'b100;\n            end\n        else\n            begin\n            o_wb_cyc        <= 1'd0;\n            o_wb_stb        <= 1'd0;\n            \n            \n            \n            o_wb_we         <= 1'd0;\n            o_wb_adr        <= 'd0;\n            o_wb_dat        <= 'd0;\n            \n            serving_port    <= 3'b000;\n            end    \n        end\n    end"
+    ]
+}

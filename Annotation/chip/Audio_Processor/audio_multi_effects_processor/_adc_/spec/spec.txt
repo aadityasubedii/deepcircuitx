@@ -1,0 +1,9 @@
+Module name: adc
+
+Module specification: The adc module is an implementation of an Analog to Digital Converter (ADC), designed to convert incoming serial data (from a SPI interface) into parallel format, transforming an analog signal into digital. The module's operation is controlled by three input ports: 'clock', which provides the timing; 'clockenable', which, when high, enables the operations tied with the clock; and 'miso', the SPI data line carrying the incoming data to convert.
+
+The main outputs are 'adconv', the ADC conversion signal indicating when conversion is active; 'datos', a 12-bit bus carrying the output data from the conversion; 'ready', a signal that indicates the ADC conversion process is done and 'datos' is ready; and 'sck', a clock signal that is active during certain states of the ADC operation.
+
+Internal signals 'bloque', 'estadoadconv', 'estadosck', and 'datostemp' work in tandem to control the process. 'bloque' is a 6-bit signal or a state variable that triggers different operations based on its value. 'estadoadconv' and 'estadosck' are signals used to control 'adconv' and 'sck' respectively, allowing them to mimic the clock signal at certain times. 'datostemp' is a temporary 12-bit register where the data from 'miso' is first written in sequence before transferring to 'datos'. 
+
+The operation of the module is divided based on the 'bloque' states, facilitating activities such as data acquisition, transfer of data from temporary space to the output register, and signalling the completion of ADC conversion process. The module design provides a comprehensive solution for digitalizing analog signals captured in the 'miso' input in an organized and systematic way.

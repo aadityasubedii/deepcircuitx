@@ -1,0 +1,1 @@
+assign md_io = md_state_r == MD_RDATA ? md_rdata_r[15] : 1'bz;

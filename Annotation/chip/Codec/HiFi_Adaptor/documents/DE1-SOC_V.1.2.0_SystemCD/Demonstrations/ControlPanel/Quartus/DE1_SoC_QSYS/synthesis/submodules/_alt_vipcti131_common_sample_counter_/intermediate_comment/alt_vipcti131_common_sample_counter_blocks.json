@@ -1,0 +1,51 @@
+{
+    "line_num": [
+        [
+            42,
+            42
+        ],
+        [
+            41,
+            41
+        ],
+        [
+            40,
+            40
+        ],
+        [
+            29,
+            38
+        ],
+        [
+            27,
+            27
+        ],
+        [
+            22,
+            22
+        ],
+        [
+            21,
+            21
+        ],
+        [
+            20,
+            20
+        ],
+        [
+            18,
+            28
+        ]
+    ],
+    "blocks": [
+        "        assign sample_ticks = count_valids;",
+        "        assign start_of_sample = (hd_sdn) ? 1'b1 : (count_valids == {LOG2_NUMBER_OF_COLOUR_PLANES{1'b0}});",
+        "        assign count_sample = (hd_sdn) ? count_cycle : count_cycle & new_sample; ",
+        "        always @ (posedge rst or posedge clk) begin\n            if(rst) begin\n                count_valids <= {LOG2_NUMBER_OF_COLOUR_PLANES{1'b0}};\n            end else begin\n                if(sclr)\n                    count_valids <= {{LOG2_NUMBER_OF_COLOUR_PLANES-1{1'b0}}, count_cycle};\n                else\n                    count_valids <= (count_cycle) ? (new_sample) ? {LOG2_NUMBER_OF_COLOUR_PLANES{1'b0}} : count_valids + 1 : count_valids;\n            end\n        end",
+        "        assign new_sample = count_valids == (NUMBER_OF_COLOUR_PLANES - 1);",
+        "        assign sample_ticks = 1'b0;",
+        "        assign start_of_sample = 1'b1;",
+        "        assign count_sample = count_cycle;",
+        "generate\n    if(NUMBER_OF_COLOUR_PLANES == 1) begin\n        assign count_sample = count_cycle;\n        assign start_of_sample = 1'b1;\n        assign sample_ticks = 1'b0;\n    end else begin\n        reg [LOG2_NUMBER_OF_COLOUR_PLANES-1:0] count_valids;\n        wire new_sample;\n        \n        assign new_sample = count_valids == (NUMBER_OF_COLOUR_PLANES - 1);\n        "
+    ]
+}

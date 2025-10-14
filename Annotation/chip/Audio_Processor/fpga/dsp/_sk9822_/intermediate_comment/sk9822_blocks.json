@@ -1,0 +1,66 @@
+{
+    "line_num": [
+        [
+            151,
+            151
+        ],
+        [
+            111,
+            149
+        ],
+        [
+            109,
+            109
+        ],
+        [
+            102,
+            102
+        ],
+        [
+            100,
+            100
+        ],
+        [
+            95,
+            97
+        ],
+        [
+            92,
+            94
+        ],
+        [
+            79,
+            88
+        ],
+        [
+            68,
+            77
+        ],
+        [
+            63,
+            66
+        ],
+        [
+            53,
+            53
+        ],
+        [
+            37,
+            41
+        ]
+    ],
+    "blocks": [
+        "    assign led_data = enabled ? shift[31] : 0;",
+        "    always @(posedge wb_clk) begin\n\n        if (led_en) begin\n            bit_count <= bit_count + 1; \n            shift <= { shift[30:0], 1'b0 };\n\n            if (bit_count == 0) begin\n                ram_addr <= ram_addr + 1;\n                case (ram_addr)\n                    0   :   shift <= tx_data;\n                    1   :   shift <= tx_data;\n                    2   :   shift <= tx_data;\n                    3   :   shift <= tx_data;\n                    4   :   shift <= tx_data;\n                    5   :   shift <= tx_data;\n                    6   :   shift <= tx_data;\n                    7   :   shift <= tx_data;\n                    8   :   shift <= tx_data;\n                    9   :   shift <= tx_data;\n                    10  :   shift <= tx_data;\n                    11  :   shift <= tx_data;\n                    12  :   shift <= 32'h0; \n                    13  :   shift <= 32'hffff_ffff; \n                    14  :   ; \n                    15  :   shift <= 32'h0; \n                endcase\n            end\n        end\n\n        if (enabled && (ram_addr != 14)) begin\n            if (led_en) begin\n                led_ck <= 0;\n            end\n            if (led_half) begin\n                led_ck <= 1;\n            end\n        end\n\n    end",
+        "    assign tx_data = { 4'he, ram_data[27:0] };",
+        "    assign led_half = prescale == ((1<<PRESCALE) / 2);",
+        "    assign led_en = prescale == 0;",
+        "    always @(posedge wb_clk) begin\n        prescale <= prescale + 1;\n    end",
+        "    localparam PRESCALE = 2;\n    reg [PRESCALE-1:0] prescale = 0;\n",
+        "    dpram #(.BITS(16), .SIZE(16))\n    dpram_lo(   \n        .ck(wb_clk),\n        .we(ack & wb_dbus_we),\n        .waddr(write_adr),\n        .wdata(wr_lo_dat),\n        .re(ram_re),\n        .raddr(ram_addr),\n        .rdata(rd_lo_dat)\n    );",
+        "    dpram #(.BITS(16), .SIZE(16))\n    dpram_hi(   \n        .ck(wb_clk),\n        .we(ack & wb_dbus_we),\n        .waddr(write_adr),\n        .wdata(wr_hi_dat),\n        .re(ram_re),\n        .raddr(ram_addr),\n        .rdata(rd_hi_dat)\n    );",
+        "    assign wr_lo_dat = wb_dbus_dat[15:0];\n    assign wr_hi_dat = wb_dbus_dat[31:16];\n    assign ram_data[15:0]  = rd_lo_dat;\n    assign ram_data[31:16] = rd_hi_dat;",
+        "    assign ram_re = 1;",
+        "    always @(posedge wb_clk) begin\n        if (cyc) begin\n            enabled <= wb_dbus_adr[5:2] != 4'hF;\n        end\n    end"
+    ]
+}

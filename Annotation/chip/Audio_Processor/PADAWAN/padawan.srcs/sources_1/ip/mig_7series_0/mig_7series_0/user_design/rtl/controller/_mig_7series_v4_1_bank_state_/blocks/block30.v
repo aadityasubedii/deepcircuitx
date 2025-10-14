@@ -1,0 +1,1 @@
+  always @(posedge clk) demand_act_priority_r <= #TCQ demand_act_priority_ns;

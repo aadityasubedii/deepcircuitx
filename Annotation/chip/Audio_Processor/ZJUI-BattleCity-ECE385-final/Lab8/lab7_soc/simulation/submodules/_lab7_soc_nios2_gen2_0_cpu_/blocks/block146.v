@@ -1,0 +1,1 @@
+  assign debug_mem_slave_clk = clk;

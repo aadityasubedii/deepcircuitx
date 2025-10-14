@@ -1,0 +1,76 @@
+{
+    "line_num": [
+        [
+            297,
+            337
+        ],
+        [
+            260,
+            295
+        ],
+        [
+            252,
+            256
+        ],
+        [
+            241,
+            249
+        ],
+        [
+            227,
+            237
+        ],
+        [
+            225,
+            225
+        ],
+        [
+            213,
+            213
+        ],
+        [
+            205,
+            211
+        ],
+        [
+            186,
+            202
+        ],
+        [
+            166,
+            182
+        ],
+        [
+            153,
+            162
+        ],
+        [
+            151,
+            152
+        ],
+        [
+            143,
+            149
+        ],
+        [
+            136,
+            141
+        ]
+    ],
+    "blocks": [
+        "generate\nif (FAMILY == \"VIRTEX6\") begin : V6_DGEN\nv6_data_gen #\n \n(  \n   .TCQ               (TCQ),\n   .ADDR_WIDTH      (32 ),\n   .BL_WIDTH        (BL_WIDTH       ),    \n   .MEM_BURST_LEN   (MEM_BURST_LEN),\n   .DWIDTH          (DWIDTH       ),\n   .DATA_PATTERN    (DATA_PATTERN  ),\n   .NUM_DQ_PINS      (NUM_DQ_PINS  ),\n   .SEL_VICTIM_LINE   (SEL_VICTIM_LINE),\n   \n   .COLUMN_WIDTH     (COLUMN_WIDTH)\n   \n )\n v6_data_gen\n (\n   .clk_i              (clk_i         ),        \n   .rst_i              (rst_i[1]      ),\n   .data_rdy_i         (data_rdy_i    ),\n   .prbs_fseed_i       (prbs_fseed_i),\n   \n   .data_mode_i        (data_mode_i   ),  \n   .cmd_startA         (cmd_start    ),  \n   .cmd_startB         (cmd_start    ),   \n   .cmd_startC         (cmd_start    ),   \n   .cmd_startD         (cmd_start    ),   \n   .cmd_startE         (cmd_start    ),   \n   .m_addr_i           (addr_i),\n   .fixed_data_i       (fixed_data_i),\n\n   .addr_i             (addr_i        ),       \n   .user_burst_cnt     (user_burst_cnt),\n   .fifo_rdy_i         (data_port_fifo_rdy    ),   \n   .data_o             (data_o        )\n  );\n\nend\nendgenerate",
+        "generate\nif (FAMILY == \"SPARTAN6\") begin : SP6_DGEN\nsp6_data_gen #\n \n( \n   .TCQ               (TCQ),\n   .ADDR_WIDTH      (32 ),\n   .BL_WIDTH        (BL_WIDTH       ),\n   .DWIDTH          (DWIDTH       ),\n   .DATA_PATTERN    (DATA_PATTERN  ),\n   .NUM_DQ_PINS      (NUM_DQ_PINS  ),\n   .COLUMN_WIDTH     (COLUMN_WIDTH)\n   \n )\n sp6_data_gen\n (\n   .clk_i              (clk_i         ),        \n   .rst_i              (rst_i[1]         ), \n   .data_rdy_i         (data_rdy_i    ),\n   .prbs_fseed_i       (prbs_fseed_i),\n   \n   .data_mode_i        (data_mode_i   ),  \n   .cmd_startA         (cmd_start    ),  \n   .cmd_startB         (cmd_start    ),   \n   .cmd_startC         (cmd_start    ),   \n   .cmd_startD         (cmd_start    ),   \n   .cmd_startE         (cmd_start    ),\n   .fixed_data_i         (fixed_data_i),\n   \n   .addr_i             (addr_i        ),       \n   .user_burst_cnt     (user_burst_cnt),\n   .fifo_rdy_i         (data_port_fifo_rdy    ),   \n   .data_o             (data_o        )  \n  );\n\nend",
+        "always @ (data_valid, data_port_fifo_rdy)\nif (FAMILY == \"SPARTAN6\")\n    data_valid_o = data_valid;\nelse\n    data_valid_o = data_port_fifo_rdy;",
+        "always @ (posedge clk_i)\nbegin\n  if (rst_i[0])  \n    data_valid <= #TCQ   'd0;\n  else if (user_burst_cnt == 6'd1 && data_port_fifo_rdy)\n    data_valid <= #TCQ   1'b0;\n  else if(( user_burst_cnt >= 6'd1) || cmd_start) \n    data_valid <= #TCQ   1'b1;\nend",
+        "always @( posedge clk_i)\nbegin\n  if ( rst_i[0] )\n    cmd_rdy <= #TCQ   1'b1;\n  else if (cmd_start)\n       cmd_rdy <= #TCQ   1'b0;\n  else if  ((data_port_fifo_rdy && user_burst_cnt == 1)) \n      cmd_rdy <= #TCQ   1'b1;\n  \n\nend",
+        "assign cmd_rdy_o = cmd_rdy;",
+        "assign  last_word_o = u_bcount_2 & data_rdy_i;",
+        "always @ (posedge clk_i)\nbegin\nif ((user_burst_cnt == 2  && data_rdy_i )|| (cmd_start && bl_i == 1))\n    u_bcount_2 <= #TCQ   1'b1;\nelse if (last_word_o)\n    u_bcount_2 <= #TCQ   1'b0;\nend    ",
+        "always @( posedge clk_i)\nbegin\n  if ( rst_i[0] )\n    user_burst_cnt <= #TCQ   'd0;\n  else if(cmd_start)  begin\n       if (bl_i == 6'b000000)\n          user_burst_cnt <= #TCQ 7'b1000000;\n       else\n          user_burst_cnt <= #TCQ bl_i;\n      end\n  else if(data_port_fifo_rdy) \n     if (user_burst_cnt != 6'd0)\n        user_burst_cnt <= #TCQ   user_burst_cnt - 1'b1;\n     else\n        user_burst_cnt <= #TCQ   'd0;\n        \nend",
+        "always @(cmd_valid_i,cmd_valid_r1,cmd_rdy,user_bl_cnt_is_1,rd_mdata_en)\nbegin\n   if (FAMILY == \"SPARTAN6\") begin\n       cmd_start = cmd_valid_i & cmd_rdy ;\n       cmd_start_b = cmd_valid_i & cmd_rdy ;\n       end\n   else if (MEM_BURST_LEN == 4 && FAMILY == \"VIRTEX6\")  begin\n       cmd_start =  rd_mdata_en;  \n       cmd_start_b =  rd_mdata_en;  \n           end\n   else if (MEM_BURST_LEN == 8 && FAMILY == \"VIRTEX6\")   begin\n       \n       cmd_start = (~cmd_valid_r1 & cmd_valid_i) | user_bl_cnt_is_1;  \n       cmd_start_b = (~cmd_valid_r1 & cmd_valid_i) | user_bl_cnt_is_1;  \n       end\n\nend",
+        "always @ (posedge clk_i)\nbegin\nif ((user_burst_cnt == 2 && data_port_fifo_rdy && FAMILY == \"SPARTAN6\")\n    || (user_burst_cnt == 2 && data_port_fifo_rdy &&  FAMILY == \"VIRTEX6\")\n   )\n\n     user_bl_cnt_is_1 <= #TCQ 1'b1;\nelse\n     user_bl_cnt_is_1 <= #TCQ 1'b0;\nend",
+        "reg user_bl_cnt_is_1;\nassign user_bl_cnt_is_1_o = user_bl_cnt_is_1;",
+        "always @ (posedge clk_i)\nbegin\nif (user_burst_cnt == 2 && data_rdy_i)\n     next_count_is_one <= #TCQ 1'b1;\nelse\n     next_count_is_one <= #TCQ 1'b0;\nend",
+        "always @ (posedge clk_i)\nbegin\n      data_rdy_r1 <= #TCQ data_rdy_i;\n      data_rdy_r2 <= #TCQ data_rdy_r1;\n      cmd_valid_r1 <= #TCQ cmd_valid_i;\nend      "
+    ]
+}

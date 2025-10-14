@@ -1,0 +1,1 @@
+  assign prbs_rdlvl_done = (SIM_CAL_OPTION == "FAST_CAL")? rdlvl_stg1_done : prbs_rdlvl_done_complex;

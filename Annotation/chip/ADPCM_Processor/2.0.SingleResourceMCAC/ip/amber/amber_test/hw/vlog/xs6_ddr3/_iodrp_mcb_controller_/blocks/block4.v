@@ -1,0 +1,1 @@
+   assign DRP_SDI_pre = (DRP_CS)? shift_through_reg[0] : 1'b0;  

@@ -1,0 +1,1 @@
+assign request_pulse    = i_request && i_cache_enable;

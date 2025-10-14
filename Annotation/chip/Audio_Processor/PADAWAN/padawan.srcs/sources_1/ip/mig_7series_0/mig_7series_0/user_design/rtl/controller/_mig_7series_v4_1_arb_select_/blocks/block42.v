@@ -1,0 +1,1 @@
+      always @(posedge clk) col_rmw_r <= #TCQ col_rmw_ns;

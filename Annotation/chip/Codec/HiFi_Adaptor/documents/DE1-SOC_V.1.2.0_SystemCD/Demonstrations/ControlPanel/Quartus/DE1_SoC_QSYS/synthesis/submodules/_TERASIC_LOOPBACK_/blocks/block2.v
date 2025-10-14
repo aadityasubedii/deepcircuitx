@@ -1,0 +1,1 @@
+assign {test_dir_invert, test_value_invert} = {PAIR_BIR?test_case[1]:1'b0,test_case[0]};

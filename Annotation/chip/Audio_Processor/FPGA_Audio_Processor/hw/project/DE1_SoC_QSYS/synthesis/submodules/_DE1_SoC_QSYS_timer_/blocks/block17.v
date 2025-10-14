@@ -1,0 +1,1 @@
+  assign timeout_event = (counter_is_zero) & ~(delayed_unxcounter_is_zeroxx0);

@@ -1,0 +1,1 @@
+        assign write_trigger_ack = write_trigger_ack_reg;

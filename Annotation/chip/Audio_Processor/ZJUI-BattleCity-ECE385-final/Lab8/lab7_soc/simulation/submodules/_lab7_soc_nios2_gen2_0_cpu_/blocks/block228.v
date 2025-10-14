@@ -1,0 +1,1 @@
+  assign E_eq = E_logic_result_is_0;

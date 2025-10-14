@@ -1,0 +1,31 @@
+{
+    "line_num": [
+        [
+            114,
+            121
+        ],
+        [
+            77,
+            112
+        ],
+        [
+            65,
+            75
+        ],
+        [
+            13,
+            18
+        ],
+        [
+            7,
+            10
+        ]
+    ],
+    "blocks": [
+        "    always @(posedge clk or posedge reset) begin\n        if (reset) begin\n            o_serial_ready <= 1'b1;\n        end else if (o_serial_valid && o_serial_ready) begin\n            $write(\"Outlet: is_left = %d / audio = %08h\\n\",  o_serial_is_left, o_serial_audio);\n            outlet_count += 2;\n        end\n    end",
+        "    initial begin\n\n        \n        i_valid <= 1'b0;\n        reset = 1'b1;\n        repeat(2) @(posedge clk);\n\n        reset = 1'b0;\n        repeat(2) @(posedge clk);\n\n        \n        intake(1'b1, 32'h00010000);\n        intake(1'b0, 32'h1fed1fed);\n\n        intake(1'b1, 32'h2eef2eef);\n        intake(1'b0, 32'h33333333);\n\n        intake(1'b1, 32'h12345678);\n        intake(1'b0, 32'h1fed1fed);\n\n        intake(1'b1, 32'h99911223);\n        intake(1'b0, 32'hABCDEF01);\n\n        intake(1'b1, 32'h55555555);\n        intake(1'b0, 32'h44444444);\n\n        @(posedge clk);\n        i_valid <= 1'b0;\n\n        wait (intake_count != outlet_count) @(posedge clk);\n\n        repeat(32) @(posedge clk);\n\n        $finish();\n\n    end",
+        "    task intake(input is_left, input reg [31:0] value);\n        begin\n            i_valid <= 1'b1;\n            i_is_left <= is_left;\n            i_audio <= value;\n            @(posedge clk);\n            if (!i_ready)\n                wait (i_ready) @(posedge clk);\n            intake_count++;\n        end\n    endtask",
+        "    initial begin\n        clk = 1'b0;\n        forever begin\n            #(CLK_TIME / 2) clk = ~clk;\n        end\n    end",
+        "    initial begin\n        $dumpfile(\"stereo_audio_parallel_serial_tb.vcd\");\n        $dumpvars;\n    end"
+    ]
+}

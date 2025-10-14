@@ -1,0 +1,1 @@
+  assign D_ctrl_shift_right_arith = D_op_srai|D_op_sra;

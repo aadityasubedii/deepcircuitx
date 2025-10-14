@@ -1,0 +1,1 @@
+assign read_data_filtered_c = i_wb_read_data_valid ? read_data_filtered : read_data_filtered_r;

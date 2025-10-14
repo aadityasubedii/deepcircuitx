@@ -1,0 +1,1 @@
+assign input_data = (read_enable) ? datamem[dataread] : 16'd0;

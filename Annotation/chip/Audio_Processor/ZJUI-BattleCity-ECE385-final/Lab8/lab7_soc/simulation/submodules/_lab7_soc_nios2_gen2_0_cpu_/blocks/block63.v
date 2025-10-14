@@ -1,0 +1,19 @@
+  assign D_ctrl_br_cmp = D_op_br|
+    D_op_bge|
+    D_op_blt|
+    D_op_bne|
+    D_op_beq|
+    D_op_bgeu|
+    D_op_bltu|
+    D_op_cmpgei|
+    D_op_cmplti|
+    D_op_cmpnei|
+    D_op_cmpgeui|
+    D_op_cmpltui|
+    D_op_cmpeqi|
+    D_op_cmpge|
+    D_op_cmplt|
+    D_op_cmpne|
+    D_op_cmpgeu|
+    D_op_cmpltu|
+    D_op_cmpeq;

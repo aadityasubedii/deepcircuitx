@@ -1,0 +1,106 @@
+{
+    "line_num": [
+        [
+            194,
+            194
+        ],
+        [
+            193,
+            193
+        ],
+        [
+            191,
+            191
+        ],
+        [
+            190,
+            190
+        ],
+        [
+            186,
+            186
+        ],
+        [
+            185,
+            185
+        ],
+        [
+            174,
+            181
+        ],
+        [
+            168,
+            171
+        ],
+        [
+            147,
+            166
+        ],
+        [
+            123,
+            132
+        ],
+        [
+            92,
+            96
+        ],
+        [
+            81,
+            90
+        ],
+        [
+            66,
+            70
+        ],
+        [
+            64,
+            64
+        ],
+        [
+            56,
+            64
+        ],
+        [
+            49,
+            51
+        ],
+        [
+            37,
+            46
+        ],
+        [
+            35,
+            35
+        ],
+        [
+            29,
+            31
+        ],
+        [
+            22,
+            26
+        ]
+    ],
+    "blocks": [
+        "assign ram_read = (streg == st_pl_ram_rd);",
+        "assign ram_write = (streg == st_rc_ram_wait);",
+        "assign audio_out = ram_data_out;",
+        "assign ram_data_in = Y;",
+        "assign write_audio_out = (st == st_pl_ram_nextaddr);",
+        "assign read_audio_in = (streg == st_rc_ram_nextaddr) || (streg == st_start && audio_in_available);",
+        "always @(posedge CLOCK_50)\n\tif(reset) ram_addr <= 0;\n\telse\n\t\tcase(streg)\n\t\t\tst_start: ram_addr <= 0;\n\t\t\tst_rc_ram_nextaddr: ram_addr <= ram_addr + 1;\n\t\t\tst_pl_ram_nextaddr: ram_addr <= ram_addr + 1 + speed;\n\t\tendcase",
+        "always @(posedge CLOCK_50)\n\tif(reset) streg <= st_input_check;\n\telse streg <= st;\n",
+        "always @(*) begin\n\tst = streg;\n\tcase(streg)\n\t\tst_start: st = st_input_check;\n\t\tst_input_check:\n\t\t\tif(!pause)\n\t\t\t\tif(play) st = st_pl_audio_wait;\n\t\t\t\telse if(record) st = st_rc_audio_wait;\n\t\t\t\telse st = st_start;\n\n\t\tst_rc_audio_wait: if(audio_in_available) st = st_rc_ram_nextaddr;\n\t\tst_rc_ram_nextaddr: st = st_rc_ram_wait;\n\t\tst_rc_ram_wait: if(!ram_waitrq) st = st_input_check;\n\n\t\tst_pl_audio_wait: if(audio_out_allowed) st = st_pl_ram_rd;\n\t\tst_pl_ram_rd: if(!ram_waitrq && ram_valid) st = st_pl_ram_nextaddr; \n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\tst_pl_ram_nextaddr: st = st_input_check;\n\tendcase\nend",
+        "always @(sel)begin\n  case(sel)\n  0: Y = audio_in;\n  1: Y = Y1;\n  2: Y = Y2;\n  3: Y = Y3;\n  4: Y = Y4;\n  default: Y = audio_in;\n  endcase\nend",
+        "  always @(posedge clock)begin\n      y[0] <= h[0]*Xin;\n\t\tfor(int i = 1; i < N2; i++)\n\t\t   y[i] <= y[i-1]+h[N2-1-i]*Xin;\n  end",
+        "  assign h[0] = 0;\n  assign h[1] = -4;\n  assign h[2] = -22;\n  assign h[3] = -50;\n  assign h[4] = 192;\n  assign h[5] = -50;\n  assign h[6] = -22;\n  assign h[7] = -4;\n  assign h[8] = 0;\n  assign Y = y[N2-1]>>H;",
+        "  always @(posedge clock)begin\n      y[0] <= h[0]*Xin;\n\t\tfor(int i = 1; i < N; i++)\n\t\t   y[i] <= y[i-1]+h[N-1-i]*Xin;\n  end",
+        "  assign Y = y[N-1]>>H;",
+        "  assign h[0] = -1;\n  assign h[1] = 5;\n  assign h[2] = 39;\n  assign h[3] = 86;\n  assign h[4] = 86;\n  assign h[5] = 39;\n  assign h[6] = 5;\n  assign h[7] = -1;\n  assign Y = y[N-1]>>H;",
+        "module filter3(input clock,\n                input signed [W-1:0]Xin,\n                output reg signed [W-1:0]Y);",
+        "  always @(posedge clock)begin\n      y[0] <= Xin;\n\t\ty[1] <= y[0];\n\t\ty[2] <= y[1];\n\t\ty[3] <= y[2];\n\t\ty[4] <= y[3];\n\t\ty[5] <= y[4];\n\t\ty[6] <= y[5];\n\t\ty[7] <= (y[6]>>1)+Xin;\n  end",
+        "  assign Y = y[N-1][W-1:0];",
+        "module filter2(input clock,\n                input signed [W-1:0]Xin,\n                output reg signed [W-1:0]Y);",
+        "  always @(posedge clock)begin\n      y[0] <= h[0]*Xin;\n\t\tfor(int i = 1; i < N; i++)\n\t\t   y[i] <= y[i-1]+h[N-1-i]*Xin;\n  end"
+    ]
+}

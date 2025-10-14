@@ -1,0 +1,41 @@
+{
+    "line_num": [
+        [
+            210,
+            210
+        ],
+        [
+            204,
+            208
+        ],
+        [
+            200,
+            201
+        ],
+        [
+            178,
+            197
+        ],
+        [
+            176,
+            176
+        ],
+        [
+            173,
+            175
+        ],
+        [
+            102,
+            171
+        ]
+    ],
+    "blocks": [
+        "  assign mem_out = mem[rd_ptr_timing];",
+        "  always @ (posedge clk)\n  begin\n    if (wr_en)\n      mem[wr_ptr] <= #TCQ d_in;\n  end",
+        "  assign wr_en = (!empty_in[2] & ((!rd_en_in & !my_full[0]) |\n                                  (rd_en_in & !my_empty[2])));",
+        "  always @(posedge clk) \n    if (rst) begin\n      my_empty <=  #TCQ 5'b11111;\n      my_full  <=  #TCQ 2'b00;\n      rd_ptr   <=  #TCQ 'b0;\n      rd_ptr_timing   <=  #TCQ 'b0;\n      wr_ptr   <=  #TCQ 'b0;\n    end else begin\n      \n      \n      \n      \n      if (my_empty[1] && !my_full[1] && rd_en_in && !empty_in[1]) ;\n      else\n        \n        \n        \n        \n        updt_ptrs(rd_en_in, !empty_in[1]);\n    end",
+        "  assign byte_rd_en = !empty_in[3] || !my_empty[3];",
+        "  assign d_out = my_empty[4] ? d_in : mem_out;\n  \n  assign empty_out = empty_in[0] & my_empty[0];",
+        "  task updt_ptrs;\n    input rd;\n    input wr;\n    reg [1:0] next_rd_ptr;\n    reg [1:0] next_wr_ptr;\n    begin\n      next_rd_ptr = (rd_ptr + 1'b1)%DEPTH;\n      next_wr_ptr = (wr_ptr + 1'b1)%DEPTH;\n      casez ({rd, wr, my_empty[1], my_full[1]})\n        4'b00zz: ; \n        4'b0100: begin\n          \n          wr_ptr  <= #TCQ next_wr_ptr;\n          my_full[0] <= #TCQ (next_wr_ptr == rd_ptr);\n          my_full[1] <= #TCQ (next_wr_ptr == rd_ptr);\n          \n        end\n        4'b0110: begin\n          \n          wr_ptr   <= #TCQ next_wr_ptr;\n          my_empty <= #TCQ 5'b00000;\n          \n        end     \n        4'b1000: begin\n          \n          rd_ptr   <= #TCQ next_rd_ptr;\n          rd_ptr_timing   <= #TCQ next_rd_ptr;\n          my_empty[0] <= #TCQ (next_rd_ptr == wr_ptr);\n          my_empty[1] <= #TCQ (next_rd_ptr == wr_ptr);\n          my_empty[2] <= #TCQ (next_rd_ptr == wr_ptr);\n          my_empty[3] <= #TCQ (next_rd_ptr == wr_ptr);\n          my_empty[4] <= #TCQ (next_rd_ptr == wr_ptr);\n        end\n        4'b1001: begin\n          \n          rd_ptr <= #TCQ next_rd_ptr;\n          rd_ptr_timing <= #TCQ next_rd_ptr;\n          my_full[0] <= #TCQ 1'b0;\n          my_full[1] <= #TCQ 1'b0;\n        end\n        4'b1100, 4'b1101, 4'b1110: begin\n          \n          \n          rd_ptr <= #TCQ next_rd_ptr;\n          rd_ptr_timing <= #TCQ next_rd_ptr;\n          wr_ptr <= #TCQ next_wr_ptr;\n          \n        end\n        4'b0101, 4'b1010: ;\n          \n          \n          \n          \n          \n          \n        \n        default: begin\n          \n          \n          $display(\"ERR %m @%t: Bad access: rd:%b,wr:%b,empty:%b,full:%b\", \n                   $time, rd, wr, my_empty[1], my_full[1]);    \n          rd_ptr <=  #TCQ 2'bxx;\n          rd_ptr_timing <=  #TCQ 2'bxx;\n          wr_ptr <=  #TCQ 2'bxx;\n        end\n        \n      endcase\n    end\n  endtask\n"
+    ]
+}

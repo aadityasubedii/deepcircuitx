@@ -1,0 +1,11 @@
+Module name: a25_fetch. 
+
+Module specification: The 'a25_fetch' module forms a crucial component of a digital system, specifically designed to fetch instructions from cache memory or system memory based on whether the address is cacheable and the cache is enabled. The module accommodates various output stalling conditions such as the system not being ready, awaiting write-back operations, and cache stalls, and interfaces with the cache module 'a25_icache'. 
+
+The input ports of this module consist of the system clock (clk), and reset signals; the test signals (scan_enable, test_mode); signals for various stall conditions and conflict situations (i_mem_stall, i_exec_stall, i_conflict); system readiness signal (i_system_rdy); instruction related signals (i_iaddress, i_iaddress_valid, i_iaddress_nxt); cache control related signals (i_cache_enable, i_cache_flush, i_cacheable_area); and write-back related signals(i_wb_read_data, i_wb_ready). 
+
+The output ports produced consist of the fetched instruction (o_fetch_instruction), write-back request and address (o_wb_req, o_wb_address), and fetch stall (o_fetch_stall). 
+
+Internally, the module employs various signals such as core_stall, cache_stall, cache_read_data128, cache_read_data, sel_cache, uncached_instruction_read, address_cachable, icache_wb_req, wait_wb, wb_req_r, wb_rdata32, these handle stalling conditions, data read from cache, cache selection, instruction selection from memory, address cache check, cache write-back request, waiting condition for write-back operation, and data read during a write-back operation respectively.
+
+The 'a25_fetch' module is divided into two major blocks: signal declaration/definition and instantiation of cache module. The signal definition block consists of detailed assigning and defining of core internal signals, while the instantiation of the cache module 'a25_icache' forms the communication bridge between the 'a25_fetch' module and the 'a25_icache', thereby serving a significant role in the overall functionality of this module.

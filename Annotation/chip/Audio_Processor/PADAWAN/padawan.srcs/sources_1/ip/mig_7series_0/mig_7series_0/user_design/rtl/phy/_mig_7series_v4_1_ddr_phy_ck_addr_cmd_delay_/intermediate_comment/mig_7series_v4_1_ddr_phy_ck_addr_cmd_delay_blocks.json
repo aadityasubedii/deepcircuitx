@@ -1,0 +1,51 @@
+{
+    "line_num": [
+        [
+            226,
+            231
+        ],
+        [
+            215,
+            222
+        ],
+        [
+            205,
+            212
+        ],
+        [
+            195,
+            201
+        ],
+        [
+            184,
+            192
+        ],
+        [
+            157,
+            179
+        ],
+        [
+            146,
+            153
+        ],
+        [
+            136,
+            143
+        ],
+        [
+            129,
+            134
+        ]
+    ],
+    "blocks": [
+        "   always @(posedge clk) begin\n     delay_done_r1 <= #TCQ delay_dec_done;\n     delay_done_r2 <= #TCQ delay_done_r1;\n     delay_done_r3 <= #TCQ delay_done_r2;\n     delay_done_r4 <= #TCQ delay_done_r3;\n   end",
+        "   always @(posedge clk) begin\n     if (rst || ~cmd_delay_start)  begin\n       delay_dec_done    <= #TCQ 1'b0;\n     end else if (((TAP_CNT == 0) && (TAP_DEC == 0)) ||\n                 ((delaydec_cnt_r == 6'd0) && (delay_cnt_r == 'd0) && (ctl_lane_cnt == N_CTL_LANES-1))) begin\n       delay_dec_done    <= #TCQ 1'b1;\n     end\n   end",
+        "   always @(posedge clk) begin\n     if (rst || ~cmd_delay_start )\n       ctl_lane_cnt <= #TCQ 6'b0;\n     else if (~delay_dec_done && (ctl_lane_cnt == N_CTL_LANES-1) && (delaydec_cnt_r == 6'd1))\n       ctl_lane_cnt <= #TCQ ctl_lane_cnt;\n     else if ((ctl_lane_cnt != N_CTL_LANES-1) && (delaydec_cnt_r == 6'd0) && (delay_cnt_r == 'd0))\n       ctl_lane_cnt <= #TCQ ctl_lane_cnt + 1;\n   end",
+        "   always @(posedge clk) begin\n     \n     if (rst || ~cmd_delay_start ||((delaydec_cnt_r == 6'd0) && (delay_cnt_r == 6'd0) && (ctl_lane_cnt != N_CTL_LANES-1)))\n       delaydec_cnt_r  <= #TCQ TAP_DEC;\n     else if (po_cnt_dec && (delaydec_cnt_r > 6'd0))\n       delaydec_cnt_r  <= #TCQ delaydec_cnt_r - 1;\n   end",
+        "   always @(posedge clk) begin\n     \n     if (rst || (tCK >= 2500) || (SIM_CAL_OPTION == \"FAST_CAL\"))\n       delay_cnt_r  <= #TCQ 'd0;\n     else if ((delaydec_cnt_r > 6'd0) ||((delay_cnt_r == 6'd0) && (ctl_lane_cnt != N_CTL_LANES-1)))\n       delay_cnt_r  <= #TCQ 'd1;\n     else if (po_cnt_inc && (delay_cnt_r > 6'd0))\n       delay_cnt_r  <= #TCQ delay_cnt_r - 1;\n   end",
+        "   always @(posedge clk) begin\n     if (rst) begin\n       po_stg2_f_incdec <= #TCQ 1'b0;\n       po_en_stg2_f     <= #TCQ 1'b0;\n       po_stg2_c_incdec <= #TCQ 1'b0;\n       po_en_stg2_c     <= #TCQ 1'b0;\n     end else begin\n       if (po_cnt_dec) begin\n         po_stg2_f_incdec <= #TCQ 1'b0;\n         po_en_stg2_f     <= #TCQ 1'b1;\n       end else begin\n         po_stg2_f_incdec <= #TCQ 1'b0;\n         po_en_stg2_f     <= #TCQ 1'b0;\n       end\n       if (po_cnt_inc) begin\n         po_stg2_c_incdec <= #TCQ 1'b1;\n         po_en_stg2_c     <= #TCQ 1'b1;\n       end else begin\n         po_stg2_c_incdec <= #TCQ 1'b0;\n         po_en_stg2_c     <= #TCQ 1'b0;\n       end\n     end\n   end",
+        "   always @(posedge clk) begin\n     if (rst || (delaydec_cnt_r == 'd0))\n       po_cnt_dec      <= #TCQ 1'b0;\n     else if (cmd_delay_start && (delaydec_cnt_r > 'd0) && (wait_cnt_r == 'd1))\n       po_cnt_dec      <= #TCQ 1'b1;\n     else\n       po_cnt_dec      <= #TCQ 1'b0;\n   end",
+        "   always @(posedge clk) begin\n     if (rst || (delaydec_cnt_r > 6'd0) || (delay_cnt_r == 'd0) || (TAP_DEC == 0))\n       po_cnt_inc      <= #TCQ 1'b0;\n     else if ((delay_cnt_r > 'd0) && (wait_cnt_r == 'd1))\n       po_cnt_inc      <= #TCQ 1'b1;\n     else\n       po_cnt_inc      <= #TCQ 1'b0;\n   end",
+        "   always @(posedge clk) begin\n     if (rst || po_cnt_dec || po_cnt_inc)\n       wait_cnt_r <= #TCQ 'd8;\n     else if (cmd_delay_start && (wait_cnt_r > 'd0))\n       wait_cnt_r <= #TCQ wait_cnt_r - 1;\n   end"
+    ]
+}

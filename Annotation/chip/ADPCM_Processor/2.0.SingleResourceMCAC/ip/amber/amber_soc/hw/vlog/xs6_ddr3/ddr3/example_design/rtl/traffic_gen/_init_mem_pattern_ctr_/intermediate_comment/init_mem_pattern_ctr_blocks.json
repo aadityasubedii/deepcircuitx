@@ -1,0 +1,136 @@
+{
+    "line_num": [
+        [
+            497,
+            692
+        ],
+        [
+            482,
+            494
+        ],
+        [
+            466,
+            476
+        ],
+        [
+            456,
+            464
+        ],
+        [
+            444,
+            454
+        ],
+        [
+            431,
+            441
+        ],
+        [
+            421,
+            424
+        ],
+        [
+            413,
+            419
+        ],
+        [
+            408,
+            410
+        ],
+        [
+            402,
+            406
+        ],
+        [
+            398,
+            398
+        ],
+        [
+            396,
+            396
+        ],
+        [
+            383,
+            393
+        ],
+        [
+            377,
+            381
+        ],
+        [
+            370,
+            374
+        ],
+        [
+            359,
+            367
+        ],
+        [
+            350,
+            355
+        ],
+        [
+            345,
+            348
+        ],
+        [
+            336,
+            343
+        ],
+        [
+            316,
+            335
+        ],
+        [
+            303,
+            313
+        ],
+        [
+            288,
+            298
+        ],
+        [
+            286,
+            288
+        ],
+        [
+            279,
+            279
+        ],
+        [
+            275,
+            278
+        ],
+        [
+            272,
+            274
+        ]
+    ],
+    "blocks": [
+        "always @ (*)\nbegin\n             load_seed_o   = 1'b0;\n             if (CMD_PATTERN == \"CGEN_BRAM\" || bram_mode_enable )\n                 addr_mode = 'b0;\n             else\n                 addr_mode   = SEQUENTIAL_ADDR;\n\n             if (CMD_PATTERN == \"CGEN_BRAM\" || bram_mode_enable )\n                 instr_mode_o = 'b0;\n             else\n                 instr_mode_o   = FIXED_INSTR_MODE;\n\n\n             if (CMD_PATTERN == \"CGEN_BRAM\" || bram_mode_enable )\n                 bl_mode_o = 'b0;\n             else\n                 bl_mode_o   = FIXED_BL_MODE;\n\n           \n             \n             if (FAMILY == \"VIRTEX6\")\n                 fixed_bl_o = FIXED_BL_VALUE;\n                                                 \n             else if (data_mode_o[2:0] == 3'b111 && FAMILY == \"SPARTAN6\")\n                 fixed_bl_o = 64;  \n             else\n                  fixed_bl_o    = fix_bl_value;\n                 \n                 \n                 \n             mode_load_o   = 1'b0;\n             run_traffic = 1'b0;   \n             next_state = IDLE;\n\n             if (PORT_MODE == \"RD_MODE\") begin\n               fixed_instr_o = RD_INSTR;\n             end\n              else if( PORT_MODE == \"WR_MODE\" || PORT_MODE == \"BI_MODE\") begin\n               fixed_instr_o = WR_INSTR;\n             end\n             \ncase(current_state)\n   IDLE:  \n        begin\n         if(mcb_init_done_reg )   \n            begin\n              if (PORT_MODE == \"WR_MODE\" || PORT_MODE == \"BI_MODE\") begin\n                 next_state = INIT_MEM_WRITE;\n              mode_load_o = 1'b1;\n              run_traffic = 1'b0;\n              load_seed_o   = 1'b1;\n             end\n              else if (PORT_MODE == \"RD_MODE\" && end_addr_reached) begin\n                    next_state = TEST_MEM;\n                    mode_load_o = 1'b1;\n                    run_traffic = 1'b1;\n              load_seed_o   = 1'b1;\n                    \n              end\n            end\n         else\n              begin\n              next_state = IDLE;\n              run_traffic = 1'b0;\n              load_seed_o   = 1'b0;\n              \n              end\n         \n         end\n   INIT_MEM_WRITE:  begin\n   \n         if (end_addr_reached  && EYE_TEST == \"FALSE\"  )\n            begin\n               next_state = TEST_MEM;\n               mode_load_o = 1'b1;\n               load_seed_o   = 1'b1;\n               run_traffic = 1'b1;\n               \n            end   \n          else\n             begin\n               next_state = INIT_MEM_WRITE;\n              run_traffic = 1'b1; \n              mode_load_o = 1'b0;\n              load_seed_o   = 1'b0;\n              if (EYE_TEST == \"TRUE\")  \n                addr_mode   = FIXED_ADDR;\n              else if (CMD_PATTERN == \"CGEN_BRAM\" || bram_mode_enable )\n                addr_mode = 'b0;\n              else\n                addr_mode   = SEQUENTIAL_ADDR;\n              \n             end  \n         \n        end\n      \n   INIT_MEM_READ:  begin\n   \n         if (end_addr_reached  )\n            begin\n               next_state = TEST_MEM;\n               mode_load_o = 1'b1;\n              load_seed_o   = 1'b1;\n               \n            end   \n          else\n             begin\n               next_state = INIT_MEM_READ;\n              run_traffic = 1'b0; \n              mode_load_o = 1'b0;\n              load_seed_o   = 1'b0;\n              \n             end  \n         \n        end\n   TEST_MEM: begin  \n         if (cmp_error)\n               next_state = CMP_ERROR;\n               \n         else\n           next_state = TEST_MEM;\n           run_traffic = 1'b1;\n       \n\n           if (PORT_MODE == \"BI_MODE\" && TST_MEM_INSTR_MODE == \"FIXED_INSTR_W_MODE\")\n                fixed_instr_o = WR_INSTR;\n           else if (PORT_MODE == \"BI_MODE\" && TST_MEM_INSTR_MODE == \"FIXED_INSTR_R_MODE\")\n                fixed_instr_o = RD_INSTR;                \n           else if (PORT_MODE == \"RD_MODE\")\n              fixed_instr_o = RD_INSTR;\n           \n           else if( PORT_MODE == \"WR_MODE\") \n              fixed_instr_o = WR_INSTR;\n           \n        \n             if (FAMILY == \"VIRTEX6\")\n                 fixed_bl_o = fix_bl_value;\n             else if ((data_mode_o == 3'b111) && (FAMILY == \"SPARTAN6\"))\n                 fixed_bl_o = 64;  \n             else\n            fixed_bl_o    = fix_bl_value;\n                 \n           bl_mode_o     = bl_mode_sel;\n\n              if (bl_mode_o == PRBS_BL_MODE)  \n                addr_mode   = PRBS_ADDR;\n              else\n                addr_mode   = addr_mode_sel;\n\n           \n           \n           if(PORT_MODE == \"BI_MODE\") begin\n               if(CMD_PATTERN == \"CGEN_BRAM\" || bram_mode_enable )\n                   instr_mode_o  = BRAM_INSTR_MODE;\n               else\n                   instr_mode_o  = test_mem_instr_mode;\n              end\n           else if (PORT_MODE == \"RD_MODE\" || PORT_MODE == \"WR_MODE\") begin\n               instr_mode_o  = FIXED_INSTR_MODE;\n           end\n              \n         end\n   \n   \n   \n\n   \n   CMP_ERROR: \n        begin\n               next_state = CMP_ERROR;\n               bl_mode_o     = bl_mode_sel;\n               fixed_instr_o = RD_INSTR;\n               addr_mode   = SEQUENTIAL_ADDR;\n               if(CMD_PATTERN == \"CGEN_BRAM\" || bram_mode_enable )\n                   instr_mode_o  = BRAM_INSTR_MODE;\n               else\n                   instr_mode_o  = test_mem_instr_mode;\n               \n               run_traffic = 1'b1;       \n\n        end\n   default:\n          begin\n            next_state = IDLE;       \n           \n\n        end\n  \n endcase\n end\n\n\n\n\nendmodule",
+        "always @ (posedge clk_i)\nbegin\n    data_mode_o   <= data_mode_sel;\n    addr_mode_o   <= addr_mode;\n    \n    \n    \n    if (syn1_vio_addr_mode_value == 0 && vio_modify_enable == 1'b1)\n        bram_mode_enable <=  1'b1;\n    else\n        bram_mode_enable <=  1'b0;\n    \n end",
+        " always @ (posedge clk_i)\n begin\n if (rst_i || (FAMILY == \"VIRTEX6\")) \n      if  (FAMILY == \"VIRTEX6\")\n         bl_mode_sel <= FIXED_BL_MODE;\n      else\n       bl_mode_sel <= PRBS_BL_MODE;\n else if (vio_modify_enable == 1'b1) begin\n       bl_mode_sel <= vio_bl_mode_value;\n       end\n end",
+        " always @ (posedge clk_i)\n begin\n if (rst_i  || FAMILY == \"VIRTEX6\") \n       fix_bl_value <= FIXED_BL_VALUE;\n\n else if (vio_modify_enable == 1'b1) begin\n       fix_bl_value <= vio_fixed_bl_value;\n       end\n end",
+        " always @ (posedge clk_i)\n begin\n if (rst_i) begin\n       data_mode_sel <= DATA_MODE;\n       addr_mode_sel <= 2'b11;\n       end\n else if (vio_modify_enable == 1'b1) begin\n       data_mode_sel <= syn1_vio_data_mode_value[2:0];\n       addr_mode_sel <= vio_addr_mode_value;\n       end\n end",
+        " always @ (posedge clk_i)\n begin\n   if (rst_i) begin\n        syn1_vio_data_mode_value <= 3'b011;\n        syn1_vio_addr_mode_value <= 2'b11;\n       end        \n else if (vio_modify_enable == 1'b1) begin\n   syn1_vio_data_mode_value <= vio_data_mode_value;\n   syn1_vio_addr_mode_value <= vio_addr_mode_value;\n   end\n end",
+        "   assign          start_addr_o  = BEGIN_ADDRESS;\n   assign          end_addr_o    = END_ADDRESS;\n   assign          cmd_seed_o    = CMD_SEED_VALUE;\n   assign          data_seed_o   = DATA_SEED_VALUE;",
+        " always @ (posedge clk_i)\n begin\n    if (rst_i)\n        current_state <= 5'b00001;\n    else\n        current_state <= next_state;\n end",
+        " always @ (posedge clk_i)\n       run_traffic_o <= run_traffic;\n",
+        " always @ (posedge clk_i)\n begin\n      mcb_init_done_reg1 <= mcb_init_done_i;\n      mcb_init_done_reg <= mcb_init_done_reg1;\nend",
+        "assign   fixed_addr_o = 32'h00001234;",
+        "assign tst_matched = upper_end_matched & lower_end_matched;",
+        "always @(posedge clk_i)\nbegin\n   if ((upper_end_matched && lower_end_matched && FAMILY == \"SPARTAN6\" && DWIDTH == 32) ||\n      (upper_end_matched && lower_end_matched && FAMILY == \"SPARTAN6\" && DWIDTH == 64) ||   \n      (upper_end_matched && DWIDTH == 128 && FAMILY == \"SPARTAN6\") ||\n      (upper_end_matched && lower_end_matched && FAMILY == \"VIRTEX6\"))\n      end_addr_reached <= 1'b1;\n   else    \n      end_addr_reached <= 1'b0;\n\nend ",
+        "always @(posedge clk_i)\nbegin\n  if (mcb_cmd_en_i)\n   mcb_cmd_bl_r <= mcb_cmd_bl_i;\nend   ",
+        "always @(posedge clk_i)\nbegin\n  if (mcb_cmd_en_i )\n   mcb_cmd_addr_r <= mcb_cmd_addr_i;\nend   ",
+        "always @(posedge clk_i)\nbegin\n  if (current_address[7:0] >= end_boundary_addr[7:0])\n\n   lower_end_matched <= 1'b1;\n  else\n   lower_end_matched <= 1'b0;\n  \nend   ",
+        "always @(posedge clk_i)\nbegin\n\n     end_boundary_addr <= (END_ADDRESS[31:0] - (DWIDTH/8) +1) ;\n\nend   ",
+        "wire [6:0] FIXED_BL_VALUE;\nassign FIXED_BL_VALUE = (FAMILY == \"VIRTEX6\" && (MEM_BURST_LEN == 8 || MEM_BURST_LEN == 0)) ? 2 :\n                        (FAMILY == \"VIRTEX6\" && MEM_BURST_LEN == 4) ? 1 :\n                         FIXEDBL;",
+        "always @(posedge clk_i)\nbegin\nif (rst_i)\n     upper_end_matched <= 1'b0;\n \n else if (mcb_cmd_en_i)\n     upper_end_matched <= AC3_G_E3 & AC2_G_E2 & AC1_G_E1;\nend   ",
+        "always @ (posedge clk_i)\nbegin\n  if (current_address[29:24] >= end_boundary_addr[29:24])\n      AC3_G_E3 <= 1'b1;\n  else\n      AC3_G_E3 <= 1'b0;\n  \n  \n    if (current_address[23:16] >= end_boundary_addr[23:16])\n      AC2_G_E2 <= 1'b1;\n  else\n      AC2_G_E2 <= 1'b0;\n  \n  if (current_address[15:8] >= end_boundary_addr[15:8])\n      AC1_G_E1 <= 1'b1;\nelse\n      AC1_G_E1 <= 1'b0;\n  \n  \nend",
+        "always @ (posedge clk_i)\nbegin\nif (rst_i)\n    current_address <= BEGIN_ADDRESS;\nelse if (mcb_wr_en_i && (current_state == INIT_MEM_WRITE && (PORT_MODE == \"WR_MODE\" || PORT_MODE == \"BI_MODE\"))\n         || (mcb_wr_en_i && (current_state == IDLE && PORT_MODE == \"RD_MODE\")) )\n    current_address <= current_address + INC_COUNTS;\nelse\n    current_address <= current_address;\n\nend    ",
+        "always @ (posedge clk_i)\nbegin\nif ( (DWIDTH >= 256 && DWIDTH <= 576))          \n     INC_COUNTS <= 32  ;\nelse if ((DWIDTH >= 128) && (DWIDTH <= 224))    \n     INC_COUNTS <= 16     ;\nelse if ((DWIDTH == 64) || (DWIDTH == 96))      \n     INC_COUNTS <= 8  ;\nelse if ((DWIDTH == 32) )      \n     INC_COUNTS <= 4 ;\nend",
+        "generate\nif (FAMILY == \"VIRTEX6\" ) begin : INC_COUNTS_V\nalways @ (posedge clk_i)",
+        "endgenerate",
+        "always @ (posedge clk_i)\n    INC_COUNTS <= (DWIDTH/8);\n    \nend",
+        "generate\nif (FAMILY == \"SPARTAN6\" ) begin : INC_COUNTS_S\n    "
+    ]
+}

@@ -1,0 +1,1 @@
+  wire samp_end = samps_r == ONE[SAMP_CNT_WIDTH-1:0];

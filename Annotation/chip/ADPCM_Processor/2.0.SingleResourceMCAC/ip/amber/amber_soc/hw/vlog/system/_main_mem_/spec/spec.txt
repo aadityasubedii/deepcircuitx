@@ -1,0 +1,9 @@
+Module name: main_mem.
+
+Module specification: Main_mem is a parametrizable memory module designed in Verilog RTL. Its functionality is determined by the data width (WB_DWIDTH) and select width (WB_SWIDTH). The module performs read and write operations at the addresses specified by 'i_wb_adr' with data 'i_wb_dat'. It supports 128 and 32-bit operations, determined by 'i_mem_ctrl'. Memory operations are controlled by write enable 'i_wb_we' and strobe signals 'i_wb_stb'.
+
+The module contains several input ports; 'i_clk' the system clock, 'i_mem_ctrl' the control signal, 'i_wb_adr' for memory operations address, 'i_wb_sel' for selecting data bits during memory write, 'i_wb_we' the write enable, 'i_wb_dat' the input data for write operation, 'i_wb_cyc' not utilized currently, 'i_wb_stb' initiates a read operation from memory if 'i_wb_we' is low. The output ports are 'o_wb_dat' which provides the output data for read operations, 'o_wb_ack' gives acknowledgment for read or write operation and 'o_wb_err' which flags error state during failed operations.
+
+An array of registers internally referred to as 'ram' forms the core memory. Further, multiple internal signals aid in read and write operations with carefully designed handshake protocols to handle concurrent read and write operations effectively. Two such signals are 'start_read_d1' and 'start_read_d2'.
+
+The code is divided into sections differentiated by the data width. For data width of 128 bits, a sequence of operations like write enable, masking, data storage and address storage is performed forming the 'wb128' block. When the data width is 32 bits, similar operations get performed with specific changes appropriate for that width, in the 'wb32' block. A separate 'masked' block generates masked data for writing into memory. The design efficiently ensures successful memory read/write operations processing either 32 or 128-bit width data as per configuration.

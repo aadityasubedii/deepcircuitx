@@ -1,0 +1,1 @@
+  assign edge_detect = d1_data_in ^  d2_data_in;

@@ -1,0 +1,9 @@
+Module name: Altera_UP_Clock_Edge. 
+
+Module specification: 
+
+The Altera_UP_Clock_Edge is a Verilog module designed to detect the rising and falling edges of a 'test_clk' signal. The Module has three inputs and two outputs. The inputs are 'clk', 'reset', and 'test_clk'. 'clk' is the primary clock signal that controls the flow of data within the module, 'reset' is a signal that's supposed to reset the module, although it is not used in the provided implementation, and 'test_clk' is the test clock signal whose edges are to be detected by the module. The output signals are 'rising_edge' and 'falling_edge', which signify the detection of a rising (0 to 1 transition) or falling (1 to 0 transition) edge in the 'test_clk' signal respectively. 
+
+Internally, the module uses three signals. 'cur_test_clk' and 'last_test_clk' are registers storing the current and previous state of the 'test_clk' signal respectively, updated at every rising edge of 'clk'. The wire 'found_edge' is used to determine changes in the state of the 'test_clk' signal by XORing the 'cur_test_clk' and 'last_test_clk'. 
+
+The main functions of the module can be divided into specialized blocks based on their functionality. The block that assigns 'cur_test_clk' and 'last_test_clk' samples 'test_clk' at every 'clk' rising edge. The block that calculates 'found_edge' checks for a change in state of 'test_clk'. Finally, the blocks that assign 'rising_edge' and 'falling_edge' activate these signals if a rising or falling edge is detected respectively in 'test_clk'. The module therefore effectively enables the detection and signal of various events (rising or falling edges) in a test clock signal.

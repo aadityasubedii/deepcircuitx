@@ -1,0 +1,1 @@
+  always @(posedge clk) accept_internal_r <= accept_internal_ns;

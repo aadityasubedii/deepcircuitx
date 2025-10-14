@@ -1,0 +1,1 @@
+  assign pd_out = pd_out_pre[byte_sel_cnt_w1];

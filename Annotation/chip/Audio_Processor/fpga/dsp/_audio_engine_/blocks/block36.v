@@ -1,0 +1,1 @@
+    localparam MIC_W = 24;

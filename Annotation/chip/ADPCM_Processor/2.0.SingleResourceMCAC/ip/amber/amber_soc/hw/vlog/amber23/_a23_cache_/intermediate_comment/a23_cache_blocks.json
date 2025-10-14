@@ -1,0 +1,291 @@
+{
+    "line_num": [
+        [
+            895,
+            900
+        ],
+        [
+            882,
+            892
+        ],
+        [
+            880,
+            880
+        ],
+        [
+            871,
+            879
+        ],
+        [
+            869,
+            870
+        ],
+        [
+            861,
+            868
+        ],
+        [
+            859,
+            860
+        ],
+        [
+            851,
+            858
+        ],
+        [
+            848,
+            850
+        ],
+        [
+            835,
+            845
+        ],
+        [
+            826,
+            833
+        ],
+        [
+            773,
+            816
+        ],
+        [
+            768,
+            772
+        ],
+        [
+            739,
+            766
+        ],
+        [
+            734,
+            738
+        ],
+        [
+            709,
+            732
+        ],
+        [
+            704,
+            707
+        ],
+        [
+            682,
+            702
+        ],
+        [
+            677,
+            681
+        ],
+        [
+            632,
+            670
+        ],
+        [
+            614,
+            625
+        ],
+        [
+            604,
+            611
+        ],
+        [
+            602,
+            603
+        ],
+        [
+            595,
+            601
+        ],
+        [
+            593,
+            594
+        ],
+        [
+            587,
+            592
+        ],
+        [
+            584,
+            586
+        ],
+        [
+            574,
+            576
+        ],
+        [
+            571,
+            572
+        ],
+        [
+            568,
+            568
+        ],
+        [
+            512,
+            578
+        ],
+        [
+            504,
+            506
+        ],
+        [
+            500,
+            500
+        ],
+        [
+            496,
+            498
+        ],
+        [
+            491,
+            491
+        ],
+        [
+            484,
+            484
+        ],
+        [
+            481,
+            481
+        ],
+        [
+            477,
+            479
+        ],
+        [
+            475,
+            475
+        ],
+        [
+            473,
+            473
+        ],
+        [
+            468,
+            468
+        ],
+        [
+            466,
+            466
+        ],
+        [
+            459,
+            463
+        ],
+        [
+            450,
+            456
+        ],
+        [
+            444,
+            447
+        ],
+        [
+            438,
+            441
+        ],
+        [
+            435,
+            436
+        ],
+        [
+            431,
+            432
+        ],
+        [
+            425,
+            428
+        ],
+        [
+            418,
+            422
+        ],
+        [
+            413,
+            416
+        ],
+        [
+            392,
+            409
+        ],
+        [
+            390,
+            390
+        ],
+        [
+            382,
+            385
+        ],
+        [
+            362,
+            376
+        ],
+        [
+            354,
+            357
+        ],
+        [
+            220,
+            348
+        ]
+    ],
+    "blocks": [
+        "    initial\n        begin\n        `TB_ERROR_MESSAGE\n        $display(\"Unsupported number of ways %0d\", WAYS);\n        $display(\"Set A23_CACHE_WAYS in a23_config_defines.v to either 2,3,4 or 8\");\n        end",
+        "    always @( posedge i_clk )\n        if ( (data_hit_way[0] + data_hit_way[1] + \n              data_hit_way[2] + data_hit_way[3] +\n              data_hit_way[4] + data_hit_way[5] +\n              data_hit_way[6] + data_hit_way[7] ) > 4'd1 )\n            begin\n            `TB_ERROR_MESSAGE\n            $display(\"Hit in more than one cache ways!\");                                                  \n            end\n                           \nend",
+        "else if ( WAYS == 8 )  begin : check_hit_8ways",
+        "    always @( posedge i_clk )\n        if ( (data_hit_way[0] + data_hit_way[1] + \n              data_hit_way[2] + data_hit_way[3] ) > 4'd1 )\n            begin\n            `TB_ERROR_MESSAGE\n            $display(\"Hit in more than one cache ways!\");                                                  \n            end\n                           \nend",
+        "else if ( WAYS == 4 ) begin : check_hit_4ways\n",
+        "    always @( posedge i_clk )\n        if ( (data_hit_way[0] + data_hit_way[1] + data_hit_way[2] ) > 4'd1 )\n            begin\n            `TB_ERROR_MESSAGE\n            $display(\"Hit in more than one cache ways!\");                                                  \n            end\n                           \nend",
+        "else if ( WAYS == 3 ) begin : check_hit_3ways\n",
+        "    always @( posedge i_clk )\n        if ( (data_hit_way[0] + data_hit_way[1] ) > 4'd1 )\n            begin\n            `TB_ERROR_MESSAGE\n            $display(\"Hit in more than one cache ways!\");                                                  \n            end\n                                                      \nend",
+        "generate\nif ( WAYS == 2 ) begin : check_hit_2ways\n",
+        "assign xC_STATE    = c_state == CS_INIT            ? \"CS_INIT\"          :\n                     c_state == CS_IDLE            ? \"CS_IDLE\"          :\n                     c_state == CS_FILL1           ? \"CS_FILL1\"         :\n                     c_state == CS_FILL2           ? \"CS_FILL2\"         :\n                     c_state == CS_FILL3           ? \"CS_FILL3\"         :\n                     c_state == CS_FILL4           ? \"CS_FILL4\"         :\n                     c_state == CS_FILL_COMPLETE   ? \"CS_FILL_COMPLETE\" :\n                     c_state == CS_EX_DELETE       ? \"CS_EX_DELETE\"     :\n                     c_state == CS_TURN_AROUND     ? \"CS_TURN_AROUND\"   :\n                     c_state == CS_WRITE_HIT1      ? \"CS_WRITE_HIT1\"    :\n                                                     \"UNKNOWN\"          ;",
+        "wire    [(6*8)-1:0]     xSOURCE_SEL;\nwire    [(20*8)-1:0]    xC_STATE;\n\nassign xSOURCE_SEL = source_sel[C_CORE]            ? \"C_CORE\"           :\n                     source_sel[C_INIT]            ? \"C_INIT\"           :\n                     source_sel[C_FILL]            ? \"C_FILL\"           :\n                     source_sel[C_INVA]            ? \"C_INVA\"           :\n                                                     \"UNKNON\"           ;",
+        "    function [WAYS-1:0] pick_way;\n    input [WAYS-1:0] valid_bits;\n    input [3:0]      random_num;\n    begin\n        if (      valid_bits[0] == 1'd0 )\n            \n            pick_way     = 8'b00000001;\n        else if ( valid_bits[1] == 1'd0 )\n            \n            pick_way     = 8'b00000010;\n        else if ( valid_bits[2] == 1'd0 )\n            \n            pick_way     = 8'b00000100;\n        else if ( valid_bits[3] == 1'd0 )\n            \n            pick_way     = 8'b00001000;\n        else if ( valid_bits[4] == 1'd0 )\n            \n            pick_way     = 8'b00010000;\n        else if ( valid_bits[5] == 1'd0 )\n            \n            pick_way     = 8'b00100000;\n        else if ( valid_bits[6] == 1'd0 )\n            \n            pick_way     = 8'b01000000;\n        else if ( valid_bits[7] == 1'd0 )\n            \n            pick_way     = 8'b10000000;\n        else\n            begin\n            \n            case (random_num[3:1])\n                3'd0:       pick_way = 8'b00010000;\n                3'd1:       pick_way = 8'b00100000;\n                3'd2:       pick_way = 8'b01000000;\n                3'd3:       pick_way = 8'b10000000;\n                3'd4:       pick_way = 8'b00000001;\n                3'd5:       pick_way = 8'b00000010;\n                3'd6:       pick_way = 8'b00000100;\n                default:    pick_way = 8'b00001000;\n            endcase\n            end\n    end\n    endfunction",
+        "end\nelse begin : pick_way_8ways\n\n    assign next_way = pick_way ( valid_bits_r, random_num );\n",
+        "    function [WAYS-1:0] pick_way;\n    input [WAYS-1:0] valid_bits;\n    input [3:0]      random_num;\n    begin\n        if (      valid_bits[0] == 1'd0 )\n            \n            pick_way     = 4'b0001;\n        else if ( valid_bits[1] == 1'd0 )\n            \n            pick_way     = 4'b0010;\n        else if ( valid_bits[2] == 1'd0 )\n            \n            pick_way     = 4'b0100;\n        else if ( valid_bits[3] == 1'd0 )\n            \n            pick_way     = 4'b1000;\n        else\n            begin\n            \n            case (random_num[3:1])\n                3'd0, 3'd1: pick_way = 4'b0100;\n                3'd2, 3'd3: pick_way = 4'b1000;\n                3'd4, 3'd5: pick_way = 4'b0001;\n                default:    pick_way = 4'b0010;\n            endcase\n            end\n    end\n    endfunction",
+        "end\nelse if ( WAYS == 4 ) begin : pick_way_4ways\n\n    assign next_way = pick_way ( valid_bits_r, random_num );\n",
+        "    function [WAYS-1:0] pick_way;\n    input [WAYS-1:0] valid_bits;\n    input [3:0]      random_num;\n    begin\n        if (      valid_bits[0] == 1'd0 )\n            \n            pick_way     = 3'b001;\n        else if ( valid_bits[1] == 1'd0 )\n            \n            pick_way     = 3'b010;\n        else if ( valid_bits[2] == 1'd0 )\n            \n            pick_way     = 3'b100;\n        else\n            begin\n            \n            case (random_num[3:1])\n                3'd0, 3'd1, 3'd2: pick_way = 3'b010;\n                3'd2, 3'd3, 3'd4: pick_way = 3'b100;\n                default:          pick_way = 3'b001;\n            endcase\n            end\n    end\n    endfunction",
+        "end\nelse if ( WAYS == 3 ) begin : pick_way_3ways\n\n    assign next_way = pick_way ( valid_bits_r, random_num );",
+        "    function [WAYS-1:0] pick_way;\n    input [WAYS-1:0] valid_bits;\n    input [3:0]      random_num;\n    begin\n        if (      valid_bits[0] == 1'd0 )\n            \n            pick_way     = 2'b01;\n        else if ( valid_bits[1] == 1'd0 )\n            \n            pick_way     = 2'b10;\n        else\n            begin\n            \n            case (random_num[3:1])\n                3'd0, 3'd3,\n                3'd5, 3'd6: pick_way = 2'b10;\n                default:    pick_way = 2'b01;\n            endcase\n            end\n    end\n    endfunction",
+        "generate\nif ( WAYS == 2 ) begin : pick_way_2ways\n\n    assign next_way = pick_way ( valid_bits_r, random_num );\n",
+        "generate\nif ( WAYS == 2 ) begin : read_data_2ways\n\n    assign hit_rdata    = data_hit_way[0] ? data_rdata_way[0] :\n                          data_hit_way[1] ? data_rdata_way[1] :\n                                     {CACHE_LINE_WIDTH{1'd1}} ;  \n                           \nend\nelse if ( WAYS == 3 ) begin : read_data_3ways\n\n    assign hit_rdata    = data_hit_way[0] ? data_rdata_way[0] :\n                          data_hit_way[1] ? data_rdata_way[1] :\n                          data_hit_way[2] ? data_rdata_way[2] :\n                                     {CACHE_LINE_WIDTH{1'd1}} ;  \n                           \nend\nelse if ( WAYS == 4 ) begin : read_data_4ways\n\n    assign hit_rdata    = data_hit_way[0] ? data_rdata_way[0] :\n                          data_hit_way[1] ? data_rdata_way[1] :\n                          data_hit_way[2] ? data_rdata_way[2] :\n                          data_hit_way[3] ? data_rdata_way[3] :\n                                     {CACHE_LINE_WIDTH{1'd1}} ;  \n                           \nend\nelse begin : read_data_8ways\n\n    assign hit_rdata    = data_hit_way[0] ? data_rdata_way[0] :\n                          data_hit_way[1] ? data_rdata_way[1] :\n                          data_hit_way[2] ? data_rdata_way[2] :\n                          data_hit_way[3] ? data_rdata_way[3] :\n                          data_hit_way[4] ? data_rdata_way[4] :\n                          data_hit_way[5] ? data_rdata_way[5] :\n                          data_hit_way[6] ? data_rdata_way[6] :\n                          data_hit_way[7] ? data_rdata_way[7] :\n                                     {CACHE_LINE_WIDTH{1'd1}} ;  \n                           \nend\nendgenerate",
+        "    always @ ( posedge i_clk )\n        if ( c_state == CS_IDLE )\n            valid_bits_r <= {tag_rdata_way[7][TAG_WIDTH-1], \n                             tag_rdata_way[6][TAG_WIDTH-1], \n                             tag_rdata_way[5][TAG_WIDTH-1], \n                             tag_rdata_way[4][TAG_WIDTH-1], \n                             tag_rdata_way[3][TAG_WIDTH-1], \n                             tag_rdata_way[2][TAG_WIDTH-1], \n                             tag_rdata_way[1][TAG_WIDTH-1], \n                             tag_rdata_way[0][TAG_WIDTH-1]};\n                           \nend",
+        "    always @ ( posedge i_clk )\n        if ( c_state == CS_IDLE )\n            valid_bits_r <= {tag_rdata_way[3][TAG_WIDTH-1], \n                             tag_rdata_way[2][TAG_WIDTH-1], \n                             tag_rdata_way[1][TAG_WIDTH-1], \n                             tag_rdata_way[0][TAG_WIDTH-1]};\n                           \nend",
+        "else if ( WAYS == 4 ) begin : valid_bits_4ways\n",
+        "    always @ ( posedge i_clk )\n        if ( c_state == CS_IDLE )\n            valid_bits_r <= {tag_rdata_way[2][TAG_WIDTH-1], \n                             tag_rdata_way[1][TAG_WIDTH-1], \n                             tag_rdata_way[0][TAG_WIDTH-1]};\n                           \nend",
+        "else if ( WAYS == 3 ) begin : valid_bits_3ways\n",
+        "    always @ ( posedge i_clk )\n        if ( c_state == CS_IDLE )\n            valid_bits_r <= {tag_rdata_way[1][TAG_WIDTH-1], \n                             tag_rdata_way[0][TAG_WIDTH-1]};\n                           \nend",
+        "generate\nif ( WAYS == 2 ) begin : valid_bits_2ways\n",
+        "        assign data_hit_way[i]     = tag_rdata_way[i][TAG_WIDTH-1] &&                                                  \n                                     tag_rdata_way[i][TAG_ADDR_WIDTH-1:0] == i_address[31:TAG_ADDR32_LSB] &&  \n                                     c_state == CS_IDLE;                                                               ",
+        "        assign data_wenable_way[i] = (source_sel[C_FILL] && select_way[i]) || \n                                     (write_hit && data_hit_way[i] && c_state == CS_IDLE);",
+        "        assign tag_wenable_way[i]  = tag_wenable && ( select_way[i] || source_sel[C_INIT] );",
+        "generate\n    for ( i=0; i<WAYS;i=i+1 ) begin : rams\n\n        \n        `ifdef XILINX_SPARTAN6_FPGA\n        xs6_sram_256x21_line_en\n        `endif\n\n        `ifdef XILINX_VIRTEX6_FPGA\n        xv6_sram_256x21_line_en\n        `endif\n\n        `ifndef XILINX_FPGA\n        generic_sram_line_en \n        `endif\n\n            #(\n            .DATA_WIDTH                 ( TAG_WIDTH             ),\n            .INITIALIZE_TO_ZERO         ( 1                     ),\n            .ADDRESS_WIDTH              ( CACHE_ADDR_WIDTH      ))\n        u_tag (\n            .i_clk                      ( i_clk                 ),\n            .i_write_data               ( tag_wdata             ),\n            .i_write_enable             ( tag_wenable_way[i]    ),\n            .i_address                  ( tag_address           ),\n\n            .o_read_data                ( tag_rdata_way[i]      )\n            );\n            \n        \n        `ifdef XILINX_SPARTAN6_FPGA\n        xs6_sram_256x128_byte_en\n        `endif\n\n        `ifdef XILINX_VIRTEX6_FPGA\n        xv6_sram_256x128_byte_en\n        `endif\n\n        `ifndef XILINX_FPGA\n        generic_sram_byte_en\n        `endif\n\n            #(\n            .DATA_WIDTH    ( CACHE_LINE_WIDTH) ,\n            .ADDRESS_WIDTH ( CACHE_ADDR_WIDTH) )\n        u_data (\n            .i_clk                      ( i_clk                         ),\n            .i_write_data               ( data_wdata                    ),\n            .i_write_enable             ( data_wenable_way[i]           ),\n            .i_address                  ( data_address                  ),\n            .i_byte_enable              ( {CACHE_LINE_WIDTH/8{1'd1}}    ),\n            .o_read_data                ( data_rdata_way[i]             )\n            );                                                     \n\n\n        \n        assign tag_wenable_way[i]  = tag_wenable && ( select_way[i] || source_sel[C_INIT] );\n\n        \n        assign data_wenable_way[i] = (source_sel[C_FILL] && select_way[i]) || \n                                     (write_hit && data_hit_way[i] && c_state == CS_IDLE);\n        \n        assign data_hit_way[i]     = tag_rdata_way[i][TAG_WIDTH-1] &&                                                  \n                                     tag_rdata_way[i][TAG_ADDR_WIDTH-1:0] == i_address[31:TAG_ADDR32_LSB] &&  \n                                     c_state == CS_IDLE;                                                               \n    end                                                         \nendgenerate",
+        "assign cache_busy_stall = ((c_state == CS_TURN_AROUND || c_state == CS_FILL1) && enable) ||\n                           c_state == CS_INIT;\n",
+        "assign read_stall       = read_miss;",
+        "assign write_stall      = ( write_hit  && c_state != CS_WRITE_HIT1 ) ||\n                          ( write_miss && ( c_state != CS_IDLE ) )   ||\n                           i_wb_stall                                ;",
+        "assign ex_read_cache_busy = exclusive_access && !i_write_enable && c_state != CS_IDLE;",
+        "assign ex_read_hit      = exclusive_access && !i_write_enable && (hit || wb_read_buf_hit);",
+        "assign read_miss        = enable && !i_write_enable && !(hit || wb_read_buf_hit);",
+        "assign write_hit        = enable &&  i_write_enable && hit;\n                                                           \nassign write_miss       = enable &&  i_write_enable && !hit && c_state != CS_WRITE_HIT1;",
+        "assign hit              = |data_hit_way;",
+        "assign wb_read_buf_hit  = enable && wb_read_buf_address == i_address && wb_read_buf_valid;",
+        "assign exclusive_access = i_exclusive && i_cache_enable;",
+        "assign enable           = i_select && i_cache_enable;",
+        "assign tag_wenable      = source_sel[C_INVA] ? 1'd1  :\n                          source_sel[C_FILL] ? 1'd1  :\n                          source_sel[C_INIT] ? 1'd1  :\n                          source_sel[C_CORE] ? 1'd0  :\n                                               1'd0  ;",
+        "assign write_data_word  = i_byte_enable == 4'b0001 ? { o_read_data[31: 8], i_write_data[ 7: 0]                   } :\n                          i_byte_enable == 4'b0010 ? { o_read_data[31:16], i_write_data[15: 8], o_read_data[ 7:0]} :\n                          i_byte_enable == 4'b0100 ? { o_read_data[31:24], i_write_data[23:16], o_read_data[15:0]} :\n                          i_byte_enable == 4'b1000 ? {                     i_write_data[31:24], o_read_data[23:0]} :\n                          i_byte_enable == 4'b0011 ? { o_read_data[31:16], i_write_data[15: 0]                   } :\n                          i_byte_enable == 4'b1100 ? {                     i_write_data[31:16], o_read_data[15:0]} :\n                                                     i_write_data                                                  ;",
+        "assign write_hit_wdata  = i_address[3:2] == 2'd0 ? {hit_rdata[127:32], write_data_word                   } :\n                          i_address[3:2] == 2'd1 ? {hit_rdata[127:64], write_data_word, hit_rdata[31:0]  } :\n                          i_address[3:2] == 2'd2 ? {hit_rdata[127:96], write_data_word, hit_rdata[63:0]  } :\n                                                   {                   write_data_word, hit_rdata[95:0]  } ;",
+        "assign read_miss_wdata  = miss_address[3:2] == 2'd0 ? wb_rdata_burst                              :\n                          miss_address[3:2] == 2'd1 ? { wb_rdata_burst[95:0], wb_rdata_burst[127:96] }:\n                          miss_address[3:2] == 2'd2 ? { wb_rdata_burst[63:0], wb_rdata_burst[127:64] }:\n                                                      { wb_rdata_burst[31:0], wb_rdata_burst[127:32] };",
+        "    \nassign data_wdata       = write_hit && c_state == CS_IDLE ? write_hit_wdata : read_miss_wdata;",
+        "assign tag_wdata        = source_sel[C_FILL] ? {1'd1, miss_address[31:TAG_ADDR32_LSB]} :\n                                               {TAG_WIDTH{1'd0}}                       ;",
+        "assign data_address     = write_hit          ? i_address   [CACHE_ADDR32_MSB:CACHE_ADDR32_LSB] :\n                          source_sel[C_FILL] ? miss_address[CACHE_ADDR32_MSB:CACHE_ADDR32_LSB] : \n                          source_sel[C_CORE] ? address                                         :\n                                               {CACHE_ADDR_WIDTH{1'd0}}                        ;",
+        "assign tag_address      = source_sel[C_FILL] ? miss_address      [CACHE_ADDR32_MSB:CACHE_ADDR32_LSB] :\n                          source_sel[C_INVA] ? ex_read_address                                       :\n                          source_sel[C_INIT] ? init_count[CACHE_ADDR_WIDTH-1:0]                      :\n                          source_sel[C_CORE] ? address                                               :\n                                               {CACHE_ADDR_WIDTH{1'd0}}                              ;",
+        "always @ (posedge i_clk)\n    if ( ex_read_hit )\n        ex_read_address <= i_address[CACHE_ADDR32_MSB:CACHE_ADDR32_LSB];\n",
+        "always @ ( posedge i_clk )\n    if ( ex_read_hit_clear )\n        begin\n        ex_read_hit_r   <= 1'd0;\n        ex_read_hit_way <= 'd0;\n        end\n    else if ( ex_read_hit )\n        begin\n        \n        `ifdef A23_CACHE_DEBUG\n            `TB_DEBUG_MESSAGE\n            $display (\"Exclusive access cache hit address 0x%08h\", i_address);\n        `endif\n        \n        ex_read_hit_r   <= 1'd1;\n        ex_read_hit_way <= data_hit_way;\n        end\n    else if ( c_state == CS_FILL_COMPLETE && ex_read_hit_r )",
+        "assign ex_read_hit_clear = c_state == CS_EX_DELETE;",
+        "always @ ( posedge i_clk )\n    if ( o_wb_req )\n        miss_address <= i_address;\n        ",
+        "always @ ( posedge i_clk )\n    begin\n    if ( c_state == CS_FILL1 || c_state == CS_FILL2 || \n         c_state == CS_FILL3 || c_state == CS_FILL4 )\n        begin\n        if ( !i_wb_stall )\n            begin\n            wb_read_buf_valid   <= 1'd1;\n            wb_read_buf_address <= i_wb_address;\n            wb_read_buf_data    <= i_wb_read_data;\n            end\n        end\n    else    \n        wb_read_buf_valid   <= 1'd0;\n    end",
+        "always @ ( posedge i_clk )\n    if ( !i_wb_stall )\n        wb_rdata_burst <= {i_wb_read_data, wb_rdata_burst[127:32]};\n",
+        "always @ ( posedge i_clk )\n    if ( i_cache_flush )\n        begin\n        c_state     <= CS_INIT;\n        source_sel  <= 1'd1 << C_INIT;\n        init_count  <= 'd0;\n        `ifdef A23_CACHE_DEBUG  \n        `TB_DEBUG_MESSAGE  \n        $display(\"Cache Flush\");\n        `endif            \n        end\n    else    \n        case ( c_state )\n            CS_INIT :\n                if ( init_count < CACHE_LINES [CACHE_ADDR_WIDTH:0] )\n                    begin\n                    init_count  <= init_count + 1'd1;\n                    source_sel  <= 1'd1 << C_INIT;\n                    end\n                else\n                    begin\n                    source_sel  <= 1'd1 << C_CORE;\n                    c_state     <= CS_TURN_AROUND;\n                    end \n                       \n             CS_IDLE :\n                begin\n                source_sel  <= 1'd1 << C_CORE;\n                \n                if ( ex_read_hit || ex_read_hit_r )\n                    begin\n                    select_way  <= data_hit_way | ex_read_hit_way;\n                    c_state     <= CS_EX_DELETE;        \n                    source_sel  <= 1'd1 << C_INVA;\n                    end\n                else if ( read_miss ) \n                    begin\n                    \n                    if ( !i_wb_stall )   \n                        c_state <= CS_FILL1; \n                    end           \n                else if ( write_hit )\n                    c_state <= CS_WRITE_HIT1;        \n               end\n                   \n                   \n             CS_FILL1 :\n                begin\n                \n                if ( !i_wb_stall )\n                    c_state <= CS_FILL2;\n                end\n                \n                \n             CS_FILL2 :\n                \n                \n                if ( !i_wb_stall )\n                    c_state <= CS_FILL3;\n\n\n             CS_FILL3 :\n                \n                \n                if ( !i_wb_stall )\n                    c_state <= CS_FILL4;\n                \n                \n             CS_FILL4 :\n                \n                \n                if ( !i_wb_stall ) \n                    begin\n                    c_state     <= CS_FILL_COMPLETE;\n                    source_sel  <= 1'd1 << C_FILL;\n                \n                    \n                    \n                    \n                    \n                    select_way  <= next_way; \n                    random_num  <= {random_num[2], random_num[1], random_num[0], \n                                     random_num[3]^random_num[2]};\n                    end\n\n\n             \n             CS_FILL_COMPLETE : \n                \n                \n                if ( !i_wb_stall )\n                    begin\n                    \n                    \n                    \n                    \n                    source_sel  <= 1'd1 << C_CORE;              \n                    c_state     <= CS_TURN_AROUND;    \n                    end                                 \n                                                        \n\n             \n             \n             CS_TURN_AROUND : \n                begin\n                c_state     <= CS_IDLE;\n                end\n                \n\n             \n             CS_EX_DELETE:       \n                begin\n                `ifdef A23_CACHE_DEBUG    \n                `TB_DEBUG_MESSAGE\n                $display(\"Cache deleted Locked entry\");\n                `endif    \n                c_state    <= CS_TURN_AROUND;\n                source_sel <= 1'd1 << C_CORE;\n                end\n                \n                                 \n             CS_WRITE_HIT1:\n                begin\n                \n                if ( !i_wb_stall )           \n                    c_state     <= CS_IDLE;\n                    \n                end\n        endcase                       "
+    ]
+}

@@ -1,0 +1,1 @@
+      if (ECC == "OFF") begin : ecc_off

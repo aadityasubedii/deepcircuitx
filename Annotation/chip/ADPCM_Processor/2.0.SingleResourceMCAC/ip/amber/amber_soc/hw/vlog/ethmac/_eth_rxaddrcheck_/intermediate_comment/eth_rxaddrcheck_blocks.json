@@ -1,0 +1,41 @@
+{
+    "line_num": [
+        [
+            204,
+            204
+        ],
+        [
+            194,
+            202
+        ],
+        [
+            192,
+            192
+        ],
+        [
+            165,
+            190
+        ],
+        [
+            152,
+            160
+        ],
+        [
+            142,
+            148
+        ],
+        [
+            130,
+            138
+        ]
+    ],
+    "blocks": [
+        "assign HashBit = ByteHash[CrcHash[2:0]];",
+        "always@(CrcHash or IntHash)\nbegin\n  case(CrcHash[4:3])\n    2'b00: ByteHash = IntHash[7:0];\n    2'b01: ByteHash = IntHash[15:8];\n    2'b10: ByteHash = IntHash[23:16];\n    2'b11: ByteHash = IntHash[31:24];\n  endcase\nend",
+        "assign IntHash = (CrcHash[5])? HASH1 : HASH0;",
+        "always @ (posedge MRxClk or posedge Reset)\nbegin\n  if(Reset)\n    UnicastOK <= #Tp 1'b0;\n  else\n  if(RxCheckEn & ByteCntEq2)\n    UnicastOK <= #Tp   RxData[7:0] == MAC[47:40];\n  else\n  if(RxCheckEn & ByteCntEq3)\n    UnicastOK <= #Tp ( RxData[7:0] == MAC[39:32]) & UnicastOK;\n  else\n  if(RxCheckEn & ByteCntEq4)\n    UnicastOK <= #Tp ( RxData[7:0] == MAC[31:24]) & UnicastOK;\n  else\n  if(RxCheckEn & ByteCntEq5)\n    UnicastOK <= #Tp ( RxData[7:0] == MAC[23:16]) & UnicastOK;\n  else\n  if(RxCheckEn & ByteCntEq6)\n    UnicastOK <= #Tp ( RxData[7:0] == MAC[15:8])  & UnicastOK;\n  else\n  if(RxCheckEn & ByteCntEq7)\n    UnicastOK <= #Tp ( RxData[7:0] == MAC[7:0])   & UnicastOK;\n  else\n  if(RxEndFrm | RxAbort)\n    UnicastOK <= #Tp 1'b0;\nend",
+        "always @ (posedge MRxClk or posedge Reset)\nbegin\n  if(Reset)\n    MulticastOK <= #Tp 1'b0;\n  else if(RxEndFrm | RxAbort)\n    MulticastOK <= #Tp 1'b0;\n  else if(CrcHashGood & Multicast)\n    MulticastOK <= #Tp HashBit;\nend",
+        "always @ (posedge MRxClk or posedge Reset)\nbegin\n  if(Reset)\n    AddressMiss <= #Tp 1'b0;\n  else if(ByteCntEq7 & RxCheckEn)\n    AddressMiss <= #Tp (~(UnicastOK | BroadcastOK | MulticastOK | (PassAll & ControlFrmAddressOK)));\nend",
+        "always @ (posedge MRxClk or posedge Reset)\nbegin\n  if(Reset)\n    RxAbort <= #Tp 1'b0;\n  else if(RxAddressInvalid & ByteCntEq7 & RxCheckEn)\n    RxAbort <= #Tp 1'b1;\n  else\n    RxAbort <= #Tp 1'b0;\nend"
+    ]
+}

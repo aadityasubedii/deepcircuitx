@@ -1,0 +1,1 @@
+		assign dout_data = data_out;

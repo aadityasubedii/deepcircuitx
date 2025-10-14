@@ -1,0 +1,1 @@
+  always @(posedge clk) zero2fuzz_r <= #TCQ zero2fuzz_ns;

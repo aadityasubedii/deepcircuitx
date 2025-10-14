@@ -1,0 +1,1 @@
+  assign tdo = sr[0];

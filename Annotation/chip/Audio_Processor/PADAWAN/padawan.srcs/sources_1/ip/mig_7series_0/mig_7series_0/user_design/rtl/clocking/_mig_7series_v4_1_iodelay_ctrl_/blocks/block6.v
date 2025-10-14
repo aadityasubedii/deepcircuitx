@@ -1,0 +1,1 @@
+  assign rst_tmp_idelay = sys_rst_act_hi;

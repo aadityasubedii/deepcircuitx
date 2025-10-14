@@ -1,0 +1,1 @@
+  assign R_ctrl_alu_subtract_nxt = D_ctrl_alu_subtract;

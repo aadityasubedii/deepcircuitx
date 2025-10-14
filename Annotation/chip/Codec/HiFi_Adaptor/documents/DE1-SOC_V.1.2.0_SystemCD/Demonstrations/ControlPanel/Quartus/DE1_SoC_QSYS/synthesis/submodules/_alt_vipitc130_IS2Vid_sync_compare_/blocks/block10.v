@@ -1,0 +1,1 @@
+assign sclr_frame_counter = sclr | sof_cvi_int | sof_cvo_int;

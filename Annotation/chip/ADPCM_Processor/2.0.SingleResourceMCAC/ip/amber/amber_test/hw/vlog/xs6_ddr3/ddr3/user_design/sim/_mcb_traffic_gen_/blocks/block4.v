@@ -1,0 +1,1 @@
+   assign cmp_error = 1'b0;

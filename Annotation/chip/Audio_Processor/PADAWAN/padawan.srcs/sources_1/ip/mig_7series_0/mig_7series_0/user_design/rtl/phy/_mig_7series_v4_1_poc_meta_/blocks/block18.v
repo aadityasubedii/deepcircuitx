@@ -1,0 +1,1 @@
+  reg [TAPCNTRWIDTH-1:0] center_diff_r;

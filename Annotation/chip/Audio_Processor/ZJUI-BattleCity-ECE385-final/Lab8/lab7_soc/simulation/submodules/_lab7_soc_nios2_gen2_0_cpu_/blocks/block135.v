@@ -1,0 +1,1 @@
+  assign D_ctrl_jmp_direct = D_op_call|D_op_jmpi;

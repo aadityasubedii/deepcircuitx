@@ -1,0 +1,1 @@
+assign Collision = ~r_FullD & Collision_Tx2;

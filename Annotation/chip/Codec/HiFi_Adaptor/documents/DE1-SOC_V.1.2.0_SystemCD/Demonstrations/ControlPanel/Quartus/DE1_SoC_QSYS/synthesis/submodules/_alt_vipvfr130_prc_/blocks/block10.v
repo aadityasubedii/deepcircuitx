@@ -1,0 +1,1 @@
+assign master_clock = (CLOCKS_ARE_SEPARATE) ? master_av_clock : clock;

@@ -1,0 +1,1 @@
+      always @(wr_data_offset) wr_data_offset_r = wr_data_offset;

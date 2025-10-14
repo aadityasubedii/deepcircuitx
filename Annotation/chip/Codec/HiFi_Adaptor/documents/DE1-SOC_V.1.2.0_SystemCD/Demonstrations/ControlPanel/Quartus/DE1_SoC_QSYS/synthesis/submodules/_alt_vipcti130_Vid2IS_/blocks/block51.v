@@ -1,0 +1,1 @@
+         assign rst_vid_clk = rst;

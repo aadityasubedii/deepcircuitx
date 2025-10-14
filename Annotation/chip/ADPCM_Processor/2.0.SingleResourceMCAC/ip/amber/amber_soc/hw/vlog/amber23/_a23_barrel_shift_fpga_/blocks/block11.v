@@ -1,0 +1,1 @@
+assign p_r = {rot_prod[30:0], rot_prod[31]};

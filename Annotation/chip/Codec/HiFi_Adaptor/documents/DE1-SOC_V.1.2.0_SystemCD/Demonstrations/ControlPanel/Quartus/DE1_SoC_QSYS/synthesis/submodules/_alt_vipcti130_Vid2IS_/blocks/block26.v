@@ -1,0 +1,1 @@
+assign wrreq = wrreq_pre_enable & enable_synced;

@@ -1,0 +1,1 @@
+assign WB_DAT_O = ram_do;

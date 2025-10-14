@@ -1,0 +1,1 @@
+assign tst_matched = upper_end_matched & lower_end_matched;

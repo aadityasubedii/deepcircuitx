@@ -1,0 +1,1 @@
+assign write_audio_out = (st == st_pl_ram_nextaddr);

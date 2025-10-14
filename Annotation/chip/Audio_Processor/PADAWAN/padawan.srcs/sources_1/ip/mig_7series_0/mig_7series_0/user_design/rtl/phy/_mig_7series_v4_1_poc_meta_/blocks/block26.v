@@ -1,0 +1,1 @@
+  always @(posedge clk) rise_lead_center_offset_r <= #TCQ rise_lead_center_offset_ns;

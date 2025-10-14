@@ -1,0 +1,26 @@
+{
+    "line_num": [
+        [
+            131,
+            149
+        ],
+        [
+            98,
+            129
+        ],
+        [
+            82,
+            96
+        ],
+        [
+            78,
+            80
+        ]
+    ],
+    "blocks": [
+        "\talways @(negedge Sclk)\n\tbegin\n\t\tif (OutReady)\n\t\tbegin\n\t\t\twriteL[l] = OutputL_reg ;\n\t\t\twriteR[l] = OutputR_reg ;\n\t\t\tOutputL = OutputL_reg ;\n\t\t\tOutputR = OutputR_reg;\n\t\t\tl = l - 1;\n\t\t\tif (l < 0 && count < 6395 )\n\t\t\tbegin\n\t\t\t\tif(count!=3798 && count!= 5397)\n\t\t\t\t$fwrite (mv, \"   %h      %h\\n\", writeL, writeR);\n\t\t\t\tcount=count+1;\n\t\t\t\tl = 39;\n\t\t\t\n\t\t\tend\n\t\tend\n\tend",
+        "\talways @(posedge Dclk)\n\tbegin\n\t\tif ((((m == 9458) || (m == 13058)) && flag_reset == 1'b0))\n\t\tbegin\n\t\t\tReset_n = 1'b0;\n\t\t\tflag_reset = 1'b1;\n\t\tend\n\t\telse if (InReady || flag_reset)\n\t\tbegin\n\t\t\tif (m < 15056)\n\t\t\tbegin\n\t\t\t\tReset_n = 1'b1;\n\t\t\t\tif (n == 15 )\n\t\t\t\t\tFrame = 1'b1;\n\t\t\t\telse\n\t\t\t\t\tFrame = 1'b0;\n\t\t\t\tif (n >= 0)\n\t\t\t\tbegin\n\t\t\t\t\tInputL = data[m][n];\n\t\t\t\t\tInputR = data[m+1][n];\n\t\t\t\t\tn = n - 1;\n\t\t\t\tend\n\t\t\t\tif (n == -1)\n\t\t\t\tbegin\n\t\t\t\t\tn = 15;\n\t\t\t\t\tm = m + 2;\n\t\t\t\t\tif (flag_reset)\n\t\t\t\t\t\tflag_reset = 1'b0;\n\t\t\t\tend\n\t\t\tend\n\t\tend\n\tend",
+        "\tinitial begin\n\t\tDclk = 1;\n\t\tSclk = 1;\n\t\tFrame = 0;\n\t\tInputL = 0;\n\t\tInputR = 0;\n\t\tReset_n = 1;\n\t\t\n\t\t$readmemh (\"data2.in\", data);\n    \tStart = 1'b1;\n\t\t#2; Start = 1'b0;\n\t\t\n\t\tif (count==6394)\n\t\t$finish;\n\tend",
+        "\tinitial begin\n\t\tmv = $fopen (\"output2.txt\", \"w+\");\n\tend"
+    ]
+}

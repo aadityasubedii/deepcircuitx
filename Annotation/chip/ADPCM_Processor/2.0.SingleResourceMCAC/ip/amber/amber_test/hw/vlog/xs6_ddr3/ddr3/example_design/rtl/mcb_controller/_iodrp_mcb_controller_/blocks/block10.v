@@ -1,0 +1,1 @@
+   assign     data_out = (addr_data_sel_n)? {1'b0, memcell_addr_reg} : {1'b0, data_reg};

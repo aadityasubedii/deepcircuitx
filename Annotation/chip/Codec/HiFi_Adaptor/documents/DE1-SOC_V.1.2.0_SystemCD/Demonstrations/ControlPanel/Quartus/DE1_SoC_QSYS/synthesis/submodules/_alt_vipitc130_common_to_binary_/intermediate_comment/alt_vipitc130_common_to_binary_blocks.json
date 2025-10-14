@@ -1,0 +1,11 @@
+{
+    "line_num": [
+        [
+            12,
+            28
+        ]
+    ],
+    "blocks": [
+        "generate\n    genvar binary_pos, one_hot_pos;\n    \n    wire [(NO_OF_MODES*LOG2_NO_OF_MODES)-1:0] binary_values;\n    wire [(NO_OF_MODES*LOG2_NO_OF_MODES)-1:0] binary_values_by_bit;\n    \n    for(one_hot_pos=0; one_hot_pos<NO_OF_MODES; one_hot_pos=one_hot_pos+1) begin : to_binary_one_hot_pos\n       assign binary_values[(one_hot_pos*LOG2_NO_OF_MODES)+(LOG2_NO_OF_MODES-1):(one_hot_pos*LOG2_NO_OF_MODES)] = (one_hot[one_hot_pos]) ? one_hot_pos + 1 : 0;\n    end\n    \n    for(binary_pos=0; binary_pos<LOG2_NO_OF_MODES; binary_pos=binary_pos+1) begin : to_binary_binary_pos\n        for(one_hot_pos=0; one_hot_pos<NO_OF_MODES; one_hot_pos=one_hot_pos+1) begin : to_binary_one_hot_pos\n            assign binary_values_by_bit[(binary_pos*NO_OF_MODES)+one_hot_pos] = binary_values[(one_hot_pos*LOG2_NO_OF_MODES)+binary_pos];\n        end\n        assign binary[binary_pos] = |binary_values_by_bit[(binary_pos*NO_OF_MODES)+NO_OF_MODES-1:binary_pos*NO_OF_MODES];\n    end\nendgenerate"
+    ]
+}

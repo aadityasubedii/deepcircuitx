@@ -1,0 +1,51 @@
+{
+    "line_num": [
+        [
+            238,
+            270
+        ],
+        [
+            237,
+            237
+        ],
+        [
+            236,
+            236
+        ],
+        [
+            196,
+            228
+        ],
+        [
+            194,
+            194
+        ],
+        [
+            193,
+            193
+        ],
+        [
+            166,
+            185
+        ],
+        [
+            164,
+            164
+        ],
+        [
+            142,
+            162
+        ]
+    ],
+    "blocks": [
+        "always@ (posedge clk, posedge reset) begin\n\tif (reset) begin\n\t\to_wb_dat_d         <= 32'h00000000;\n\t\tstart_read_d\t   <= 1'b0;\n\t\to_wb_ack_d         <= 1'b0;\n\t\twb_ack2_d          <= 1'b0;\n\t\tdec_ready_for_data <= 1'b0;\n\tend else begin\n\t\tif(i_wb_adr_d[15:0] == CONFIG_DONE_REG) begin\n\t\t\tbuffer_1 <= {2'b00,&(decoder_configured)}; \n\t\t\tbuffer_2 <= buffer_1;\n\t\tend\n\t\telse begin\n\t\t\tbuffer_1   <= dec_ch[(i_wb_adr_d[6:0])/4];\n\t\t\tbuffer_2   <= buffer_1;\n\t\tend\n\t\twb_ack2_d  <= wb_ack1_d;\n\t\to_wb_ack_d <= wb_ack2_d;\n\n\t\tif(i_wb_stb_d & i_wb_cyc_d & i_wb_we_d) begin \n\t\t\tif(i_wb_adr_d[15:0] == CONFIG_CORE_READY) begin\n\t\t\t\tdec_ready_for_data <= 1'b1;\n\t\t\tend\n\t\tend\n\n\t\tif (i_wb_stb_d & i_wb_cyc_d & (~i_wb_we_d)) begin\t\n\t\t\to_wb_dat_d <= {29'h00000000, buffer_2};\n\t\t\tstart_read_d <= 1'b1;\n\t\tend else begin\n\t\t\tstart_read_d <= 1'b0;\n\t\tend\t\t\n\tend\nend",
+        "assign o_wb_err_d = 1'b0;\t\t\t",
+        "assign wb_ack1_d = (i_wb_we_d) ? (i_wb_stb_d & i_wb_cyc_d) : (i_wb_stb_d & i_wb_cyc_d & start_read_d);",
+        "always@ (posedge clk, posedge reset) begin\t\n\tif (reset) begin\n\t\to_wb_dat_e         <= 32'h00000000;\n\t\tstart_read_e\t   <= 1'b0;\n\t\to_wb_ack_e         <= 1'b0;\n\t\twb_ack2_e          <= 1'b0;\n\t\tenc_ready_for_data <= 1'b0;\n\tend else begin\n\t\tif(i_wb_adr_e[15:0] == CONFIG_DONE_REG) begin\n\t\t\tbuffer_3 <= {2'b00,&(encoder_configured)}; \n\t\t\tbuffer_4 <= buffer_3;\n\t\tend\n\t\telse begin \n\t\t\tbuffer_3   <= enc_ch[(i_wb_adr_e[6:0])/4];\n\t\t\tbuffer_4   <= buffer_3;\n\t\tend\t\t\n\t\twb_ack2_e  <= wb_ack1_e;\n\t\to_wb_ack_e <= wb_ack2_e;\n\t\t\n\t\tif(i_wb_stb_e & i_wb_cyc_e & i_wb_we_e) begin \n\t\t\tif(i_wb_adr_e[15:0] == CONFIG_CORE_READY) begin\n\t\t\t\tenc_ready_for_data <= 1'b1;\n\t\t\tend\n\t\tend\n\n\t\tif (i_wb_stb_e & i_wb_cyc_e & (~i_wb_we_e)) begin\t\n\t\t\to_wb_dat_e <= {29'h00000000, buffer_4};\n\t\t\tstart_read_e <= 1'b1;\n\t\tend else begin\n\t\t\tstart_read_e <= 1'b0;\n\t\tend\n\tend\nend",
+        "assign o_wb_err_e = 1'b0;\t\t\t",
+        "assign wb_ack1_e = (i_wb_we_e) ? (i_wb_stb_e & i_wb_cyc_e) : (i_wb_stb_e & i_wb_cyc_e & start_read_e);",
+        "always@ (posedge write_clk or posedge reset) begin\n        if (reset) begin\n                for (i = 0; i<32; i=i+1) begin\n                        enc_ch[i] <= 3'b000;\n                        dec_ch[i] <= 3'b000;\n                end\n\t\tencoder_configured <= 32'h00000000;\n\t\tdecoder_configured <= 32'h00000000;\n        end\n        else begin\n                if (addrs[5]) begin\n                        enc_ch[addrs[4:0]]             <= w_data[2:0];\n\t\t\tencoder_configured[addrs[4:0]] <= 1'b1;\n                end else begin\n                        dec_ch[addrs[4:0]]             <= w_data[2:0];\n\t\t\tdecoder_configured[addrs[4:0]] <= 1'b1;\n                end\n\n        end\nend",
+        "wire write_clk = test_mode ? clk : ~(cs & ws);",
+        "always@ (posedge read_clk or posedge reset) begin\n        if (reset) begin\n                r_data <= 8'h00;\n       end\n       else begin\n\t\tif(addrs[6]) begin\n\t\t\tif(addrs[5]) begin\n\t\t\t\tr_data <= {7'b0000000,enc_ready_for_data};\n\t\t\tend\n\t\t\telse begin\n\t\t\t\tr_data <= {7'b0000000,dec_ready_for_data};\n\t\t\tend\n\t\tend\n                else if (addrs[5]) begin\n                        r_data <= enc_ch[addrs[4:0]];\n                end\n\t\telse begin\n                        r_data <= dec_ch[addrs[4:0]];\n                end\n        end\nend"
+    ]
+}

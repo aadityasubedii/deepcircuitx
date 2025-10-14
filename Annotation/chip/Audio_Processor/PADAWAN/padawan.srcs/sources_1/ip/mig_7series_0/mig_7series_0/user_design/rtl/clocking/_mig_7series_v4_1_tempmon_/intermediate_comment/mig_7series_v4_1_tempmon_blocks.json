@@ -1,0 +1,111 @@
+{
+    "line_num": [
+        [
+            379,
+            379
+        ],
+        [
+            341,
+            373
+        ],
+        [
+            313,
+            340
+        ],
+        [
+            308,
+            308
+        ],
+        [
+            302,
+            307
+        ],
+        [
+            291,
+            300
+        ],
+        [
+            284,
+            289
+        ],
+        [
+            277,
+            282
+        ],
+        [
+            270,
+            275
+        ],
+        [
+            242,
+            267
+        ],
+        [
+            238,
+            240
+        ],
+        [
+            231,
+            235
+        ],
+        [
+            224,
+            229
+        ],
+        [
+            218,
+            221
+        ],
+        [
+            173,
+            217
+        ],
+        [
+            171,
+            171
+        ],
+        [
+            167,
+            170
+        ],
+        [
+            161,
+            166
+        ],
+        [
+            149,
+            159
+        ],
+        [
+            112,
+            123
+        ],
+        [
+            95,
+            100
+        ]
+    ],
+    "blocks": [
+        "  endgenerate",
+        "      XADC_inst (\n        \n        .ALM(),                     \n        .OT(),                      \n        \n        .DO(xadc_do),               \n        .DRDY(xadc_drdy),           \n        \n        .BUSY(),                    \n        .CHANNEL(),                 \n        .EOC(),                     \n        .EOS(),                     \n        .JTAGBUSY(),                \n        .JTAGLOCKED(),              \n        .JTAGMODIFIED(),            \n        .MUXADDR(),                 \n        \n        .VAUXN(16'b0),              \n        .VAUXP(16'b0),              \n        \n        .CONVST(1'b0),              \n        .CONVSTCLK(1'b0),           \n        .RESET(1'b0),               \n        \n        .VN(1'b0),                  \n        .VP(1'b0),                  \n        \n        .DADDR(7'b0),               \n        .DCLK(xadc_clk),            \n        .DEN(xadc_den),             \n        .DI(16'b0),                 \n        .DWE(1'b0)                  \n      );",
+        "      XADC #(\n        \n        .INIT_40(16'h1000), \n        .INIT_41(16'h2fff), \n        .INIT_42(16'h0800), \n        \n        .INIT_48(16'h0101), \n        .INIT_49(16'h0000), \n        .INIT_4A(16'h0100), \n        .INIT_4B(16'h0000), \n        .INIT_4C(16'h0000), \n        .INIT_4D(16'h0000), \n        .INIT_4E(16'h0000), \n        .INIT_4F(16'h0000), \n        \n        .INIT_50(16'hb5ed), \n        .INIT_51(16'h57e4), \n        .INIT_52(16'ha147), \n        .INIT_53(16'hca33), \n        .INIT_54(16'ha93a), \n        .INIT_55(16'h52c6), \n        .INIT_56(16'h9555), \n        .INIT_57(16'hae4e), \n        .INIT_58(16'h5999), \n        .INIT_5C(16'h5111), \n        \n        .SIM_DEVICE(\"7SERIES\")  \n      )",
+        "      assign device_temp_lcl = temperature;",
+        "      always @(posedge xadc_clk)\n        if(rst_r2)\n          temperature <= #TCQ 12'b0;\n        else if(tempmon_state == READ)\n          temperature <= #TCQ xadc_do_r[15:4];\n",
+        "      always @(posedge xadc_clk)\n        if(rst_r2) begin\n          xadc_drdy_r <= #TCQ 1'b0;\n          xadc_do_r <= #TCQ 16'b0;\n        end\n        else begin\n          xadc_drdy_r <= #TCQ xadc_drdy;\n          xadc_do_r <= #TCQ xadc_do;\n        end\n",
+        "      always @(posedge xadc_clk)\n        if(rst_r2 || (tempmon_state == WAIT_FOR_READ))\n          xadc_den <= #TCQ 1'b0;\n        else if(tempmon_state == REQUEST_READ_TEMP)\n          xadc_den <= #TCQ 1'b1;\n",
+        "      always @(posedge xadc_clk)\n        if(rst_r2 || (tempmon_state == REQUEST_READ_TEMP))\n          sample_timer_en <= #TCQ 1'b0;\n        else if((tempmon_state == INIT_IDLE) || (tempmon_state == READ))\n          sample_timer_en <= #TCQ 1'b1;\n",
+        "      always @(posedge xadc_clk)\n        if(rst_r2 || (tempmon_state == WAIT_FOR_READ))\n          sample_timer_clr <= #TCQ 1'b0;\n        else if(tempmon_state == REQUEST_READ_TEMP)\n          sample_timer_clr <= #TCQ 1'b1;\n",
+        "      always @(tempmon_state or sample_en or xadc_drdy_r) begin\n\n        tempmon_next_state = tempmon_state;\n\n        case(tempmon_state)\n\n          INIT_IDLE:\n            if(sample_en)\n              tempmon_next_state = REQUEST_READ_TEMP;\n\n          REQUEST_READ_TEMP:\n            tempmon_next_state = WAIT_FOR_READ;\n\n          WAIT_FOR_READ:\n            if(xadc_drdy_r)\n              tempmon_next_state = READ;\n\n          READ:\n            tempmon_next_state = INIT_IDLE;\n\n          default:\n            tempmon_next_state = INIT_IDLE;\n\n        endcase\n\n      end",
+        "      always @(posedge xadc_clk)\n        sample_en <= #TCQ (sample_timer == nTEMPSAMP_CLKS_M6) ? 1'b1 : 1'b0;\n",
+        "      always @(posedge xadc_clk)\n        if(rst_r2)\n          tempmon_state <= #TCQ INIT_IDLE;\n        else\n          tempmon_state <= #TCQ tempmon_next_state;",
+        "      always @ (posedge xadc_clk)\n        if(rst_r2 || sample_timer_clr)\n          sample_timer <= #TCQ {nTEMPSAMP_CNTR_WIDTH{1'b0}};\n        else if(sample_timer_en)\n          sample_timer <= #TCQ sample_timer + 1'b1;\n",
+        "      always @(posedge xadc_clk) begin\n        rst_r1 <= rst;\n        rst_r2 <= rst_r1;\n      end",
+        "  generate\n\n    if(TEMP_MON_CONTROL == \"EXTERNAL\") begin : user_supplied_temperature\n\n      assign device_temp_lcl = device_temp_i;\n\n    end else begin : xadc_supplied_temperature\n\n      \n      localparam nTEMPSAMP = cdiv(tTEMPSAMPLE, XADC_CLK_PERIOD);\n      localparam nTEMPSAMP_CLKS = nTEMPSAMP;\n      localparam nTEMPSAMP_CLKS_M6 = nTEMPSAMP - 6;\n      localparam nTEMPSAMP_CNTR_WIDTH = clogb2(nTEMPSAMP_CLKS);\n\n      \n      localparam INIT_IDLE                                = 2'b00;\n      localparam REQUEST_READ_TEMP                        = 2'b01;\n      localparam WAIT_FOR_READ                            = 2'b10;\n      localparam READ                                     = 2'b11;\n\n      \n      reg [nTEMPSAMP_CNTR_WIDTH-1:0]  sample_timer = {nTEMPSAMP_CNTR_WIDTH{1'b0}};\n      reg                             sample_timer_en     = 1'b0;\n      reg                             sample_timer_clr    = 1'b0;\n      reg                             sample_en           = 1'b0;\n\n      \n      reg [2:0]                       tempmon_state       = INIT_IDLE;\n      reg [2:0]                       tempmon_next_state  = INIT_IDLE;\n\n      \n      reg                             xadc_den            = 1'b0;\n      wire                            xadc_drdy;\n      wire  [15:0]                    xadc_do;\n      reg                             xadc_drdy_r         = 1'b0;\n      reg   [15:0]                    xadc_do_r           = 1'b0;\n\n      \n      reg   [11:0]                    temperature         = 12'b0;\n\n      \n      (* ASYNC_REG = \"TRUE\" *)  reg rst_r1;\n      (* ASYNC_REG = \"TRUE\" *)  reg rst_r2;\n                                                  \n      ",
+        "  assign device_temp = device_temp_r;",
+        "  always @(posedge clk)\n    if(&sync_cntr)\n      device_temp_r <= #TCQ device_temp_sync_r5;\n",
+        "  always @(posedge clk)\n    if(rst || (device_temp_sync_r4_neq_r3))\n      sync_cntr <= #TCQ 4'b0000;\n    else if(~&sync_cntr)\n      sync_cntr <= #TCQ sync_cntr + 4'b0001;\n",
+        "  always @(posedge clk) begin\n\n    device_temp_sync_r1 <= #TCQ device_temp_lcl;\n    device_temp_sync_r2 <= #TCQ device_temp_sync_r1;\n    device_temp_sync_r3 <= #TCQ device_temp_sync_r2;\n    device_temp_sync_r4 <= #TCQ device_temp_sync_r3;\n    device_temp_sync_r5 <= #TCQ device_temp_sync_r4;\n\n    device_temp_sync_r4_neq_r3 <= #TCQ (device_temp_sync_r4 != device_temp_sync_r3) ? 1'b1 : 1'b0;\n\n  end",
+        "  function integer clogb2 (input integer size);\n    begin\n\n      size = size - 1;\n\n      \n      for (clogb2 = 1; size > 1; clogb2 = clogb2 + 1)\n      size = size >> 1;\n\n    end\n\n  endfunction ",
+        "  function integer cdiv (input integer num, input integer div);\n    begin\n      \n      cdiv = (num/div) + (((num%div)>0) ? 1 : 0);\n    end\n  endfunction "
+    ]
+}

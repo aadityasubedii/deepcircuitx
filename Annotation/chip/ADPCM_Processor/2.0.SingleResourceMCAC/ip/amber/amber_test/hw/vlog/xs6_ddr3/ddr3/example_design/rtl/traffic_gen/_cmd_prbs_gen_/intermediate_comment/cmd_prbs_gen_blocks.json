@@ -1,0 +1,61 @@
+{
+    "line_num": [
+        [
+            249,
+            249
+        ],
+        [
+            243,
+            245
+        ],
+        [
+            229,
+            241
+        ],
+        [
+            227,
+            228
+        ],
+        [
+            176,
+            204
+        ],
+        [
+            160,
+            173
+        ],
+        [
+            158,
+            160
+        ],
+        [
+            148,
+            156
+        ],
+        [
+            142,
+            144
+        ],
+        [
+            129,
+            140
+        ],
+        [
+            127,
+            128
+        ]
+    ],
+    "blocks": [
+        "assign prbs_o = prbs;",
+        "    always @ (lfsr_q[SEED_WIDTH - 1:1], ZEROS) begin\n        prbs = {ZEROS[SEED_WIDTH - 1:7],lfsr_q[6:1]};\n    end",
+        "    always @(posedge clk_i) begin\n      if(prbs_seed_init) begin\n        lfsr_q <= #TCQ {5'b0,prbs_seed_i[14:0]};\n      end else if(clk_en) begin\n        lfsr_q[20]   <= #TCQ lfsr_q[19];\n        lfsr_q[19]   <= #TCQ lfsr_q[18];\n\n        lfsr_q[18]   <= #TCQ lfsr_q[20] ^lfsr_q[17];\n\n        lfsr_q[17:2] <= #TCQ lfsr_q[16:1];\n        lfsr_q[1]    <= #TCQ lfsr_q[20];\n      end\n    end",
+        "generate\n  if(PRBS_CMD == \"INSTR\" | PRBS_CMD == \"BLEN\") begin :gen20_taps",
+        "    always @(lfsr_q[32:1]) begin\n    \n     if (FAMILY == \"SPARTAN6\" ) begin  \n    \n      for(i = logb2(DWIDTH) + 1; i <= SEED_WIDTH - 1; i = i + 1)\n\n       if(PRBS_SADDR_MASK_POS[i] == 1)\n          prbs[i] = PRBS_SADDR[i] | lfsr_q[i+1];\n       else if(PRBS_EADDR_MASK_POS[i] == 1)\n          prbs[i] = PRBS_EADDR[i] & lfsr_q[i+1];\n       else\n          prbs[i] =  lfsr_q[i+1];\n          \n       prbs[logb2(DWIDTH )  :0] = {logb2(DWIDTH ) + 1{1'b0}};         \n\n      end\n    else begin\n     for(i = logb2(DWIDTH)-4; i <= SEED_WIDTH - 1; i = i + 1)\n       if(PRBS_SADDR_MASK_POS[i] == 1)\n          prbs[i] = PRBS_SADDR[i] | lfsr_q[i+1];\n       else if(PRBS_EADDR_MASK_POS[i] == 1)\n          prbs[i] = PRBS_EADDR[i] & lfsr_q[i+1];\n       else\n          prbs[i] =  lfsr_q[i+1];\n     prbs[logb2(DWIDTH)-5:0] = {logb2(DWIDTH) - 4{1'b0}};\n\n    end  \n \n  end  ",
+        "    always @ (posedge clk_i) begin\n      if(prbs_seed_init) begin \n        lfsr_q <= #TCQ {prbs_seed_i};\n      end else if(clk_en) begin\n        lfsr_q[32:9] <= #TCQ lfsr_q[31:8];\n        lfsr_q[8]    <= #TCQ lfsr_q[32] ^ lfsr_q[7];\n        lfsr_q[7]    <= #TCQ lfsr_q[32] ^ lfsr_q[6];\n        lfsr_q[6:4]  <= #TCQ lfsr_q[5:3];\n\n        lfsr_q[3]    <= #TCQ lfsr_q[32] ^ lfsr_q[2];\n        lfsr_q[2]    <= #TCQ lfsr_q[1] ;\n        lfsr_q[1]    <= #TCQ lfsr_q[32];\n      end\n    end",
+        "generate\n  if(PRBS_CMD == \"ADDRESS\" && PRBS_WIDTH == 32) begin :gen32_taps\n    always @ (posedge clk_i) begin",
+        "function integer logb2;\n  input [31:0] in;\n  integer i;\n  begin\n    i = in;\n      for(logb2=1; i>0; logb2=logb2+1)\n        i = i >> 1;\n  end\nendfunction",
+        "    always @(lfsr_q[32:1]) begin\n      prbs = lfsr_q[32:1];\n    end",
+        "    always @ (posedge clk_i) begin\n      if(prbs_seed_init) begin\n        lfsr_q <= #TCQ {31'b0,prbs_seed_i};\n      end else if(clk_en) begin\n        lfsr_q[64] <= #TCQ lfsr_q[64] ^ lfsr_q[63];\n        lfsr_q[63] <= #TCQ lfsr_q[62];\n        lfsr_q[62] <= #TCQ lfsr_q[64] ^ lfsr_q[61];\n        lfsr_q[61] <= #TCQ lfsr_q[64] ^ lfsr_q[60];\n        lfsr_q[60:2] <= #TCQ lfsr_q[59:1];\n        lfsr_q[1] <= #TCQ lfsr_q[64];\n      end\n    end",
+        "generate\n  if(PRBS_CMD == \"ADDRESS\" && PRBS_WIDTH == 64) begin :gen64_taps"
+    ]
+}

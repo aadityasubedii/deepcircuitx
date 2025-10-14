@@ -1,0 +1,9 @@
+Module name: DE1_SoC_QSYS_timer.
+
+Module specification: The DE1_SoC_QSYS_timer module is designed as a configurable timer with interrupt functionality tailored for the DE1-SoC system. It facilitates timing operations by allowing initialization with distinct high and low timer period values, and can be controlled with start and stop commands. Featuring continuous operation capabilities, this timer can also generate an interrupt signal upon counter expiration.
+
+The module contains the following input ports: `address` (3-bit-wide) used for internal register selection, `chipselect` enabling read/write operations, `clk` for the clock signal, `reset_n` as an active-low reset, `write_n` active-low write enable, and `writedata` (16-bit-wide) for writing data into registers. The output ports include `irq`, which asserts an interrupt when appropriate, and `readdata` (16-bit-wide), which represents data read from the internal registers based on the current address.
+
+Internally, signals such as `control_continuous`, `control_interrupt_enable`, `internal_counter`, and `counter_is_zero` help manage counter operations and interrupt handling. `period_h_register` and `period_l_register` store the timer's duration, while `counter_snapshot` captures the counter's value for read operations. The `timeout_event` and `timeout_occurred` flags monitor and report on timer expiration events.
+
+The code comprises several blocks for different functions: the counter mechanism that decreases on each clock tick and reloads if necessary, interrupt management which includes triggering and clearing of interrupts, read and write logic to interact with the registers based on inputs, and signal generation for read data multiplexing and status indicators. This modular approach allows for maintainable and organized implementation of the timer's features.

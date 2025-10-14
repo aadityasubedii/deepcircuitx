@@ -1,0 +1,1 @@
+  assign mc_read_idle = mc_read_idle_r;

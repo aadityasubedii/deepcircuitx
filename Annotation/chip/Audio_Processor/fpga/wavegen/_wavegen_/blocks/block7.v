@@ -1,0 +1,1 @@
+    assign debounce = & prescale[19:0];

@@ -1,0 +1,1 @@
+  assign av_fill_bit = av_sign_bit & R_ctrl_ld_signed;

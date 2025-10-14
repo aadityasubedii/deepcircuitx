@@ -1,0 +1,1 @@
+assign ctrl_packet_interlaced_bank1_bits_FROM_slave_TO_controller =  registers[(SLAVE_DATA_REQUIREDWIDTH*14)+CONTROL_PACKET_INTERLACED_REQUIREDWIDTH-1:SLAVE_DATA_REQUIREDWIDTH*14];

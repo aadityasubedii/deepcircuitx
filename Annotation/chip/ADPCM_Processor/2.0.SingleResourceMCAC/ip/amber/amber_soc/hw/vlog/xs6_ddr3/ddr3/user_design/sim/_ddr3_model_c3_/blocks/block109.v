@@ -1,0 +1,1 @@
+    always @(dq_in[21]) dq_timing_check(21);

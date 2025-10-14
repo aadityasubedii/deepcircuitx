@@ -1,0 +1,1 @@
+assign new_line = (h_count >= h_total_int) && count_sample;

@@ -1,0 +1,31 @@
+{
+    "line_num": [
+        [
+            125,
+            136
+        ],
+        [
+            120,
+            123
+        ],
+        [
+            85,
+            116
+        ],
+        [
+            62,
+            83
+        ],
+        [
+            57,
+            61
+        ]
+    ],
+    "blocks": [
+        "\talways @(posedge clk or posedge reset) begin\n\t   if (reset) begin\n\t      data1 <= 'b0;\n\t      full1 <= 1'b0;\n\t   end\n\t   else begin\n\t      if (in_ready) begin\n\t\t data1 <= in_data;\n\t\t full1 <= in_valid;\n\t      end\n\t   end\n\tend\t\t",
+        "     begin : UNREGISTERED_READY_PLINE\n\t\n\t\n\tassign in_ready = (~full1) | out_ready;",
+        "        always @(posedge clk or posedge reset) begin\n           if (reset) begin\n              full0    <= 1'b0;\n              full1    <= 1'b0;\n           end else begin\n              \n              if (~full0 & ~full1) begin\n                 if (in_valid) begin\n                    full1 <= 1'b1;\n                 end\n              end \n\n              \n              if (full1 & ~full0) begin\n                 if (in_valid & ~out_ready) begin\n                    full0 <= 1'b1;\n                 end\n                 \n                 if (~in_valid & out_ready) begin\n                    full1 <= 1'b0;\n                 end\n              end \n              \n              \n              if (full1 & full0) begin\n                 \n                 if (out_ready) begin\n                    full0 <= 1'b0;\n                 end\n              end \n           end\n        end",
+        "        always @(posedge clk, posedge reset) begin\n           if (reset) begin\n              data0 <= {DATA_WIDTH{1'b0}};\n              data1 <= {DATA_WIDTH{1'b0}};\n           end else begin\n              \n              \n              \n              if (~full0)\n                data0 <= in_data;\n              \n              \n              \n              \n              if (~full1 || (out_ready && out_valid)) begin\n                 if (full0)\n                   data1 <= data0;\n                 else\n                   data1 <= in_data;\n              end\n           end\n        end",
+        "   generate if (PIPELINE_READY == 1) \n     begin : REGISTERED_READY_PLINE\n        \n        assign in_ready  = !full0;\n"
+    ]
+}
